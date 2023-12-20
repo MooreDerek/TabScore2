@@ -50,7 +50,7 @@ namespace TabScore2.DataServices
         {
             TableStatus tableStatus = tableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber)!;
             tableStatus.RoundNumber = roundNumber;
-            database.GetTableStatusRoundData(tableStatus);
+            database.GetRoundData(tableStatus);
             tableStatus.ReadyForNextRoundNorth = false;
             tableStatus.ReadyForNextRoundSouth = false;
             tableStatus.ReadyForNextRoundEast = false;

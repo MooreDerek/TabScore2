@@ -27,7 +27,7 @@ namespace TabScore2.DataServices
         int GetNumberOfRoundsInEvent(int sectionID);
         int GetNumberOfLastRoundWithResults(int sectionID, int tableNumber);
         public List<Round> GetRoundsList(int sectionID, int roundNumber);
-        void GetTableStatusRoundData(TableStatus tableStatus);
+        void GetRoundData(TableStatus tableStatus);
 
         // RESULT = RECEIVEDDATA
         Result GetResult(int sectionID, int tableNumber, int roundNumber, int boardNumber);

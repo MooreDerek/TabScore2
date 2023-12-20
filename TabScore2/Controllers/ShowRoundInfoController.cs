@@ -89,7 +89,7 @@ namespace TabScore2.Controllers
             int newRoundNumber = tabletDeviceStatus.RoundNumber;  // Going back, so new round is current round!
             tabletDeviceStatus.RoundNumber--;
             tableStatus.RoundNumber--;
-            database.GetTableStatusRoundData(tableStatus);
+            database.GetRoundData(tableStatus);
             return RedirectToAction("Index", "ShowMove", new { tabletDeviceNumber, newRoundNumber});
         }
     }

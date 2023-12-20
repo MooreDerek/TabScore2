@@ -1201,31 +1201,7 @@ namespace TabScore2.UtilityServices
 
 
 
-
-
-
-
-
-                // Set the number of tablet devices per table - possibly different for each section depending on the movements
-                        public void SetTabletDevicesPerTable()
-                        {
-                            foreach (Section section in database.GetSections())
-                            {
-                                // Default TabletDevicesPerTable = 1
-                                if (Settings.TabletDevicesMove)
-                                {
-                                    if (Settings.IsIndividual)
-                                    {
-                                        section.TabletDevicesPerTable = 4;
-                                    }
-                                    else
-                                    {
-                                        if (section.Winners == 1) section.TabletDevicesPerTable = 2;
-                                    }
-                                }
-                            }
-                        }
-
+    
                         // Look up player name using table from scoring database
                         public static string GetNameFromPlayerNamesTable(string playerID)
                         {

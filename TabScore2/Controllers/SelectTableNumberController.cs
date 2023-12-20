@@ -40,7 +40,7 @@ namespace TabScore2.Controllers
                 appData.AddTableStatus(sectionID, tableNumber, database.GetNumberOfLastRoundWithResults(sectionID, tableNumber));
             }
             TableStatus tableStatus = appData.GetTableStatus(sectionID, tableNumber)!;  // Return value cannot be null as we've just set it
-            database.GetTableStatusRoundData(tableStatus);
+            database.GetRoundData(tableStatus);
 
             if (database.GetSection(sectionID).TabletDevicesPerTable == 1)
             {

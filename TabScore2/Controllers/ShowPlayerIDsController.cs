@@ -2,13 +2,13 @@
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using Microsoft.AspNetCore.Mvc;
-using TabScore.Models;
 using TabScore2.Classes;
 using TabScore2.DataServices;
 using TabScore2.Globals;
+using TabScore2.Models;
 using TabScore2.UtilityServices;
 
-namespace TabScore.Controllers
+namespace TabScore2.Controllers
 {
     public class ShowPlayerIDsController(IDatabase iDatabase, IAppData iAppData, ISettings iSettings, IUtilities iUtilities) : Controller
     {

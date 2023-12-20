@@ -3,9 +3,9 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using TabScore2.Classes;
 using TabScore2.DataServices;
 using TabScore2.Globals;
+using TabScore2.Models;
 using TabScore2.Resources;
 
 namespace TabScore2.Controllers
@@ -17,11 +17,12 @@ namespace TabScore2.Controllers
         
         public ActionResult Index()
         {
-            IList<Section> sectionsList = database.GetSectionsList();
+            SelectSection selectSection = [];
+            selectSection.AddRange(database.GetSectionsList());
             // Check if only one section - if so use it
-            if (sectionsList.Count == 1)
+            if (selectSection.Count == 1)
             {
-                return RedirectToAction("Index", "SelectTableNumber", new { sectionID = sectionsList[0].ID });
+                return RedirectToAction("Index", "SelectTableNumber", new { sectionID = selectSection[0].ID });
             }
             else
             // Get section
@@ -29,7 +30,7 @@ namespace TabScore2.Controllers
                 ViewData["Title"] = localizer["SelectSection"];
                 ViewData["Header"] = string.Empty;
                 ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
-                return View(sectionsList);
+                return View(selectSection);
             }
         }
     }

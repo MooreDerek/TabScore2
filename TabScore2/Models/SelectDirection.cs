@@ -3,7 +3,8 @@
 
 using TabScore2.Classes;
 using TabScore2.Globals;
-namespace TabScore.Models
+
+namespace TabScore2.Models
 {
     public class SelectDirection(TableStatus tableStatus, Section section, Direction direction, bool confirm)
     {

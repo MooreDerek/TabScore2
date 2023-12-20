@@ -918,7 +918,7 @@ namespace TabScore2.DataServices
             return roundsList;
         }
 
-        public void GetTableStatusRoundData(TableStatus tableStatus)
+        public void GetRoundData(TableStatus tableStatus)
         {
             using OdbcConnection connection = new(connectionString);
             Round round = new();

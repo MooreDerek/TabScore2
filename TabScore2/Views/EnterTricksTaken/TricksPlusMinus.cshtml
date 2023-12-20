@@ -1,0 +1,111 @@
+﻿<!-- TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
+     Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+
+@model TabScore.Models.EnterContract
+@using Resources
+@using System.Web.Optimization
+
+<style>
+    .btn-plus {
+        background-color:rgb(63, 115, 37);
+        color:white;
+    }
+
+    .btn-minus {
+        background-color: rgb(181, 47, 47);
+        color:white;
+    }
+</style>
+
+<div class="row mt-5">
+    <div class="col-12 text-center p-0">
+        <h3>
+            @Strings.Board @Model.ResultData.BoardNumber: @Html.Raw(Model.ResultData.ContractDisplay)
+        </h3>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-12 text-center p-0">
+        <h3>
+            @Strings.EnterTricksTaken
+        </h3>
+    </div>
+</div>
+
+@if (Model.ResultData.ContractLevel == 1)
+{
+    <div class="row">
+        <div class="col-12 text-center p-0">
+            <button id="plus6" class="btn btn-plus btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setPlusTricks(6)" onclick="if (!touchAvailable) setPlusTricks(6)">
+                +6
+            </button>
+        </div>
+    </div>
+}
+
+@if (Model.ResultData.ContractLevel < 7)
+{
+    <div class="row">
+        <div class="col-12 text-center p-0">
+            @for (int i = ((Model.ResultData.ContractLevel <= 2) ? 5 : 7 - Model.ResultData.ContractLevel); i >= 1; i--)
+            {
+                <button id="plus@(i)" class="btn btn-plus btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setPlusTricks(@i)" onclick="if (!touchAvailable) setPlusTricks(@i)">
+                    +@i
+                </button>
+            }
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-12 text-center p-0">
+        <button id="equals" class="btn btn-primary btn-lg m-1" style="width: 6em" ontouchstart="touchAvailable = true; setEqualsTricks()" onclick="if (!touchAvailable) setEqualsTricks()">
+            =
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center p-0">
+        @for (int i = 1; i <= 5; i++)
+        {
+            <button id="minus@(i)" class="btn btn-minus btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setMinusTricks(@i)" onclick="if (!touchAvailable) setMinusTricks(@i)">
+                -@i
+            </button>
+        }
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center p-0">
+        @for (int i = 6; i <= ((Model.ResultData.ContractLevel > 3) ? 10 : (Model.ResultData.ContractLevel + 6)); i++)
+        {
+            <button id="minus@(i)" class="btn btn-minus btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setMinusTricks(@i)" onclick="if (!touchAvailable) setMinusTricks(@i)">
+                -@i
+            </button>
+        }
+    </div>
+</div>
+
+@if (Model.ResultData.ContractLevel >= 5)
+{
+    <div class="row">
+        <div class="col-12 text-center p-0">
+            @for (int i = 11; i <= Model.ResultData.ContractLevel + 6; i++)
+            {
+                <button id="minus@(i)" class="btn btn-minus btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setMinusTricks(@i)" onclick="if (!touchAvailable) setMinusTricks(@i)">
+                    -@i
+                </button>
+            }
+        </div>
+    </div>
+}
+
+<script>
+    var numTricks = @Model.ResultData.TricksTakenNumber;
+    var contractLevel = @Model.ResultData.ContractLevel;
+    var urlOKButtonClick = '@Url.Action("OKButtonClick", "EnterTricksTaken")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+    var urlBackButtonClick = '@Url.Action("BackButtonClick", "EnterTricksTaken")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+</script>
+@Scripts.Render("~/bundles/tricksPlusMinusJS")

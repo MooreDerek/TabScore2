@@ -1,0 +1,37 @@
+﻿// TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
+// Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
+
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using System.Reflection;
+using TabScore2.DataServices;
+using TabScore2.Globals;
+using TabScore2.Resources;
+
+namespace TabScore2.Controllers
+{
+    public class StartScreenController(IStringLocalizer<Strings> iLocalizer, IDatabase iDatabase) : Controller
+    {
+        private readonly IStringLocalizer<Strings> localizer = iLocalizer;
+        private readonly IDatabase database = iDatabase;
+
+        public ActionResult Index()
+        {
+            ViewData["Title"] = localizer["StartScreen"];
+            ViewData["Header"] = string.Empty; 
+            ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
+            ViewData["Version"] = Assembly.GetExecutingAssembly().GetName().Version!.ToString();
+            return View();
+        }
+
+        public ActionResult OKButtonClick()
+        {
+            if (database.PathToDatabase == string.Empty)
+            {
+                TempData["WarningMessage"] = "ErrorNoDBSelected";
+                return RedirectToAction("Index", "StartScreen");
+            }
+            return RedirectToAction("Index", "SelectSection");
+        }
+    }
+}

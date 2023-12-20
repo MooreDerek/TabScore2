@@ -1,0 +1,104 @@
+﻿<!-- TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
+     Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+
+@model TabScore.Models.EnterContract
+@using Resources
+@using System.Web.Optimization
+
+<div id="noTricksModal" class="modal modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header text-primary">
+            <p class="modal-title text-center">
+                <h3>@Strings.Warning</h3>
+            </p>
+        </div>
+        <div class="modal-body">
+            <p>@Strings.EnterTricksTaken</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-lg btn-success" data-dismiss="modal">
+                @Strings.OK <span class="fa fa-check-circle"></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-12 text-center p-0">
+        <h3>
+            @Strings.Board @Model.ResultData.BoardNumber: @Html.Raw(Model.ResultData.ContractDisplay)
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center p-0">
+        <h3>
+            @Strings.EnterTricksTaken
+        </h3>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12 text-center p-0">
+        <button id="n0" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setNumTricks('0')" onclick="if (!touchAvailable) setNumTricks('0')">
+            0
+        </button>
+        <button id="n1" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setNumTricks('1')" onclick="if (!touchAvailable) setNumTricks('1')">
+            1
+        </button>
+        <button id="n2" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setNumTricks('2')" onclick="if (!touchAvailable) setNumTricks('2')">
+            2
+        </button>
+        <button id="n3" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setNumTricks('3')" onclick="if (!touchAvailable) setNumTricks('3')">
+            3
+        </button>
+        <button id="n4" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setNumTricks('4')" onclick="if (!touchAvailable) setNumTricks('4')">
+            4
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center p-0">
+        <button id="n5" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setNumTricks('5')" onclick="if (!touchAvailable) setNumTricks('5')">
+            5
+        </button>
+        <button id="n6" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setNumTricks('6')" onclick="if (!touchAvailable) setNumTricks('6')">
+            6
+        </button>
+        <button id="n7" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setNumTricks('7')" onclick="if (!touchAvailable) setNumTricks('7')">
+            7
+        </button>
+        <button id="n8" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setNumTricks('8')" onclick="if (!touchAvailable) setNumTricks('8')">
+            8
+        </button>
+        <button id="n9" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setNumTricks('9')" onclick="if (!touchAvailable) setNumTricks('9')">
+            9
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center p-0">
+        <button id="n10" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setNumTricks('10')" onclick="if (!touchAvailable) setNumTricks('10')">
+            10
+        </button>
+        <button id="n11" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setNumTricks('11')" onclick="if (!touchAvailable) setNumTricks('11')">
+            11
+        </button>
+        <button id="n12" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setNumTricks('12')" onclick="if (!touchAvailable) setNumTricks('12')">
+            12
+        </button>
+        <button id="n13" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setNumTricks('13')" onclick="if (!touchAvailable) setNumTricks('13')">
+            13
+        </button>
+    </div>
+</div>
+
+<script>
+    var numTricks = '@Model.ResultData.TricksTakenNumber';
+    var urlOKButtonClick = '@Url.Action("OKButtonClick", "EnterTricksTaken")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+    var urlBackButtonClick = '@Url.Action("BackButtonClick", "EnterTricksTaken")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+</script>
+@Scripts.Render("~/bundles/totalTricksJS")

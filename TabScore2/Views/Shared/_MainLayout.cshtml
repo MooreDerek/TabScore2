@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+
+<head>
+    <title>@ViewData["Title"]</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <script>
+        // Force reload if browser back button was used (avoids bfcache)
+        (function () {
+            window.onpageshow = function (event) {
+                if (event.persisted) window.location.reload();
+            };
+        })();
+        // Flag to prevent both touch and click events
+        var touchAvailable = false;
+    </script>
+    <link rel="stylesheet" href="~/css/coreCSS.css" />
+    <script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
+</head>
+
+<body style="background-color: ivory">
+    <div id="headerRow" class="container-fluid fixed-top" style="min-height: 51px; background-color: bisque; border-bottom-style: solid">
+        <div class="row my-2">
+            <div id="header" class="col-12 my-auto px-2">
+                <h5>@Html.Raw(ViewData["Header"])</h5>
+            </div>
+            <div id="battery" class="col-1 my-auto px-2" style="display:none">
+                <h3><span id="bl"></span></h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        @RenderBody()
+    </div>
+
+    <div id="footerRow" class="container-fluid fixed-bottom" style="background-color: bisque; border-top-style: solid">
+        <div class="row">
+            <div class="col-4 px-2">
+                @{
+                    ButtonOptions buttonOptions = ButtonOptions.OKEnabled;
+                    object? viewDataButtonOptions = ViewData["ButtonOptions"];
+                    if (viewDataButtonOptions != null){
+                        buttonOptions = (ButtonOptions)viewDataButtonOptions;
+                    }
+                    if (buttonOptions == ButtonOptions.OKEnabledAndBack || buttonOptions == ButtonOptions.OKDisabledAndBack)
+                    {
+                        <button id="BackButton" class="btn btn-danger my-2 px-2 float-start" style="font-size: 1.5rem" ontouchstart="touchAvailable = true; BackButtonClick()" onclick="if (!touchAvailable) BackButtonClick()">
+                            <span class="fa fa-chevron-circle-left"></span> @Strings["Back"]
+                        </button>
+                    }
+                }
+            </div>
+            <div class="col-4 px-0 text-center">
+                @{
+                    int timerSeconds = -1;
+                    object? viewDataTimerSeconds = ViewData["TimerSeconds"];
+                    if (viewDataTimerSeconds != null) {
+                        timerSeconds = (int)viewDataTimerSeconds;
+                        if (timerSeconds >= 0) {
+                            <button id="timerButton" class="btn my-2 px-2" style="font-size: 1.5rem">
+                                <span class="fa fa-clock-o"></span><span id="timerValue"></span>
+                            </button>
+                        } 
+                    }
+                }
+            </div>
+            <div class="col-4 px-2">
+                @if (buttonOptions == ButtonOptions.OKDisabled || buttonOptions == ButtonOptions.OKDisabledAndBack)
+                {
+                    <button id="OKButton" class="btn btn-success my-2 px-2 float-end" style="font-size: 1.5rem" disabled ontouchstart="touchAvailable = true; OKButtonClick()" onclick="if (!touchAvailable) OKButtonClick()">
+                        @Strings["OK"] <span class="fa fa-chevron-circle-right"></span>
+                    </button>
+                }
+                else if (buttonOptions == ButtonOptions.OKEnabled || buttonOptions == ButtonOptions.OKEnabledAndBack)
+                {
+                    <button id="OKButton" class="btn btn-success my-2 px-2 float-end" style="font-size: 1.5rem" ontouchstart="touchAvailable = true; OKButtonClick()" onclick="if (!touchAvailable) OKButtonClick()">
+                        @Strings["OK"] <span class="fa fa-chevron-circle-right"></span>
+                    </button>
+                }
+            </div>
+        </div>
+    </div>
+
+    @if (ViewData.ContainsKey("TimerSeconds"))
+    {
+        <script>
+            var timerSeconds = @ViewData["TimerSeconds"];
+        </script>
+    }
+    else
+    {
+        <script>
+            var timerSeconds = -1;
+        </script>
+    }
+    <script src="~/js/mainLayoutJS.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,99 @@
+﻿<!-- TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
+Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+
+@model TabScore.Models.ShowRankingList
+@using Resources
+@using System.Web.Optimization
+
+<div class="row mt-4">
+    <div class="col-12 text-center">
+        <h4>
+            @Strings.RankingList
+        </h4>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-6 p-0">
+        <table class="table-sm table-bordered text-center" style="margin:auto; width:80%">
+            <thead class="thead-dark">
+                <tr>
+                    <th>@Strings.Rank @Strings.N@Strings.S</th>
+                    <th>@Strings.PairNumber</th>
+                    <th>@Strings.PercentageShort</th>
+                </tr>
+            </thead>
+            <tbody id="tableBodyNS">
+                @foreach (var Rank in Model)
+                {
+                    if (Rank.Orientation == "N")
+                    {
+                        if (Model.NumberNorth == Rank.PairNo)
+                        {
+                            <tr class="table-success">
+                                <td>@Rank.Rank</td>
+                                <td>@Rank.PairNo</td>
+                                <td>@Rank.Score%</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>@Rank.Rank</td>
+                                <td>@Rank.PairNo</td>
+                                <td>@Rank.Score%</td>
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-6 p-0">
+        <table class="table-sm table-bordered text-center" style="margin:auto; width:80%">
+            <thead>
+                <tr>
+                    <th>@Strings.Rank @Strings.E@Strings.W</th>
+                    <th>@Strings.PairNumber</th>
+                    <th>@Strings.PercentageShort</th>
+                </tr>
+            </thead>
+            <tbody id="tableBodyEW">
+                @foreach (var Rank in Model)
+                {
+                    if (Rank.Orientation == "E")
+                    {
+                        if (Model.NumberEast == Rank.PairNo)
+                        {
+                            <tr class="table-warning">
+                                <td>@Rank.Rank</td>
+                                <td>@Rank.PairNo</td>
+                                <td>@Rank.Score%</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>@Rank.Rank</td>
+                                <td>@Rank.PairNo</td>
+                                <td>@Rank.Score%</td>
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    var urlPollRanking = '@Url.Action("PollRanking", "ShowRankingList")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+    var urlEndScreen = '@Url.Action("Index", "EndScreen")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+    var urlShowMove = '@Url.Action("Index", "ShowMove")?tabletDeviceNumber=@Model.TabletDeviceNumber&newRoundNumber=' + (@Model.RoundNumber + 1).toString();
+    var urlShowBoards = '@Url.Action("Index", "ShowBoards")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+    var finalRankingList = @Model.FinalRankingList.ToString().ToLower();
+    var pairNS = @Model.NumberNorth;
+    var pairEW = @Model.NumberEast;
+</script>
+@Scripts.Render("~/bundles/twoWinnersRankingListJS")

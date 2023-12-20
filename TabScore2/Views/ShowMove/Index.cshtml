@@ -1,0 +1,155 @@
+﻿<!-- TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
+Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+
+@model TabScore.Models.ShowMove
+@using Resources
+
+<div id="newTableNotReadyModal" class="modal" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header text-danger">
+                <p class="modal-title text-center">
+                    <h3>@Strings.Warning</h3>
+                </p>
+            </div>
+            <div class="modal-body">
+                <p>@Strings.ErrorTableNotReady1 @Model.TableNotReadyNumber.ToString() @Strings.ErrorTableNotReady2</p>
+            </div>
+            <div class="modal-footer" style="justify-content:space-between">
+                <button class="btn btn-lg btn-success" data-dismiss="modal">
+                    @Strings.OK <span class="fa fa-times-circle"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-12 text-center">
+        <h3>
+            @Strings.MoveForRound @Model.NewRoundNumber
+        </h3>
+    </div>
+</div>
+
+@foreach (var move in Model)
+{
+    <div class="row mt-2">
+        <div class="col-12 text-center">
+            <h3 style="color:blue">
+                @move.DisplayDirection: @move.PairNumber
+            </h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 text-center">
+            @if (move.NewTableNumber == 0)
+            {
+                <h4>
+                    @Strings.MoveToSitOut
+                </h4>
+            }
+            else
+            {
+                if (move.Stay)
+                {
+                    <h4>
+                        @Strings.StayAtTable @move.NewTableNumber @move.DisplayNewDirection
+                    </h4>
+                }
+                else
+                {
+                    <h4>
+                        @Strings.MoveToTable @move.NewTableNumber @move.DisplayNewDirection
+                    </h4>
+                }
+                if (move.NewTableIsSitout)
+                {
+                    <h6>
+                        [ @Strings.SittingOut ]
+                    </h6>
+                }
+            }
+        </div>
+    </div>
+}
+
+@if (Model.BoardsNewTable >= 0)
+{
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            @if (Model.LowBoard == Model.HighBoard)
+            {
+                <h3 style="color:green">
+                    @Strings.Board @Model.LowBoard
+                </h3>
+            }
+            else
+            {
+                <h3 style="color:green">
+                    @Strings.Boards @Model.LowBoard - @Model.HighBoard
+                </h3>
+            }
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 text-center">
+            @if (Model.BoardsNewTable == 0)
+            {
+                <h4>
+                    @Strings.PassToRelayTable
+                </h4>
+            }
+            else
+            {
+                <h4>
+                    @Strings.PassToTable @Model.BoardsNewTable
+                </h4>
+            }
+        </div>
+    </div>
+}
+
+@if (Model.TabletDevicesPerTable > 1)
+{
+    <div class="row mt-4">
+        <div class="col-2">
+        </div>
+        <div class="col-8 text-center">
+            @if (Model[0].Stay)
+            {
+                <h5>
+                    @Strings.WaitThisTable
+                </h5>
+            }
+            else
+            {
+                <h5>
+                    @Strings.WaitNextTable
+                </h5>
+            }
+        </div>
+        <div class="col-2">
+        </div>
+    </div>
+}
+
+@if (Model.TableNotReadyNumber > 0)
+{
+    <script>
+        $("#newTableNotReadyModal").modal("show");
+    </script>
+}
+
+<script>
+    var isSubmitted = false;
+
+    $(document).on('touchstart click', '#OKButton:enabled', function () {
+        if (!isSubmitted) {
+            isSubmitted = true;
+            location.href = '@Url.Action("OKButtonClick", "ShowMove")?tabletDeviceNumber=@Model.TabletDeviceNumber&newRoundNumber=@Model.NewRoundNumber';
+        }
+    });
+</script>

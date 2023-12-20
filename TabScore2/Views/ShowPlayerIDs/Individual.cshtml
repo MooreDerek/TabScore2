@@ -1,0 +1,133 @@
+﻿<!-- TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
+Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+
+@model TabScore.Models.ShowPlayerIDs
+@using Resources
+
+<div id="notAllPlayerNumbersModal" class="modal" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header text-danger">
+                <p class="modal-title text-center">
+                    <h3>@Strings.Warning</h3>
+                </p>
+            </div>
+            <div class="modal-body">
+                <p>@Strings.ErrorWaitAllIDs</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-lg btn-success" data-dismiss="modal">
+                    @Strings.OK <span class="fa fa-check-circle"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="notAllNamesModal" class="modal" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header text-primary">
+                <p class="modal-title text-center">
+                    <h3>@Strings.Warning</h3>
+                </p>
+            </div>
+            <div class="modal-body">
+                <p>@Strings.ErrorNoID</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-lg btn-success" data-dismiss="modal">
+                    @Strings.OK <span class="fa fa-check-circle"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-12 text-center p-0">
+        <h3>
+            @Strings.EnterEditPlayerIDs
+        </h3>
+    </div>
+</div>
+
+@foreach (var playerEntry in Model)
+{
+    <div class="row mt-3">
+        <div class="col-12 text-center p-0">
+            <h3 style="color:blue">
+                @playerEntry.DisplayDirection: @playerEntry.Number
+            </h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-1">
+        </div>
+        <div class="col-4">
+            @if (playerEntry.Name == "")
+            {
+                <button class="btn btn-primary btn-lg m-1 px-1" style="min-width: 4.8rem" ontouchstart="touchAvailable = true; EnterPlayerID('@playerEntry.Direction')" onclick="if (!touchAvailable) EnterPlayerID('@playerEntry.Direction')">
+                    @Strings.Enter
+                </button>
+            }
+            else
+            {
+                <button class="btn btn-info btn-lg m-1 px-1" style="min-width: 4.8rem" ontouchstart="touchAvailable = true; EnterPlayerID('@playerEntry.Direction')" onclick="if (!touchAvailable) EnterPlayerID('@playerEntry.Direction')">
+                    @Strings.Edit
+                </button>
+            }
+        </div>
+        <div class="col-7 px-0 align-self-center">
+            <h4>
+                @playerEntry.Name
+            </h4>
+        </div>
+    </div>
+}
+
+@if (Model.ShowMessage)
+{
+    <div class="row mt-5">
+        <div class="col-1">
+        </div>
+        <div class="col-10 text-center">
+            <h5>
+                @Strings.NeedAllIDs
+            </h5>
+        </div>
+        <div class="col-1">
+        </div>
+    </div>
+}
+
+@if (Model.ShowWarning)
+{
+    <script>
+        $("#notAllPlayerNumbersModal").modal("show");
+    </script>
+}
+
+<script>
+    var isSubmitted = false;
+
+    $(document).on('touchstart click', '#OKButton:enabled', function () {
+        if (@Model.NumberOfBlankEntries > 0) {
+            $("#notAllNamesModal").modal("show");
+        }
+        else {
+            if (!isSubmitted) {
+                isSubmitted = true;
+                location.href = '@Url.Action("OKButtonClick", "ShowPlayerIDs")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+            }
+        }
+    });
+
+    function EnterPlayerID(direction) {
+            if (!isSubmitted) {
+                isSubmitted = true;
+                location.href = '@Url.Action("Index", "EnterPlayerID")?tabletDeviceNumber=@Model.TabletDeviceNumber&direction=' + direction;
+            }
+    }
+</script>

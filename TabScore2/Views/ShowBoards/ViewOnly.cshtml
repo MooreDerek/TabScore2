@@ -1,0 +1,116 @@
+﻿<!-- TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
+Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+
+@model TabScore.Models.ShowBoards
+@using Resources
+
+<div id="notAllResultsModal" class="modal" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header text-danger">
+                <p class="modal-title text-center">
+                    <h3>@Strings.Warning</h3>
+                </p>
+            </div>
+            <div class="modal-body">
+                <p>@Strings.ErrorWaitResults</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-lg btn-success" data-dismiss="modal">
+                    @Strings.OK <span class="fa fa-check-circle"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="noResultModal" class="modal" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header text-danger">
+                <p class="modal-title text-center">
+                    <h3>@Strings.Warning</h3>
+                </p>
+            </div>
+            <div class="modal-body">
+                <p>@Strings.ErrorWaitResult</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-lg btn-success" data-dismiss="modal">
+                    @Strings.OK <span class="fa fa-check-circle"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-12 text-center p-0">
+        <h5>
+            @Strings.NotScoring
+        </h5>
+    </div>
+</div>
+
+<div class="row mt-3 mb-3">
+    <div class="col-12 text-center p-0">
+        <h3>
+            @Strings.Boards
+        </h3>
+    </div>
+</div>
+
+@foreach (var Result in Model)
+{
+    <div class="row">
+        <div class="col-1 text-right px-0 align-self-center">
+            <h4>
+                @Result.BoardNumber:
+            </h4>
+        </div>
+        <div class="col-6 px-3">
+            @if (Result.Remarks != "Not played")
+            {
+                <button class="btn btn-secondary btn-lg m-1 px-1" style="min-width: 5rem" ontouchstart="touchAvailable = true; View(@Result.BoardNumber)" onclick="if (!touchAvailable) View(@Result.BoardNumber)">
+                    @Strings.View
+                </button>
+            }
+        </div>
+        <div class="col-5 px-0 align-self-center">
+            <h4>
+                @Html.Raw(Result.ContractDisplay)
+            </h4>
+        </div>
+    </div>
+}
+
+@if (Model.Message == "NORESULT")
+{
+    <script>
+        $("#noResultModal").modal("show");
+    </script>
+}
+else if (Model.Message == "NOTALLRESULTS")
+{
+    <script>
+        $("#notAllResultsModal").modal("show");
+    </script>
+}
+
+<script>
+    var isSubmitted = false;
+
+    $(document).on('touchstart click', '#OKButton:enabled', function () {
+        if (!isSubmitted) {
+            isSubmitted = true;
+            location.href = '@Url.Action("OKButtonClick", "ShowBoards")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+        }
+    });
+
+    function View(n) {
+        if (!isSubmitted) {
+            isSubmitted = true;
+            location.href = '@Url.Action("ViewResult", "ShowBoards")?tabletDeviceNumber=@Model.TabletDeviceNumber&boardNumber=' + n;
+        }
+    }
+</script>

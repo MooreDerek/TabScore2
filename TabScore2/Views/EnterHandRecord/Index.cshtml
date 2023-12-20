@@ -1,0 +1,359 @@
+﻿<!-- TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
+    Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+
+@model TabScore.Models.EnterHandRecord
+@using System.Web.Optimization
+@using Resources
+
+<style>
+    .px-custom {
+        padding-left: 0;
+        padding-right: 0;
+        width: 20px;
+    }
+
+    .btn-suit {
+        background-color: paleturquoise;
+    }
+</style>
+
+<div id="backModal" class="modal" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header text-danger">
+                <p class="modal-title text-center">
+                    <h3>Warning</h3>
+                </p>
+            </div>
+            <div class="modal-body">
+                <p>@Strings.WarningHandRecordBack</p>
+            </div>
+            <div class="modal-footer" style="justify-content:space-between">
+                <button class="btn btn-danger" onclick="modalBack()">
+                    <span class="fa fa-play-circle"></span> @Strings.Back
+                </button>
+                <button class="btn btn-success" data-dismiss="modal">
+                    @Strings.Cancel <span class="fa fa-times-circle"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row mt-5">
+    <div class="col-12 text-center p-0">
+        <h4>
+            @Strings.EnterHandRecord @Model.BoardNumber @Strings.EnterHandRecord2
+        </h4>
+    </div>
+</div>
+
+<div class="row mt-2">
+    <div class="col-12 text-center p-0">
+        <button id="cA" class="btn btn-primary m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; addCard('A')" onclick="if (!touchAvailable) addCard('A')">
+            @Strings.A
+        </button>
+        <button id="cB" class="btn btn-primary m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; addCard('B')" onclick="if (!touchAvailable) addCard('B')">
+            @Strings.K
+        </button>
+        <button id="cC" class="btn btn-primary m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; addCard('C')" onclick="if (!touchAvailable) addCard('C')">
+            @Strings.Q
+        </button>
+        <button id="cD" class="btn btn-primary m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; addCard('D')" onclick="if (!touchAvailable) addCard('D')">
+            @Strings.J
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center p-0">
+        <button id="cE" class="btn btn-primary m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; addCard('E')" onclick="if (!touchAvailable) addCard('E')">
+            @Strings.TenShorthand
+        </button>
+        <button id="cF" class="btn btn-primary m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; addCard('F')" onclick="if (!touchAvailable) addCard('F')">
+            9
+        </button>
+        <button id="cG" class="btn btn-primary m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; addCard('G')" onclick="if (!touchAvailable) addCard('G')">
+            8
+        </button>
+        <button id="cH" class="btn btn-primary m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; addCard('H')" onclick="if (!touchAvailable) addCard('H')">
+            7
+        </button>
+        <button id="cI" class="btn btn-primary m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; addCard('I')" onclick="if (!touchAvailable) addCard('I')">
+            6
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center p-0">
+        <button id="cJ" class="btn btn-primary m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; addCard('J')" onclick="if (!touchAvailable) addCard('J')">
+            5
+        </button>
+        <button id="cK" class="btn btn-primary m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; addCard('K')" onclick="if (!touchAvailable) addCard('K')">
+            4
+        </button>
+        <button id="cL" class="btn btn-primary m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; addCard('L')" onclick="if (!touchAvailable) addCard('L')">
+            3
+        </button>
+        <button id="cM" class="btn btn-primary m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; addCard('M')" onclick="if (!touchAvailable) addCard('M')">
+            2
+        </button>
+    </div>
+</div>
+
+<div class="row mt-2">
+    <div class="col-12 text-center">
+        <button id="suitS" class="btn btn-warning m-1 p-0" style="color:black; width:2.5em; height:2.5em" ontouchstart="touchAvailable = true; setSuit('S')" onclick="if (!touchAvailable) setSuit('S')">
+            <div style="font-size:xx-large; line-height:1em">&spades;</div>
+        </button>
+        <button id="suitH" class="btn btn-suit m-1 p-0" style="color:red; width:2.5em; height:2.5em" ontouchstart="touchAvailable = true; setSuit('H')" onclick="if (!touchAvailable) setSuit('H')">
+            <div style="font-size:xx-large; line-height:1em">&hearts;</div>
+        </button>
+        <button id="suitD" class="btn btn-suit m-1 p-0" style="color:lightsalmon; width:2.5em; height:2.5em" ontouchstart="touchAvailable = true; setSuit('D')" onclick="if (!touchAvailable) setSuit('D')">
+            <div style="font-size:xx-large; line-height:1em">&diams;</div>
+        </button>
+        <button id="suitC" class="btn btn-suit m-1 p-0" style="color:lightslategrey; width:2.5em; height:2.5em" ontouchstart="touchAvailable = true; setSuit('C')" onclick="if (!touchAvailable) setSuit('C')">
+            <div style="font-size:xx-large; line-height:1em">&clubs;</div>
+        </button>
+    </div>
+</div>
+
+
+<div class="row mt-2">
+    <div class="col-4 text-right align-self-center">
+        <button id="skipButton" class="btn btn-outline-danger float-right" ontouchstart="touchAvailable = true; skip()" onclick="if (!touchAvailable) skip()">
+            @Strings.Skip
+        </button>
+    </div>
+    <div class="col-4 text-center p-0">
+        <span class="fa fa-arrow-circle-down fa-2x px-2"></span><span id="count" style="font-size:1.6rem">0</span><span class="fa fa-arrow-circle-up fa-2x px-2"></span>
+    </div>
+    <div class="col-4 text-left align-self-center">
+        <button id="remainderButton" class="btn d-none" ontouchstart="touchAvailable = true; remainder()" onclick="if (!touchAvailable) remainder()">
+            @Strings.All <span class="fa fa-arrow-down"></span>
+        </button>
+    </div>
+</div>
+
+<div class="row mt-2">
+    <div class="col-12 text-center p-0">
+        <button id="dN" class="btn btn-warning m-1 px-2" ontouchstart="touchAvailable = true; setDirection('N')" onclick="if (!touchAvailable) setDirection('N')">
+            @Strings.North
+        </button>
+        <button id="dS" class="btn btn-secondary m-1 px-2" ontouchstart="touchAvailable = true; setDirection('S')" onclick="if (!touchAvailable) setDirection('S')">
+            @Strings.South
+        </button>
+        <button id="dE" class="btn btn-secondary m-1 px-2" ontouchstart="touchAvailable = true; setDirection('E')" onclick="if (!touchAvailable) setDirection('E')">
+            @Strings.East
+        </button>
+        <button id="dW" class="btn btn-secondary m-1 px-2" ontouchstart="touchAvailable = true; setDirection('W')" onclick="if (!touchAvailable) setDirection('W')">
+            @Strings.West
+        </button>
+    </div>
+</div>
+
+<div class="row mt-2">
+    <div id="colBlankSpades" class="col-2">
+    </div>
+    <div id="colSpades" class="col-10 text-left p-0">
+        <button id="handSpades" class="btn px-0 py-1">
+            <div style="font-size:larger; color: black">&spades;</div>
+        </button>
+        <button id="S0" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('S',0)" onclick="if (!touchAvailable) removeCard('S',0)">
+            <span id="S0Text"></span>
+        </button>
+        <button id="S1" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('S',1)" onclick="if (!touchAvailable) removeCard('S',1)">
+            <span id="S1Text"></span>
+        </button>
+        <button id="S2" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('S',2)" onclick="if (!touchAvailable) removeCard('S',2)">
+            <span id="S2Text"></span>
+        </button>
+        <button id="S3" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('S',3)" onclick="if (!touchAvailable) removeCard('S',3)">
+            <span id="S3Text"></span>
+        </button>
+        <button id="S4" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('S',4)" onclick="if (!touchAvailable) removeCard('S',4)">
+            <span id="S4Text"></span>
+        </button>
+        <button id="S5" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('S',5)" onclick="if (!touchAvailable) removeCard('S',5)">
+            <span id="S5Text"></span>
+        </button>
+        <button id="S6" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('S',6)" onclick="if (!touchAvailable) removeCard('S',6)">
+            <span id="S6Text"></span>
+        </button>
+        <button id="S7" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('S',7)" onclick="if (!touchAvailable) removeCard('S',7)">
+            <span id="S7Text"></span>
+        </button>
+        <button id="S8" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('S',8)" onclick="if (!touchAvailable) removeCard('S',8)">
+            <span id="S8Text"></span>
+        </button>
+        <button id="S9" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('S',9)" onclick="if (!touchAvailable) removeCard('S',9)">
+            <span id="S9Text"></span>
+        </button>
+        <button id="S10" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('S',10)" onclick="if (!touchAvailable) removeCard('S',10)">
+            <span id="S10Text"></span>
+        </button>
+        <button id="S11" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('S',11)" onclick="if (!touchAvailable) removeCard('S',11)">
+            <span id="S11Text"></span>
+        </button>
+        <button id="S12" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('S',12)" onclick="if (!touchAvailable) removeCard('S',12)">
+            <span id="S12Text"></span>
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div id="colBlankHearts" class="col-2">
+    </div>
+    <div id="colHearts" class="col-10 text-left p-0">
+        <button id="handHearts" class="btn px-0 py-1">
+            <div style="font-size:larger; color: red">&hearts;</div>
+        </button>
+        <button id="H0" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('H',0)" onclick="if (!touchAvailable) removeCard('H',0)">
+            <span id="H0Text" t></span>
+        </button>
+        <button id="H1" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('H',1)" onclick="if (!touchAvailable) removeCard('H',1)">
+            <span id="H1Text"></span>
+        </button>
+        <button id="H2" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('H',2)" onclick="if (!touchAvailable) removeCard('H',2)">
+            <span id="H2Text"></span>
+        </button>
+        <button id="H3" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('H',3)" onclick="if (!touchAvailable) removeCard('H',3)">
+            <span id="H3Text"></span>
+        </button>
+        <button id="H4" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('H',4)" onclick="if (!touchAvailable) removeCard('H',4)">
+            <span id="H4Text"></span>
+        </button>
+        <button id="H5" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('H',5)" onclick="if (!touchAvailable) removeCard('H',5)">
+            <span id="H5Text"></span>
+        </button>
+        <button id="H6" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('H',6)" onclick="if (!touchAvailable) removeCard('H',6)">
+            <span id="H6Text"></span>
+        </button>
+        <button id="H7" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('H',7)" onclick="if (!touchAvailable) removeCard('H',7)">
+            <span id="H7Text"></span>
+        </button>
+        <button id="H8" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('H',8)" onclick="if (!touchAvailable) removeCard('H',8)">
+            <span id="H8Text"></span>
+        </button>
+        <button id="H9" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('H',9)" onclick="if (!touchAvailable) removeCard('H',9)">
+            <span id="H9Text"></span>
+        </button>
+        <button id="H10" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('H',10)" onclick="if (!touchAvailable) removeCard('H',10)">
+            <span id="H10Text"></span>
+        </button>
+        <button id="H11" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('H',11)" onclick="if (!touchAvailable) removeCard('H',11)">
+            <span id="H11Text"></span>
+        </button>
+        <button id="H12" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('H',12)" onclick="if (!touchAvailable) removeCard('H',12)">
+            <span id="H12Text"></span>
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div id="colBlankDiamonds" class="col-2">
+    </div>
+    <div id="colDiamonds" class="col-10 text-left p-0">
+        <button id="handDiamonds" class="btn px-0 py-1">
+            <div style="font-size:larger; color: lightsalmon">&diams;</div>
+        </button>
+        <button id="D0" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('D',0)" onclick="if (!touchAvailable) removeCard('D',0)">
+            <span id="D0Text"></span>
+        </button>
+        <button id="D1" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('D',1)" onclick="if (!touchAvailable) removeCard('D',1)">
+            <span id="D1Text"></span>
+        </button>
+        <button id="D2" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('D',2)" onclick="if (!touchAvailable) removeCard('D',2)">
+            <span id="D2Text"></span>
+        </button>
+        <button id="D3" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('D',3)" onclick="if (!touchAvailable) removeCard('D',3)">
+            <span id="D3Text"></span>
+        </button>
+        <button id="D4" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('D',4)" onclick="if (!touchAvailable) removeCard('D',4)">
+            <span id="D4Text"></span>
+        </button>
+        <button id="D5" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('D',5)" onclick="if (!touchAvailable) removeCard('D',5)">
+            <span id="D5Text"></span>
+        </button>
+        <button id="D6" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('D',6)" onclick="if (!touchAvailable) removeCard('D',6)">
+            <span id="D6Text"></span>
+        </button>
+        <button id="D7" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('D',7)" onclick="if (!touchAvailable) removeCard('D',7)">
+            <span id="D7Text"></span>
+        </button>
+        <button id="D8" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('D',8)" onclick="if (!touchAvailable) removeCard('D',8)">
+            <span id="D8Text"></span>
+        </button>
+        <button id="D9" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('D',9)" onclick="if (!touchAvailable) removeCard('D',9)">
+            <span id="D9Text"></span>
+        </button>
+        <button id="D10" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('D',10)" onclick="if (!touchAvailable) removeCard('D',10)">
+            <span id="D10Text"></span>
+        </button>
+        <button id="D11" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('D',11)" onclick="if (!touchAvailable) removeCard('D',11)">
+            <span id="D11Text"></span>
+        </button>
+        <button id="D12" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('D',12)" onclick="if (!touchAvailable) removeCard('D',12)">
+            <span id="D12Text"></span>
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div id="colBlankClubs" class="col-2">
+    </div>
+    <div id="colClubs" class="col-10 text-left p-0">
+        <button id="handClubs" class="btn px-0 py-1">
+            <div style="font-size:larger; color: lightslategrey">&clubs;</div>
+        </button>
+        <button id="C0" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('C',0)" onclick="if (!touchAvailable) removeCard('C',0)">
+            <span id="C0Text"></span>
+        </button>
+        <button id="C1" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('C',1)" onclick="if (!touchAvailable) removeCard('C',1)">
+            <span id="C1Text"></span>
+        </button>
+        <button id="C2" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('C',2)" onclick="if (!touchAvailable) removeCard('C',2)">
+            <span id="C2Text"></span>
+        </button>
+        <button id="C3" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('C',3)" onclick="if (!touchAvailable) removeCard('C',3)">
+            <span id="C3Text"></span>
+        </button>
+        <button id="C4" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('C',4)" onclick="if (!touchAvailable) removeCard('C',4)">
+            <span id="C4Text"></span>
+        </button>
+        <button id="C5" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('C',5)" onclick="if (!touchAvailable) removeCard('C',5)">
+            <span id="C5Text"></span>
+        </button>
+        <button id="C6" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('C',6)" onclick="if (!touchAvailable) removeCard('C',6)">
+            <span id="C6Text"></span>
+        </button>
+        <button id="C7" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('C',7)" onclick="if (!touchAvailable) removeCard('C',7)">
+            <span id="C7Text"></span>
+        </button>
+        <button id="C8" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('C',8)" onclick="if (!touchAvailable) removeCard('C',8)">
+            <span id="C8Text"></span>
+        </button>
+        <button id="C9" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('C',9)" onclick="if (!touchAvailable) removeCard('C',9)">
+            <span id="C9Text"></span>
+        </button>
+        <button id="C10" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('C',10)" onclick="if (!touchAvailable) removeCard('C',10)">
+            <span id="C10Text"></span>
+        </button>
+        <button id="C11" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('C',11)" onclick="if (!touchAvailable) removeCard('C',11)">
+            <span id="C11Text"></span>
+        </button>
+        <button id="C12" class="btn btn-sm d-none px-custom" ontouchstart="touchAvailable = true; removeCard('C',12)" onclick="if (!touchAvailable) removeCard('C',12)">
+            <span id="C12Text"></span>
+        </button>
+    </div>
+</div>
+
+<script>
+    var urlOKButtonClick = '@Url.Action("OKButtonClick", "EnterHandRecord")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+    var urlBackButtonClick = '@Url.Action("Index", "ConfirmResult")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+    var urlSkipButtonClick = '@Url.Action("Index", "ShowTraveller")?tabletDeviceNumber=@Model.TabletDeviceNumber&boardNumber=@Model.BoardNumber';
+    const cardString = ['@Strings.A', '@Strings.K', '@Strings.Q', '@Strings.J', '@Strings.TenShorthand', '9', '8', '7', '6', '5', '4', '3', '2'];
+</script>
+@Scripts.Render("~/bundles/enterHandRecordJS")

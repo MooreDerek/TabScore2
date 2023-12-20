@@ -1,0 +1,94 @@
+﻿<!-- TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
+     Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+
+@model TabScore.Models.SelectDirection
+
+<div id="tableDirectionRegisteredModal" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header text-danger">
+                <p class="modal-title text-center">
+                    <h3>@Strings["Warning"]</h3>
+                </p>
+            </div>
+            <div class="modal-body">
+                <p>@Strings["ErrorTableRegistered1"] @Model.TableNumber @Strings["ErrorTableRegistered2"] @Model.Direction @Strings["ErrorTableRegistered3"]</p>
+            </div>
+            <div class="modal-footer" style="justify-content:space-between">
+                <button class="btn btn-lg btn-danger" ontouchstart="modalLogOn()" onclick="modalLogOn()">
+                    <span class="fa fa-play-circle"></span> @Strings["Register"]
+                </button>
+                <button class="btn btn-lg btn-success" data-dismiss="modal">
+                    @Strings["Cancel"] <span class="fa fa-times-circle"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-12 text-center">
+        <h3>
+            @Strings["SelectDirection"]
+        </h3>
+    </div>
+</div>
+
+
+@if (!Model.NorthSouthMissing)
+{
+    <div class="row">
+        <div class="col-12 text-center">
+            <button id="dNorth" class="btn btn-secondary btn-lg m-1" style="width:8em" ontouchstart="touchAvailable = true; selectDirection('North')" onclick="if (!touchAvailable) selectDirection('North')">
+                @Strings["North"]/@Strings["South"]
+            </button>
+        </div>
+    </div>
+}
+
+@if (!Model.EastWestMissing)
+{
+    <div class="row">
+        <div class="col-12 text-center">
+            <button id="dEast" class="btn btn-secondary btn-lg m-1" style="width:8em" ontouchstart="touchAvailable = true; selectDirection('East')" onclick="if (!touchAvailable) selectDirection('East')">
+                @Strings["East"]/@Strings["West"]
+            </button>
+        </div>
+    </div>
+}
+
+@if (Model.Confirm)
+{
+    <script>
+        var warningModal = new bootstrap.Modal(document.getElementById("tableDirectionRegisteredModal"), { backdrop: 'static' })
+        warningModal.show()
+    </script>
+}
+
+<script>
+    var direction = "Null";
+    var isSubmitted = false;
+
+    function selectDirection(d) {
+        if (document.getElementById("dNorth")) document.getElementById("dNorth").className = "btn btn-secondary btn-lg m-1";
+        if (document.getElementById("dEast")) document.getElementById("dEast").className = "btn btn-secondary btn-lg m-1";
+        document.getElementById("d" + d).className = "btn btn-warning btn-lg m-1";
+        direction = d;
+        document.getElementById("OKButton").disabled = false;
+    }
+
+    function OKButtonClick() {
+        if (document.getElementById("OKButton").disabled) return;
+        if (!isSubmitted) {
+            isSubmitted = true;
+            location.href = '@Url.Action("OKButtonClick", "SelectDirection")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber&direction=' + direction + '&roundNumber=@Model.RoundNumber&confirm=false';
+        }
+    }
+
+    function modalLogOn() {
+        if (!isSubmitted) {
+            isSubmitted = true;
+            location.href = '@Url.Action("OKButtonClick", "SelectDirection")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber&direction=@Model.Direction&roundNumber=@Model.RoundNumber&confirm=true';
+        }
+    }
+</script>

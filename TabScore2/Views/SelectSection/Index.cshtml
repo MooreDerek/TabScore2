@@ -1,0 +1,45 @@
+﻿<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+     Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+
+@model List<Section>
+
+<div class="row mt-5">
+    <div class="col-12 text-center">
+        <h3>
+            @Strings["SelectSection"];
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center p-0">
+        @foreach (var section in Model)
+        {
+            <button id="s@(section.ID)" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; selectSection('@(section.ID)')" onclick="if (!touchAvailable) selectSection('@(section.ID)')">
+                @(section.Letter)
+            </button>
+        }
+    </div>
+</div>
+
+<script>
+    var section = "";
+    var isSubmitted = false;
+
+    function selectSection(n) {
+        if (section != "") {
+            document.getElementById("s" + section).className = "btn btn-primary btn-lg m-1 px-0";
+        }
+        document.getElementById("s" + n).className = "btn btn-warning btn-lg m-1 px-0";
+        section = n;
+        document.getElementById("OKButton").disabled = false;
+    }
+
+    function OKButtonClick() {
+        if (document.getElementById("OKButton").disabled) return;
+        if (!isSubmitted) {
+            isSubmitted = true;
+            location.href = '@Url.Action("Index", "SelectTableNumber")?sectionID=' + section;
+        }
+    }
+</script>

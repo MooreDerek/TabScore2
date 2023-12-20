@@ -1,0 +1,81 @@
+﻿<!-- TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
+     Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+
+@model TabScore.Models.EnterContract
+@using Resources
+
+<div class="row mt-5">
+    <div class="col-12 text-center">
+        <h3>
+            @Strings.Board @Model.ResultData.BoardNumber
+        </h3>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        <h3>
+            @Strings.ConfirmResult
+        </h3>
+    </div>
+</div>
+
+@if (Model.ResultData.ContractLevel == 0)
+{
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            <h3>
+                <span style="color:darkgreen">@Strings.AllPass</span>
+            </h3>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            <h3>
+                @Html.Raw(Model.ResultData.ContractDisplay)
+            </h3>
+        </div>
+    </div>
+
+    if (Model.ResultData.Score > 0)
+    {
+        <div class="row">
+            <div class="col-12 text-center">
+                <h3>
+                    @Model.ResultData.Score @Strings.To @Strings.N@Strings.S
+                </h3>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-12 text-center">
+                <h3>
+                    @(-Model.ResultData.Score) @Strings.To @Strings.E@Strings.W
+                </h3>
+            </div>
+        </div>
+    }
+}
+
+<script>
+    var isSubmitted = false;
+
+    $(document).on('touchstart click', '#OKButton:enabled', function () {
+        if (!isSubmitted) {
+            isSubmitted = true;
+            location.href = '@Url.Action("OKButtonClick", "ConfirmResult")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+        }
+    });
+
+    $(document).on('touchstart click', '#BackButton:enabled', function () {
+        if (!isSubmitted) {
+            isSubmitted = true;
+            location.href = '@Url.Action("BackButtonClick", "ConfirmResult")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+        }
+    });
+</script>

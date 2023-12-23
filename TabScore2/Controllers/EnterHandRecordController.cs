@@ -17,36 +17,34 @@ namespace TabScore.Controllers
         private readonly IUtilities utilities = iUtilities;
         private readonly ISettings settings = iSettings;
 
-        public ActionResult Index(int tabletDeviceNumber, int boardNumber)
+        public ActionResult Index(int deviceNumber, int boardNumber)
         {
             if (!settings.ManualHandRecordEntry)
             {
-                return RedirectToAction("Index", "ShowTraveller", new { tabletDeviceNumber, boardNumber });
+                return RedirectToAction("Index", "ShowTraveller", new { deviceNumber, boardNumber });
             }
-            TabletDeviceStatus tabletDeviceStatus = appData.GetTabletDeviceStatus(tabletDeviceNumber);
-            TableStatus tableStatus = appData.GetTableStatus(tabletDeviceNumber)!;
+            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(deviceNumber);
 
-            if (database.GetHand(tabletDeviceStatus.SectionID, boardNumber) != null)
+            if (database.GetHand(deviceStatus.SectionID, boardNumber) != null)
             {
                 // Hand record already exists, so no need to enter it
-                return RedirectToAction("Index", "ShowTraveller", new { tabletDeviceNumber, boardNumber });
+                return RedirectToAction("Index", "ShowTraveller", new { deviceNumber, boardNumber });
             }
-            EnterHandRecord enterHandRecord = new(tabletDeviceNumber, tableStatus.SectionID, boardNumber);
+            EnterHandRecord enterHandRecord = new(deviceNumber, deviceStatus.SectionID, boardNumber);
             
-            if (settings.ShowTimer) ViewData["TimerSeconds"] = appData.GetTimerSeconds(tabletDeviceNumber);
-            ViewData["Title"] = utilities.Title(tabletDeviceNumber, "EnterHandRecord", TitleType.Plain);
-            ViewData["Header"] = utilities.Header(tabletDeviceNumber, HeaderType.FullColoured, tableStatus.ResultData!.BoardNumber);
+            if (settings.ShowTimer) ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
+            ViewData["Title"] = utilities.Title(deviceNumber, "EnterHandRecord", TitleType.Plain);
+            ViewData["Header"] = utilities.Header(deviceNumber, HeaderType.FullColoured, boardNumber);
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabledAndBack;
             return View(enterHandRecord);
         }
 
-        public ActionResult OKButtonClick(int tabletDeviceNumber, string NS, string NH, string ND, string NC, string SS, string SH, string SD, string SC, string ES, string EH, string ED, string EC, string WS, string WH, string WD, string WC)
+        public ActionResult OKButtonClick(int deviceNumber, string NS, string NH, string ND, string NC, string SS, string SH, string SD, string SC, string ES, string EH, string ED, string EC, string WS, string WH, string WD, string WC)
         {
-            TableStatus tableStatus = appData.GetTableStatus(tabletDeviceNumber)!;
-            int boardNumber = tableStatus.ResultData!.BoardNumber;
+            int boardNumber = appData.GetTableStatus(deviceNumber).ResultData.BoardNumber;
             Hand hand = new()
             {
-                SectionID = tableStatus.SectionID,
+                SectionID = appData.GetTabletDeviceStatus(deviceNumber).SectionID,
                 BoardNumber = boardNumber,
                 NorthSpades = NS,
                 NorthHearts = NH,
@@ -67,7 +65,7 @@ namespace TabScore.Controllers
             };
             database.AddHand(hand);
             if (settings.DoubleDummy) appData.AddHandEvaluation(hand);
-            return RedirectToAction("Index", "ShowTraveller", new { tabletDeviceNumber, boardNumber });
+            return RedirectToAction("Index", "ShowTraveller", new { deviceNumber, boardNumber });
         }
     }
 }

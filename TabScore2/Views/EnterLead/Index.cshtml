@@ -1,9 +1,7 @@
-﻿<!-- TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
+﻿<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore.Models.EnterContract
-@using Resources
-@using System.Web.Optimization
+@model TabScore2.Models.EnterContract
 
 <style>
     .btn-suit {
@@ -11,20 +9,20 @@
     }
 </style>
 
-<div id="leadNoMatchModal" class="modal" data-backdrop="static">
+<div id="leadNoMatchModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header text-primary">
                 <p class="modal-title text-center">
-                    <h3>@Strings.Warning</h3>
+                    <h3>@Strings["Warning"]</h3>
                 </p>
             </div>
             <div class="modal-body">
-                <p>@Strings.LeadNoMatch</p>
+                <p>@Strings["LeadNoMatch"]</p>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-lg btn-success" data-dismiss="modal">
-                    @Strings.OK <span class="fa fa-check-circle"></span>
+                    @Strings["OK"] <span class="fa fa-check-circle"></span>
                 </button>
             </div>
         </div>
@@ -34,7 +32,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center p-0">
         <h3>
-            @Strings.Board @Model.ResultData.BoardNumber: @Html.Raw(Model.ResultData.ContractDisplay)
+            @Strings["Board"] @Model.BoardNumber: @Html.Raw(Model.ContractDisplay)
         </h3>
     </div>
 </div>
@@ -42,7 +40,7 @@
 <div class="row">
     <div class="col-12 text-center p-0">
         <h3>
-            @Strings.EnterLead
+            @Strings["EnterLead"]
         </h3>
     </div>
 </div>
@@ -50,16 +48,16 @@
 <div class="row mt-4">
     <div class="col-12 text-center p-0">
         <button id="cA" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setCard('A')" onclick="if (!touchAvailable) setCard('A')">
-            @Strings.A
+            @Strings["A"]
         </button>
         <button id="cK" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setCard('K')" onclick="if (!touchAvailable) setCard('K')">
-            @Strings.K
+            @Strings["K"]
         </button>
         <button id="cQ" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setCard('Q')" onclick="if (!touchAvailable) setCard('Q')">
-            @Strings.Q
+            @Strings["Q"]
         </button>
         <button id="cJ" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setCard('J')" onclick="if (!touchAvailable) setCard('J')">
-            @Strings.J
+            @Strings["J"]
         </button>
     </div>
 </div>
@@ -67,7 +65,7 @@
 <div class="row">
     <div class="col-12 text-center p-0">
         <button id="cT" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setCard('T')" onclick="if (!touchAvailable) setCard('T')">
-            @Strings.TenShorthand
+            @Strings["TenShorthand"]
         </button>
         <button id="c9" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setCard('9')" onclick="if (!touchAvailable) setCard('9')">
             9
@@ -118,27 +116,28 @@
     </div>
 </div>
 
-@if (Model.ResultData.LeadValidation != TabScore.Models.LeadValidationOptions.Validate)
+@if (Model.LeadValidation != TabScore2.Globals.LeadValidationOptions.Validate)
 {
     <div class="row mt-2">
         <div class="col-12 text-center p-0">
             <button id="skip" class="btn btn-outline-danger btn-lg m-1 px-2" ontouchstart="touchAvailable = true; setSkip()" onclick="if (!touchAvailable) setSkip()">
-                @Strings.Skip
+                @Strings["Skip"]
             </button>
         </div>
     </div>
 }
 
-@if (Model.ResultData.LeadValidation == TabScore.Models.LeadValidationOptions.Warning)
+@if (Model.LeadValidation == TabScore2.Globals.LeadValidationOptions.Warning)
 {
     <script>
-        $("#leadNoMatchModal").modal("show");
+        var leadNoMatchModal = new bootstrap.Modal(document.getElementById("leadNoMatchModal"), { backdrop: 'static' })
+        leadNoMatchModal.show()
     </script>
 }
 
 <script>
-    var leadCard = "@Model.ResultData.LeadCard";
-    var urlOKButtonClick = '@Url.Action("OKButtonClick", "EnterLead")?tabletDeviceNumber=@Model.TabletDeviceNumber';
-    var urlEnterContract = '@Url.Action("Index", "EnterContract")?tabletDeviceNumber=@Model.TabletDeviceNumber&boardNumber=@Model.ResultData.BoardNumber';
+    var leadCard = "@Model.LeadCard";
+    var urlOKButtonClick = '@Url.Action("OKButtonClick", "EnterLead")?deviceNumber=@Model.TabletDeviceNumber';
+    var urlEnterContract = '@Url.Action("Index", "EnterContract")?deviceNumber=@Model.TabletDeviceNumber&boardNumber=@Model.BoardNumber';
 </script>
-@Scripts.Render("~/bundles/enterLeadJS")
+<script src="~/js/enterLeadJS.js"></script>

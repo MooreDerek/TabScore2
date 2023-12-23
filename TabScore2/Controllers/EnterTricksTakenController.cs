@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using Microsoft.AspNetCore.Mvc;
-using TabScore.Models;
+using TabScore2.Models;
 using TabScore2.Classes;
 using TabScore2.DataServices;
 using TabScore2.Globals;
@@ -16,19 +16,19 @@ namespace TabScore2.Controllers
         private readonly IUtilities utilities = iUtilities;
         private readonly ISettings settings = iSettings;
 
-        public ActionResult Index(int tabletDeviceNumber)
+        public ActionResult Index(int deviceNumber)
         {
-            TableStatus tableStatus = appData.GetTableStatus(tabletDeviceNumber)!;
-            if (tableStatus.ResultData == null)  // Probably from browser 'Back' button.  Don't know boardNumber so go to ShowBoards
+            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
+            if (tableStatus.ResultData.BoardNumber == 0)  // Probably from browser 'Back' button.  Don't know boardNumber so go to ShowBoards
             {
-                return RedirectToAction("Index", "ShowBoards", new { tabletDeviceNumber });
+                return RedirectToAction("Index", "ShowBoards", new { deviceNumber });
             }
-            
-            EnterContract enterContract = new(tabletDeviceNumber, tableStatus.ResultData);
 
-            if (settings.ShowTimer) ViewData["TimerSeconds"] = appData.GetTimerSeconds(tabletDeviceNumber);
-            ViewData["Title"] = utilities.Title(tabletDeviceNumber, "EnterTricksTaken", TitleType.Location);
-            ViewData["Header"] = utilities.Header(tabletDeviceNumber, HeaderType.FullColoured, tableStatus.ResultData.BoardNumber);
+            EnterContract enterContract = utilities.CreateEnterContractModel(deviceNumber, tableStatus.ResultData);
+
+            if (settings.ShowTimer) ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
+            ViewData["Title"] = utilities.Title(deviceNumber, "EnterTricksTaken", TitleType.Location);
+            ViewData["Header"] = utilities.Header(deviceNumber, HeaderType.FullColoured, tableStatus.ResultData.BoardNumber);
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabledAndBack;
             if (settings.EnterResultsMethod == 1)
             {
@@ -40,26 +40,26 @@ namespace TabScore2.Controllers
             }
         }
 
-        public ActionResult OKButtonClick(int tabletDeviceNumber, int numTricks)
+        public ActionResult OKButtonClick(int deviceNumber, int numTricks)
         {
-            TableStatus tableStatus = appData.GetTableStatus(tabletDeviceNumber)!;  // tableStatus and result must exist
-            Result contractResult = tableStatus.ResultData!;
+            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
+            Result contractResult = tableStatus.ResultData;
             contractResult.TricksTaken = numTricks;
             contractResult.CalculateScore();
-            return RedirectToAction("Index", "ConfirmResult", new { tabletDeviceNumber });
+            return RedirectToAction("Index", "ConfirmResult", new { deviceNumber });
         }
 
-        public ActionResult BackButtonClick(int tabletDeviceNumber)
+        public ActionResult BackButtonClick(int deviceNumber)
         {
             if (settings.EnterLeadCard)
             {
-                return RedirectToAction("Index", "EnterLead", new { tabletDeviceNumber, leadValidation = LeadValidationOptions.NoWarning });
+                return RedirectToAction("Index", "EnterLead", new { deviceNumber, leadValidation = LeadValidationOptions.NoWarning });
             }
             else
             {
-                TableStatus tableStatus = appData.GetTableStatus(tabletDeviceNumber)!;  // tableStatus and result must exist
+                TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
                 Result contractResult = tableStatus.ResultData!;
-                return RedirectToAction("Index", "EnterContract", new { tabletDeviceNumber, boardNumber = contractResult.BoardNumber });
+                return RedirectToAction("Index", "EnterContract", new { deviceNumber, boardNumber = contractResult.BoardNumber });
             }
         }
     }

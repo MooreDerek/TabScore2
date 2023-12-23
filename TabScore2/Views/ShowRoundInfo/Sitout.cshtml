@@ -1,13 +1,12 @@
-﻿<!-- TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
-Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+﻿<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+     Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore.Models.ShowRoundInfoSitout
-@using Resources
+@model TabScore2.Models.ShowRoundInfoSitout
 
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            @Strings.Round @Model.RoundNumber
+            @Strings["Round"] @Model.RoundNumber
         </h3>
     </div>
 </div>
@@ -17,7 +16,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     <div class="row mt-4">
         <div class="col-12 text-center">
             <h3 style="color:blue">
-                @Strings.Pair @Model.PairNumber
+                @Strings["Pair"] @Model.PairNumber
             </h3>
         </div>
     </div>
@@ -27,7 +26,7 @@ else
     <div class="row mt-4">
         <div class="col-12 text-center">
             <h3 style="color:blue">
-                @Strings.Player @Model.PairNumber
+                @Strings["Player"] @Model.PairNumber
             </h3>
         </div>
     </div>
@@ -36,7 +35,7 @@ else
 <div class="row mt-4">
     <div class="col-12 text-center">
         <h3 style="color:red">
-            @Strings.SittingOut
+            @Strings["SittingOut"]
         </h3>
     </div>
 </div>
@@ -46,7 +45,7 @@ else
     </div>
     <div class="col-10 text-center">
         <h5>
-            @Strings.SittingOutNoTable
+            @Strings["SittingOutNoTable"]
         </h5>
     </div>
     <div class="col-1">
@@ -56,18 +55,20 @@ else
 <script>
     var isSubmitted = false;
 
-    $(document).on('touchstart click', '#OKButton:enabled', function () {
+    function OKButtonClick() {
+        if (document.getElementById("OKButton").disabled) return;
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("Index", "ShowRankingList")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+            location.href = '@Url.Action("Index", "ShowRankingList")?deviceNumber=@Model.TabletDeviceNumber';
         }
-    });
+    }
 
-    $(document).on('touchstart click', '#BackButton:enabled', function () {
+    function BackButtonClick() {
+        if (document.getElementById("BackButton").disabled) return;
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("BackButtonClick", "ShowRoundInfo")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+            location.href = '@Url.Action("BackButtonClick", "ShowRoundInfo")?deviceNumber=@Model.TabletDeviceNumber';
         }
-    });
+    }
 </script>
 

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using Microsoft.AspNetCore.Mvc;
-using TabScore.Models;
+using TabScore2.Models;
 using TabScore2.Classes;
 using TabScore2.DataServices;
 using TabScore2.Globals;
@@ -17,24 +17,27 @@ namespace TabScore2.Controllers
         private readonly IUtilities utilities = iUtilities;
         private readonly ISettings settings = iSettings;
 
-        public ActionResult Index(int tabletDeviceNumber, int boardNumber, bool fromView = false)
+        public ActionResult Index(int deviceNumber, int boardNumber, bool fromView = false)
         {
             if (!settings.ShowTraveller)
             {
-                return RedirectToAction("Index", "ShowBoards", new { tabletDeviceNumber });
+                return RedirectToAction("Index", "ShowBoards", new { deviceNumber });
             }
 
-            TableStatus tableStatus = appData.GetTableStatus(tabletDeviceNumber)!;
-            
-            // If ResultData is null, either from ShowBoards/View or browser 'Back' button, retrieve result
-            tableStatus.ResultData ??= database.GetResult(tableStatus.SectionID, tableStatus.TableNumber, tableStatus.RoundNumber, boardNumber);
+            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
+
+            // If ResultData doesn't exist, either from ShowBoards/View or browser 'Back' button, retrieve result
+            if (tableStatus.ResultData.BoardNumber == 0)
+            {
+                tableStatus.ResultData = database.GetResult(tableStatus.SectionID, tableStatus.TableNumber, tableStatus.RoundNumber, boardNumber);
+            }
            
-            ShowTraveller traveller = utilities.CreateShowTravellerModel(tabletDeviceNumber);
+            ShowTraveller traveller = utilities.CreateShowTravellerModel(deviceNumber);
             traveller.FromView = fromView;
 
-            if (settings.ShowTimer) ViewData["TimerSeconds"] = appData.GetTimerSeconds(tabletDeviceNumber);
-            ViewData["Title"] = utilities.Title(tabletDeviceNumber, "ShowTraveller", TitleType.Location);
-            ViewData["Header"] = utilities.Header(tabletDeviceNumber, HeaderType.FullColoured);
+            if (settings.ShowTimer) ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
+            ViewData["Title"] = utilities.Title(deviceNumber, "ShowTraveller", TitleType.Location);
+            ViewData["Header"] = utilities.Header(deviceNumber, HeaderType.FullColoured);
             if (fromView)
             {
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;

@@ -1,9 +1,7 @@
-﻿<!-- TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
-    Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+﻿<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+     Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore.Models.ResultInfo
-@using System.Web.Optimization
-@using Resources
+@model TabScore2.Models.EnterContract
 
 <style>
     .btn-suit {
@@ -41,7 +39,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center p-0">
         <h3>
-            @Strings.Board @Model.ResultData.BoardNumber
+            @Strings["Board"] @Model.BoardNumber
         </h3>
     </div>
 </div>
@@ -49,7 +47,7 @@
 <div class="row">
     <div class="col-12 text-center p-0">
         <h3>
-            @Strings.EnterContract
+            @Strings["EnterContract"]
         </h3>
     </div>
 </div>
@@ -57,10 +55,10 @@
 <div class="row mt-4">
     <div class="col-12 text-center p-0">
         <button id="skip" class="btn btn-lg btn-outline-danger m-1 px-2" ontouchstart="touchAvailable = true; setSkip()" onclick="if (!touchAvailable) setSkip()">
-            @Strings.Skip
+            @Strings["Skip"]
         </button>
         <button id="pass" class="btn btn-lg btn-pass m-1 px-2" ontouchstart="touchAvailable = true; setPass()" onclick="if (!touchAvailable) setPass()">
-            @Strings.AllPass
+            @Strings["AllPass"]
         </button>
         <button id="n1" class="btn btn-lg btn-primary m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setLevel(1)" onclick="if (!touchAvailable) setLevel(1)">
             1
@@ -94,7 +92,7 @@
 <div class="row">
     <div class="col-12 text-center p-0">
         <button id="sNT" class="btn btn-lg btn-suit m-1 p-0" style="width:2.5em; height:2.5em" ontouchstart="touchAvailable = true; setSuit('NT')" onclick="if (!touchAvailable) setSuit('NT')">
-            @Strings.NT
+            @Strings["NT"]
         </button>
         <button id="sS" class="btn btn-lg btn-suit m-1 p-0" style="width:2.5em; height:2.5em" ontouchstart="touchAvailable = true; setSuit('S')" onclick="if (!touchAvailable) setSuit('S')">
             <div style="font-size: 2rem; color: black">&spades;</div>
@@ -125,7 +123,7 @@
 <div class="row mt-2">
     <div class="col-12 text-center p-0">
         <h3>
-            @Strings.by
+            @Strings["by"]
         </h3>
     </div>
 </div>
@@ -133,28 +131,28 @@
 <div class="row mt-2">
     <div class="col-12 text-center p-0">
         <button id="dN" class="btn btn-lg btn-secondary m-1 px-2" ontouchstart="touchAvailable = true; setNSEW('N')" onclick="if (!touchAvailable) setNSEW('N')">
-            @Strings.North
+            @Strings["North"]
         </button>
         <button id="dS" class="btn btn-lg btn-secondary m-1 px-2" ontouchstart="touchAvailable = true; setNSEW('S')" onclick="if (!touchAvailable) setNSEW('S')">
-            @Strings.South
+            @Strings["South"]
         </button>
         <button id="dE" class="btn btn-lg btn-secondary m-1 px-2" ontouchstart="touchAvailable = true; setNSEW('E')" onclick="if (!touchAvailable) setNSEW('E')">
-            @Strings.East
+            @Strings["East"]
         </button>
         <button id="dW" class="btn btn-lg btn-secondary m-1 px-2" ontouchstart="touchAvailable = true; setNSEW('W')" onclick="if (!touchAvailable) setNSEW('W')">
-            @Strings.West
+            @Strings["West"]
         </button>
     </div>
 </div>
 
 <script>
-    var level = @Model.ResultData.ContractLevel;
-    var suit = '@Model.ResultData.ContractSuit';
-    var double = '@Model.ResultData.ContractX';
-    var NSEW = '@Model.ResultData.DeclarerNSEW';
-    var urlOKButtonPass = '@Url.Action("OKButtonPass", "EnterContract")?tabletDeviceNumber=@Model.TabletDeviceNumber';
-    var urlOKButtonSkip = '@Url.Action("OKButtonSkip", "EnterContract")?tabletDeviceNumber=@Model.TabletDeviceNumber';
-    var urlOKButtonContract = '@Url.Action("OKButtonContract", "EnterContract")?tabletDeviceNumber=@Model.TabletDeviceNumber';
-    var urlShowBoards = '@Url.Action("Index", "ShowBoards")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+    var level = @Model.ContractLevel;
+    var suit = '@Model.ContractSuit';
+    var double = '@Model.ContractX';
+    var NSEW = '@Model.DeclarerNSEW';
+    var urlOKButtonPass = '@Url.Action("OKButtonPass", "EnterContract")?deviceNumber=@Model.TabletDeviceNumber';
+    var urlOKButtonSkip = '@Url.Action("OKButtonSkip", "EnterContract")?deviceNumber=@Model.TabletDeviceNumber';
+    var urlOKButtonContract = '@Url.Action("OKButtonContract", "EnterContract")?deviceNumber=@Model.TabletDeviceNumber';
+    var urlShowBoards = '@Url.Action("Index", "ShowBoards")?deviceNumber=@Model.TabletDeviceNumber';
 </script>
-@Scripts.Render("~/bundles/enterContractJS")
+<script src="~/js/enterContractJS.js"></script>

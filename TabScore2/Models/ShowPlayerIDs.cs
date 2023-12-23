@@ -5,9 +5,9 @@ using TabScore2.Classes;
 
 namespace TabScore2.Models
 {
-    public class ShowPlayerIDs(int tabletDeviceNumber, bool showWarning) : List<PlayerEntry>
+    public class ShowPlayerIDs(int deviceNumber, bool showWarning) : List<PlayerEntry>
     {
-        public int TabletDeviceNumber { get; set; } = tabletDeviceNumber;
+        public int TabletDeviceNumber { get; set; } = deviceNumber;
         public int NumberOfBlankEntries { get; set; } = 0;
         public bool ShowWarning { get; set; } = showWarning;
         public bool ShowMessage { get; set; } = false;

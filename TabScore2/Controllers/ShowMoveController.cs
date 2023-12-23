@@ -18,77 +18,73 @@ namespace TabScore2.Controllers
         private readonly ISettings settings = iSettings;
         private readonly IHttpContextAccessor httpContextAccessor = iHttpContextAccessor;
 
-        public ActionResult Index(int tabletDeviceNumber, int newRoundNumber, int tableNotReadyNumber = -1)
+        public ActionResult Index(int deviceNumber, int newRoundNumber, int tableNotReadyNumber = -1)
         {
-            TabletDeviceStatus tabletDeviceStatus = appData.GetTabletDeviceStatus(tabletDeviceNumber);
-            if (newRoundNumber > database.GetNumberOfRoundsInEvent(tabletDeviceStatus.SectionID))  // Session complete
+            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(deviceNumber);
+            if (newRoundNumber > database.GetNumberOfRoundsInEvent(deviceStatus.SectionID))  // Session complete
             {
                 if (settings.ShowRanking == 2)
                 {
-                    return RedirectToAction("Final", "ShowRankingList", new { tabletDeviceNumber });
+                    return RedirectToAction("Final", "ShowRankingList", new { deviceNumber });
                 }
                 else
                 {
-                    return RedirectToAction("Index", "EndScreen", new { tabletDeviceNumber });
+                    return RedirectToAction("Index", "EndScreen", new { deviceNumber });
                 }
             }
 
-            TableStatus? tableStatus = appData.GetTableStatus(tabletDeviceNumber);
+            TableStatus? tableStatus = appData.GetTableStatus(deviceNumber);
             if (tableStatus != null && tableStatus.RoundNumber < newRoundNumber)
             {
                 // No tablet device has yet advanced this table to the next round, so show that this one is ready to do so
-                if (tabletDeviceStatus.Direction == Direction.North)
+                if (deviceStatus.Direction == Direction.North)
                 {
                     tableStatus.ReadyForNextRoundNorth = true;
                 }
-                else if (tabletDeviceStatus.Direction == Direction.East)
+                else if (deviceStatus.Direction == Direction.East)
                 {
                     tableStatus.ReadyForNextRoundEast = true;
                 }
-                else if (tabletDeviceStatus.Direction == Direction.South)
+                else if (deviceStatus.Direction == Direction.South)
                 {
                     tableStatus.ReadyForNextRoundSouth = true;
                 }
-                else if (tabletDeviceStatus.Direction == Direction.West)
+                else if (deviceStatus.Direction == Direction.West)
                 {
                     tableStatus.ReadyForNextRoundWest = true;
                 }
             }
 
-            ShowMove showMove = utilities.CreateShowMoveModel(tabletDeviceNumber, newRoundNumber, tableNotReadyNumber);
+            ShowMove showMove = utilities.CreateShowMoveModel(deviceNumber, newRoundNumber, tableNotReadyNumber);
 
-            ViewData["Title"] = utilities.Title(tabletDeviceNumber, "ShowMove", TitleType.Location);
-            ViewData["Header"] = utilities.Header(tabletDeviceNumber, HeaderType.Location);
+            ViewData["Title"] = utilities.Title(deviceNumber, "ShowMove", TitleType.Location);
+            ViewData["Header"] = utilities.Header(deviceNumber, HeaderType.Location);
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
-            if (settings.ShowTimer) ViewData["TimerSeconds"] = appData.GetTimerSeconds(tabletDeviceNumber);
+            if (settings.ShowTimer) ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
 
             return View(showMove);
         }
 
-        public ActionResult OKButtonClick(int tabletDeviceNumber, int newRoundNumber)
+        public ActionResult OKButtonClick(int deviceNumber, int newRoundNumber)
         {
-            TabletDeviceStatus tabletDeviceStatus = appData.GetTabletDeviceStatus(tabletDeviceNumber);
-            Section section = database.GetSection(tabletDeviceStatus.SectionID);
+            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(deviceNumber);
+            Section section = database.GetSection(deviceStatus.SectionID);
             if (section.TabletDevicesPerTable > 1)  // Tablet devices are moving, so need to check if new table is ready
             {
                 // Get the move for this tablet device
-                List<Round> roundsList = database.GetRoundsList(tabletDeviceStatus.SectionID, newRoundNumber);
-                Move move = utilities.GetMove(roundsList, tabletDeviceStatus.TableNumber, tabletDeviceStatus.PairNumber, tabletDeviceStatus.Direction);
+                List<Round> roundsList = database.GetRoundsList(deviceStatus.SectionID, newRoundNumber);
+                Move move = utilities.GetMove(roundsList, deviceStatus.TableNumber, deviceStatus.PairNumber, deviceStatus.Direction);
 
                 if (move.NewTableNumber == 0)  // Move is to phantom table, so go straight to RoundInfo
                 {
-                    appData.UpdateTabletDeviceStatus(tabletDeviceNumber, 0, newRoundNumber, Direction.Sitout);
-                    return RedirectToAction("Index", "ShowRoundInfo", new { tabletDeviceNumber });
+                    appData.UpdateTabletDeviceStatus(deviceNumber, 0, newRoundNumber, Direction.Sitout);
+                    return RedirectToAction("Index", "ShowRoundInfo", new { deviceNumber });
                 }
 
                 // Check if the new table (the one we're trying to move to) is ready.  Expanded code here to make it easier to understand
                 bool newTableReady;
-                TableStatus? newTableStatus = appData.GetTableStatus(section.ID, move.NewTableNumber);
-                if (newTableStatus == null)
-                {
-                    newTableReady = false;  // New table not yet registered (unlikely but possible)
-                }
-                else if (newTableStatus.RoundNumber == newRoundNumber)
+                TableStatus newTableStatus = appData.GetTableStatus(section.ID, move.NewTableNumber);
+                if (newTableStatus.RoundNumber == newRoundNumber)
                 {
                     newTableReady = true;  // New table has already been advanced to next round by another tablet device, so is ready
                 }
@@ -116,25 +112,25 @@ namespace TabScore2.Controllers
 
                 if (newTableReady)  // Reset tablet device and table statuses for new round, and update cookie
                 {
-                    appData.UpdateTabletDeviceStatus(tabletDeviceNumber, move.NewTableNumber, newRoundNumber, move.NewDirection);
+                    appData.UpdateTabletDeviceStatus(deviceNumber, move.NewTableNumber, newRoundNumber, move.NewDirection);
 
                     appData.UpdateTableStatus(section.ID, move.NewTableNumber, newRoundNumber);
                     SetCookie(section.ID, move.NewTableNumber, move.NewDirection);
                 }
                 else  // Go back and wait
                 {
-                    return RedirectToAction("Index", "ShowMove", new { tabletDeviceNumber, newRoundNumber, tableNotReadyNumber = move.NewTableNumber });
+                    return RedirectToAction("Index", "ShowMove", new { deviceNumber, newRoundNumber, tableNotReadyNumber = move.NewTableNumber });
                 }
             }
             else  // Tablet device not moving and is the only tablet device at this table
             {
-                tabletDeviceStatus.RoundNumber = newRoundNumber;
-                appData.UpdateTableStatus(section.ID, tabletDeviceStatus.TableNumber, newRoundNumber);
+                deviceStatus.RoundNumber = newRoundNumber;
+                appData.UpdateTableStatus(section.ID, deviceStatus.TableNumber, newRoundNumber);
             }
 
             // Refresh settings for the start of the round.  Only done once per round.
             settings.DatabaseRefresh(newRoundNumber);
-            return RedirectToAction("Index", "ShowPlayerIDs", new { tabletDeviceNumber });
+            return RedirectToAction("Index", "ShowPlayerIDs", new { deviceNumber });
         }
 
         // Set a cookie for this device

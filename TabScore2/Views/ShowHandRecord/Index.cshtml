@@ -1,14 +1,13 @@
-﻿<!-- TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
-Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+﻿<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+     Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore.Models.ShowHandRecord
-@using Resources
-@using System.Web.Optimization
+@model TabScore2.Models.ShowHandRecord
+@using TabScore2.Globals
 
 <div class="row mt-4">
     <div class="col-12 text-center p-0">
         <h3>
-            @Strings.Board @Model.BoardNumber
+            @Strings["Board"] @Model.BoardNumber
         </h3>
     </div>
 </div>
@@ -18,7 +17,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     </div>
     <div class="col-4">
         <h5>
-            @Strings.Dealer @Model.Dealer
+            @Strings["Dealer"] @Model.Dealer
         </h5>
     </div>
     <div class="col-3">
@@ -60,8 +59,8 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
         </div>
         <div class="row h-25 mt-3">
             <div class="col-12" style="display: inline-block; vertical-align: middle;">
-                <span id="L" class="float-left"></span>
-                <span id="R" class="float-right"></span>
+                <span id="L" class="float-start"></span>
+                <span id="R" class="float-end"></span>
             </div>
         </div>
         <div class="row h-25 mt-3">
@@ -86,13 +85,13 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 
 <div class="row mt-2">
     <div class="col-4 p-0 text-center">
-        @if (Model.EvalNorthNT != "###")
+        @if (Model.EvalNorthNT != -1)
         {
             <table class="table-sm table-bordered text-center mt-1 bg-white" style="font-size:smaller; margin:auto; width:50%">
                 <thead>
                     <tr>
                         <th></th>
-                        <th>@Strings.NT</th>
+                        <th>@Strings["NT"]</th>
                         <th style="color:black">&spades;</th>
                         <th style="color:red">&hearts;</th>
                         <th style="color:lightsalmon">&diams;</th>
@@ -101,7 +100,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                 </thead>
                 <tbody>
                     <tr>
-                        <td>@Strings.N</td>
+                        <td>@Strings["N"]</td>
                         <td>@Model.EvalNorthNT</td>
                         <td>@Model.EvalNorthSpades</td>
                         <td>@Model.EvalNorthHearts</td>
@@ -109,7 +108,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                         <td>@Model.EvalNorthClubs</td>
                     </tr>
                     <tr>
-                        <td>@Strings.S</td>
+                        <td>@Strings["S"]</td>
                         <td>@Model.EvalSouthNT</td>
                         <td>@Model.EvalSouthSpades</td>
                         <td>@Model.EvalSouthHearts</td>
@@ -117,7 +116,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                         <td>@Model.EvalSouthClubs</td>
                     </tr>
                     <tr>
-                        <td>@Strings.E</td>
+                        <td>@Strings["E"]</td>
                         <td>@Model.EvalEastNT</td>
                         <td>@Model.EvalEastSpades</td>
                         <td>@Model.EvalEastHearts</td>
@@ -125,7 +124,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                         <td>@Model.EvalEastClubs</td>
                     </tr>
                     <tr>
-                        <td>@Strings.W</td>
+                        <td>@Strings["W"]</td>
                         <td>@Model.EvalWestNT</td>
                         <td>@Model.EvalWestSpades</td>
                         <td>@Model.EvalWestHearts</td>
@@ -158,41 +157,42 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 
 <div class="row mt-2">
     <div class="col-12 text-center">
-        @if (Model.PerspectiveButtonOption == TabScore.Models.HandRecordPerspectiveButtonOptions.NSEW || Model.PerspectiveButtonOption == TabScore.Models.HandRecordPerspectiveButtonOptions.NS)
+        @if (Model.PerspectiveButtonOption == HandRecordPerspectiveButtonOptions.NSEW || Model.PerspectiveButtonOption == HandRecordPerspectiveButtonOptions.NS)
         {
             <button id="btnNorth" class="btn btn-secondary m-1" ontouchstart="touchAvailable = true; setNSEW('North')" onclick="if (!touchAvailable) setNSEW('North')">
-                @Strings.N
+                @Strings["N"]
             </button>
             <button id="btnSouth" class="btn btn-secondary m-1" ontouchstart="touchAvailable = true; setNSEW('South')" onclick="if (!touchAvailable) setNSEW('South')">
-                @Strings.S
+                @Strings["S"]
             </button>
         }
-        @if (Model.PerspectiveButtonOption == TabScore.Models.HandRecordPerspectiveButtonOptions.NSEW || Model.PerspectiveButtonOption == TabScore.Models.HandRecordPerspectiveButtonOptions.EW)
+        @if (Model.PerspectiveButtonOption == HandRecordPerspectiveButtonOptions.NSEW || Model.PerspectiveButtonOption == HandRecordPerspectiveButtonOptions.EW)
         {
             <button id="btnEast" class="btn btn-secondary m-1" ontouchstart="touchAvailable = true; setNSEW('East')" onclick="if (!touchAvailable) setNSEW('East')">
-                @Strings.E
+                @Strings["E"]
             </button>
             <button id="btnWest" class="btn btn-secondary m-1" ontouchstart="touchAvailable = true; setNSEW('West')" onclick="if (!touchAvailable) setNSEW('West')">
-                @Strings.W
+                @Strings["W"]
             </button>
         }
     </div>
 </div>
 
 <script>
-    var model = @Html.Raw(Json.Encode(Model));
+    var model = @Html.Raw(Json.Serialize(Model));
     var isSubmitted = false;
-    var stringN = "@Strings.N";
-    var stringE = "@Strings.E";
-    var stringS = "@Strings.S";
-    var stringW = "@Strings.W";
+    var stringN = '@Strings["N"]';
+    var stringE = '@Strings["E"]';
+    var stringS = '@Strings["S"]';
+    var stringW = '@Strings["W"]';
 </script>
-@Scripts.Render("~/bundles/showHandRecordJS")
+<script src="~/js/showHandRecordJS.js"></script>
 <script>
-    $(document).on('touchstart click', '#OKButton:enabled', function () {
+    function OKButtonClick() {
+        if (document.getElementById("OKButton").disabled) return;
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("Index", "ShowTraveller")?tabletDeviceNumber=@Model.TabletDeviceNumber&boardNumber=@Model.BoardNumber&fromView=@Model.FromView.ToString().ToLower()';
+            location.href = '@Url.Action("Index", "ShowTraveller")?deviceNumber=@Model.TabletDeviceNumber&boardNumber=@Model.BoardNumber&fromView=@Model.FromView.ToString().ToLower()';
         }
-    });
+    }
 </script>

@@ -1,9 +1,7 @@
-﻿<!-- TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
+﻿<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore.Models.EnterPlayerID
-@using Resources
-@using System.Web.Optimization
+@model TabScore2.Models.EnterPlayerID
 
 <style>
     .btn-numeric {
@@ -12,20 +10,20 @@
     }
 </style>
 
-<div id="noPlayerNoModal" class="modal" data-backdrop="static">
+<div id="noPlayerNoModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header text-primary">
                 <p class="modal-title text-center">
-                    <h3>@Strings.Warning</h3>
+                    <h3>@Strings["Warning"]</h3>
                 </p>
             </div>
             <div class="modal-body">
-                <p>@Strings.ErrorNoID</p>
+                <p>@Strings["ErrorNoID"]</p>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-lg btn-success" data-dismiss="modal">
-                    @Strings.OK <span class="fa fa-check-circle"></span>
+                    @Strings["OK"] <span class="fa fa-check-circle"></span>
                 </button>
             </div>
         </div>
@@ -35,7 +33,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center p-0">
         <h3>
-            @Strings.EnterID @Model.DisplayDirection
+            @Strings["EnterID"] @Model.DisplayDirection
         </h3>
     </div>
 </div>
@@ -49,7 +47,7 @@
 <div class="row mt-4">
     <div class="col-12 text-center p-0">
         <button id="nk" class="btn btn-secondary btn-lg m-1" onclick="unknown()">
-            @Strings.Unknown
+            @Strings["Unknown"]
         </button>
     </div>
 </div>
@@ -111,7 +109,7 @@
 </div>
 
 <script>
-    var urlOKButtonClick = '@Url.Action("OKButtonClick", "EnterPlayerID")?tabletDeviceNumber=@Model.TabletDeviceNumber&direction=@Model.Direction';
-    var stringUnknown = '@Strings.Unknown';
+    var urlOKButtonClick = '@Url.Action("OKButtonClick", "EnterPlayerID")?deviceNumber=@Model.TabletDeviceNumber&direction=@Model.Direction';
+    var stringUnknown = '@Strings["Unknown"]';
 </script>
-@Scripts.Render("~/bundles/enterPlayerIdJS")
+<script src="~/js/enterPlayerIdJS.js"></script>

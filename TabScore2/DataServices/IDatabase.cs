@@ -17,8 +17,7 @@ namespace TabScore2.DataServices
 
         // SECTION
         Section GetSection(int sectionID);
-        Section GetSection(string sectionLetter);
-        IList<Section> GetSectionsList();
+        List<Section> GetSectionsList();
 
         // TABLE
         void RegisterTable(int sectionID, int tableNumber);
@@ -44,7 +43,7 @@ namespace TabScore2.DataServices
 
         // HANDRECORD
         int HandsCount { get; }
-        IList<Hand> HandsList { get; }
+        List<Hand> HandsList { get; }
         Hand? GetHand(int sectionID, int boardNumber);
         public void AddHand(Hand hand);
         void GetHandsFromFile(StreamReader file);

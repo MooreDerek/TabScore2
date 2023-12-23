@@ -502,14 +502,14 @@ function removeCard(removeSuit, position) {
     cardCount--;
     document.getElementById("OKButton").disabled = true;
     if (cardCount == 0) {
-        document.getElementById("skipButton").className = "btn btn-outline-danger float-right" 
+        document.getElementById("skipButton").className = "btn btn-outline-danger float-end" 
     }
     showRemainder();
 }
 
 function showRemainder() {
     if (cardCount == 39 && ((direction == 'N' && cardCountN == 0) || (direction == 'S' && cardCountS == 0) || (direction == 'E' && cardCountE == 0) || (direction == 'W' && cardCountW == 0))) {
-        document.getElementById("remainderButton").className = "btn btn-dark float-left"
+        document.getElementById("remainderButton").className = "btn btn-dark float-start"
     }
     else {
         document.getElementById("remainderButton").className = "btn d-none"

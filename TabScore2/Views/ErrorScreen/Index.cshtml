@@ -1,13 +1,10 @@
 ﻿<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
 Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
-@using Microsoft.Extensions.Localization
-@using TabScore2.Resources
-@inject IStringLocalizer<Strings> Strings
 
 <div class="row mt-5">
     <div class="col-12 text-center text-danger">
         <h2>
-            <span class="fa fa-exclamation-circle"></span> Error
+            <span class="fa fa-exclamation-circle"></span> @Strings["Error"]
         </h2>
     </div>
 </div>
@@ -29,10 +26,11 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <script>
     var isSubmitted = false;
 
-    $(document).on('touchstart click', '#OKButton:enabled', function () {
+    function OKButtonClick() {
+        if (document.getElementById("OKButton").disabled) return;
         if (!isSubmitted) {
             isSubmitted = true;
             location.href = '@Url.Action("OKButtonClick", "ErrorScreen")';
         }
-    });
+    }
 </script>

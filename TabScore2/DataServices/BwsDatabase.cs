@@ -765,14 +765,7 @@ namespace TabScore2.DataServices
             return section;
         }
 
-        public Section GetSection(string sectionLetter)
-        {
-            Section? section = sectionsList.Find(x => x.Letter == sectionLetter);
-            section ??= sectionsList[0];
-            return section;
-        }
-
-        public IList<Section> GetSectionsList()
+        public List<Section> GetSectionsList()
         {
             return sectionsList;
         }
@@ -1643,7 +1636,7 @@ namespace TabScore2.DataServices
 
         public int HandsCount { get { return handsList.Count; } }
 
-        public IList<Hand> HandsList { get { return handsList; } }
+        public List<Hand> HandsList { get { return handsList; } }
 
         public Hand? GetHand(int sectionID, int boardNumber)
         {

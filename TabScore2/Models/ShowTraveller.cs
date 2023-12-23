@@ -5,11 +5,11 @@ using TabScore2.Classes;
 
 namespace TabScore2.Models
 {
-    public class ShowTraveller(int tabletDeviceNumber, int boardNumber) : List<Result>
+    public class ShowTraveller(int deviceNumber, int boardNumber) : List<TravellerResult>
     {
-        public int TabletDeviceNumber { get; private set; } = tabletDeviceNumber;
+        public int TabletDeviceNumber { get; private set; } = deviceNumber;
         public int BoardNumber { get; private set; } = boardNumber;
-        public bool HandRecord { get; set; }
+        public bool HandRecord { get; set; } = false;
         public string PercentageNS { get; set; } = string.Empty;
         public string PercentageEW { get; set; } = string.Empty;
         public bool FromView { get; set; }

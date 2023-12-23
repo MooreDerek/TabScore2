@@ -1,43 +1,42 @@
-﻿<!-- TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
-Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+﻿<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+     Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore.Models.ShowBoards
-@using Resources
+@model TabScore2.Models.ShowBoards
 
-<div id="notAllResultsModal" class="modal" data-backdrop="static">
+<div id="notAllResultsModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header text-danger">
                 <p class="modal-title text-center">
-                    <h3>@Strings.Warning</h3>
+                    <h3>@Strings["Warning"]</h3>
                 </p>
             </div>
             <div class="modal-body">
-                <p>@Strings.ErrorWaitResults</p>
+                <p>@Strings["ErrorWaitResults"]</p>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-lg btn-success" data-dismiss="modal">
-                    @Strings.OK <span class="fa fa-check-circle"></span>
+                    @Strings["OK"] <span class="fa fa-check-circle"></span>
                 </button>
             </div>
         </div>
     </div>
 </div>
 
-<div id="noResultModal" class="modal" data-backdrop="static">
+<div id="noResultModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header text-danger">
                 <p class="modal-title text-center">
-                    <h3>@Strings.Warning</h3>
+                    <h3>@Strings["Warning"]</h3>
                 </p>
             </div>
             <div class="modal-body">
-                <p>@Strings.ErrorWaitResult</p>
+                <p>@Strings["ErrorWaitResult"]</p>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-lg btn-success" data-dismiss="modal">
-                    @Strings.OK <span class="fa fa-check-circle"></span>
+                    @Strings["OK"] <span class="fa fa-check-circle"></span>
                 </button>
             </div>
         </div>
@@ -47,7 +46,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <div class="row mt-5">
     <div class="col-12 text-center p-0">
         <h5>
-            @Strings.NotScoring
+            @Strings["NotScoring"]
         </h5>
     </div>
 </div>
@@ -55,7 +54,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <div class="row mt-3 mb-3">
     <div class="col-12 text-center p-0">
         <h3>
-            @Strings.Boards
+            @Strings["Boards"]
         </h3>
     </div>
 </div>
@@ -72,13 +71,13 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
             @if (Result.Remarks != "Not played")
             {
                 <button class="btn btn-secondary btn-lg m-1 px-1" style="min-width: 5rem" ontouchstart="touchAvailable = true; View(@Result.BoardNumber)" onclick="if (!touchAvailable) View(@Result.BoardNumber)">
-                    @Strings.View
+                    @Strings["View"]
                 </button>
             }
         </div>
         <div class="col-5 px-0 align-self-center">
             <h4>
-                @Html.Raw(Result.ContractDisplay)
+                @Html.Raw(Result.DisplayContract)
             </h4>
         </div>
     </div>
@@ -87,30 +86,33 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 @if (Model.Message == "NORESULT")
 {
     <script>
-        $("#noResultModal").modal("show");
+        var noResultModal = new bootstrap.Modal(document.getElementById("noResultModal"), { backdrop: 'static' });
+        noResultModal.show();
     </script>
 }
 else if (Model.Message == "NOTALLRESULTS")
 {
     <script>
-        $("#notAllResultsModal").modal("show");
+        var notAllResultsModal = new bootstrap.Modal(document.getElementById("notAllResultsModal"), { backdrop: 'static' });
+        notAllResultsModal.show();
     </script>
 }
 
 <script>
     var isSubmitted = false;
 
-    $(document).on('touchstart click', '#OKButton:enabled', function () {
+    function OKButtonClick() {
+        if (document.getElementById("OKButton").disabled) return;
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("OKButtonClick", "ShowBoards")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+            location.href = '@Url.Action("OKButtonClick", "ShowBoards")?deviceNumber=@Model.TabletDeviceNumber';
         }
-    });
+    }
 
     function View(n) {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("ViewResult", "ShowBoards")?tabletDeviceNumber=@Model.TabletDeviceNumber&boardNumber=' + n;
+            location.href = '@Url.Action("ViewResult", "ShowBoards")?deviceNumber=@Model.TabletDeviceNumber&boardNumber=' + n;
         }
     }
 </script>

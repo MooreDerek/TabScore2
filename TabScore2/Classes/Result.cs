@@ -7,29 +7,22 @@ namespace TabScore2.Classes
 {
     public class Result
     {
-        public int BoardNumber { get; set; }
+        public int BoardNumber { get; set; } = 0;
         public int NumberNorth { get; set; }
         public int NumberEast { get; set; }
         public int NumberSouth { get; set; } = 0;
         public int NumberWest { get; set; } = 0;
-        public string? DeclarerNSEW { get; set; }
+        public string DeclarerNSEW { get; set; } = string.Empty;
         public bool Vulnerable { get; set; }
-        public int ContractLevel { get; set; }
-        public string? ContractSuit { get; set; }
+        public int ContractLevel { get; set; } = -999;
+        public string ContractSuit { get; set; } = string.Empty;
         public string ContractX { get; set; } = string.Empty;
         public string LeadCard { get; set; } = string.Empty;
         public int TricksTaken { get; set; }
         public string Remarks { get; set; } = string.Empty;
         public int Score { get; set; }
-        public string ScoreNS { get; set; } = string.Empty;
-        public string ScoreEW { get; set; } = string.Empty;
-        public string PercentageNS { get; set; } = string.Empty;
-        public string PercentageEW { get; set; } = string.Empty;
         public double MatchpointsNS { get; set; }
         public double MatchpointsEW { get; set; }
-        public double SortPercentage { get; set; }
-        public bool Highlight { get; set; } = false;
-
 
         public void CalculateScore()
         {

@@ -20,7 +20,7 @@ namespace TabScore.Controllers
 
         public ActionResult Index(int sectionID, int tableNumber, Direction direction = Direction.Null, bool confirm = false) 
         {
-            TableStatus tableStatus = appData.GetTableStatus(sectionID, tableNumber)!;
+            TableStatus tableStatus = appData.GetTableStatus(sectionID, tableNumber);
             Section section = database.GetSection(sectionID);
             SelectDirection selectDirection = new(tableStatus, section, direction, confirm);
 
@@ -39,8 +39,7 @@ namespace TabScore.Controllers
 
         public ActionResult OKButtonClick(int sectionID, int tableNumber, Direction direction, int roundNumber, bool confirm)
         {
-            // Check if tablet device is already registered for this location, and if so confirm
-            TableStatus tableStatus = appData.GetTableStatus(sectionID, tableNumber)!;
+            TableStatus tableStatus = appData.GetTableStatus(sectionID, tableNumber);
 
             // Check if tablet device is already registered for this location
             if (appData.TabletDeviceStatusExists(sectionID, tableNumber) && confirm)
@@ -80,18 +79,18 @@ namespace TabScore.Controllers
                 appData.AddTabletDeviceStatus(sectionID, tableNumber, pairNumber, roundNumber, direction);
                 SetCookie(sectionID, tableNumber, direction);
             }
-            TabletDeviceStatus tabletDeviceStatus = appData.GetTabletDeviceStatus(sectionID, tableNumber);
+            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(sectionID, tableNumber);
 
-            // tabletDeviceNumber is the key for identifying this particular tablet device and is used throughout the rest of the application
-            int tabletDeviceNumber = appData.GetTabLetDeviceNumber(tabletDeviceStatus);
+            // deviceNumber is the key for identifying this particular tablet device and is used throughout the rest of the application
+            int deviceNumber = appData.GetTabLetDeviceNumber(deviceStatus);
 
             if (((direction == Direction.North) && tableStatus.ReadyForNextRoundNorth) || ((direction == Direction.East) && tableStatus.ReadyForNextRoundEast) || (direction == Direction.South && tableStatus.ReadyForNextRoundSouth) || (direction == Direction.West && tableStatus.ReadyForNextRoundWest))
             {
-                return RedirectToAction("Index", "ShowMove", new { tabletDeviceNumber, newRoundNumber = roundNumber + 1 });
+                return RedirectToAction("Index", "ShowMove", new { deviceNumber, newRoundNumber = roundNumber + 1 });
             }
             else
             {
-                return RedirectToAction("Index", "ShowPlayerIDs", new { tabletDeviceNumber });
+                return RedirectToAction("Index", "ShowPlayerIDs", new { deviceNumber });
             }
         }
 

@@ -17,26 +17,26 @@ namespace TabScore2.Controllers
         private readonly ISettings settings = iSettings;
         private readonly IUtilities utilities = iUtilities;
 
-        public ActionResult Index(int tabletDeviceNumber, bool showWarning = false)
+        public ActionResult Index(int deviceNumber, bool showWarning = false)
         {
-            TabletDeviceStatus tabletDeviceStatus = appData.GetTabletDeviceStatus(tabletDeviceNumber);
-            TableStatus tableStatus = appData.GetTableStatus(tabletDeviceNumber)!;
+            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(deviceNumber);
+            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
 
-            if (tabletDeviceStatus.NamesUpdateRequired) {
+            if (deviceStatus.NamesUpdateRequired) {
                 database.GetNamesForRound(tableStatus);  // Update names from database if not done very recently
             }
 
-            if (tableStatus.RoundData.GotAllNames && tabletDeviceStatus.RoundNumber > 1 && !settings.NumberEntryEachRound)
+            if (tableStatus.RoundData.GotAllNames && deviceStatus.RoundNumber > 1 && !settings.NumberEntryEachRound)
             {
                 // Player numbers not needed if all names have already been entered and names are not being updated each round
-                tabletDeviceStatus.NamesUpdateRequired = false;  // No round update required in RoundInfo as it's just been done
-                return RedirectToAction("Index", "ShowRoundInfo", new { tabletDeviceNumber });
+                deviceStatus.NamesUpdateRequired = false;  // No round update required in RoundInfo as it's just been done
+                return RedirectToAction("Index", "ShowRoundInfo", new { deviceNumber });
             }
-            tabletDeviceStatus.NamesUpdateRequired = true;  // We'll now need to update when we get to RoundInfo in case names change in the mean time
+            deviceStatus.NamesUpdateRequired = true;  // We'll now need to update when we get to RoundInfo in case names change in the mean time
 
-            ShowPlayerIDs showplayerIDs = utilities.CreateShowPlayerIDsModel(tabletDeviceNumber, showWarning);
-            ViewData["Title"] = utilities.Title(tabletDeviceNumber, "ShowPlayerIDs", TitleType.Location);
-            ViewData["Header"] = utilities.Header(tabletDeviceNumber, HeaderType.Round);
+            ShowPlayerIDs showplayerIDs = utilities.CreateShowPlayerIDsModel(deviceNumber, showWarning);
+            ViewData["Title"] = utilities.Title(deviceNumber, "ShowPlayerIDs", TitleType.Location);
+            ViewData["Header"] = utilities.Header(deviceNumber, HeaderType.Round);
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
 
             if (database.IsIndividual)
@@ -49,20 +49,20 @@ namespace TabScore2.Controllers
             }
         }
 
-        public ActionResult OKButtonClick(int tabletDeviceNumber)
+        public ActionResult OKButtonClick(int deviceNumber)
         {
-            TableStatus tableStatus = appData.GetTableStatus(tabletDeviceNumber)!;
+            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
             database.GetNamesForRound(tableStatus);
-            appData.GetTabletDeviceStatus(tabletDeviceNumber).NamesUpdateRequired = false;  // No names update required on next screen as it's only just been done
+            appData.GetTabletDeviceStatus(deviceNumber).NamesUpdateRequired = false;  // No names update required on next screen as it's only just been done
 
             // Check if all required names have been entered, and if not go back and wait
             if (tableStatus.RoundData.GotAllNames)
             {
-                return RedirectToAction("Index", "ShowRoundInfo", new { tabletDeviceNumber });
+                return RedirectToAction("Index", "ShowRoundInfo", new { deviceNumber });
             }
             else
             {
-                return RedirectToAction("Index", "ShowPlayerIDs", new { tabletDeviceNumber, showWarning = true });
+                return RedirectToAction("Index", "ShowPlayerIDs", new { deviceNumber, showWarning = true });
             }
         }
     }

@@ -5,7 +5,7 @@ using TabScore2.Globals;
 
 namespace TabScore2.Classes
 {
-    public class TabletDeviceStatus(int sectionID, int tableNumber, int pairNumber, int roundNumber, Direction direction)
+    public class DeviceStatus(int sectionID, int tableNumber, int pairNumber, int roundNumber, Direction direction)
     {
         public int SectionID { get; private set; } = sectionID;
         public int TableNumber { get; set; } = tableNumber;

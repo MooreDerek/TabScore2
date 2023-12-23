@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Localization;
+using System.Text;
 using TabScore2.Classes;
 using TabScore2.DataServices;
 using TabScore2.Globals;
@@ -15,13 +16,13 @@ namespace TabScore2.UtilityServices
         private static readonly char[] arbitralScoreSeparators = ['%', '-'];
 
         // PUBLIC CLASSES TO CREATE VIEW MODELS
-        public ShowPlayerIDs CreateShowPlayerIDsModel(int tabletDeviceNumber, bool showWarning)
+        public ShowPlayerIDs CreateShowPlayerIDsModel(int deviceNumber, bool showWarning)
         {
-            ShowPlayerIDs showPlayerIDs = new(tabletDeviceNumber, showWarning);
-            TabletDeviceStatus tabletDeviceStatus = appData.GetTabletDeviceStatus(tabletDeviceNumber);
-            TableStatus tableStatus = appData.GetTableStatus(tabletDeviceNumber)!;
+            ShowPlayerIDs showPlayerIDs = new(deviceNumber, showWarning);
+            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(deviceNumber);
+            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
             Round round = tableStatus.RoundData;
-            Section section = database.GetSection(tabletDeviceStatus.SectionID);
+            Section section = database.GetSection(deviceStatus.SectionID);
 
             if (section.TabletDevicesPerTable == 1)
             {
@@ -38,7 +39,7 @@ namespace TabScore2.UtilityServices
             }
             else if (section.TabletDevicesPerTable == 2)
             {
-                if (tabletDeviceStatus.Direction == Direction.North)
+                if (deviceStatus.Direction == Direction.North)
                 {
                     showPlayerIDs.Add(CreatePlayerEntry(round, Direction.North));
                     showPlayerIDs.Add(CreatePlayerEntry(round, Direction.South));
@@ -51,59 +52,82 @@ namespace TabScore2.UtilityServices
             }
             else  // tabletDevicesPerTable == 4
             {
-                showPlayerIDs.Add(CreatePlayerEntry(round, tabletDeviceStatus.Direction));
+                showPlayerIDs.Add(CreatePlayerEntry(round, deviceStatus.Direction));
             }
 
-            showPlayerIDs.NumberOfBlankEntries = showPlayerIDs.FindAll(x => x.Name == "").Count;
+            showPlayerIDs.NumberOfBlankEntries = showPlayerIDs.FindAll(x => x.DisplayName == "").Count;
             showPlayerIDs.ShowMessage = section.TabletDevicesPerTable == 4 || (section.TabletDevicesPerTable == 2 && showPlayerIDs.Count == 4);
             return showPlayerIDs;
         }
 
-        public ShowBoards CreateShowBoardsModel(int tabletDeviceNumber)
+        public EnterPlayerID CreateEnterPlayerIDModel(int deviceNumber, Direction direction)
         {
-            TableStatus tableStatus = appData.GetTableStatus(tabletDeviceNumber)!;
+            EnterPlayerID enterPlayerID = new(deviceNumber, direction)
+            {
+                DisplayDirection = localizer[direction.ToString()]
+            };
+            return enterPlayerID;
+        }
+
+        public ShowRoundInfo CreateShowRoundInfoModel(int deviceNumber) 
+        {
+            Round round = appData.GetTableStatus(deviceNumber).RoundData;
+            string unknown = localizer["Unknown"];
+            return new(deviceNumber)
+            {
+                NumberNorth = round.NumberNorth,
+                NumberEast = round.NumberEast,
+                NumberSouth = round.NumberSouth,
+                NumberWest = round.NumberNorth,
+                DisplayNameNorth = round.NameNorth.Replace("Unknown", unknown),
+                DisplayNameSouth = round.NameSouth.Replace("Unknown", unknown),
+                DisplayNameEast = round.NameEast.Replace("Unknown", unknown),
+                DisplayNameWest = round.NameWest.Replace("Unknown", unknown),
+                LowBoard = round.LowBoard,
+                HighBoard = round.HighBoard
+            };
+        }
+
+        public ShowBoards CreateShowBoardsModel(int deviceNumber)
+        {
+            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
             List<Result> resultsList = database.GetResultsList(tableStatus.SectionID, tableStatus.RoundData.LowBoard, tableStatus.RoundData.HighBoard, tableStatus.TableNumber, tableStatus.RoundNumber);
 
-            ShowBoards showBoards = new(tabletDeviceNumber, settings.ShowTraveller);
+            ShowBoards showBoards = new(deviceNumber, settings.ShowTraveller);
+            foreach (Result result in resultsList) 
+            {
+                showBoards.Add(new ShowBoardsResult(result.BoardNumber, result.ContractLevel, GetDisplayContract(result), result.Remarks));
+            }
 
             // Check to see if any boards don't have a result, and add dummies to the list
             for (int iBoard = tableStatus.RoundData.LowBoard; iBoard <= tableStatus.RoundData.HighBoard; iBoard++)
             {
-                if (resultsList.Find(x => x.BoardNumber == iBoard) == null)
+                if (showBoards.Find(x => x.BoardNumber == iBoard) == null)
                 {
-                    Result result = new()
-                    {
-                        BoardNumber = iBoard,
-                        ContractLevel = -999,
-                        ContractSuit = "",
-                        ContractX = "",
-                        DeclarerNSEW = "",
-                        TricksTaken = -1,
-                    };
-                    resultsList.Add(result);
+                    ShowBoardsResult showBoardsResult = new(iBoard, -999, string.Empty, string.Empty);
+                    showBoards.Add(showBoardsResult);
                     showBoards.GotAllResults = false;
                 }
             }
-            resultsList.Sort((x, y) => x.BoardNumber.CompareTo(y.BoardNumber));
-            showBoards.AddRange(resultsList);
+            showBoards.Sort((x, y) => x.BoardNumber.CompareTo(y.BoardNumber));
             return showBoards;
         }
 
-        public ShowMove CreateShowMoveModel(int tabletDeviceNumber, int newRoundNumber, int tableNotReadyNumber)
+        public ShowMove CreateShowMoveModel(int deviceNumber, int newRoundNumber, int tableNotReadyNumber)
         {
-            TabletDeviceStatus tabletDeviceStatus = appData.GetTabletDeviceStatus(tabletDeviceNumber);
-            TableStatus tableStatus = appData.GetTableStatus(tabletDeviceNumber)!;    // tableStatus cannot be null, but compiler objects
-            Section section = database.GetSection(tabletDeviceStatus.SectionID);
+            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(deviceNumber);
+            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
+            Section section = database.GetSection(deviceStatus.SectionID);
 
             ShowMove showMove = [];
-            showMove.TabletDeviceNumber = tabletDeviceNumber;
-            showMove.Direction = tabletDeviceStatus.Direction;
+            showMove.TabletDeviceNumber = deviceNumber;
+            showMove.Direction = deviceStatus.Direction;
             showMove.NewRoundNumber = newRoundNumber;
             showMove.TableNotReadyNumber = tableNotReadyNumber;
             showMove.TabletDevicesPerTable = section.TabletDevicesPerTable;
             int missingPair = section.MissingPair;
 
-            List<Round> roundsList = database.GetRoundsList(tabletDeviceStatus.SectionID, newRoundNumber);
+            List<Round> roundsList = database.GetRoundsList(deviceStatus.SectionID, newRoundNumber);
             if (section.TabletDevicesPerTable == 1)
             {
                 if (database.IsIndividual)
@@ -137,9 +161,9 @@ namespace TabScore2.UtilityServices
                     }
                 }
             }
-            else  // TabletDevicesPerTable > 1, so only need move for single player/pair.  tableStatus could be null (at phantom table), so use tabletDeviceStatus
+            else  // TabletDevicesPerTable > 1, so only need move for single player/pair.  tableStatus could be null (at phantom table), so use deviceStatus
             {
-                showMove.Add(GetMove(roundsList, tableStatus.TableNumber, tabletDeviceStatus.PairNumber, tabletDeviceStatus.Direction));
+                showMove.Add(GetMove(roundsList, tableStatus.TableNumber, deviceStatus.PairNumber, deviceStatus.Direction));
             }
 
             showMove.BoardsNewTable = -999;
@@ -156,11 +180,29 @@ namespace TabScore2.UtilityServices
             return showMove;
         }
 
-        public ShowTraveller CreateShowTravellerModel(int tabletDeviceNumber)
+        public EnterContract CreateEnterContractModel(int deviceNumber, Result result, LeadValidationOptions leadValidation = LeadValidationOptions.NoWarning)
         {
-            TableStatus tableStatus = appData.GetTableStatus(tabletDeviceNumber)!;
+            EnterContract enterContract = new(deviceNumber)
+            {
+                BoardNumber = result.BoardNumber,
+                ContractLevel = result.ContractLevel,
+                ContractSuit = result.ContractSuit,
+                ContractX = result.ContractX,
+                DeclarerNSEW = result.DeclarerNSEW,
+                LeadCard = result.LeadCard,
+                LeadValidation = leadValidation,
+                Score = result.Score,
+                DeclarerNSEWDisplay = localizer[result.DeclarerNSEW],
+                ContractDisplay = GetDisplayContract(result)
+            };
+            return enterContract;
+        }
+
+        public ShowTraveller CreateShowTravellerModel(int deviceNumber)
+        {
+            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
             int currentBoardNumber = tableStatus.ResultData!.BoardNumber; 
-            ShowTraveller showTraveller = new(tabletDeviceNumber, currentBoardNumber);
+            ShowTraveller showTraveller = new(deviceNumber, currentBoardNumber);
             List<Result> resultsList = database.GetResultsList(tableStatus.SectionID, currentBoardNumber);
 
             // Set maximum match points based on total number of results (including Not Played) for Neuberg formula
@@ -173,79 +215,124 @@ namespace TabScore2.UtilityServices
 
             foreach (Result result in resultsList)
             {
-                if (result.Remarks != "" && result.Remarks != "Wrong direction")
+                TravellerResult travellerResult = new()
+                {
+                    NumberNorth = result.NumberNorth,
+                    NumberEast = result.NumberEast,
+                    NumberSouth = result.NumberSouth,
+                    NumberWest = result.NumberWest
+                };
+                if (result.ContractLevel < 0)
                 {
                     // No scorable contract, so look for arbitral percentages
                     string[] temp = result.Remarks.Split(arbitralScoreSeparators, StringSplitOptions.RemoveEmptyEntries);
                     if (temp.Length == 2 && uint.TryParse(temp[0], out uint tempInt0) && uint.TryParse(temp[1], out uint tempInt1))
                     {
-                        result.ScoreNS = $"<span style=\"color:red\">{temp[0]}%</span>";
-                        result.ScoreEW = $"<span style=\"color:red\">{temp[1]}%</span>";
-                        result.SortPercentage = Convert.ToDouble(temp[0]);
-                        if (result.NumberNorth == tableStatus.RoundData.NumberNorth)
-                        {
-                            result.PercentageNS = temp[0] + "%";
-                            result.PercentageEW = temp[1] + "%";
-                        }
+                        travellerResult.ScoreNS = $"<span style=\"color:red\">{temp[0]}%</span>";
+                        travellerResult.ScoreEW = $"<span style=\"color:red\">{temp[1]}%</span>";
+                        travellerResult.SortPercentage = Convert.ToDouble(temp[0]);
                     }
-                    else  // Can't work out percentages
+                    else  // Can't work out percentage
                     {
-                        result.ScoreNS = result.ScoreEW = "<span style=\"color:red\">???</span>";
-                        result.SortPercentage = 0.0;
-                        if (result.NumberNorth == tableStatus.RoundData.NumberNorth)
-                        {
-                            result.PercentageNS = result.PercentageEW = "???";
-                            result.Highlight = true;
-                        }
+                        travellerResult.ScoreNS = travellerResult.ScoreEW = "<span style=\"color:red\">???</span>";
+                        travellerResult.SortPercentage = 0.0;
                     }
                 }
                 else  // Genuine result
                 {
+                    if (result.ContractLevel == 0)
+                    {
+                        travellerResult.DisplayContract = $"<span style=\"color:darkgreen\">{localizer["Pass"]}</span>";
+                    }
+                    else if (result.ContractLevel > 0)
+                    {
+                        StringBuilder s = new();
+                        s.Append(result.ContractLevel);
+                        switch (result.ContractSuit)
+                        {
+                            case "NT":
+                                s.Append(localizer["NT"]);
+                                break;
+                            case "S":
+                                s.Append("<span style=\"color:black\">&spades;</span>");
+                                break;
+                            case "H":
+                                s.Append("<span style=\"color:red\">&hearts;</span>");
+                                break;
+                            case "D":
+                                s.Append("<span style=\"color:lightsalmon\">&diams;</span>");
+                                break;
+                            case "C":
+                                s.Append("<span style=\"color:lightslategrey\">&clubs;</span>");
+                                break;
+                        }
+                        s.Append(result.ContractX);
+                        if (result.TricksTaken > 0)
+                        {
+                            int tricksTakenLevel = result.TricksTaken - result.ContractLevel - 6;
+                            if (tricksTakenLevel == 0)
+                            {
+                                s.Append('=');
+                            }
+                            else
+                            {
+                                s.Append(tricksTakenLevel.ToString("+#;-#;0"));
+                            }
+                        }
+                        travellerResult.DisplayContract = s.ToString();
+                        travellerResult.DisplayDeclarerNSEW = localizer[result.DeclarerNSEW];
+
+                        if (result.LeadCard != string.Empty && result.LeadCard != "SKIP")
+                        {
+                            travellerResult.DisplayLeadCard = result.LeadCard.Replace("S", "<span style=\"color:black\">&spades;</span>")
+                                    .Replace("H", "<span style=\"color:red\">&hearts;</span>")
+                                    .Replace("D", "<span style=\"color:lightsalmon\">&diams;</span>")
+                                    .Replace("C", "<span style=\"color:lightslategrey\">&clubs;</span>")
+                                    .Replace("T", localizer["TenShorthand"]);
+                        }
+                    }
                     result.CalculateScore();
                     if (result.Score > 0)
                     {
-                        result.ScoreNS = result.Score.ToString();
-                        result.ScoreEW = "";
+                        travellerResult.ScoreNS = result.Score.ToString();
                     }
                     else if (result.Score < 0)
                     {
-                        result.ScoreEW = (-result.Score).ToString();
-                        result.ScoreNS = "";
+                        travellerResult.ScoreEW = (-result.Score).ToString();
                     }
 
                     if (matchPointsMax == 0)
                     {
-                        result.SortPercentage = 50.0;
+                        travellerResult.SortPercentage = 50.0;
                     }
                     else
                     {
                         // Apply Neuberg formula here
                         int matchpoints = 2 * resultsWithContractList.FindAll(x => x.Score < result.Score).Count + resultsWithContractList.FindAll(x => x.Score == result.Score).Count - 1;
                         double neuberg = ((matchpoints + 1) * resultsForThisBoard / (double)scoresForThisBoard) - 1.0;
-                        result.SortPercentage = neuberg / matchPointsMax * 100.0;
+                        travellerResult.SortPercentage = neuberg / matchPointsMax * 100.0;
+                    }
+
+                    if (result.Remarks == "Wrong direction")  // Swap pairs
+                    {
+                        (travellerResult.NumberEast, travellerResult.NumberNorth) = (travellerResult.NumberNorth, travellerResult.NumberEast);
+                        (travellerResult.NumberWest, travellerResult.NumberSouth) = (travellerResult.NumberSouth, travellerResult.NumberWest);
                     }
                     if (result.NumberNorth == tableStatus.RoundData.NumberNorth)
                     {
-                        int intPercentageNS = Convert.ToInt32(result.SortPercentage);
-                        result.PercentageNS = Convert.ToString(intPercentageNS) + "%";
-                        result.PercentageEW = Convert.ToString(100 - intPercentageNS) + "%";
-                        result.Highlight = true;
-                    }
-
-                    if (result.Remarks == "Wrong direction")
-                    {
-                        (result.NumberEast, result.NumberNorth) = (result.NumberNorth, result.NumberEast);
-                        (result.NumberWest, result.NumberSouth) = (result.NumberSouth, result.NumberWest);
+                        int intPercentageNS = Convert.ToInt32(travellerResult.SortPercentage);
+                        showTraveller.PercentageNS = Convert.ToString(intPercentageNS) + "%";
+                        showTraveller.PercentageEW = Convert.ToString(100 - intPercentageNS) + "%";
+                        travellerResult.Highlight = true;
                     }
                 }
+                showTraveller.Add(travellerResult);
             }
 
-            resultsList.Sort((x, y) => y.SortPercentage.CompareTo(x.SortPercentage));  // Sort traveller into descending percentage order
-            showTraveller.AddRange(resultsList);
-            if (!settings.ShowPercentage) showTraveller.PercentageNS = "";   // Don't show percentage
+            showTraveller.Sort((x, y) => y.SortPercentage.CompareTo(x.SortPercentage));  // Sort traveller into descending percentage order
+            if (!settings.ShowPercentage) showTraveller.PercentageNS = string.Empty;   // Don't show percentage
 
             // Determine if there is a hand record to view
-            showTraveller.HandRecord = false;
             if (settings.ShowHandRecord && database.HandsCount > 0)
             {
                 Hand? hand = database.GetHand(tableStatus.SectionID, currentBoardNumber);
@@ -265,10 +352,10 @@ namespace TabScore2.UtilityServices
             return showTraveller;
         }
 
-        public ShowHandRecord? CreateShowHandRecordModel(int tabletDeviceNumber, int boardNumber)
+        public ShowHandRecord? CreateShowHandRecordModel(int deviceNumber, int boardNumber)
         {
-            TabletDeviceStatus tabletDeviceStatus = appData.GetTabletDeviceStatus(tabletDeviceNumber);
-            Hand? hand = database.GetHand(tabletDeviceStatus.SectionID, boardNumber);
+            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(deviceNumber);
+            Hand? hand = database.GetHand(deviceStatus.SectionID, boardNumber);
             hand ??= database.GetHand(1, boardNumber);
             if (hand == null) return null;
 
@@ -280,7 +367,7 @@ namespace TabScore2.UtilityServices
                 3 => (string)localizer["W"],
                 _ => "#",
             };
-            ShowHandRecord showHandRecord = new(tabletDeviceNumber, dealer);
+            ShowHandRecord showHandRecord = new(deviceNumber, boardNumber, dealer);
             // Set dealer based on board number
             string A = localizer["A"];
             string K = localizer["K"];
@@ -304,7 +391,7 @@ namespace TabScore2.UtilityServices
             showHandRecord.WestDiamonds = hand.WestDiamonds.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", T);
             showHandRecord.WestClubs = hand.WestClubs.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", T);
 
-            HandEvaluation? handEvaluation = appData.GetHandEvaluation(tabletDeviceStatus.SectionID, boardNumber);
+            HandEvaluation? handEvaluation = appData.GetHandEvaluation(deviceStatus.SectionID, boardNumber);
             if (handEvaluation == null) return showHandRecord;
 
             showHandRecord.EvalNorthNT = handEvaluation.NorthNotrump;
@@ -336,17 +423,17 @@ namespace TabScore2.UtilityServices
             return showHandRecord;
         }
 
-        public ShowRankingList CreateRankingListModel(int tabletDeviceNumber)
+        public ShowRankingList CreateRankingListModel(int deviceNumber)
         {
-            TabletDeviceStatus tabletDeviceStatus = appData.GetTabletDeviceStatus(tabletDeviceNumber);
+            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(deviceNumber);
             ShowRankingList showRankingList = [];
-            showRankingList.TabletDeviceNumber = tabletDeviceNumber;
-            showRankingList.RoundNumber = tabletDeviceStatus.RoundNumber;
+            showRankingList.TabletDeviceNumber = deviceNumber;
+            showRankingList.RoundNumber = deviceStatus.RoundNumber;
 
             // Set player numbers to highlight appropriate rows of ranking list
-            if (database.GetSection(tabletDeviceStatus.SectionID).TabletDevicesPerTable == 1)
+            if (database.GetSection(deviceStatus.SectionID).TabletDevicesPerTable == 1)
             {
-                TableStatus tableStatus = appData.GetTableStatus(tabletDeviceNumber)!;
+                TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
                 showRankingList.NumberNorth = tableStatus.RoundData.NumberNorth;
                 showRankingList.NumberEast = tableStatus.RoundData.NumberEast;
                 showRankingList.NumberSouth = tableStatus.RoundData.NumberSouth;
@@ -355,10 +442,10 @@ namespace TabScore2.UtilityServices
             else  // More than one tablet device per table
             {
                 // Only need to highlight one row entry, so use NumberNorth as proxy
-                showRankingList.NumberNorth = tabletDeviceStatus.PairNumber;
+                showRankingList.NumberNorth = deviceStatus.PairNumber;
             }
 
-            showRankingList.AddRange(GetRankings(tabletDeviceStatus.SectionID));
+            showRankingList.AddRange(GetRankings(deviceStatus.SectionID));
             return showRankingList;
         }
 
@@ -532,46 +619,46 @@ namespace TabScore2.UtilityServices
             return rankings;
         }
 
-        public string Header(int tabletDeviceNumber, HeaderType headerType, int boardNumber = 0)
+        public string Header(int deviceNumber, HeaderType headerType, int boardNumber = 0)
         {
-            TabletDeviceStatus tabletDeviceStatus = appData.GetTabletDeviceStatus(tabletDeviceNumber);
-            TableStatus tableStatus = appData.GetTableStatus(tabletDeviceNumber)!;
+            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(deviceNumber);
+            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
             switch (headerType)
             {
                 case HeaderType.Location:
-                    return $"{tabletDeviceStatus.Location}";
+                    return $"{deviceStatus.Location}";
                 case HeaderType.Round:
-                    return $"{tabletDeviceStatus.Location}: {localizer["Round"]} {tabletDeviceStatus.RoundNumber}";
+                    return $"{deviceStatus.Location}: {localizer["Round"]} {deviceStatus.RoundNumber}";
                 case HeaderType.FullPlain:
                     if (database.IsIndividual)
                     {
-                        return $"{tabletDeviceStatus.Location}: {localizer["Round"]} {tableStatus.RoundNumber}: {tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth} v {tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}";
+                        return $"{deviceStatus.Location}: {localizer["Round"]} {tableStatus.RoundNumber}: {tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth} v {tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}";
                     }
                     else
                     {
-                        return $"{tabletDeviceStatus.Location}: {localizer["Round"]} {tableStatus.RoundNumber}: {localizer["N"]}{localizer["S"]} {tableStatus.RoundData.NumberNorth} v {localizer["E"]}{localizer["W"]} {tableStatus.RoundData.NumberEast}";
+                        return $"{deviceStatus.Location}: {localizer["Round"]} {tableStatus.RoundNumber}: {localizer["N"]}{localizer["S"]} {tableStatus.RoundData.NumberNorth} v {localizer["E"]}{localizer["W"]} {tableStatus.RoundData.NumberEast}";
                     }
                 case HeaderType.FullColoured:
                     if (database.IsIndividual)
                     {
-                        return $"{tabletDeviceStatus.Location}: {localizer["Round"]} {tableStatus.RoundNumber}: {ColourPairByVulnerability("NS", boardNumber, $"{tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth}")} v {ColourPairByVulnerability("EW", boardNumber, $"{tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}")}";
+                        return $"{deviceStatus.Location}: {localizer["Round"]} {tableStatus.RoundNumber}: {ColourPairByVulnerability("NS", boardNumber, $"{tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth}")} v {ColourPairByVulnerability("EW", boardNumber, $"{tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}")}";
                     }
                     else
                     {
-                        return $"{tabletDeviceStatus.Location}: {localizer["Round"]} {tableStatus.RoundNumber}: {ColourPairByVulnerability("NS", boardNumber, $"{localizer["N"]}{localizer["S"]} {tableStatus.RoundData.NumberNorth}")} v {ColourPairByVulnerability("EW", boardNumber, $"{localizer["E"]}{localizer["W"]} {tableStatus.RoundData.NumberEast}")}";
+                        return $"{deviceStatus.Location}: {localizer["Round"]} {tableStatus.RoundNumber}: {ColourPairByVulnerability("NS", boardNumber, $"{localizer["N"]}{localizer["S"]} {tableStatus.RoundData.NumberNorth}")} v {ColourPairByVulnerability("EW", boardNumber, $"{localizer["E"]}{localizer["W"]} {tableStatus.RoundData.NumberEast}")}";
                     }
                 default:
                     return string.Empty;
             }
         }
 
-        public string Title(int tabletDeviceNumber, string titleString, TitleType titleType)
+        public string Title(int deviceNumber, string titleString, TitleType titleType)
         {
-            TabletDeviceStatus tabletDeviceStatus = appData.GetTabletDeviceStatus(tabletDeviceNumber);
+            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(deviceNumber);
             return titleType switch
             {
                 TitleType.Plain => $"{localizer[titleString]}",
-                TitleType.Location => $"{localizer[titleString]} - {tabletDeviceStatus.Location}",
+                TitleType.Location => $"{localizer[titleString]} - {deviceStatus.Location}",
                 _ => string.Empty,
             };
         }
@@ -668,7 +755,7 @@ namespace TabScore2.UtilityServices
 
 
         // PRIVATE CLASSES
-        private static PlayerEntry CreatePlayerEntry(Round round, Direction direction)
+        private PlayerEntry CreatePlayerEntry(Round round, Direction direction)
         {
             int number;
             string name;
@@ -692,7 +779,72 @@ namespace TabScore2.UtilityServices
                 name = round.NameWest;
                 number = round.NumberWest;
             }
-            return new PlayerEntry(name, number, direction);
+            return new PlayerEntry(name.Replace("Unknown", localizer["Unknown"]), number, direction);
+        }
+
+        private string GetDisplayContract(Result result)
+        {
+            if (result.ContractLevel == -1)  // Board not played or arbitral result of some kind
+            {
+                if (result.Remarks == "Not played")
+                {
+                    return $"<span style=\"color:red\">{localizer["NotPlayed"]}</span>";
+                }
+                else if (result.Remarks == "Arbitral score")
+                {
+                    return $"<span style=\"color:red\">{localizer["ArbitralScore"]}</span>";
+                }
+                else
+                {
+                    return $"<span style=\"color:red\">{result.Remarks}</span>";
+                }
+            }
+            else if (result.ContractLevel == 0)
+            {
+                return $"<span style=\"color:darkgreen\">{localizer["AllPass"]}</span>";
+            }
+            else if (result.ContractLevel > 0)
+            {
+                StringBuilder s = new();
+                s.Append(result.ContractLevel);
+                switch (result.ContractSuit)
+                {
+                    case "NT":
+                        s.Append(localizer["NT"]);
+                        break;
+                    case "S":
+                        s.Append("<span style=\"color:black\">&spades;</span>");
+                        break;
+                    case "H":
+                        s.Append("<span style=\"color:red\">&hearts;</span>");
+                        break;
+                    case "D":
+                        s.Append("<span style=\"color:lightsalmon\">&diams;</span>");
+                        break;
+                    case "C":
+                        s.Append("<span style=\"color:lightslategrey\">&clubs;</span>");
+                        break;
+                }
+                s.Append(result.ContractX);
+
+                string tricksTakenSymbol = string.Empty;
+                if (result.TricksTaken > 0)
+                {
+                    int tricksTakenLevel = result.TricksTaken - result.ContractLevel - 6;
+                    if (tricksTakenLevel == 0)
+                    {
+                        tricksTakenSymbol = "=";
+                    }
+                    else
+                    {
+                        tricksTakenSymbol = tricksTakenLevel.ToString("+#;-#;0");
+                    }
+                }
+                s.Append($"{tricksTakenSymbol} {localizer["by"]} ");
+                s.Append(localizer[result.DeclarerNSEW]);
+                return s.ToString();
+            }
+            return string.Empty;
         }
 
         private static int GetBoardsNewTableNumber(List<Round> roundsList, int tableNumber, int lowBoard)
@@ -1199,50 +1351,6 @@ namespace TabScore2.UtilityServices
                         vul = utilities.GetIsEWVulnerable(BoardNumber);
                     }
 
-
-
-    
-                        // Look up player name using table from scoring database
-                        public static string GetNameFromPlayerNamesTable(string playerID)
-                        {
-                            if (PlayerNamesTable.Count == 0)
-                            {
-                                return "#" + playerID;
-                            }
-                            PlayerRecord player = PlayerNamesTable.Find(x => x.ID == playerID);
-                            if (player == null)
-                            {
-                                return Strings.Unknown + " #" + playerID;
-                            }
-                            else
-                            {
-                                return player.Name;
-                            }
-                        }
-
-                        // Function to deal with different display format options for blank and unknown names
-                        public string FormatName(string name, string number)
-                        {
-                            if (name == string.Empty || name == localizer["Unknown"])
-                            {
-                                if (number == string.Empty)
-                                {
-                                    return string.Empty;
-                                }
-                                else if (number == "0")
-                                {
-                                    return localizer["Unknown"];
-                                }
-                                else
-                                {
-                                    return localizer["Unknown"] + " #" + number;
-                                }
-                            }
-                            else
-                            {
-                                return name;
-                            }
-                        }
                 */
     }
 }

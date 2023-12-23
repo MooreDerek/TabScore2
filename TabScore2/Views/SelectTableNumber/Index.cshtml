@@ -3,7 +3,7 @@
 
 @model TabScore2.Models.SelectTableNumber
 
-<div id="tableRegisteredModal" class="modal">
+<div id="tableRegisteredModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header text-danger">
@@ -117,8 +117,8 @@
 @if (Model.Confirm)
 {
     <script>
-        var warningModal = new bootstrap.Modal(document.getElementById("tableRegisteredModal"), { backdrop: 'static' })
-        warningModal.show()
+        var tableRegisteredModal = new bootstrap.Modal(document.getElementById("tableRegisteredModal"), { backdrop: 'static' });
+        tableRegisteredModal.show();
     </script>
 }
 

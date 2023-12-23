@@ -1,43 +1,42 @@
-﻿<!-- TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
-Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+﻿<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+     Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore.Models.ShowPlayerIDs
-@using Resources
+@model TabScore2.Models.ShowPlayerIDs
 
-<div id="notAllPlayerNumbersModal" class="modal" data-backdrop="static">
+<div id="notAllPlayerNumbersModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header text-danger">
                 <p class="modal-title text-center">
-                    <h3>@Strings.Warning</h3>
+                    <h3>@Strings["Warning"]</h3>
                 </p>
             </div>
             <div class="modal-body">
-                <p>@Strings.ErrorWaitAllIDs</p>
+                <p>@Strings["ErrorWaitAllIDs"]</p>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-lg btn-success" data-dismiss="modal">
-                    @Strings.OK <span class="fa fa-check-circle"></span>
+                    @Strings["OK"] <span class="fa fa-check-circle"></span>
                 </button>
             </div>
         </div>
     </div>
 </div>
 
-<div id="notAllNamesModal" class="modal" data-backdrop="static">
+<div id="notAllNamesModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header text-primary">
                 <p class="modal-title text-center">
-                    <h3>@Strings.Warning</h3>
+                    <h3>@Strings["Warning"]</h3>
                 </p>
             </div>
             <div class="modal-body">
-                <p>@Strings.ErrorNoID</p>
+                <p>@Strings["ErrorNoID"]</p>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-lg btn-success" data-dismiss="modal">
-                    @Strings.OK <span class="fa fa-check-circle"></span>
+                    @Strings["OK"] <span class="fa fa-check-circle"></span>
                 </button>
             </div>
         </div>
@@ -47,7 +46,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <div class="row mt-5">
     <div class="col-12 text-center p-0">
         <h3>
-            @Strings.EnterEditPlayerIDs
+            @Strings["EnterEditPlayerIDs"]
         </h3>
     </div>
 </div>
@@ -57,7 +56,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     <div class="row mt-3">
         <div class="col-12 text-center p-0">
             <h3 style="color:blue">
-                @playerEntry.DisplayDirection: @playerEntry.Number
+                @Strings[playerEntry.Direction.ToString()]:
             </h3>
         </div>
     </div>
@@ -66,22 +65,22 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
         <div class="col-1">
         </div>
         <div class="col-4">
-            @if (playerEntry.Name == "")
+            @if (playerEntry.DisplayName == "")
             {
                 <button class="btn btn-primary btn-lg m-1 px-1" style="min-width: 4.8rem" ontouchstart="touchAvailable = true; EnterPlayerID('@playerEntry.Direction')" onclick="if (!touchAvailable) EnterPlayerID('@playerEntry.Direction')">
-                    @Strings.Enter
+                    @Strings["Enter"]
                 </button>
             }
             else
             {
                 <button class="btn btn-info btn-lg m-1 px-1" style="min-width: 4.8rem" ontouchstart="touchAvailable = true; EnterPlayerID('@playerEntry.Direction')" onclick="if (!touchAvailable) EnterPlayerID('@playerEntry.Direction')">
-                    @Strings.Edit
+                    @Strings["Edit"]
                 </button>
             }
         </div>
         <div class="col-7 px-0 align-self-center">
             <h4>
-                @playerEntry.Name
+                @playerEntry.DisplayName
             </h4>
         </div>
     </div>
@@ -94,7 +93,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
         </div>
         <div class="col-10 text-center">
             <h5>
-                @Strings.NeedAllIDs
+                @Strings["NeedAllIDs"]
             </h5>
         </div>
         <div class="col-1">
@@ -105,29 +104,32 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 @if (Model.ShowWarning)
 {
     <script>
-        $("#notAllPlayerNumbersModal").modal("show");
+        var notAllPlayerNumbersModal = new bootstrap.Modal(document.getElementById("notAllPlayerNumbersModal"), { backdrop: 'static' });
+        notAllPlayerNumbersModal.show();
     </script>
 }
 
 <script>
     var isSubmitted = false;
 
-    $(document).on('touchstart click', '#OKButton:enabled', function () {
+    function OKButtonClick() {
+        if (document.getElementById("OKButton").disabled) return;
         if (@Model.NumberOfBlankEntries > 0) {
-            $("#notAllNamesModal").modal("show");
+            var notAllNamesModal = new bootstrap.Modal(document.getElementById("notAllNamesModal"), { backdrop: 'static' });
+            notAllNamesModal.show();
         }
         else {
             if (!isSubmitted) {
                 isSubmitted = true;
-                location.href = '@Url.Action("OKButtonClick", "ShowPlayerIDs")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+                location.href = '@Url.Action("OKButtonClick", "ShowPlayerIDs")?deviceNumber=@Model.TabletDeviceNumber';
             }
         }
-    });
+    }
 
     function EnterPlayerID(direction) {
             if (!isSubmitted) {
                 isSubmitted = true;
-                location.href = '@Url.Action("Index", "EnterPlayerID")?tabletDeviceNumber=@Model.TabletDeviceNumber&direction=' + direction;
+                location.href = '@Url.Action("Index", "EnterPlayerID")?deviceNumber=@Model.TabletDeviceNumber&direction=' + direction;
             }
     }
 </script>

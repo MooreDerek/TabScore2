@@ -5,9 +5,9 @@ using TabScore2.Globals;
 
 namespace TabScore2.Classes
 {
-    public class PlayerEntry(string name, int number, Direction direction)
+    public class PlayerEntry(string displayName, int number, Direction direction)
     {
-        public string Name { get; private set; } = name;
+        public string DisplayName { get; private set; } = displayName;
         public int Number { get; private set; } = number;
         public Direction Direction { get; private set; } = direction;
     }

@@ -12,19 +12,18 @@ namespace TabScore2.DataServices
         void ClearAppData();
 
         bool TableStatusExists(int sectionID, int tableNumber);
-        TableStatus? GetTableStatus(int tabletDeviceNumber);
-        TableStatus? GetTableStatus(int sectionID, int tableNumber);
-        void AddTableStatus(int sectionID, int tableNumber, int roundNumber);
+        TableStatus GetTableStatus(int deviceNumber);
+        TableStatus GetTableStatus(int sectionID, int tableNumber);
         void UpdateTableStatus(int sectionID, int tableNumber, int roundNumber);
 
         bool TabletDeviceStatusExists(int sectionID, int tableNumber, Direction direction = Direction.North);
-        TabletDeviceStatus GetTabletDeviceStatus(int tabletDeviceNumber);
-        TabletDeviceStatus GetTabletDeviceStatus(int sectionID, int tableNumber, Direction direction = Direction.North);
+        DeviceStatus GetTabletDeviceStatus(int deviceNumber);
+        DeviceStatus GetTabletDeviceStatus(int sectionID, int tableNumber, Direction direction = Direction.North);
         void AddTabletDeviceStatus(int sectionID, int tableNumber, int pairNumber, int roundNumber, Direction direction = Direction.North);
-        void UpdateTabletDeviceStatus(int tabletDeviceNumber, int tableNumber, int roundNumber, Direction direction);
-        int GetTabLetDeviceNumber(TabletDeviceStatus tabletDeviceStatus);
+        void UpdateTabletDeviceStatus(int deviceNumber, int tableNumber, int roundNumber, Direction direction);
+        int GetTabLetDeviceNumber(DeviceStatus deviceStatus);
 
-        int GetTimerSeconds(int tabletDeviceNumber);
+        int GetTimerSeconds(int deviceNumber);
 
         public void ClearHandEvaluations();
         public HandEvaluation? GetHandEvaluation(int sectionID, int boardNumber);

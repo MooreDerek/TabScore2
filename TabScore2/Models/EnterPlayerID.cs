@@ -5,9 +5,10 @@ using TabScore2.Globals;
 
 namespace TabScore2.Models
 {
-    public class EnterPlayerID(int tabletDeviceNumber, Direction direction)
+    public class EnterPlayerID(int deviceNumber, Direction direction)
     {
-        public int TabletDeviceNumber { get; set; } = tabletDeviceNumber;
+        public int TabletDeviceNumber { get; set; } = deviceNumber;
         public Direction Direction { get; set; } = direction;
+        public string DisplayDirection { get; set; } = string.Empty;
     }
 }

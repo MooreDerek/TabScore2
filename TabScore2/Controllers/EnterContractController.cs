@@ -2,10 +2,10 @@
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using Microsoft.AspNetCore.Mvc;
-using TabScore.Models;
 using TabScore2.Classes;
 using TabScore2.DataServices;
 using TabScore2.Globals;
+using TabScore2.Models;
 using TabScore2.UtilityServices;
 
 namespace TabScore2.Controllers
@@ -17,46 +17,38 @@ namespace TabScore2.Controllers
         private readonly IUtilities utilities = iUtilities;
         private readonly ISettings settings = iSettings;
 
-        public ActionResult Index(int tabletDeviceNumber, int boardNumber)
+        public ActionResult Index(int deviceNumber, int boardNumber)
         {
-            TableStatus tableStatus = appData.GetTableStatus(tabletDeviceNumber)!;
+            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
             
-            // Get or create new result as needed
-            tableStatus.ResultData ??= database.GetResult(tableStatus.SectionID, tableStatus.TableNumber, tableStatus.RoundNumber, boardNumber);
-
-            LeadValidationOptions leadValidationOptions;
-            if (settings.ValidateLeadCard)
+            // Get result as needed
+            if (tableStatus.ResultData.BoardNumber == 0) 
             {
-                leadValidationOptions = LeadValidationOptions.Validate;
+                tableStatus.ResultData = database.GetResult(tableStatus.SectionID, tableStatus.TableNumber, tableStatus.RoundNumber, boardNumber);
             }
-            else
-            {
-                leadValidationOptions = LeadValidationOptions.NoWarning;
-            }
-            EnterContract enterContract = new(tabletDeviceNumber, tableStatus.ResultData, leadValidationOptions);
 
-            if (settings.ShowTimer) ViewData["TimerSeconds"] = appData.GetTimerSeconds(tabletDeviceNumber);
-            ViewData["Title"] = utilities.Title(tabletDeviceNumber, "EnterContract", TitleType.Location);
-            ViewData["Header"] = utilities.Header(tabletDeviceNumber, HeaderType.FullColoured, tableStatus.ResultData.BoardNumber);
+            EnterContract enterContract = utilities.CreateEnterContractModel(deviceNumber, tableStatus.ResultData);
+
+            if (settings.ShowTimer) ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
+            ViewData["Title"] = utilities.Title(deviceNumber, "EnterContract", TitleType.Location);
+            ViewData["Header"] = utilities.Header(deviceNumber, HeaderType.FullColoured, tableStatus.ResultData.BoardNumber);
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabledAndBack;
             return View(enterContract);
         }
 
-        public ActionResult OKButtonContract(int tabletDeviceNumber, int contractLevel, string contractSuit, string contractX, string declarerNSEW)
+        public ActionResult OKButtonContract(int deviceNumber, int contractLevel, string contractSuit, string contractX, string declarerNSEW)
         {
-            TableStatus tableStatus = appData.GetTableStatus(tabletDeviceNumber)!;  // tableStatus and result must exist
-            Result result = tableStatus.ResultData!;
+            Result result = appData.GetTableStatus(deviceNumber).ResultData;
             result.ContractLevel = contractLevel;
             result.ContractSuit = contractSuit;
             result.ContractX = contractX;
             result.DeclarerNSEW = declarerNSEW;
-            return RedirectToAction("Index", "EnterLead", new { tabletDeviceNumber, leadValidation = LeadValidationOptions.Validate });
+            return RedirectToAction("Index", "EnterLead", new { deviceNumber, leadValidation = LeadValidationOptions.Validate });
         }
 
-        public ActionResult OKButtonPass(int tabletDeviceNumber)
+        public ActionResult OKButtonPass(int deviceNumber)
         {
-            TableStatus tableStatus = appData.GetTableStatus(tabletDeviceNumber)!;  // tableStatus and result must exist
-            Result result = tableStatus.ResultData!;
+            Result result = appData.GetTableStatus(deviceNumber).ResultData;
             result.ContractLevel = 0;
             result.ContractSuit = "";
             result.ContractX = "";
@@ -64,13 +56,13 @@ namespace TabScore2.Controllers
             result.LeadCard = "";
             result.TricksTaken = -1;
             result.CalculateScore();
-            return RedirectToAction("Index", "ConfirmResult", new { tabletDeviceNumber });
+            return RedirectToAction("Index", "ConfirmResult", new { deviceNumber });
         }
         
-        public ActionResult OKButtonSkip(int tabletDeviceNumber)
+        public ActionResult OKButtonSkip(int deviceNumber)
         {
-            TableStatus tableStatus = appData.GetTableStatus(tabletDeviceNumber)!;  // tableStatus and result must exist
-            Result result = tableStatus.ResultData!;
+            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
+            Result result = tableStatus.ResultData;
             result.ContractLevel = -1;
             result.ContractSuit = "";
             result.ContractX = "";
@@ -78,7 +70,7 @@ namespace TabScore2.Controllers
             result.LeadCard = "";
             result.TricksTaken = -1;
             database.SetResult(tableStatus.SectionID, tableStatus.TableNumber, tableStatus.RoundNumber, result);
-            return RedirectToAction("Index", "ShowBoards", new { tabletDeviceNumber });
+            return RedirectToAction("Index", "ShowBoards", new { deviceNumber });
         }
     }
 }

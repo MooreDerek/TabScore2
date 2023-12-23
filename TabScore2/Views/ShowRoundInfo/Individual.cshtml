@@ -1,41 +1,40 @@
-﻿<!-- TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
-Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+﻿<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+     Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore.Models.ShowRoundInfo
-@using Resources
+@model TabScore2.Models.ShowRoundInfo
 
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            @Strings.Round @Model.RoundNumber
+            @Strings["Round"] @Model.RoundNumber
         </h3>
     </div>
 </div>
 
 <div class="row">
     <div class="col-12 text-center">
-        @if (Model.RoundData.LowBoard == Model.RoundData.HighBoard)
+        @if (Model.LowBoard == Model.HighBoard)
         {
             <h3 style="color:green">
-                @Strings.Board @Model.RoundData.LowBoard
+                @Strings["Board"] @Model.LowBoard
             </h3>
         }
         else
         {
             <h3 style="color:green">
-                @Strings.Boards @Model.RoundData.LowBoard - @Model.RoundData.HighBoard
+                @Strings["Boards"] @Model.LowBoard - @Model.HighBoard
             </h3>
         }
         @if (Model.BoardsFromTable == 0)
         {
             <h6>
-                [ @Strings.FromRelayTable ]
+                [ @Strings["FromRelayTable"] ]
             </h6>
         }
         else if (Model.BoardsFromTable > 0)
         {
             <h6>
-                [ @Strings.FromTable @Model.BoardsFromTable ]
+                [ @Strings["FromTable"] @Model.BoardsFromTable ]
             </h6>
         }
     </div>
@@ -46,7 +45,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     <div class="row mt-4">
         <div class="col-12 text-center">
             <h3 style="color:blue">
-                @Strings.North: @Model.RoundData.NumberNorth & @Strings.South: @Model.RoundData.NumberSouth
+                @Strings["North"]: @Model.NumberNorth & @Strings["South"]: @Model.NumberSouth
             </h3>
         </div>
     </div>
@@ -54,7 +53,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     <div class="row">
         <div class="col-12 text-center">
             <h4>
-                @Model.RoundData.NameNorth & @Model.RoundData.NameSouth
+                @Model.DisplayNameNorth & @Model.DisplayNameSouth
             </h4>
         </div>
     </div>
@@ -65,7 +64,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     <div class="row mt-4">
         <div class="col-12 text-center">
             <h3 style="color:blue">
-                @Strings.East: @Model.RoundData.NumberEast & @Strings.West: @Model.RoundData.NumberWest
+                @Strings["East"]: @Model.NumberEast & @Strings["West"]: @Model.NumberWest
             </h3>
         </div>
     </div>
@@ -73,7 +72,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     <div class="row">
         <div class="col-12 text-center">
             <h4>
-                @Model.RoundData.NameEast & @Model.RoundData.NameWest
+                @Model.DisplayNameEast & @Model.DisplayNameWest
             </h4>
         </div>
     </div>
@@ -84,7 +83,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     <div class="row mt-4">
         <div class="col-12 text-center">
             <h3 style="color:red">
-                @Strings.SittingOut
+                @Strings["SittingOut"]
             </h3>
         </div>
     </div>
@@ -94,24 +93,24 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     var isSubmitted = false;
     var sitOut = @Model.NSMissing.ToString().ToLower() || @Model.EWMissing.ToString().ToLower();
 
-    $(document).on('touchstart click', '#OKButton:enabled', function () {
+    function OKButtonClick() {
+        if (document.getElementById("OKButton").disabled) return;
         if (!isSubmitted) {
             isSubmitted = true;
-            if (sitOut)
-            {
-                location.href = '@Url.Action("Index", "ShowRankingList")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+            if (sitOut) {
+                location.href = '@Url.Action("Index", "ShowRankingList")?deviceNumber=@Model.TabletDeviceNumber';
             }
-            else
-            {
-                location.href = '@Url.Action("Index", "ShowBoards")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+            else {
+                location.href = '@Url.Action("Index", "ShowBoards")?deviceNumber=@Model.TabletDeviceNumber';
             }
         }
-    });
+    }
 
-    $(document).on('touchstart click', '#BackButton:enabled', function () {
+    function BackButtonClick() {
+        if (document.getElementById("BackButton").disabled) return;
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("BackButtonClick", "ShowRoundInfo")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+            location.href = '@Url.Action("BackButtonClick", "ShowRoundInfo")?deviceNumber=@Model.TabletDeviceNumber';
         }
-    });
+    }
 </script>

@@ -1,9 +1,7 @@
-﻿<!-- TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
-    Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+﻿<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+     Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore.Models.EnterHandRecord
-@using System.Web.Optimization
-@using Resources
+@model TabScore2.Models.EnterHandRecord
 
 <style>
     .px-custom {
@@ -17,7 +15,7 @@
     }
 </style>
 
-<div id="backModal" class="modal" data-backdrop="static">
+<div id="backModal" class="modal face">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header text-danger">
@@ -26,14 +24,14 @@
                 </p>
             </div>
             <div class="modal-body">
-                <p>@Strings.WarningHandRecordBack</p>
+                <p>@Strings["WarningHandRecordBack"]</p>
             </div>
             <div class="modal-footer" style="justify-content:space-between">
                 <button class="btn btn-danger" onclick="modalBack()">
-                    <span class="fa fa-play-circle"></span> @Strings.Back
+                    <span class="fa fa-play-circle"></span> @Strings["Back"]
                 </button>
                 <button class="btn btn-success" data-dismiss="modal">
-                    @Strings.Cancel <span class="fa fa-times-circle"></span>
+                    @Strings["Cancel"] <span class="fa fa-times-circle"></span>
                 </button>
             </div>
         </div>
@@ -44,7 +42,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center p-0">
         <h4>
-            @Strings.EnterHandRecord @Model.BoardNumber @Strings.EnterHandRecord2
+            @Strings["EnterHandRecord"] @Model.BoardNumber @Strings["EnterHandRecord2"]
         </h4>
     </div>
 </div>
@@ -52,16 +50,16 @@
 <div class="row mt-2">
     <div class="col-12 text-center p-0">
         <button id="cA" class="btn btn-primary m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; addCard('A')" onclick="if (!touchAvailable) addCard('A')">
-            @Strings.A
+            @Strings["A"]
         </button>
         <button id="cB" class="btn btn-primary m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; addCard('B')" onclick="if (!touchAvailable) addCard('B')">
-            @Strings.K
+            @Strings["K"]
         </button>
         <button id="cC" class="btn btn-primary m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; addCard('C')" onclick="if (!touchAvailable) addCard('C')">
-            @Strings.Q
+            @Strings["Q"]
         </button>
         <button id="cD" class="btn btn-primary m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; addCard('D')" onclick="if (!touchAvailable) addCard('D')">
-            @Strings.J
+            @Strings["J"]
         </button>
     </div>
 </div>
@@ -69,7 +67,7 @@
 <div class="row">
     <div class="col-12 text-center p-0">
         <button id="cE" class="btn btn-primary m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; addCard('E')" onclick="if (!touchAvailable) addCard('E')">
-            @Strings.TenShorthand
+            @Strings["TenShorthand"]
         </button>
         <button id="cF" class="btn btn-primary m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; addCard('F')" onclick="if (!touchAvailable) addCard('F')">
             9
@@ -123,8 +121,8 @@
 
 <div class="row mt-2">
     <div class="col-4 text-right align-self-center">
-        <button id="skipButton" class="btn btn-outline-danger float-right" ontouchstart="touchAvailable = true; skip()" onclick="if (!touchAvailable) skip()">
-            @Strings.Skip
+        <button id="skipButton" class="btn btn-outline-danger float-end" ontouchstart="touchAvailable = true; skip()" onclick="if (!touchAvailable) skip()">
+            @Strings["Skip"]
         </button>
     </div>
     <div class="col-4 text-center p-0">
@@ -132,7 +130,7 @@
     </div>
     <div class="col-4 text-left align-self-center">
         <button id="remainderButton" class="btn d-none" ontouchstart="touchAvailable = true; remainder()" onclick="if (!touchAvailable) remainder()">
-            @Strings.All <span class="fa fa-arrow-down"></span>
+            @Strings["All"] <span class="fa fa-arrow-down"></span>
         </button>
     </div>
 </div>
@@ -140,16 +138,16 @@
 <div class="row mt-2">
     <div class="col-12 text-center p-0">
         <button id="dN" class="btn btn-warning m-1 px-2" ontouchstart="touchAvailable = true; setDirection('N')" onclick="if (!touchAvailable) setDirection('N')">
-            @Strings.North
+            @Strings["North"]
         </button>
         <button id="dS" class="btn btn-secondary m-1 px-2" ontouchstart="touchAvailable = true; setDirection('S')" onclick="if (!touchAvailable) setDirection('S')">
-            @Strings.South
+            @Strings["South"]
         </button>
         <button id="dE" class="btn btn-secondary m-1 px-2" ontouchstart="touchAvailable = true; setDirection('E')" onclick="if (!touchAvailable) setDirection('E')">
-            @Strings.East
+            @Strings["East"]
         </button>
         <button id="dW" class="btn btn-secondary m-1 px-2" ontouchstart="touchAvailable = true; setDirection('W')" onclick="if (!touchAvailable) setDirection('W')">
-            @Strings.West
+            @Strings["West"]
         </button>
     </div>
 </div>
@@ -351,9 +349,9 @@
 </div>
 
 <script>
-    var urlOKButtonClick = '@Url.Action("OKButtonClick", "EnterHandRecord")?tabletDeviceNumber=@Model.TabletDeviceNumber';
-    var urlBackButtonClick = '@Url.Action("Index", "ConfirmResult")?tabletDeviceNumber=@Model.TabletDeviceNumber';
-    var urlSkipButtonClick = '@Url.Action("Index", "ShowTraveller")?tabletDeviceNumber=@Model.TabletDeviceNumber&boardNumber=@Model.BoardNumber';
-    const cardString = ['@Strings.A', '@Strings.K', '@Strings.Q', '@Strings.J', '@Strings.TenShorthand', '9', '8', '7', '6', '5', '4', '3', '2'];
+    var urlOKButtonClick = '@Url.Action("OKButtonClick", "EnterHandRecord")?deviceNumber=@Model.TabletDeviceNumber';
+    var urlBackButtonClick = '@Url.Action("Index", "ConfirmResult")?deviceNumber=@Model.TabletDeviceNumber';
+    var urlSkipButtonClick = '@Url.Action("Index", "ShowTraveller")?deviceNumber=@Model.TabletDeviceNumber&boardNumber=@Model.BoardNumber';
+    const cardString = ['@Strings["A"]', '@Strings["K"]', '@Strings["Q"]', '@Strings["J"]', '@Strings["TenShorthand"]', '9', '8', '7', '6', '5', '4', '3', '2'];
 </script>
-@Scripts.Render("~/bundles/enterHandRecordJS")
+<script src="~/js/enterHandRecordJS.js"></script>

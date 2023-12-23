@@ -1,8 +1,7 @@
-﻿<!-- TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
-Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
-
-@model TabScore.Models.ShowTraveller
-@using Resources
+﻿<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+     Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+     
+     @model TabScore2.Models.ShowTraveller
 
 <div class="row mt-4">
     @if (Model.HandRecord)
@@ -11,29 +10,29 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
             <div class="row">
                 <div class="col-12 text-center p-0">
                     <h3>
-                        @Strings.Board @Model.BoardNumber
+                        @Strings["Board"] @Model.BoardNumber
                     </h3>
                 </div>
             </div>
             <div class="row">
                 <div class="col-12 text-center p-0">
-                    @if (Model.PercentageNS == "")
+                    @if (Model.PercentageNS == string.Empty)
                     {
                         <h4>
-                            @Strings.Traveller
+                            @Strings["Traveller"]
                         </h4>
                     }
                     else
                     {
                         <h4>
-                            @Strings.N@Strings.S: @Model.PercentageNS - @Strings.E@Strings.W: @Model.PercentageEW
+                            @Strings["N"]@Strings["S"]: @Model.PercentageNS - @Strings["E"]@Strings["W"]: @Model.PercentageEW
                         </h4>
                     }
                 </div>
             </div>
         </div>
         <div class="col-3 p-0">
-            <button class="btn btn-outline-light btn-lg mr-2 my-2 float-right" ontouchstart="touchAvailable = true; handRecordClick()" onclick="if (!touchAvailable) handRecordClick()">
+            <button class="btn btn-outline-light btn-lg mr-2 my-2 float-end" ontouchstart="touchAvailable = true; handRecordClick()" onclick="if (!touchAvailable) handRecordClick()">
                 <img src="~/Resources/Cards Logo.png" />
             </button>
         </div>
@@ -42,20 +41,20 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     {
         <div class="col-12 text-center p-0">
             <h4>
-                @Strings.Board @Model.BoardNumber
+                @Strings["Board"] @Model.BoardNumber
             </h4>
         </div>
         <div class="col-12 text-center p-0">
             @if (Model.PercentageNS == "")
             {
                 <h4>
-                    @Strings.Traveller
+                    @Strings["Traveller"]
                 </h4>
             }
             else
             {
                 <h4>
-                    @Strings.N@Strings.S: @Model.PercentageNS - @Strings.E@Strings.W: @Model.PercentageEW
+                    @Strings["N"]@Strings["S"]: @Model.PercentageNS - @Strings["E"]@Strings["W"]: @Model.PercentageEW
                 </h4>
             }
         </div>
@@ -67,14 +66,13 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
         <table class="table-sm table-bordered text-center" style="margin:auto; width:80%">
             <thead class="thead-dark">
                 <tr>
-                    <th>@Strings.N@Strings.S</th>
-                    <th>@Strings.E@Strings.W</th>
-                    <th>@Html.Raw(Strings.Contract)</th>
-                    <th>@Strings.ByOnTraveller</th>
-                    <th>@Html.Raw(Strings.Lead)</th>
-                    <th>@Strings.Tricks</th>
-                    <th>@Strings.N@Strings.S @Html.Raw(Strings.Score)</th>
-                    <th>@Strings.E@Strings.W @Html.Raw(Strings.Score)</th>
+                    <th>@Strings["N"]@Strings["S"]</th>
+                    <th>@Strings["E"]@Strings["W"]</th>
+                    <th>@Html.Raw(Strings["Contract"])</th>
+                    <th>@Strings["ByOnTraveller"]</th>
+                    <th>@Html.Raw(Strings["Lead"])</th>
+                    <th>@Strings["N"]@Strings["S"] @Html.Raw(Strings["Score"])</th>
+                    <th>@Strings["E"]@Strings["W"] @Html.Raw(Strings["Score"])</th>
                 </tr>
             </thead>
             <tbody>
@@ -85,10 +83,9 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                         <tr class="table-success">
                             <td>@Result.NumberNorth+@Result.NumberSouth</td>
                             <td>@Result.NumberEast+@Result.NumberWest</td>
-                            <td>@Html.Raw(Result.Contract)</td>
-                            <td>@Result.DeclarerNSEW</td>
-                            <td>@Html.Raw(Result.LeadCard)</td>
-                            <td>@Result.TricksTaken</td>
+                            <td>@Html.Raw(Result.DisplayContract)</td>
+                            <td>@Result.DisplayDeclarerNSEW</td>
+                            <td>@Html.Raw(Result.DisplayLeadCard)</td>
                             <td>@Html.Raw(Result.ScoreNS)</td>
                             <td>@Html.Raw(Result.ScoreEW)</td>
                         </tr>
@@ -98,10 +95,9 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
                         <tr>
                             <td>@Result.NumberNorth+@Result.NumberSouth</td>
                             <td>@Result.NumberEast+@Result.NumberWest</td>
-                            <td>@Html.Raw(Result.Contract)</td>
-                            <td>@Result.DeclarerNSEW</td>
-                            <td>@Html.Raw(Result.LeadCard)</td>
-                            <td>@Result.TricksTaken</td>
+                            <td>@Html.Raw(Result.DisplayContract)</td>
+                            <td>@Result.DisplayDeclarerNSEW</td>
+                            <td>@Html.Raw(Result.DisplayLeadCard)</td>
                             <td>@Html.Raw(@Result.ScoreNS)</td>
                             <td>@Html.Raw(@Result.ScoreEW)</td>
                         </tr>
@@ -115,24 +111,26 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <script>
     var isSubmitted = false;
 
-    $(document).on('touchstart click', '#OKButton:enabled', function () {
+    function OKButtonClick() {
+        if (document.getElementById("OKButton").disabled) return;
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("Index", "ShowBoards")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+            location.href = '@Url.Action("Index", "ShowBoards")?deviceNumber=@Model.TabletDeviceNumber';
         }
-    });
+    }
+
+    function BackButtonClick() {
+        if (document.getElementById("BackButton").disabled) return;
+        if (!isSubmitted) {
+            isSubmitted = true;
+            location.href = '@Url.Action("Index", "ConfirmResult")?deviceNumber=@Model.TabletDeviceNumber';
+        }
+    }
 
     function handRecordClick() {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("Index", "ShowHandRecord")?tabletDeviceNumber=@Model.TabletDeviceNumber&boardNumber=@Model.BoardNumber&fromView=@Model.FromView.ToString().ToLower()';
+            location.href = '@Url.Action("Index", "ShowHandRecord")?deviceNumber=@Model.TabletDeviceNumber&boardNumber=@Model.BoardNumber&fromView=@Model.FromView.ToString().ToLower()';
         }
     }
-
-    $(document).on('touchstart click', '#BackButton:enabled', function () {
-        if (!isSubmitted) {
-            isSubmitted = true;
-            location.href = '@Url.Action("Index", "ConfirmResult")?tabletDeviceNumber=@Model.TabletDeviceNumber';
-        }
-    });
 </script>

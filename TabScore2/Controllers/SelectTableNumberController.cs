@@ -34,24 +34,19 @@ namespace TabScore2.Controllers
             // Register table in database
             database.RegisterTable(sectionID, tableNumber);
 
-            // Check if table status has already been created; if not, add it to the list
-            if (!appData.TableStatusExists(sectionID, tableNumber))
-            {
-                appData.AddTableStatus(sectionID, tableNumber, database.GetNumberOfLastRoundWithResults(sectionID, tableNumber));
-            }
-            TableStatus tableStatus = appData.GetTableStatus(sectionID, tableNumber)!;  // Return value cannot be null as we've just set it
+            TableStatus tableStatus = appData.GetTableStatus(sectionID, tableNumber);  // Return value cannot be null as we've just set it
             database.GetRoundData(tableStatus);
 
             if (database.GetSection(sectionID).TabletDevicesPerTable == 1)
             {
                 // Check if tablet device is already registered for this location. One tablet device per table, so Direction defaults to North
-                bool tabletDeviceStatusExists = appData.TabletDeviceStatusExists(sectionID, tableNumber);
-                if (tabletDeviceStatusExists && confirm)
+                bool deviceStatusExists = appData.TabletDeviceStatusExists(sectionID, tableNumber);
+                if (deviceStatusExists && confirm)
                 {
                     // Ok to change to this tablet, so set cookie
                     SetCookie(sectionID, tableNumber);
                 }
-                else if (tabletDeviceStatusExists)
+                else if (deviceStatusExists)
                 {
                     // Check if table number cookie has not been set - if so go back to confirm
                     if (!CheckCookie(sectionID, tableNumber))
@@ -66,22 +61,22 @@ namespace TabScore2.Controllers
                     appData.AddTabletDeviceStatus(sectionID, tableNumber, tableStatus.RoundData.NumberNorth, tableStatus.RoundNumber);
                     SetCookie(sectionID, tableNumber);
                 }
-                TabletDeviceStatus tabletDeviceStatus = appData.GetTabletDeviceStatus(sectionID, tableNumber);
+                DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(sectionID, tableNumber);
 
-                // tabletDeviceNumber is the key for identifying this particular tablet device and is used throughout the rest of the application
-                int tabletDeviceNumber = appData.GetTabLetDeviceNumber(tabletDeviceStatus);
+                // deviceNumber is the key for identifying this particular tablet device and is used throughout the rest of the application
+                int deviceNumber = appData.GetTabLetDeviceNumber(deviceStatus);
 
                 if (tableStatus.ReadyForNextRoundNorth)
                 {
-                    return RedirectToAction("Index", "ShowMove", new { tabletDeviceNumber, newRoundNumber = tableStatus.RoundNumber + 1 });
+                    return RedirectToAction("Index", "ShowMove", new { deviceNumber, newRoundNumber = tableStatus.RoundNumber + 1 });
                 }
-                else if (tabletDeviceStatus.RoundNumber == 1 || settings.NumberEntryEachRound)
+                else if (deviceStatus.RoundNumber == 1 || settings.NumberEntryEachRound)
                 {
-                    return RedirectToAction("Index", "ShowPlayerIDs", new { tabletDeviceNumber });
+                    return RedirectToAction("Index", "ShowPlayerIDs", new { deviceNumber });
                 }
                 else
                 {
-                    return RedirectToAction("Index", "ShowRoundInfo", new { tabletDeviceNumber });
+                    return RedirectToAction("Index", "ShowRoundInfo", new { deviceNumber });
                 } 
             }
             else   // More than one tablet device per table, so need to know direction for this tablet device

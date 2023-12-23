@@ -1,23 +1,22 @@
-﻿<!-- TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
-Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+﻿<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+     Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore.Models.ShowBoards
-@using Resources
+@model TabScore2.Models.ShowBoards
 
-<div id="notAllResultsModal" class="modal" data-backdrop="static">
+<div id="notAllResultsModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header text-danger">
                 <p class="modal-title text-center">
-                    <h3>@Strings.Warning</h3>
+                    <h3>@Strings["Warning"]</h3>
                 </p>
             </div>
             <div class="modal-body">
-                <p>@Strings.ErrorEnterResult</p>
+                <p>@Strings["ErrorEnterResult"]</p>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-lg btn-success" data-dismiss="modal">
-                    @Strings.OK <span class="fa fa-check-circle"></span>
+                    @Strings["OK"] <span class="fa fa-check-circle"></span>
                 </button>
             </div>
         </div>
@@ -27,48 +26,48 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <div class="row mt-5 mb-3">
     <div class="col-12 text-center p-0">
         <h3>
-            @Strings.Boards
+            @Strings["Boards"]
         </h3>
     </div>
 </div>
 
-@foreach (var Result in Model)
+@foreach (var result in Model)
 {
     <div class="row">
         <div class="col-1 text-right px-0 align-self-center">
             <h4>
-                @Result.BoardNumber:
+                @result.BoardNumber:
             </h4>
         </div>
         <div class="col-6 px-3">
-            @if (Result.ContractLevel == -999)
+            @if (result.ContractLevel == -999)
             {
-                <button class="btn btn-primary btn-lg m-1 px-1" style="min-width: 5rem" ontouchstart="touchAvailable = true; EnterEdit(@Result.BoardNumber)" onclick="if (!touchAvailable) EnterEdit(@Result.BoardNumber)">
-                    @Strings.Enter
+                <button class="btn btn-primary btn-lg m-1 px-1" style="min-width: 5rem" ontouchstart="touchAvailable = true; EnterEdit(@result.BoardNumber)" onclick="if (!touchAvailable) EnterEdit(@result.BoardNumber)">
+                    @Strings["Enter"]
                 </button>
             }
             else
             {
-                if (Model.ShowViewButton && Result.Remarks != "Not played")
+                if (Model.ShowViewButton && result.Remarks != "Not played")
                 {
-                    <button class="btn btn-info btn-lg m-1 px-1" style="min-width: 4rem" ontouchstart="touchAvailable = true; EnterEdit(@Result.BoardNumber)" onclick="if (!touchAvailable) EnterEdit(@Result.BoardNumber)">
-                        @Strings.Edit
+                    <button class="btn btn-info btn-lg m-1 px-1" style="min-width: 4rem" ontouchstart="touchAvailable = true; EnterEdit(@result.BoardNumber)" onclick="if (!touchAvailable) EnterEdit(@result.BoardNumber)">
+                        @Strings["Edit"]
                     </button>
-                    <button class="btn btn-secondary btn-lg px-1" style="min-width: 4rem" ontouchstart="touchAvailable = true; View(@Result.BoardNumber)" onclick="if (!touchAvailable) View(@Result.BoardNumber)">
-                        @Strings.View
+                    <button class="btn btn-secondary btn-lg px-1" style="min-width: 4rem" ontouchstart="touchAvailable = true; View(@result.BoardNumber)" onclick="if (!touchAvailable) View(@result.BoardNumber)">
+                        @Strings["View"]
                     </button>
                 }
                 else
                 {
-                    <button class="btn btn-info btn-lg m-1 px-1" style="min-width: 4.8rem" ontouchstart="touchAvailable = true; EnterEdit(@Result.BoardNumber)" onclick="if (!touchAvailable) EnterEdit(@Result.BoardNumber)">
-                        @Strings.Edit
+                    <button class="btn btn-info btn-lg m-1 px-1" style="min-width: 4.8rem" ontouchstart="touchAvailable = true; EnterEdit(@result.BoardNumber)" onclick="if (!touchAvailable) EnterEdit(@result.BoardNumber)">
+                        @Strings["Edit"]
                     </button>
                 }
             }
         </div>
         <div class="col-5 px-0 align-self-center">
             <h4>
-                @Html.Raw(Result.ContractDisplay)
+                @Html.Raw(result.DisplayContract)
             </h4>
         </div>
     </div>
@@ -77,30 +76,32 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
 <script>
     var isSubmitted = false;
 
-    $(document).on('touchstart click', '#OKButton:enabled', function () {
+    function OKButtonClick() {
+        if (document.getElementById("OKButton").disabled) return;
         if (!isSubmitted) {
             isSubmitted = true;
             if (@Model.GotAllResults.ToString().ToLower()) {
-                location.href = '@Url.Action("Index", "ShowRankingList")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+                location.href = '@Url.Action("Index", "ShowRankingList")?deviceNumber=@Model.TabletDeviceNumber';
             }
             else {
-                $("#notAllResultsModal").modal("show")
+                var notAllResultsModal = new bootstrap.Modal(document.getElementById("notAllResultsModal"), { backdrop: 'static' });
+                notAllResultsModal.show();
                 isSubmitted = false;
             }
         }
-    });
+    }
 
     function EnterEdit(n) {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("Index", "EnterContract")?tabletDeviceNumber=@Model.TabletDeviceNumber&boardNumber=' + n;
+            location.href = '@Url.Action("Index", "EnterContract")?deviceNumber=@Model.TabletDeviceNumber&boardNumber=' + n;
         }
     }
 
     function View(n) {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("Index", "ShowTraveller")?tabletDeviceNumber=@Model.TabletDeviceNumber&boardNumber=' + n + '&fromView=true';
+            location.href = '@Url.Action("Index", "ShowTraveller")?deviceNumber=@Model.TabletDeviceNumber&boardNumber=' + n + '&fromView=true';
         }
     }
 </script>

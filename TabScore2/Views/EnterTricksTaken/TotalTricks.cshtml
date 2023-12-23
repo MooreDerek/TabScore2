@@ -1,23 +1,21 @@
-﻿<!-- TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
+﻿<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore.Models.EnterContract
-@using Resources
-@using System.Web.Optimization
+@model TabScore2.Models.EnterContract
 
-<div id="noTricksModal" class="modal modal-dialog modal-lg">
+<div id="noTricksModal" class="modal fade">
     <div class="modal-content">
         <div class="modal-header text-primary">
             <p class="modal-title text-center">
-                <h3>@Strings.Warning</h3>
+                <h3>@Strings["Warning"]</h3>
             </p>
         </div>
         <div class="modal-body">
-            <p>@Strings.EnterTricksTaken</p>
+            <p>@Strings["EnterTricksTaken"]</p>
         </div>
         <div class="modal-footer">
             <button class="btn btn-lg btn-success" data-dismiss="modal">
-                @Strings.OK <span class="fa fa-check-circle"></span>
+                @Strings["OK"] <span class="fa fa-check-circle"></span>
             </button>
         </div>
     </div>
@@ -26,7 +24,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center p-0">
         <h3>
-            @Strings.Board @Model.ResultData.BoardNumber: @Html.Raw(Model.ResultData.ContractDisplay)
+            @Strings["Board"] @Model.BoardNumber: @Html.Raw(Model.ContractDisplay)
         </h3>
     </div>
 </div>
@@ -34,7 +32,7 @@
 <div class="row">
     <div class="col-12 text-center p-0">
         <h3>
-            @Strings.EnterTricksTaken
+            @Strings["EnterTricksTaken"]
         </h3>
     </div>
 </div>
@@ -97,8 +95,8 @@
 </div>
 
 <script>
-    var numTricks = '@Model.ResultData.TricksTakenNumber';
-    var urlOKButtonClick = '@Url.Action("OKButtonClick", "EnterTricksTaken")?tabletDeviceNumber=@Model.TabletDeviceNumber';
-    var urlBackButtonClick = '@Url.Action("BackButtonClick", "EnterTricksTaken")?tabletDeviceNumber=@Model.TabletDeviceNumber';
+    var numTricks = '@Model.TricksTaken';
+    var urlOKButtonClick = '@Url.Action("OKButtonClick", "EnterTricksTaken")?deviceNumber=@Model.TabletDeviceNumber';
+    var urlBackButtonClick = '@Url.Action("BackButtonClick", "EnterTricksTaken")?deviceNumber=@Model.TabletDeviceNumber';
 </script>
-@Scripts.Render("~/bundles/totalTricksJS")
+<script src="~/js/totalTricksJS.js"></script>

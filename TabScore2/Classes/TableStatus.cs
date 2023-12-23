@@ -11,7 +11,7 @@ namespace TabScore2.Classes
         public int TableNumber { get; set; } = tableNumber;
         public int RoundNumber { get; set; } = roundNumber;
         public Round RoundData { get; set; } = new();
-        public Result? ResultData { get; set; }
+        public Result ResultData { get; set; } = new();
         public LeadValidationOptions LeadValidation { get; set; }
         public bool ReadyForNextRoundNorth { get; set; } = false;
         public bool ReadyForNextRoundSouth { get; set; } = false;

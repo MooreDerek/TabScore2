@@ -2,10 +2,10 @@
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using Microsoft.AspNetCore.Mvc;
-using TabScore.Models;
 using TabScore2.Classes;
 using TabScore2.DataServices;
 using TabScore2.Globals;
+using TabScore2.Models;
 using TabScore2.UtilityServices;
 
 namespace TabScore2.Controllers
@@ -16,31 +16,31 @@ namespace TabScore2.Controllers
         private readonly IAppData appData = iAppData;
         private readonly IUtilities utilities = iUtilities;
 
-        public ActionResult Index(int tabletDeviceNumber)
+        public ActionResult Index(int deviceNumber)
         {
-            TabletDeviceStatus tabletDeviceStatus = appData.GetTabletDeviceStatus(tabletDeviceNumber);
+            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(deviceNumber);
 
-            ViewData["Title"] = utilities.Title(tabletDeviceNumber, "ShowRoundInfo", TitleType.Location);
-            ViewData["Header"] = utilities.Header(tabletDeviceNumber, HeaderType.Location);
-            if (tabletDeviceStatus.TableNumber == 0)
+            ViewData["Title"] = utilities.Title(deviceNumber, "ShowRoundInfo", TitleType.Location);
+            ViewData["Header"] = utilities.Header(deviceNumber, HeaderType.Location);
+            Section section = database.GetSection(deviceStatus.SectionID);
+            if (deviceStatus.TableNumber == 0)
             {
-                ShowRoundInfoSitout showRoundInfoSitout = new(tabletDeviceNumber);
-                tabletDeviceStatus.AtSitoutTable = true;
+                ShowRoundInfoSitout showRoundInfoSitout = new(deviceNumber, deviceStatus.PairNumber, deviceStatus.RoundNumber, section.TabletDevicesPerTable);
+                deviceStatus.AtSitoutTable = true;
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
                 return View("Sitout", showRoundInfoSitout);
             }
 
             // Update player names if not just immediately done in ShowPlayerIDs
-            TableStatus tableStatus = appData.GetTableStatus(tabletDeviceNumber)!;
-            if (tabletDeviceStatus.NamesUpdateRequired) database.GetNamesForRound(tableStatus);
-            tabletDeviceStatus.NamesUpdateRequired = true;
+            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
+            if (deviceStatus.NamesUpdateRequired) database.GetNamesForRound(tableStatus);
+            deviceStatus.NamesUpdateRequired = true;
 
-            ShowRoundInfo showRoundInfo = new(tabletDeviceNumber, tabletDeviceStatus.RoundNumber, tableStatus.RoundData);
-            if (tabletDeviceStatus.RoundNumber > 1)
+            ShowRoundInfo showRoundInfo = utilities.CreateShowRoundInfoModel(deviceNumber);
+            if (deviceStatus.RoundNumber > 1)
             {
                 showRoundInfo.BoardsFromTable = utilities.GetBoardsFromTableNumber(tableStatus);
             }
-            Section section = database.GetSection(tabletDeviceStatus.SectionID);
             
             // Check if a sitout table
             if (tableStatus.RoundData.NumberNorth == 0 || tableStatus.RoundData.NumberNorth == section.MissingPair)
@@ -48,21 +48,21 @@ namespace TabScore2.Controllers
                 tableStatus.ReadyForNextRoundNorth = true;
                 tableStatus.ReadyForNextRoundSouth = true;
                 showRoundInfo.NSMissing = true;
-                tabletDeviceStatus.AtSitoutTable = true;
+                deviceStatus.AtSitoutTable = true;
             }
             else if (tableStatus.RoundData.NumberEast == 0 || tableStatus.RoundData.NumberEast == section.MissingPair)
             {
                 tableStatus.ReadyForNextRoundEast = true;
                 tableStatus.ReadyForNextRoundWest = true;
                 showRoundInfo.EWMissing = true;
-                tabletDeviceStatus.AtSitoutTable = true;
+                deviceStatus.AtSitoutTable = true;
             }
             else
             {
-                tabletDeviceStatus.AtSitoutTable = false;
+                deviceStatus.AtSitoutTable = false;
             }
 
-            if (tabletDeviceStatus.RoundNumber == 1 || section.TabletDevicesPerTable > 1)
+            if (deviceStatus.RoundNumber == 1 || section.TabletDevicesPerTable > 1)
             {
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
             }
@@ -81,16 +81,16 @@ namespace TabScore2.Controllers
             }
         }
 
-        public ActionResult BackButtonClick(int tabletDeviceNumber)
+        public ActionResult BackButtonClick(int deviceNumber)
         {
             // Only for one tablet device per table.  Reset to the previous round; RoundNumber > 1 else no Back button and cannot get here
-            TabletDeviceStatus tabletDeviceStatus = appData.GetTabletDeviceStatus(tabletDeviceNumber);
-            TableStatus tableStatus = appData.GetTableStatus(tabletDeviceNumber)!;
-            int newRoundNumber = tabletDeviceStatus.RoundNumber;  // Going back, so new round is current round!
-            tabletDeviceStatus.RoundNumber--;
+            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(deviceNumber);
+            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
+            int newRoundNumber = deviceStatus.RoundNumber;  // Going back, so new round is current round!
+            deviceStatus.RoundNumber--;
             tableStatus.RoundNumber--;
             database.GetRoundData(tableStatus);
-            return RedirectToAction("Index", "ShowMove", new { tabletDeviceNumber, newRoundNumber});
+            return RedirectToAction("Index", "ShowMove", new { deviceNumber, newRoundNumber});
         }
     }
 }

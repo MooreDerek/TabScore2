@@ -18,16 +18,16 @@ namespace TabScore2.Controllers
         private readonly IUtilities utilities = iUtilities;
         private readonly ISettings settings = iSettings;
 
-        public ActionResult Index(int tabletDeviceNumber, Direction direction)
+        public ActionResult Index(int deviceNumber, Direction direction)
         {
-            ViewData["Title"] = utilities.Title(tabletDeviceNumber, "EnterPlayerIDs", TitleType.Location);
-            ViewData["Header"] = utilities.Header(tabletDeviceNumber, HeaderType.Location);
+            ViewData["Title"] = utilities.Title(deviceNumber, "EnterPlayerIDs", TitleType.Location);
+            ViewData["Header"] = utilities.Header(deviceNumber, HeaderType.Location);
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
-            EnterPlayerID enterPlayerID = new(tabletDeviceNumber, direction);
+            EnterPlayerID enterPlayerID = utilities.CreateEnterPlayerIDModel(deviceNumber, direction);
             return View(enterPlayerID);
         }
 
-        public ActionResult OKButtonClick(int tabletDeviceNumber, Direction direction, string playerID)
+        public ActionResult OKButtonClick(int deviceNumber, Direction direction, string playerID)
         {
             string playerName = string.Empty;
             if (playerID == "0")
@@ -57,7 +57,7 @@ namespace TabScore2.Controllers
                 }
             }
 
-            TableStatus tableStatus = appData.GetTableStatus(tabletDeviceNumber)!;
+            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
             switch (direction)
             {
                 case Direction.North:
@@ -79,7 +79,7 @@ namespace TabScore2.Controllers
             }
             database.UpdatePlayer(tableStatus, direction, playerID, playerName);
 
-            return RedirectToAction("Index", "ShowPlayerIDs", new { tabletDeviceNumber });
+            return RedirectToAction("Index", "ShowPlayerIDs", new { deviceNumber });
         }
     }
 }

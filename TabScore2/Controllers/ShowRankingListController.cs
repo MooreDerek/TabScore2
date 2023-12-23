@@ -17,20 +17,20 @@ namespace TabScore2.Controllers
         private readonly IUtilities utilities = iUtilities;
         private readonly ISettings settings = iSettings;
 
-        public ActionResult Index(int tabletDeviceNumber)
+        public ActionResult Index(int deviceNumber)
         {
-            TabletDeviceStatus tabletDeviceStatus = appData.GetTabletDeviceStatus(tabletDeviceNumber);
-            if (settings.ShowRanking == 1 && tabletDeviceStatus.RoundNumber > 1)  // Show ranking list only from round 2 onwards
+            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(deviceNumber);
+            if (settings.ShowRanking == 1 && deviceStatus.RoundNumber > 1)  // Show ranking list only from round 2 onwards
             {
-                ShowRankingList showRankingList = utilities.CreateRankingListModel(tabletDeviceNumber);
+                ShowRankingList showRankingList = utilities.CreateRankingListModel(deviceNumber);
                     
                 // Only show the ranking list if it contains something meaningful
                 if (showRankingList.Count > 1 && showRankingList[0].ScoreDecimal != 0.0)
                 {
-                    if (settings.ShowTimer) ViewData["TimerSeconds"] = appData.GetTimerSeconds(tabletDeviceNumber);
-                    ViewData["Title"] = utilities.Title(tabletDeviceNumber, "ShowRankingList", TitleType.Location);
-                    ViewData["Header"] = utilities.Header(tabletDeviceNumber, HeaderType.Round);
-                    if (tabletDeviceStatus.AtSitoutTable)
+                    if (settings.ShowTimer) ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
+                    ViewData["Title"] = utilities.Title(deviceNumber, "ShowRankingList", TitleType.Location);
+                    ViewData["Header"] = utilities.Header(deviceNumber, HeaderType.Round);
+                    if (deviceStatus.AtSitoutTable)
                     {
                         // Can't go back to ShowBoards if it's a sitout and there are no boards to play, so no 'Back' button
                         ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
@@ -54,22 +54,22 @@ namespace TabScore2.Controllers
                     }
                 }
             }
-            return RedirectToAction("Index", "ShowMove", new { tabletDeviceNumber, newRoundNumber = tabletDeviceStatus.RoundNumber + 1 });
+            return RedirectToAction("Index", "ShowMove", new { deviceNumber, newRoundNumber = deviceStatus.RoundNumber + 1 });
         }
 
-        public ActionResult Final(int tabletDeviceNumber)
+        public ActionResult Final(int deviceNumber)
         {
-            TabletDeviceStatus tabletDeviceStatus = appData.GetTabletDeviceStatus(tabletDeviceNumber);
-            ShowRankingList showRankingList = utilities.CreateRankingListModel(tabletDeviceNumber);
+            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(deviceNumber);
+            ShowRankingList showRankingList = utilities.CreateRankingListModel(deviceNumber);
             if (showRankingList.Count <= 1 && showRankingList[0].ScoreDecimal == 0.0)
             {
-                return RedirectToAction("Index", "EndScreen", new { tabletDeviceNumber });
+                return RedirectToAction("Index", "EndScreen", new { deviceNumber });
 
             }
 
             showRankingList.FinalRankingList = true;
-            ViewData["Title"] = utilities.Title(tabletDeviceNumber, "ShowFinalRankingList", TitleType.Location);
-            ViewData["Header"] = utilities.Header(tabletDeviceNumber, HeaderType.Round);
+            ViewData["Title"] = utilities.Title(deviceNumber, "ShowFinalRankingList", TitleType.Location);
+            ViewData["Header"] = utilities.Header(deviceNumber, HeaderType.Round);
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
             if (database.IsIndividual)
             {
@@ -85,9 +85,9 @@ namespace TabScore2.Controllers
             }
         }
 
-        public JsonResult PollRanking(int tabletDeviceNumber)
+        public JsonResult PollRanking(int deviceNumber)
         {
-            List<Ranking> rankingList = utilities.GetRankings(tabletDeviceNumber);
+            List<Ranking> rankingList = utilities.GetRankings(deviceNumber);
             return Json(rankingList);
         }
     }

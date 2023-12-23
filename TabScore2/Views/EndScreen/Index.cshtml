@@ -1,12 +1,12 @@
-﻿<!-- TabScore, a wireless bridge scoring program.  Copyright(C) 2023 by Peter Flippant
+﻿<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@using Resources
+@model TabScore2.Models.EnterContract
 
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h2>
-            @Strings.ScoreEntryComplete
+            @Strings["ScoreEntryComplete"]
         </h2>
     </div>
 </div>
@@ -17,10 +17,10 @@
     <div class="col-10 text-center">
         <img src="~/Resources/Chequered Flag Logo.png" style="width: 100%" />
         <h5 class="mt-2">
-            @Strings.IfFinished
+            @Strings["IfFinished"]
         </h5>
         <h5>
-            @Strings.ForSwiss
+            @Strings["ForSwiss"]
         </h5>
     </div>
     <div class="col-1">
@@ -30,10 +30,11 @@
 <script>
     var isSubmitted = false;
 
-    $(document).on('touchstart click', '#OKButton:enabled', function () {
+    function OKButtonClick() {
+        if (document.getElementById("OKButton").disabled) return;
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("OKButtonClick", "EndScreen")?tabletDeviceNumber=@ViewData["TabletDeviceNumber"]';
+            location.href = '@Url.Action("OKButtonClick", "EndScreen")?deviceNumber=@ViewData["TabletDeviceNumber"]';
         }
-    });
+    }
 </script>

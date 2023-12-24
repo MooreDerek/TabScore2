@@ -145,6 +145,7 @@
             Controls.Add(labelScoringDatabase);
             FormBorderStyle = FormBorderStyle.Fixed3D;
             Name = "MainForm";
+            FormClosing += MainForm_Closing;
             Load += MainForm_Load;
             ResumeLayout(false);
             PerformLayout();

@@ -3,6 +3,7 @@
 
 using TabScore2.DataServices;
 using TabScore2.Forms;
+using TabScore2.UtilityServices;
 
 namespace TabScore2
 {
@@ -30,11 +31,12 @@ namespace TabScore2
                 pipeline.AddJavaScriptBundle("/js/tricksPlusMinusJS.js", "js/TricksPlusMinus.js");
                 pipeline.AddJavaScriptBundle("/js/twoWinnersRankingListJS.js", "js/TwoWinnersRankingList.js");
             });
+            webAppBuilder.Services.AddSingleton<IUtilities, Utilities>();
             webAppBuilder.Services.AddSingleton<IDatabase, BwsDatabase>();
             webAppBuilder.Services.AddSingleton<IExternalNamesDatabase, ExternalNamesDatabase>();
             webAppBuilder.Services.AddSingleton<ISettings, Settings>();
             webAppBuilder.Services.AddSingleton<IAppData, AppData>();
-            webAppBuilder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            webAppBuilder.Services.AddHttpContextAccessor();
             WebApplication webApp = webAppBuilder.Build();
 //            webApp.UseExceptionHandler("/ErrorScreen/Index");
             webApp.UseWebOptimizer(); 

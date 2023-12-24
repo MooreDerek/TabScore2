@@ -4,12 +4,13 @@ using TabScore2.Classes;
 using TabScore2.DataServices;
 using TabScore2.Globals;
 using TabScore2.Models;
+using TabScore2.Resources;
 
 namespace TabScore2.UtilityServices
 {
-    public class Utilities(IStringLocalizer iLocalizer, IDatabase iDatabase, IAppData iAppData, ISettings iSettings) : IUtilities
+    public class Utilities(IStringLocalizer<Strings> iLocalizer, IDatabase iDatabase, IAppData iAppData, ISettings iSettings) : IUtilities
     {
-        private readonly IStringLocalizer localizer = iLocalizer;
+        private readonly IStringLocalizer<Strings> localizer = iLocalizer;
         private readonly IDatabase database = iDatabase;
         private readonly IAppData appData = iAppData;
         private readonly ISettings settings = iSettings;
@@ -71,10 +72,12 @@ namespace TabScore2.UtilityServices
 
         public ShowRoundInfo CreateShowRoundInfoModel(int deviceNumber) 
         {
-            Round round = appData.GetTableStatus(deviceNumber).RoundData;
+            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
+            Round round = tableStatus.RoundData;
             string unknown = localizer["Unknown"];
             return new(deviceNumber)
             {
+                RoundNumber = tableStatus.RoundNumber,
                 NumberNorth = round.NumberNorth,
                 NumberEast = round.NumberEast,
                 NumberSouth = round.NumberSouth,

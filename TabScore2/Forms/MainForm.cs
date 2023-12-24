@@ -3,6 +3,7 @@
 
 using Microsoft.Extensions.Localization;
 using System.ComponentModel;
+using System.Drawing;
 using System.Reflection;
 using TabScore2.Classes;
 using TabScore2.DataServices;
@@ -153,6 +154,15 @@ namespace TabScore2.Forms
         {
             //            ViewResultsForm frmResultsViewer = new ViewResultsForm(connectionString, new Point(Location.X + 30, Location.Y + 30));
             //            frmResultsViewer.ShowDialog();
+        }
+
+        private void MainForm_Closing(object sender, FormClosingEventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show(localizer["ClosingMessage"], "TabScore2", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (dialogResult == DialogResult.No)
+            {
+                e.Cancel = true;
+            }
         }
     }
 }

@@ -6,7 +6,7 @@ namespace TabScore2.Models
     public class ShowRoundInfo(int deviceNumber)
     {
         public int TabletDeviceNumber { get; private set; } = deviceNumber;
-        public int RoundNumber { get; private set; }
+        public int RoundNumber { get; set; }
         public int NumberNorth { get; set; }  // Applies to NS pair in pairs and teams
         public int NumberEast { get; set; }  // Applies to EW pair in pairs and teams
         public int NumberSouth { get; set; }

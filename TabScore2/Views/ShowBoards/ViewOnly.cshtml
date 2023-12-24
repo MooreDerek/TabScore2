@@ -15,7 +15,7 @@
                 <p>@Strings["ErrorWaitResults"]</p>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-lg btn-success" data-dismiss="modal">
+                <button class="btn btn-lg btn-success" data-bs-dismiss="modal">
                     @Strings["OK"] <span class="fa fa-check-circle"></span>
                 </button>
             </div>
@@ -35,7 +35,7 @@
                 <p>@Strings["ErrorWaitResult"]</p>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-lg btn-success" data-dismiss="modal">
+                <button class="btn btn-lg btn-success" data-bs-dismiss="modal">
                     @Strings["OK"] <span class="fa fa-check-circle"></span>
                 </button>
             </div>
@@ -62,7 +62,7 @@
 @foreach (var Result in Model)
 {
     <div class="row">
-        <div class="col-1 text-right px-0 align-self-center">
+        <div class="col-1 align-self-center">
             <h4>
                 @Result.BoardNumber:
             </h4>

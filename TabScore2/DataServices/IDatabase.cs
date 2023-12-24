@@ -11,6 +11,7 @@ namespace TabScore2.DataServices
     {
         // GENERAL
         string PathToDatabase { get; set; }
+        bool InitializationComplete { get; }
         bool IsIndividual { get; }
         string? Initialize();
         public bool IsDatabaseConnectionOK();

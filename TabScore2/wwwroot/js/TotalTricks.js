@@ -4,14 +4,14 @@
 var isSubmitted = false;
 
 function onFullPageLoad() {
-    if (numTricks != '-1') {
-        document.getElementById('n' + numTricks).className = "btn btn-warning btn-lg m-1 px-0";
+    if (tricksTaken != '-1') {
+        document.getElementById('n' + tricksTaken).className = "btn btn-warning btn-lg m-1 px-0";
         document.getElementById("OKButton").disabled = false;
     }
 }
 
-function setNumTricks(n) {
-    numTricks = n;
+function settricksTaken(n) {
+    tricksTaken = n;
     document.getElementById('n0').className = "btn btn-primary btn-lg m-1 px-0";
     document.getElementById('n1').className = "btn btn-primary btn-lg m-1 px-0";
     document.getElementById('n2').className = "btn btn-primary btn-lg m-1 px-0";
@@ -26,7 +26,7 @@ function setNumTricks(n) {
     document.getElementById('n11').className = "btn btn-primary btn-lg m-1 px-0";
     document.getElementById('n12').className = "btn btn-primary btn-lg m-1 px-0";
     document.getElementById('n13').className = "btn btn-primary btn-lg m-1 px-0";
-    document.getElementById('n' + numTricks).className = "btn btn-warning btn-lg m-1 px-0";
+    document.getElementById('n' + tricksTaken).className = "btn btn-warning btn-lg m-1 px-0";
     document.getElementById("OKButton").disabled = false;
 }
 
@@ -34,7 +34,7 @@ function OKButtonClick() {
     if (document.getElementById("OKButton").disabled) return;
     if (!isSubmitted) {
         isSubmitted = true;
-        location.href = urlOKButtonClick + '&numTricks=' + numTricks;
+        location.href = urlOKButtonClick + '&tricksTaken=' + tricksTaken;
     }
 }
 

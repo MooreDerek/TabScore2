@@ -4,8 +4,8 @@
 var isSubmitted = false;
 
 function onFullPageLoad() {
-    if (numTricks != -1) {
-        var diffTricks = numTricks - contractLevel - 6;
+    if (tricksTaken != -1) {
+        var diffTricks = tricksTaken - contractLevel - 6;
         if (diffTricks < 0) {
             document.getElementById('minus' + (-diffTricks).toString()).className = "btn btn-warning btn-lg m-1 px-0";
         }
@@ -30,21 +30,21 @@ function resetButtons() {
 }
 
 function setMinusTricks(n) {
-    numTricks = contractLevel + 6 - n;
+    tricksTaken = contractLevel + 6 - n;
     resetButtons();
     document.getElementById('minus' + n.toString()).className = "btn btn-warning btn-lg m-1 px-0";
     document.getElementById("OKButton").disabled = false;
 }
 
 function setPlusTricks(n) {
-    numTricks = contractLevel + 6 + n;
+    tricksTaken = contractLevel + 6 + n;
     resetButtons();
     document.getElementById('plus' + n.toString()).className = "btn btn-warning btn-lg m-1 px-0";
     document.getElementById("OKButton").disabled = false;
 }
 
 function setEqualsTricks() {
-    numTricks = contractLevel + 6;
+    tricksTaken = contractLevel + 6;
     resetButtons();
     document.getElementById('equals').className = "btn btn-warning btn-lg m-1 px-0";
     document.getElementById("OKButton").disabled = false;
@@ -54,7 +54,7 @@ function OKButtonClick() {
     if (document.getElementById("OKButton").disabled) return;
     if (!isSubmitted) {
         isSubmitted = true;
-        location.href = urlOKButtonClick + '&numTricks=' + numTricks;
+        location.href = urlOKButtonClick + '&tricksTaken=' + tricksTaken;
     }
 }
 

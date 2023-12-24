@@ -40,11 +40,11 @@ namespace TabScore2.Controllers
             }
         }
 
-        public ActionResult OKButtonClick(int deviceNumber, int numTricks)
+        public ActionResult OKButtonClick(int deviceNumber, int tricksTaken)
         {
             TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
             Result contractResult = tableStatus.ResultData;
-            contractResult.TricksTaken = numTricks;
+            contractResult.TricksTaken = tricksTaken;
             contractResult.CalculateScore();
             return RedirectToAction("Index", "ConfirmResult", new { deviceNumber });
         }

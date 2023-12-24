@@ -18,9 +18,9 @@ namespace TabScore2.DataServices
         {
             get
             {
-                if (pathToDatabase == "")
+                if (pathToDatabase == string.Empty)
                 {
-                    string argsString = "";
+                    string argsString = string.Empty;
                     string[] arguments = Environment.GetCommandLineArgs();
 
                     // Parse command line args correctly to get database path
@@ -45,7 +45,10 @@ namespace TabScore2.DataServices
                 pathToDatabase = value;
             }
         }
-
+        
+        private static bool initializationComplete = false;
+        public bool InitializationComplete { get { return initializationComplete; } }
+        
         public bool IsDatabaseConnectionOK()
         {
             // Test read and write to the scoring database
@@ -122,7 +125,7 @@ namespace TabScore2.DataServices
         public string? Initialize()
         {
             // Set connection string for ODBC
-            if (pathToDatabase == "") return "NoDatabasePath";
+            if (pathToDatabase == string.Empty) return "NoDatabasePath";
             if (!File.Exists(pathToDatabase)) return "DatabaseNotExist";
             OdbcConnectionStringBuilder cs = new() { Driver = "Microsoft Access Driver (*.mdb)" };
             cs.Add("Dbq", pathToDatabase);
@@ -748,6 +751,7 @@ namespace TabScore2.DataServices
             {
                 cmd.Dispose();
             }
+            initializationComplete = true;
             return null;
         }
 
@@ -1582,16 +1586,16 @@ namespace TabScore2.DataServices
             switch (direction)
             {
                 case Direction.North:
-                    pairNumber = tableStatus.ResultData!.NumberNorth;
+                    pairNumber = tableStatus.RoundData.NumberNorth;
                     break;
                 case Direction.South:
-                    pairNumber = tableStatus.ResultData!.NumberSouth;
+                    pairNumber = tableStatus.RoundData.NumberSouth;
                     break;
                 case Direction.East:
-                    pairNumber = tableStatus.ResultData!.NumberEast;
+                    pairNumber = tableStatus.RoundData.NumberEast;
                     break;
                 case Direction.West:
-                    pairNumber = tableStatus.ResultData!.NumberWest;
+                    pairNumber = tableStatus.RoundData.NumberWest;
                     break;
             }
 

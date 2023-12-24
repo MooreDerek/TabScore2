@@ -30,7 +30,7 @@
                 <button class="btn btn-danger" onclick="modalBack()">
                     <span class="fa fa-play-circle"></span> @Strings["Back"]
                 </button>
-                <button class="btn btn-success" data-dismiss="modal">
+                <button class="btn btn-success" data-bs-dismiss="modal">
                     @Strings["Cancel"] <span class="fa fa-times-circle"></span>
                 </button>
             </div>
@@ -120,7 +120,7 @@
 
 
 <div class="row mt-2">
-    <div class="col-4 text-right align-self-center">
+    <div class="col-4 align-self-center">
         <button id="skipButton" class="btn btn-outline-danger float-end" ontouchstart="touchAvailable = true; skip()" onclick="if (!touchAvailable) skip()">
             @Strings["Skip"]
         </button>

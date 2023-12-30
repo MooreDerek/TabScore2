@@ -16,12 +16,12 @@ namespace TabScore2.DataServices
         TableStatus GetTableStatus(int sectionID, int tableNumber);
         void UpdateTableStatus(int sectionID, int tableNumber, int roundNumber);
 
-        bool TabletDeviceStatusExists(int sectionID, int tableNumber, Direction direction = Direction.North);
-        DeviceStatus GetTabletDeviceStatus(int deviceNumber);
-        DeviceStatus GetTabletDeviceStatus(int sectionID, int tableNumber, Direction direction = Direction.North);
-        void AddTabletDeviceStatus(int sectionID, int tableNumber, int pairNumber, int roundNumber, Direction direction = Direction.North);
-        void UpdateTabletDeviceStatus(int deviceNumber, int tableNumber, int roundNumber, Direction direction);
-        int GetTabLetDeviceNumber(DeviceStatus deviceStatus);
+        bool DeviceStatusExists(int sectionID, int tableNumber, Direction direction = Direction.North);
+        DeviceStatus GetDeviceStatus(int deviceNumber);
+        DeviceStatus GetDeviceStatus(int sectionID, int tableNumber, Direction direction = Direction.North);
+        void AddDeviceStatus(int sectionID, int tableNumber, int pairNumber, int roundNumber, Direction direction = Direction.North);
+        void UpdateDeviceStatus(int deviceNumber, int tableNumber, int roundNumber, Direction direction);
+        int GetDeviceNumber(DeviceStatus deviceStatus);
 
         int GetTimerSeconds(int deviceNumber);
 

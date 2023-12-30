@@ -10,28 +10,29 @@ using TabScore2.UtilityServices;
 
 namespace TabScore2.Controllers
 {
-    public class EnterContractController(IDatabase iDatabase, IAppData iAppData, IUtilities iUtilities, ISettings iSettings) : Controller
+    public class EnterContractController(IDatabase iDatabase, IAppData iAppData, IUtilities iUtilities) : Controller
     {
         private readonly IDatabase database = iDatabase;
         private readonly IAppData appData = iAppData;
         private readonly IUtilities utilities = iUtilities;
-        private readonly ISettings settings = iSettings;
 
         public ActionResult Index(int deviceNumber, int boardNumber)
         {
             TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
-            
-            // Get result as needed
-            if (tableStatus.ResultData.BoardNumber == 0) 
-            {
-                tableStatus.ResultData = database.GetResult(tableStatus.SectionID, tableStatus.TableNumber, tableStatus.RoundNumber, boardNumber);
-            }
 
-            EnterContract enterContract = utilities.CreateEnterContractModel(deviceNumber, tableStatus.ResultData);
+            // Get result (if any), and set pair/player numbers
+            Result result = database.GetResult(tableStatus.SectionID, tableStatus.TableNumber, tableStatus.RoundNumber, boardNumber);
+            result.NumberNorth = tableStatus.RoundData.NumberNorth;
+            result.NumberEast = tableStatus.RoundData.NumberEast;
+            result.NumberSouth = tableStatus.RoundData.NumberSouth;
+            result.NumberWest = tableStatus.RoundData.NumberWest;
+            tableStatus.ResultData = result;
 
-            if (settings.ShowTimer) ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
-            ViewData["Title"] = utilities.Title(deviceNumber, "EnterContract", TitleType.Location);
-            ViewData["Header"] = utilities.Header(deviceNumber, HeaderType.FullColoured, tableStatus.ResultData.BoardNumber);
+            EnterContract enterContract = utilities.CreateEnterContractModel(deviceNumber, result);
+
+            ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
+            ViewData["Title"] = utilities.Title("EnterContract", TitleType.Location, deviceNumber);
+            ViewData["Header"] = utilities.Header(HeaderType.FullColoured, deviceNumber, result.BoardNumber);
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabledAndBack;
             return View(enterContract);
         }

@@ -20,12 +20,12 @@ namespace TabScore2.UtilityServices
         public ShowPlayerIDs CreateShowPlayerIDsModel(int deviceNumber, bool showWarning)
         {
             ShowPlayerIDs showPlayerIDs = new(deviceNumber, showWarning);
-            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(deviceNumber);
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
             TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
             Round round = tableStatus.RoundData;
             Section section = database.GetSection(deviceStatus.SectionID);
 
-            if (section.TabletDevicesPerTable == 1)
+            if (section.DevicesPerTable == 1)
             {
                 if (round.NumberNorth != 0 && round.NumberNorth != section.MissingPair)
                 {
@@ -38,7 +38,7 @@ namespace TabScore2.UtilityServices
                     showPlayerIDs.Add(CreatePlayerEntry(round, Direction.West));
                 }
             }
-            else if (section.TabletDevicesPerTable == 2)
+            else if (section.DevicesPerTable == 2)
             {
                 if (deviceStatus.Direction == Direction.North)
                 {
@@ -57,7 +57,7 @@ namespace TabScore2.UtilityServices
             }
 
             showPlayerIDs.NumberOfBlankEntries = showPlayerIDs.FindAll(x => x.DisplayName == "").Count;
-            showPlayerIDs.ShowMessage = section.TabletDevicesPerTable == 4 || (section.TabletDevicesPerTable == 2 && showPlayerIDs.Count == 4);
+            showPlayerIDs.ShowMessage = section.DevicesPerTable == 4 || (section.DevicesPerTable == 2 && showPlayerIDs.Count == 4);
             return showPlayerIDs;
         }
 
@@ -118,7 +118,7 @@ namespace TabScore2.UtilityServices
 
         public ShowMove CreateShowMoveModel(int deviceNumber, int newRoundNumber, int tableNotReadyNumber)
         {
-            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(deviceNumber);
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
             TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
             Section section = database.GetSection(deviceStatus.SectionID);
 
@@ -127,11 +127,11 @@ namespace TabScore2.UtilityServices
             showMove.Direction = deviceStatus.Direction;
             showMove.NewRoundNumber = newRoundNumber;
             showMove.TableNotReadyNumber = tableNotReadyNumber;
-            showMove.TabletDevicesPerTable = section.TabletDevicesPerTable;
+            showMove.TabletDevicesPerTable = section.DevicesPerTable;
             int missingPair = section.MissingPair;
 
             List<Round> roundsList = database.GetRoundsList(deviceStatus.SectionID, newRoundNumber);
-            if (section.TabletDevicesPerTable == 1)
+            if (section.DevicesPerTable == 1)
             {
                 if (database.IsIndividual)
                 {
@@ -357,7 +357,7 @@ namespace TabScore2.UtilityServices
 
         public ShowHandRecord? CreateShowHandRecordModel(int deviceNumber, int boardNumber)
         {
-            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(deviceNumber);
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
             Hand? hand = database.GetHand(deviceStatus.SectionID, boardNumber);
             hand ??= database.GetHand(1, boardNumber);
             if (hand == null) return null;
@@ -428,13 +428,13 @@ namespace TabScore2.UtilityServices
 
         public ShowRankingList CreateRankingListModel(int deviceNumber)
         {
-            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(deviceNumber);
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
             ShowRankingList showRankingList = [];
             showRankingList.TabletDeviceNumber = deviceNumber;
             showRankingList.RoundNumber = deviceStatus.RoundNumber;
 
             // Set player numbers to highlight appropriate rows of ranking list
-            if (database.GetSection(deviceStatus.SectionID).TabletDevicesPerTable == 1)
+            if (database.GetSection(deviceStatus.SectionID).DevicesPerTable == 1)
             {
                 TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
                 showRankingList.NumberNorth = tableStatus.RoundData.NumberNorth;
@@ -622,17 +622,21 @@ namespace TabScore2.UtilityServices
             return rankings;
         }
 
-        public string Header(int deviceNumber, HeaderType headerType, int boardNumber = 0)
+        public string Header(HeaderType headerType, int parameter1 = 0, int parameter2 = 0)
         {
-            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(deviceNumber);
-            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
             switch (headerType)
             {
                 case HeaderType.Location:
-                    return $"{deviceStatus.Location}";
+                    // parameter1 = deviceNumber
+                    return $"{appData.GetDeviceStatus(parameter1).Location}";
                 case HeaderType.Round:
+                    // parameter1 = deviceNumber
+                    DeviceStatus deviceStatus = appData.GetDeviceStatus(parameter1);
                     return $"{deviceStatus.Location}: {localizer["Round"]} {deviceStatus.RoundNumber}";
                 case HeaderType.FullPlain:
+                    // parameter1 = deviceNumber
+                    deviceStatus = appData.GetDeviceStatus(parameter1);
+                    TableStatus tableStatus = appData.GetTableStatus(parameter1);
                     if (database.IsIndividual)
                     {
                         return $"{deviceStatus.Location}: {localizer["Round"]} {tableStatus.RoundNumber}: {tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth} v {tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}";
@@ -642,26 +646,36 @@ namespace TabScore2.UtilityServices
                         return $"{deviceStatus.Location}: {localizer["Round"]} {tableStatus.RoundNumber}: {localizer["N"]}{localizer["S"]} {tableStatus.RoundData.NumberNorth} v {localizer["E"]}{localizer["W"]} {tableStatus.RoundData.NumberEast}";
                     }
                 case HeaderType.FullColoured:
+                    // parameter1 = deviceNumber, parameter2 = boardNumber
+                    deviceStatus = appData.GetDeviceStatus(parameter1);
+                    tableStatus = appData.GetTableStatus(parameter1);
                     if (database.IsIndividual)
                     {
-                        return $"{deviceStatus.Location}: {localizer["Round"]} {tableStatus.RoundNumber}: {ColourPairByVulnerability("NS", boardNumber, $"{tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth}")} v {ColourPairByVulnerability("EW", boardNumber, $"{tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}")}";
+                        return $"{deviceStatus.Location}: {localizer["Round"]} {tableStatus.RoundNumber}: {ColourPairByVulnerability("NS", parameter2, $"{tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth}")} v {ColourPairByVulnerability("EW", parameter2, $"{tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}")}";
                     }
                     else
                     {
-                        return $"{deviceStatus.Location}: {localizer["Round"]} {tableStatus.RoundNumber}: {ColourPairByVulnerability("NS", boardNumber, $"{localizer["N"]}{localizer["S"]} {tableStatus.RoundData.NumberNorth}")} v {ColourPairByVulnerability("EW", boardNumber, $"{localizer["E"]}{localizer["W"]} {tableStatus.RoundData.NumberEast}")}";
+                        return $"{deviceStatus.Location}: {localizer["Round"]} {tableStatus.RoundNumber}: {ColourPairByVulnerability("NS", parameter2, $"{localizer["N"]}{localizer["S"]} {tableStatus.RoundData.NumberNorth}")} v {ColourPairByVulnerability("EW", parameter2, $"{localizer["E"]}{localizer["W"]} {tableStatus.RoundData.NumberEast}")}";
                     }
+                case HeaderType.Section:
+                    // parameter1 = sectionID
+                    return $"{localizer["Section"]} {database.GetSection(parameter1).Letter}";
+                case HeaderType.SectionTable:
+                    // parameter1 = sectionID, parameter2 = tableNumber
+                    return $"{localizer["Table"]} {database.GetSection(parameter1).Letter}{parameter2}";
                 default:
                     return string.Empty;
             }
         }
 
-        public string Title(int deviceNumber, string titleString, TitleType titleType)
+        public string Title(string titleString, TitleType titleType = TitleType.Plain, int parameter1 = 0, int parameter2 = 0)
         {
-            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(deviceNumber);
             return titleType switch
             {
+                TitleType.Location => $"{localizer[titleString]}: {appData.GetDeviceStatus(parameter1).Location}",  // parameter1 = deviceNumber
                 TitleType.Plain => $"{localizer[titleString]}",
-                TitleType.Location => $"{localizer[titleString]} - {deviceStatus.Location}",
+                TitleType.Section => $"{localizer[titleString]}: {localizer["Section"]} {database.GetSection(parameter1).Letter}",  // parameter1 = sectionID
+                TitleType.SectionTable => $"{localizer[titleString]}: {database.GetSection(parameter1).Letter}{parameter2}",  // parameter1 = sectionID, parameter2 = tableNumber
                 _ => string.Empty,
             };
         }

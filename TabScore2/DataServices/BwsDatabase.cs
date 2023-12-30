@@ -719,7 +719,7 @@ namespace TabScore2.DataServices
             try
             {
                 cmd.ExecuteNonQuery();
-                SQLString = "UPDATE Settings SET EnterResultsMethod=0";
+                SQLString = "UPDATE Settings SET EnterResultsMethod=1";
                 cmd = new OdbcCommand(SQLString, connection);
                 cmd.ExecuteNonQuery();
             }
@@ -992,6 +992,8 @@ namespace TabScore2.DataServices
             {
                 BoardNumber = boardNumber
             };
+            if (boardNumber == 0) return result;
+
             using OdbcConnection connection = new(connectionString);
             connection.Open();
             string SQLString = $"SELECT [NS/EW], Contract, Result, LeadCard, Remarks FROM ReceivedData WHERE Section={sectionID} AND [Table]={tableNumber} AND Round={roundNumber} AND Board={boardNumber}";
@@ -1237,15 +1239,15 @@ namespace TabScore2.DataServices
                         }
                         if (IsIndividual)
                         {
-                            result.NumberNorth = reader.GetInt32(5);
-                            result.NumberEast = reader.GetInt32(6);
-                            result.NumberSouth = reader.GetInt32(7);
-                            result.NumberWest = reader.GetInt32(8);
+                            result.NumberNorth = reader.GetInt32(6);
+                            result.NumberEast = reader.GetInt32(7);
+                            result.NumberSouth = reader.GetInt32(8);
+                            result.NumberWest = reader.GetInt32(9);
                         }
                         else
                         {
-                            result.NumberNorth = reader.GetInt32(5);
-                            result.NumberEast = reader.GetInt32(6);
+                            result.NumberNorth = reader.GetInt32(6);
+                            result.NumberEast = reader.GetInt32(7);
                         }
                         resultsList.Add(result);
                     }

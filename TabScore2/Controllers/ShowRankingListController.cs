@@ -19,7 +19,7 @@ namespace TabScore2.Controllers
 
         public ActionResult Index(int deviceNumber)
         {
-            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(deviceNumber);
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
             if (settings.ShowRanking == 1 && deviceStatus.RoundNumber > 1)  // Show ranking list only from round 2 onwards
             {
                 ShowRankingList showRankingList = utilities.CreateRankingListModel(deviceNumber);
@@ -27,9 +27,9 @@ namespace TabScore2.Controllers
                 // Only show the ranking list if it contains something meaningful
                 if (showRankingList.Count > 1 && showRankingList[0].ScoreDecimal != 0.0)
                 {
-                    if (settings.ShowTimer) ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
-                    ViewData["Title"] = utilities.Title(deviceNumber, "ShowRankingList", TitleType.Location);
-                    ViewData["Header"] = utilities.Header(deviceNumber, HeaderType.Round);
+                    ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
+                    ViewData["Title"] = utilities.Title("ShowRankingList", TitleType.Location, deviceNumber);
+                    ViewData["Header"] = utilities.Header(HeaderType.Round, deviceNumber);
                     if (deviceStatus.AtSitoutTable)
                     {
                         // Can't go back to ShowBoards if it's a sitout and there are no boards to play, so no 'Back' button
@@ -59,7 +59,7 @@ namespace TabScore2.Controllers
 
         public ActionResult Final(int deviceNumber)
         {
-            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(deviceNumber);
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
             ShowRankingList showRankingList = utilities.CreateRankingListModel(deviceNumber);
             if (showRankingList.Count <= 1 && showRankingList[0].ScoreDecimal == 0.0)
             {
@@ -68,8 +68,8 @@ namespace TabScore2.Controllers
             }
 
             showRankingList.FinalRankingList = true;
-            ViewData["Title"] = utilities.Title(deviceNumber, "ShowFinalRankingList", TitleType.Location);
-            ViewData["Header"] = utilities.Header(deviceNumber, HeaderType.Round);
+            ViewData["Title"] = utilities.Title("ShowFinalRankingList", TitleType.Location, deviceNumber);
+            ViewData["Header"] = utilities.Header(HeaderType.Round, deviceNumber);
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
             if (database.IsIndividual)
             {

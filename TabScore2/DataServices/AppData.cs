@@ -52,58 +52,57 @@ namespace TabScore2.DataServices
             TableStatus tableStatus = GetTableStatus(sectionID, tableNumber)!;
             tableStatus.RoundNumber = roundNumber;
             database.GetRoundData(tableStatus);
-            tableStatus.ResultData = new();
             tableStatus.ReadyForNextRoundNorth = false;
             tableStatus.ReadyForNextRoundSouth = false;
             tableStatus.ReadyForNextRoundEast = false;
             tableStatus.ReadyForNextRoundWest = false;
         }
 
-        // TABLETDEVICESTATUS
+        // DEVICESTATUS
         private static readonly List<DeviceStatus> deviceStatusList = [];
 
-        public bool TabletDeviceStatusExists(int sectionID, int tableNumber, Direction direction = Direction.North)
+        public bool DeviceStatusExists(int sectionID, int tableNumber, Direction direction = Direction.North)
         {
             return deviceStatusList.Any(x => x.SectionID == sectionID && x.TableNumber == tableNumber && x.Direction == direction);
         }
 
-        public DeviceStatus GetTabletDeviceStatus(int deviceNumber)
+        public DeviceStatus GetDeviceStatus(int deviceNumber)
         {
             return deviceStatusList[deviceNumber];
         }
 
-        public DeviceStatus GetTabletDeviceStatus(int sectionID, int tableNumber, Direction direction = Direction.North)
+        public DeviceStatus GetDeviceStatus(int sectionID, int tableNumber, Direction direction = Direction.North)
         {
             return deviceStatusList.First(x => x.SectionID == sectionID && x.TableNumber == tableNumber && x.Direction == direction);
         }
 
-        public void AddTabletDeviceStatus(int sectionID, int tableNumber, int pairNumber, int roundNumber, Direction direction = Direction.North)
+        public void AddDeviceStatus(int sectionID, int tableNumber, int pairNumber, int roundNumber, Direction direction = Direction.North)
         {
             DeviceStatus deviceStatus = new(sectionID, tableNumber, pairNumber, roundNumber, direction);
-            SetTabletDeviceStatusLocation(deviceStatus);
+            SetDeviceStatusLocation(deviceStatus);
             deviceStatusList.Add(deviceStatus);
         }
 
-        public int GetTabLetDeviceNumber(DeviceStatus deviceStatus)
+        public int GetDeviceNumber(DeviceStatus deviceStatus)
         {
             return deviceStatusList.LastIndexOf(deviceStatus);
         }
 
-        public void UpdateTabletDeviceStatus(int deviceNumber, int tableNumber, int roundNumber, Direction direction)
+        public void UpdateDeviceStatus(int deviceNumber, int tableNumber, int roundNumber, Direction direction)
         {
-            DeviceStatus deviceStatus = GetTabletDeviceStatus(deviceNumber);
+            DeviceStatus deviceStatus = GetDeviceStatus(deviceNumber);
             deviceStatus.TableNumber = tableNumber;
             deviceStatus.Direction = direction;
             deviceStatus.RoundNumber = roundNumber;
-            SetTabletDeviceStatusLocation(deviceStatus);
+            SetDeviceStatusLocation(deviceStatus);
         }
 
-        private void SetTabletDeviceStatusLocation(DeviceStatus deviceStatus)
+        private void SetDeviceStatusLocation(DeviceStatus deviceStatus)
         {
             Section? section = database.GetSection(deviceStatus.SectionID);
             if (section == null) return;
             deviceStatus.Location = section.Letter + deviceStatus.TableNumber.ToString();
-            if (section.TabletDevicesPerTable == 4)
+            if (section.DevicesPerTable == 4)
             {
                 deviceStatus.Location += " ";
                 switch (deviceStatus.Direction)
@@ -127,7 +126,7 @@ namespace TabScore2.DataServices
                 deviceStatus.PerspectiveButtonOption = HandRecordPerspectiveButtonOptions.None;
                 deviceStatus.PerspectiveDirection = deviceStatus.Direction;
             }
-            else if (section.TabletDevicesPerTable == 2)
+            else if (section.DevicesPerTable == 2)
             {
                 if (deviceStatus.Direction == Direction.North)
                 {
@@ -145,7 +144,7 @@ namespace TabScore2.DataServices
                 }
                 else deviceStatus.Location += $" {localizer["Sitout"]}";
             }
-            else  // TabletDevicesPerTable == 1
+            else  // DevicesPerTable == 1
             {
                 deviceStatus.Location = $"{localizer["Table"]} {deviceStatus.Location}";
                 deviceStatus.PerspectiveButtonOption = HandRecordPerspectiveButtonOptions.NSEW;
@@ -158,6 +157,7 @@ namespace TabScore2.DataServices
         private static readonly List<RoundTimer> roundTimerList = [];
         public int GetTimerSeconds(int deviceNumber)
         {
+            if (!settings.ShowTimer) return -1;  // Don't show timer
             DeviceStatus deviceStatus = deviceStatusList[deviceNumber];
             RoundTimer? roundTimer = roundTimerList.Find(x => x.SectionID == deviceStatus.SectionID && x.RoundNumber == deviceStatus.RoundNumber);
             if (roundTimer == null)  // Round not yet started, so create initial timer data for this section and round 

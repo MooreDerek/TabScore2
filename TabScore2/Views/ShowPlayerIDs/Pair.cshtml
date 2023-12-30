@@ -8,15 +8,15 @@
         <div class="modal-content">
             <div class="modal-header text-danger">
                 <p class="modal-title text-center">
-                    <h3>@Strings["Warning"]</h3>
+                    <h3>@localizer["Warning"]</h3>
                 </p>
             </div>
             <div class="modal-body">
-                <p>@Strings["ErrorWaitAllIDs"]</p>
+                <p>@localizer["ErrorWaitAllIDs"]</p>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-lg btn-success" data-bs-dismiss="modal">
-                    @Strings["OK"] <span class="fa fa-check-circle"></span>
+                    @localizer["OK"] <span class="fa fa-check-circle"></span>
                 </button>
             </div>
         </div>
@@ -28,15 +28,15 @@
         <div class="modal-content">
             <div class="modal-header text-primary">
                 <p class="modal-title text-center">
-                    <h3>@Strings["Warning"]</h3>
+                    <h3>@localizer["Warning"]</h3>
                 </p>
             </div>
             <div class="modal-body">
-                <p>@Strings["ErrorNotAllIDs"]</p>
+                <p>@localizer["ErrorNotAllIDs"]</p>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-lg btn-success" data-bs-dismiss="modal">
-                    @Strings["OK"] <span class="fa fa-check-circle"></span>
+                    @localizer["OK"] <span class="fa fa-check-circle"></span>
                 </button>
             </div>
         </div>
@@ -46,7 +46,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            @Strings["EnterEditPlayerIDs"]
+            @localizer["EnterEditPlayerIDs"]
         </h3>
     </div>
 </div>
@@ -58,7 +58,7 @@
         <div class="row mt-3">
             <div class="col-12 text-center p-0">
                 <h3 style="color:blue">
-                    @Strings["North"]/@Strings["South"]: @playerEntry.Number
+                    @localizer["North"]/@localizer["South"]: @playerEntry.Number
                 </h3>
             </div>
         </div>
@@ -68,7 +68,7 @@
         <div class="row mt-3">
             <div class="col-12 text-center p-0">
                 <h3 style="color:blue">
-                    @Strings["East"]/@Strings["West"]: @playerEntry.Number
+                    @localizer["East"]/@localizer["West"]: @playerEntry.Number
                 </h3>
             </div>
         </div>
@@ -77,20 +77,20 @@
     <div class="row">
         <div class="col-3 align-self-center">
             <h4>
-                @Strings[playerEntry.Direction.ToString()]:
+                @localizer[playerEntry.Direction.ToString()]:
             </h4>
         </div>
         <div class="col-3 px-1">
             @if (playerEntry.DisplayName == string.Empty)
             {
                 <button class="btn btn-primary btn-lg m-1 px-1" style="min-width: 4.8rem" ontouchstart="touchAvailable = true; EnterPlayerID('@playerEntry.Direction')" onclick="if (!touchAvailable) EnterPlayerID('@playerEntry.Direction')">
-                    @Strings["Enter"]
+                    @localizer["Enter"]
                 </button>
             }
             else
             {
                 <button class="btn btn-info btn-lg m-1 px-1" style="min-width: 4.8rem" ontouchstart="touchAvailable = true; EnterPlayerID('@playerEntry.Direction')" onclick="if (!touchAvailable) EnterPlayerID('@playerEntry.Direction')">
-                    @Strings["Edit"]
+                    @localizer["Edit"]
                 </button>
             }
         </div>
@@ -109,7 +109,7 @@
         </div>
         <div class="col-10 text-center">
             <h5>
-                @Strings["NeedAllIDs"]
+                @localizer["NeedAllIDs"]
             </h5>
         </div>
         <div class="col-1">

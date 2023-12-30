@@ -17,8 +17,8 @@ namespace TabScore.Controllers
 
         public ActionResult Index(int deviceNumber)
         {
-            ViewData["Header"] = utilities.Header(deviceNumber, HeaderType.Location);
-            ViewData["Title"] = utilities.Title(deviceNumber, "EndScreen", TitleType.Location);
+            ViewData["Header"] = utilities.Header(HeaderType.Location, deviceNumber);
+            ViewData["Title"] = utilities.Title("EndScreen", TitleType.Location, deviceNumber);
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
             ViewData["TabletDeviceNumber"] = deviceNumber;
             return View();
@@ -27,7 +27,7 @@ namespace TabScore.Controllers
         public ActionResult OKButtonClick(int deviceNumber)
         {
             // Check if new round has been added; can't apply to individuals
-            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(deviceNumber);
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
             if (deviceStatus.RoundNumber == database.GetNumberOfRoundsInEvent(deviceStatus.SectionID))  
             {
                 // Final round, so no new rounds added

@@ -436,4 +436,43 @@
   <data name="FromTable" xml:space="preserve">
     <value>de la Mesa</value>
   </data>
+  <data name="Analysing" xml:space="preserve">
+    <value>Analizando...</value>
+  </data>
+  <data name="AnalysisComplete" xml:space="preserve">
+    <value>Análisis completo</value>
+  </data>
+  <data name="ChangeHandRecordFile" xml:space="preserve">
+    <value>Cambiar archivo de registro de la mano...</value>
+  </data>
+  <data name="DatabaseIncorrectSections" xml:space="preserve">
+    <value>La base de datos contiene secciones incorrectas. Máximo 4 secciones etiquetadas A, B, C, D</value>
+  </data>
+  <data name="DatabaseNoSections" xml:space="preserve">
+    <value>La base de datos no contiene secciones</value>
+  </data>
+  <data name="DatabaseNotAccessible" xml:space="preserve">
+    <value>No se puede acceder a la base de datos; comprobar los permisos de archivos y carpetas</value>
+  </data>
+  <data name="DatabaseNotExist" xml:space="preserve">
+    <value>La base de datos pasada en la cadena de parámetros no existe</value>
+  </data>
+  <data name="DatabaseTooManyTables" xml:space="preserve">
+    <value>La base de datos contiene &gt; 30 mesas en una sección</value>
+  </data>
+  <data name="FileNoHandRecords" xml:space="preserve">
+    <value>Archivo no contiene registros de las manos</value>
+  </data>
+  <data name="IncludedInDatabase" xml:space="preserve">
+    <value>Incluido en la base de datos de puntuación</value>
+  </data>
+  <data name="NoDatabasePath" xml:space="preserve">
+    <value>No se ha especificado ninguna ruta de base de datos</value>
+  </data>
+  <data name="SessionRunning" xml:space="preserve">
+    <value>Sesión en ejecución</value>
+  </data>
+  <data name="StartScreen" xml:space="preserve">
+    <value>Pantalla de inicio</value>
+  </data>
 </root>

@@ -23,7 +23,7 @@ namespace TabScore.Controllers
             {
                 return RedirectToAction("Index", "ShowTraveller", new { deviceNumber, boardNumber });
             }
-            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(deviceNumber);
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
 
             if (database.GetHand(deviceStatus.SectionID, boardNumber) != null)
             {
@@ -32,9 +32,9 @@ namespace TabScore.Controllers
             }
             EnterHandRecord enterHandRecord = new(deviceNumber, deviceStatus.SectionID, boardNumber);
             
-            if (settings.ShowTimer) ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
-            ViewData["Title"] = utilities.Title(deviceNumber, "EnterHandRecord", TitleType.Plain);
-            ViewData["Header"] = utilities.Header(deviceNumber, HeaderType.FullColoured, boardNumber);
+            ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
+            ViewData["Title"] = utilities.Title("EnterHandRecord", TitleType.Location, deviceNumber);
+            ViewData["Header"] = utilities.Header(HeaderType.FullColoured, deviceNumber, boardNumber);
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabledAndBack;
             return View(enterHandRecord);
         }
@@ -44,7 +44,7 @@ namespace TabScore.Controllers
             int boardNumber = appData.GetTableStatus(deviceNumber).ResultData.BoardNumber;
             Hand hand = new()
             {
-                SectionID = appData.GetTabletDeviceStatus(deviceNumber).SectionID,
+                SectionID = appData.GetDeviceStatus(deviceNumber).SectionID,
                 BoardNumber = boardNumber,
                 NorthSpades = NS,
                 NorthHearts = NH,

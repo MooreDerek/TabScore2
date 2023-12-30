@@ -439,7 +439,7 @@
     <value>West</value>
   </data>
   <data name="EnterHandRecord" xml:space="preserve">
-    <value>Enter Board</value>
+    <value>Enter board</value>
   </data>
   <data name="WarningHandRecordBack" xml:space="preserve">
     <value>All hand record entries for this board will be lost.  Click on 'Back' to continue</value>
@@ -472,6 +472,27 @@
     <value>Database contains &gt; 30 Tables in a Section</value>
   </data>
   <data name="StartScreen" xml:space="preserve">
-    <value>Start Screen</value>
+    <value>Start screen</value>
+  </data>
+  <data name="Analysing" xml:space="preserve">
+    <value>Analysing...</value>
+  </data>
+  <data name="AnalysisComplete" xml:space="preserve">
+    <value>Analysis complete</value>
+  </data>
+  <data name="ChangeHandRecordFile" xml:space="preserve">
+    <value>Change hand record file...</value>
+  </data>
+  <data name="DatabaseNotExist" xml:space="preserve">
+    <value>Database passed in parameter string does not exist</value>
+  </data>
+  <data name="FileNoHandRecords" xml:space="preserve">
+    <value>File contains no hand records</value>
+  </data>
+  <data name="IncludedInDatabase" xml:space="preserve">
+    <value>Included in scoring database</value>
+  </data>
+  <data name="NoDatabasePath" xml:space="preserve">
+    <value>No database path specified</value>
   </data>
 </root>

@@ -7,15 +7,15 @@
     <div class="modal-content">
         <div class="modal-header text-primary">
             <p class="modal-title text-center">
-                <h3>@Strings["Warning"]</h3>
+                <h3>@localizer["Warning"]</h3>
             </p>
         </div>
         <div class="modal-body">
-            <p>@Strings["EnterTricksTaken"]</p>
+            <p>@localizer["EnterTricksTaken"]</p>
         </div>
         <div class="modal-footer">
             <button class="btn btn-lg btn-success" data-bs-dismiss="modal">
-                @Strings["OK"] <span class="fa fa-check-circle"></span>
+                @localizer["OK"] <span class="fa fa-check-circle"></span>
             </button>
         </div>
     </div>
@@ -24,7 +24,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center p-0">
         <h3>
-            @Strings["Board"] @Model.BoardNumber: @Html.Raw(Model.ContractDisplay)
+            @localizer["Board"] @Model.BoardNumber: @Html.Raw(Model.ContractDisplay)
         </h3>
     </div>
 </div>
@@ -32,7 +32,7 @@
 <div class="row">
     <div class="col-12 text-center p-0">
         <h3>
-            @Strings["EnterTricksTaken"]
+            @localizer["EnterTricksTaken"]
         </h3>
     </div>
 </div>

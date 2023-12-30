@@ -24,14 +24,14 @@
                 </p>
             </div>
             <div class="modal-body">
-                <p>@Strings["WarningHandRecordBack"]</p>
+                <p>@localizer["WarningHandRecordBack"]</p>
             </div>
             <div class="modal-footer" style="justify-content:space-between">
                 <button class="btn btn-danger" onclick="modalBack()">
-                    <span class="fa fa-play-circle"></span> @Strings["Back"]
+                    <span class="fa fa-play-circle"></span> @localizer["Back"]
                 </button>
                 <button class="btn btn-success" data-bs-dismiss="modal">
-                    @Strings["Cancel"] <span class="fa fa-times-circle"></span>
+                    @localizer["Cancel"] <span class="fa fa-times-circle"></span>
                 </button>
             </div>
         </div>
@@ -42,7 +42,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center p-0">
         <h4>
-            @Strings["EnterHandRecord"] @Model.BoardNumber @Strings["EnterHandRecord2"]
+            @localizer["EnterHandRecord"] @Model.BoardNumber @localizer["EnterHandRecord2"]
         </h4>
     </div>
 </div>
@@ -50,16 +50,16 @@
 <div class="row mt-2">
     <div class="col-12 text-center p-0">
         <button id="cA" class="btn btn-primary m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; addCard('A')" onclick="if (!touchAvailable) addCard('A')">
-            @Strings["A"]
+            @localizer["A"]
         </button>
         <button id="cB" class="btn btn-primary m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; addCard('B')" onclick="if (!touchAvailable) addCard('B')">
-            @Strings["K"]
+            @localizer["K"]
         </button>
         <button id="cC" class="btn btn-primary m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; addCard('C')" onclick="if (!touchAvailable) addCard('C')">
-            @Strings["Q"]
+            @localizer["Q"]
         </button>
         <button id="cD" class="btn btn-primary m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; addCard('D')" onclick="if (!touchAvailable) addCard('D')">
-            @Strings["J"]
+            @localizer["J"]
         </button>
     </div>
 </div>
@@ -67,7 +67,7 @@
 <div class="row">
     <div class="col-12 text-center p-0">
         <button id="cE" class="btn btn-primary m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; addCard('E')" onclick="if (!touchAvailable) addCard('E')">
-            @Strings["TenShorthand"]
+            @localizer["TenShorthand"]
         </button>
         <button id="cF" class="btn btn-primary m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; addCard('F')" onclick="if (!touchAvailable) addCard('F')">
             9
@@ -122,7 +122,7 @@
 <div class="row mt-2">
     <div class="col-4 align-self-center">
         <button id="skipButton" class="btn btn-outline-danger float-end" ontouchstart="touchAvailable = true; skip()" onclick="if (!touchAvailable) skip()">
-            @Strings["Skip"]
+            @localizer["Skip"]
         </button>
     </div>
     <div class="col-4 text-center p-0">
@@ -130,7 +130,7 @@
     </div>
     <div class="col-4 text-left align-self-center">
         <button id="remainderButton" class="btn d-none" ontouchstart="touchAvailable = true; remainder()" onclick="if (!touchAvailable) remainder()">
-            @Strings["All"] <span class="fa fa-arrow-down"></span>
+            @localizer["All"] <span class="fa fa-arrow-down"></span>
         </button>
     </div>
 </div>
@@ -138,16 +138,16 @@
 <div class="row mt-2">
     <div class="col-12 text-center p-0">
         <button id="dN" class="btn btn-warning m-1 px-2" ontouchstart="touchAvailable = true; setDirection('N')" onclick="if (!touchAvailable) setDirection('N')">
-            @Strings["North"]
+            @localizer["North"]
         </button>
         <button id="dS" class="btn btn-secondary m-1 px-2" ontouchstart="touchAvailable = true; setDirection('S')" onclick="if (!touchAvailable) setDirection('S')">
-            @Strings["South"]
+            @localizer["South"]
         </button>
         <button id="dE" class="btn btn-secondary m-1 px-2" ontouchstart="touchAvailable = true; setDirection('E')" onclick="if (!touchAvailable) setDirection('E')">
-            @Strings["East"]
+            @localizer["East"]
         </button>
         <button id="dW" class="btn btn-secondary m-1 px-2" ontouchstart="touchAvailable = true; setDirection('W')" onclick="if (!touchAvailable) setDirection('W')">
-            @Strings["West"]
+            @localizer["West"]
         </button>
     </div>
 </div>
@@ -352,6 +352,6 @@
     var urlOKButtonClick = '@Url.Action("OKButtonClick", "EnterHandRecord")?deviceNumber=@Model.TabletDeviceNumber';
     var urlBackButtonClick = '@Url.Action("Index", "ConfirmResult")?deviceNumber=@Model.TabletDeviceNumber';
     var urlSkipButtonClick = '@Url.Action("Index", "ShowTraveller")?deviceNumber=@Model.TabletDeviceNumber&boardNumber=@Model.BoardNumber';
-    const cardString = ['@Strings["A"]', '@Strings["K"]', '@Strings["Q"]', '@Strings["J"]', '@Strings["TenShorthand"]', '9', '8', '7', '6', '5', '4', '3', '2'];
+    const cardString = ['@localizer["A"]', '@localizer["K"]', '@localizer["Q"]', '@localizer["J"]', '@localizer["TenShorthand"]', '9', '8', '7', '6', '5', '4', '3', '2'];
 </script>
 <script src="~/js/enterHandRecordJS.js"></script>

@@ -2,20 +2,19 @@
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization;
 using TabScore2.Classes;
 using TabScore2.DataServices;
 using TabScore2.Globals;
 using TabScore2.Models;
-using TabScore2.Resources;
+using TabScore2.UtilityServices;
 
 namespace TabScore2.Controllers
 {
-    public class SelectTableNumberController(IStringLocalizer<Strings> iLocalizer, IDatabase iDatabase, IAppData iAppData, ISettings iSettings, IHttpContextAccessor iHttpContextAccessor) : Controller
+    public class SelectTableNumberController(IDatabase iDatabase, IAppData iAppData, IUtilities iUtilities, ISettings iSettings, IHttpContextAccessor iHttpContextAccessor) : Controller
     {
-        private readonly IStringLocalizer<Strings> localizer = iLocalizer;
         private readonly IDatabase database = iDatabase;
         private readonly IAppData appData = iAppData;
+        private readonly IUtilities utilities = iUtilities;
         private readonly ISettings settings = iSettings;
         private readonly IHttpContextAccessor httpContextAccessor = iHttpContextAccessor;
 
@@ -23,8 +22,8 @@ namespace TabScore2.Controllers
         {
             Section section = database.GetSection(sectionID);
             SelectTableNumber selectTableNumber = new(section, tableNumber, confirm);
-            ViewData["Title"] = $"{localizer["SelectTableNumber"]} - {localizer["Section"]} {section.Letter}";
-            ViewData["Header"] = $"{localizer["Section"]} {section.Letter}";
+            ViewData["Title"] = utilities.Title("SelectTableNumber", TitleType.Section, sectionID);
+            ViewData["Header"] = utilities.Header(HeaderType.Section, sectionID);
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
             return View(selectTableNumber);   
         }
@@ -37,10 +36,10 @@ namespace TabScore2.Controllers
             TableStatus tableStatus = appData.GetTableStatus(sectionID, tableNumber);  // Return value cannot be null as we've just set it
             database.GetRoundData(tableStatus);
 
-            if (database.GetSection(sectionID).TabletDevicesPerTable == 1)
+            if (database.GetSection(sectionID).DevicesPerTable == 1)
             {
                 // Check if tablet device is already registered for this location. One tablet device per table, so Direction defaults to North
-                bool deviceStatusExists = appData.TabletDeviceStatusExists(sectionID, tableNumber);
+                bool deviceStatusExists = appData.DeviceStatusExists(sectionID, tableNumber);
                 if (deviceStatusExists && confirm)
                 {
                     // Ok to change to this tablet, so set cookie
@@ -58,13 +57,13 @@ namespace TabScore2.Controllers
                 else 
                 {
                     // Not on list, so need to add it
-                    appData.AddTabletDeviceStatus(sectionID, tableNumber, tableStatus.RoundData.NumberNorth, tableStatus.RoundNumber);
+                    appData.AddDeviceStatus(sectionID, tableNumber, tableStatus.RoundData.NumberNorth, tableStatus.RoundNumber);
                     SetCookie(sectionID, tableNumber);
                 }
-                DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(sectionID, tableNumber);
+                DeviceStatus deviceStatus = appData.GetDeviceStatus(sectionID, tableNumber);
 
                 // deviceNumber is the key for identifying this particular tablet device and is used throughout the rest of the application
-                int deviceNumber = appData.GetTabLetDeviceNumber(deviceStatus);
+                int deviceNumber = appData.GetDeviceNumber(deviceStatus);
 
                 if (tableStatus.ReadyForNextRoundNorth)
                 {

@@ -14,15 +14,15 @@
         <div class="modal-content">
             <div class="modal-header text-primary">
                 <p class="modal-title text-center">
-                    <h3>@Strings["Warning"]</h3>
+                    <h3>@localizer["Warning"]</h3>
                 </p>
             </div>
             <div class="modal-body">
-                <p>@Strings["LeadNoMatch"]</p>
+                <p>@localizer["LeadNoMatch"]</p>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-lg btn-success" data-bs-dismiss="modal">
-                    @Strings["OK"] <span class="fa fa-check-circle"></span>
+                    @localizer["OK"] <span class="fa fa-check-circle"></span>
                 </button>
             </div>
         </div>
@@ -32,7 +32,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center p-0">
         <h3>
-            @Strings["Board"] @Model.BoardNumber: @Html.Raw(Model.ContractDisplay)
+            @localizer["Board"] @Model.BoardNumber: @Html.Raw(Model.ContractDisplay)
         </h3>
     </div>
 </div>
@@ -40,7 +40,7 @@
 <div class="row">
     <div class="col-12 text-center p-0">
         <h3>
-            @Strings["EnterLead"]
+            @localizer["EnterLead"]
         </h3>
     </div>
 </div>
@@ -48,16 +48,16 @@
 <div class="row mt-4">
     <div class="col-12 text-center p-0">
         <button id="cA" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setCard('A')" onclick="if (!touchAvailable) setCard('A')">
-            @Strings["A"]
+            @localizer["A"]
         </button>
         <button id="cK" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setCard('K')" onclick="if (!touchAvailable) setCard('K')">
-            @Strings["K"]
+            @localizer["K"]
         </button>
         <button id="cQ" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setCard('Q')" onclick="if (!touchAvailable) setCard('Q')">
-            @Strings["Q"]
+            @localizer["Q"]
         </button>
         <button id="cJ" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setCard('J')" onclick="if (!touchAvailable) setCard('J')">
-            @Strings["J"]
+            @localizer["J"]
         </button>
     </div>
 </div>
@@ -65,7 +65,7 @@
 <div class="row">
     <div class="col-12 text-center p-0">
         <button id="cT" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setCard('T')" onclick="if (!touchAvailable) setCard('T')">
-            @Strings["TenShorthand"]
+            @localizer["TenShorthand"]
         </button>
         <button id="c9" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; setCard('9')" onclick="if (!touchAvailable) setCard('9')">
             9
@@ -121,7 +121,7 @@
     <div class="row mt-2">
         <div class="col-12 text-center p-0">
             <button id="skip" class="btn btn-outline-danger btn-lg m-1 px-2" ontouchstart="touchAvailable = true; setSkip()" onclick="if (!touchAvailable) setSkip()">
-                @Strings["Skip"]
+                @localizer["Skip"]
             </button>
         </div>
     </div>

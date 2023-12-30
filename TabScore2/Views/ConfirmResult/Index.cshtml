@@ -6,7 +6,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            @Strings["Board"] @Model.BoardNumber
+            @localizer["Board"] @Model.BoardNumber
         </h3>
     </div>
 </div>
@@ -14,7 +14,7 @@
 <div class="row">
     <div class="col-12 text-center">
         <h3>
-            @Strings["ConfirmResult"]
+            @localizer["ConfirmResult"]
         </h3>
     </div>
 </div>
@@ -24,7 +24,7 @@
     <div class="row mt-4">
         <div class="col-12 text-center">
             <h3>
-                <span style="color:darkgreen">@Strings["AllPass"]</span>
+                <span style="color:darkgreen">@localizer["AllPass"]</span>
             </h3>
         </div>
     </div>
@@ -44,7 +44,7 @@ else
         <div class="row">
             <div class="col-12 text-center">
                 <h3>
-                    @Model.Score @Strings["To"] @Strings["N"]@Strings["S"]
+                    @Model.Score @localizer["To"] @localizer["N"]@localizer["S"]
                 </h3>
             </div>
         </div>
@@ -54,7 +54,7 @@ else
         <div class="row">
             <div class="col-12 text-center">
                 <h3>
-                    @(-Model.Score) @Strings["To"] @Strings["E"]@Strings["W"]
+                    @(-Model.Score) @localizer["To"] @localizer["E"]@localizer["W"]
                 </h3>
             </div>
         </div>

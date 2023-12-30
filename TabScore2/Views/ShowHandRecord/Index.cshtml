@@ -7,7 +7,7 @@
 <div class="row mt-4">
     <div class="col-12 text-center p-0">
         <h3>
-            @Strings["Board"] @Model.BoardNumber
+            @localizer["Board"] @Model.BoardNumber
         </h3>
     </div>
 </div>
@@ -17,7 +17,7 @@
     </div>
     <div class="col-4">
         <h5>
-            @Strings["Dealer"] @Model.Dealer
+            @localizer["Dealer"] @Model.Dealer
         </h5>
     </div>
     <div class="col-3">
@@ -91,7 +91,7 @@
                 <thead>
                     <tr>
                         <th></th>
-                        <th>@Strings["NT"]</th>
+                        <th>@localizer["NT"]</th>
                         <th style="color:black">&spades;</th>
                         <th style="color:red">&hearts;</th>
                         <th style="color:lightsalmon">&diams;</th>
@@ -100,7 +100,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>@Strings["N"]</td>
+                        <td>@localizer["N"]</td>
                         <td>@Model.EvalNorthNT</td>
                         <td>@Model.EvalNorthSpades</td>
                         <td>@Model.EvalNorthHearts</td>
@@ -108,7 +108,7 @@
                         <td>@Model.EvalNorthClubs</td>
                     </tr>
                     <tr>
-                        <td>@Strings["S"]</td>
+                        <td>@localizer["S"]</td>
                         <td>@Model.EvalSouthNT</td>
                         <td>@Model.EvalSouthSpades</td>
                         <td>@Model.EvalSouthHearts</td>
@@ -116,7 +116,7 @@
                         <td>@Model.EvalSouthClubs</td>
                     </tr>
                     <tr>
-                        <td>@Strings["E"]</td>
+                        <td>@localizer["E"]</td>
                         <td>@Model.EvalEastNT</td>
                         <td>@Model.EvalEastSpades</td>
                         <td>@Model.EvalEastHearts</td>
@@ -124,7 +124,7 @@
                         <td>@Model.EvalEastClubs</td>
                     </tr>
                     <tr>
-                        <td>@Strings["W"]</td>
+                        <td>@localizer["W"]</td>
                         <td>@Model.EvalWestNT</td>
                         <td>@Model.EvalWestSpades</td>
                         <td>@Model.EvalWestHearts</td>
@@ -160,19 +160,19 @@
         @if (Model.PerspectiveButtonOption == HandRecordPerspectiveButtonOptions.NSEW || Model.PerspectiveButtonOption == HandRecordPerspectiveButtonOptions.NS)
         {
             <button id="btnNorth" class="btn btn-secondary m-1" ontouchstart="touchAvailable = true; setNSEW('North')" onclick="if (!touchAvailable) setNSEW('North')">
-                @Strings["N"]
+                @localizer["N"]
             </button>
             <button id="btnSouth" class="btn btn-secondary m-1" ontouchstart="touchAvailable = true; setNSEW('South')" onclick="if (!touchAvailable) setNSEW('South')">
-                @Strings["S"]
+                @localizer["S"]
             </button>
         }
         @if (Model.PerspectiveButtonOption == HandRecordPerspectiveButtonOptions.NSEW || Model.PerspectiveButtonOption == HandRecordPerspectiveButtonOptions.EW)
         {
             <button id="btnEast" class="btn btn-secondary m-1" ontouchstart="touchAvailable = true; setNSEW('East')" onclick="if (!touchAvailable) setNSEW('East')">
-                @Strings["E"]
+                @localizer["E"]
             </button>
             <button id="btnWest" class="btn btn-secondary m-1" ontouchstart="touchAvailable = true; setNSEW('West')" onclick="if (!touchAvailable) setNSEW('West')">
-                @Strings["W"]
+                @localizer["W"]
             </button>
         }
     </div>
@@ -181,10 +181,10 @@
 <script>
     var model = @Html.Raw(Json.Serialize(Model));
     var isSubmitted = false;
-    var stringN = '@Strings["N"]';
-    var stringE = '@Strings["E"]';
-    var stringS = '@Strings["S"]';
-    var stringW = '@Strings["W"]';
+    var stringN = '@localizer["N"]';
+    var stringE = '@localizer["E"]';
+    var stringS = '@localizer["S"]';
+    var stringW = '@localizer["W"]';
 </script>
 <script src="~/js/showHandRecordJS.js"></script>
 <script>

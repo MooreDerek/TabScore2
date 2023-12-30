@@ -8,15 +8,15 @@
         <div class="modal-content">
             <div class="modal-header text-danger">
                 <p class="modal-title text-center">
-                    <h3>@Strings["Warning"]</h3>
+                    <h3>@localizer["Warning"]</h3>
                 </p>
             </div>
             <div class="modal-body">
-                <p>@Strings["ErrorTableNotReady1"] @Model.TableNotReadyNumber.ToString() @Strings["ErrorTableNotReady2"]</p>
+                <p>@localizer["ErrorTableNotReady1"] @Model.TableNotReadyNumber.ToString() @localizer["ErrorTableNotReady2"]</p>
             </div>
             <div class="modal-footer" style="justify-content:space-between">
                 <button class="btn btn-lg btn-success" data-bs-dismiss="modal">
-                    @Strings["OK"] <span class="fa fa-times-circle"></span>
+                    @localizer["OK"] <span class="fa fa-times-circle"></span>
                 </button>
             </div>
         </div>
@@ -26,7 +26,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            @Strings["MoveForRound"] @Model.NewRoundNumber
+            @localizer["MoveForRound"] @Model.NewRoundNumber
         </h3>
     </div>
 </div>
@@ -36,7 +36,7 @@
     <div class="row mt-2">
         <div class="col-12 text-center">
             <h3 style="color:blue">
-                @Strings[move.Direction.ToString()]: @move.PairNumber
+                @localizer[move.Direction.ToString()]: @move.PairNumber
             </h3>
         </div>
     </div>
@@ -46,7 +46,7 @@
             @if (move.NewTableNumber == 0)
             {
                 <h4>
-                    @Strings["MoveToSitOut"]
+                    @localizer["MoveToSitOut"]
                 </h4>
             }
             else
@@ -54,19 +54,19 @@
                 if (move.Stay)
                 {
                     <h4>
-                        @Strings["StayAtTable"] @move.NewTableNumber @Strings[move.NewDirection.ToString()]
+                        @localizer["StayAtTable"] @move.NewTableNumber @localizer[move.NewDirection.ToString()]
                     </h4>
                 }
                 else
                 {
                     <h4>
-                        @Strings["MoveToTable"] @move.NewTableNumber @Strings[move.NewDirection.ToString()]
+                        @localizer["MoveToTable"] @move.NewTableNumber @localizer[move.NewDirection.ToString()]
                     </h4>
                 }
                 if (move.NewTableIsSitout)
                 {
                     <h6>
-                        [ @Strings["SittingOut"] ]
+                        [ @localizer["SittingOut"] ]
                     </h6>
                 }
             }
@@ -81,13 +81,13 @@
             @if (Model.LowBoard == Model.HighBoard)
             {
                 <h3 style="color:green">
-                    @Strings["Board"] @Model.LowBoard
+                    @localizer["Board"] @Model.LowBoard
                 </h3>
             }
             else
             {
                 <h3 style="color:green">
-                    @Strings["Boards"] @Model.LowBoard - @Model.HighBoard
+                    @localizer["Boards"] @Model.LowBoard - @Model.HighBoard
                 </h3>
             }
         </div>
@@ -98,13 +98,13 @@
             @if (Model.BoardsNewTable == 0)
             {
                 <h4>
-                    @Strings["PassToRelayTable"]
+                    @localizer["PassToRelayTable"]
                 </h4>
             }
             else
             {
                 <h4>
-                    @Strings["PassToTable"] @Model.BoardsNewTable
+                    @localizer["PassToTable"] @Model.BoardsNewTable
                 </h4>
             }
         </div>
@@ -120,13 +120,13 @@
             @if (Model[0].Stay)
             {
                 <h5>
-                    @Strings["WaitThisTable"]
+                    @localizer["WaitThisTable"]
                 </h5>
             }
             else
             {
                 <h5>
-                    @Strings["WaitNextTable"]
+                    @localizer["WaitNextTable"]
                 </h5>
             }
         </div>

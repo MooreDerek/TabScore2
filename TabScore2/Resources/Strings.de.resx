@@ -456,4 +456,43 @@
   <data name="FromTable" xml:space="preserve">
     <value>vom Tisch</value>
   </data>
+  <data name="Analysing" xml:space="preserve">
+    <value>Analysieren...</value>
+  </data>
+  <data name="AnalysisComplete" xml:space="preserve">
+    <value>Analyse abgeschlossen</value>
+  </data>
+  <data name="ChangeHandRecordFile" xml:space="preserve">
+    <value>Verteilungsdatei wechseln...</value>
+  </data>
+  <data name="DatabaseIncorrectSections" xml:space="preserve">
+    <value>Die Datenbank enthält falsche Abschnitte. Maximal 4 Abschnitte mit der Bezeichnung A, B, C, D</value>
+  </data>
+  <data name="DatabaseNoSections" xml:space="preserve">
+    <value>Die Datenbank enthält keine Abschnitte</value>
+  </data>
+  <data name="DatabaseNotAccessible" xml:space="preserve">
+    <value>Auf die Datenbank kann nicht zugegriffen werden. Überprüfen Sie die Datei- und Ordnerberechtigungen</value>
+  </data>
+  <data name="DatabaseNotExist" xml:space="preserve">
+    <value>Die in der Parameterzeichenfolge übergebene Datenbank ist nicht vorhanden</value>
+  </data>
+  <data name="DatabaseTooManyTables" xml:space="preserve">
+    <value>Die Datenbank enthält &gt; 30 Tische in einem Abschnitt</value>
+  </data>
+  <data name="FileNoHandRecords" xml:space="preserve">
+    <value>Die Datei enthält keine Verteilungen</value>
+  </data>
+  <data name="IncludedInDatabase" xml:space="preserve">
+    <value>In die Scoring-Datenbank aufgenommen</value>
+  </data>
+  <data name="NoDatabasePath" xml:space="preserve">
+    <value>Kein Datenbankpfad angegeben</value>
+  </data>
+  <data name="SessionRunning" xml:space="preserve">
+    <value>Turnier läuft</value>
+  </data>
+  <data name="StartScreen" xml:space="preserve">
+    <value>Startbildschirm</value>
+  </data>
 </root>

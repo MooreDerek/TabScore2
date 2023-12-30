@@ -20,8 +20,8 @@ namespace TabScore2.UtilityServices
         int GetBoardsFromTableNumber(TableStatus tableStatus);
         List<Ranking> GetRankings(int sectionID);
 
-        string Header(int deviceNumber, HeaderType headerType, int boardNumber = 0);
-        string Title(int deviceNumber, string titleString, TitleType titleType);
+        string Header(HeaderType headerType, int parameter1 = 0, int parameter2 = 0);
+        string Title(string titleString, TitleType titleType = TitleType.Plain, int parameter1 = 0, int parameter2 = 0);
         bool ValidateLead(TableStatus tableStatus, string card);
     }
 }

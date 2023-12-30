@@ -20,7 +20,7 @@ namespace TabScore2.Controllers
 
         public ActionResult Index(int deviceNumber, int newRoundNumber, int tableNotReadyNumber = -1)
         {
-            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(deviceNumber);
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
             if (newRoundNumber > database.GetNumberOfRoundsInEvent(deviceStatus.SectionID))  // Session complete
             {
                 if (settings.ShowRanking == 2)
@@ -33,8 +33,8 @@ namespace TabScore2.Controllers
                 }
             }
 
-            TableStatus? tableStatus = appData.GetTableStatus(deviceNumber);
-            if (tableStatus != null && tableStatus.RoundNumber < newRoundNumber)
+            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
+            if (tableStatus.RoundNumber < newRoundNumber)
             {
                 // No tablet device has yet advanced this table to the next round, so show that this one is ready to do so
                 if (deviceStatus.Direction == Direction.North)
@@ -57,19 +57,19 @@ namespace TabScore2.Controllers
 
             ShowMove showMove = utilities.CreateShowMoveModel(deviceNumber, newRoundNumber, tableNotReadyNumber);
 
-            ViewData["Title"] = utilities.Title(deviceNumber, "ShowMove", TitleType.Location);
-            ViewData["Header"] = utilities.Header(deviceNumber, HeaderType.Location);
+            ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
+            ViewData["Title"] = utilities.Title("ShowMove", TitleType.Location, deviceNumber);
+            ViewData["Header"] = utilities.Header(HeaderType.Location, deviceNumber);
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
-            if (settings.ShowTimer) ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
 
             return View(showMove);
         }
 
         public ActionResult OKButtonClick(int deviceNumber, int newRoundNumber)
         {
-            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(deviceNumber);
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
             Section section = database.GetSection(deviceStatus.SectionID);
-            if (section.TabletDevicesPerTable > 1)  // Tablet devices are moving, so need to check if new table is ready
+            if (section.DevicesPerTable > 1)  // Tablet devices are moving, so need to check if new table is ready
             {
                 // Get the move for this tablet device
                 List<Round> roundsList = database.GetRoundsList(deviceStatus.SectionID, newRoundNumber);
@@ -77,7 +77,7 @@ namespace TabScore2.Controllers
 
                 if (move.NewTableNumber == 0)  // Move is to phantom table, so go straight to RoundInfo
                 {
-                    appData.UpdateTabletDeviceStatus(deviceNumber, 0, newRoundNumber, Direction.Sitout);
+                    appData.UpdateDeviceStatus(deviceNumber, 0, newRoundNumber, Direction.Sitout);
                     return RedirectToAction("Index", "ShowRoundInfo", new { deviceNumber });
                 }
 
@@ -96,11 +96,11 @@ namespace TabScore2.Controllers
                 {
                     // New table is on the previous round
                     // It is ready for the move if all tablet device locations are ready.  Sitout locations were set to 'ready' previously 
-                    if (section.TabletDevicesPerTable == 2 && newTableStatus.ReadyForNextRoundNorth && newTableStatus.ReadyForNextRoundEast)
+                    if (section.DevicesPerTable == 2 && newTableStatus.ReadyForNextRoundNorth && newTableStatus.ReadyForNextRoundEast)
                     {
                         newTableReady = true;
                     }
-                    else if (section.TabletDevicesPerTable == 4 && newTableStatus.ReadyForNextRoundNorth && newTableStatus.ReadyForNextRoundSouth && newTableStatus.ReadyForNextRoundEast && newTableStatus.ReadyForNextRoundWest)
+                    else if (section.DevicesPerTable == 4 && newTableStatus.ReadyForNextRoundNorth && newTableStatus.ReadyForNextRoundSouth && newTableStatus.ReadyForNextRoundEast && newTableStatus.ReadyForNextRoundWest)
                     {
                         newTableReady = true;
                     }
@@ -112,8 +112,7 @@ namespace TabScore2.Controllers
 
                 if (newTableReady)  // Reset tablet device and table statuses for new round, and update cookie
                 {
-                    appData.UpdateTabletDeviceStatus(deviceNumber, move.NewTableNumber, newRoundNumber, move.NewDirection);
-
+                    appData.UpdateDeviceStatus(deviceNumber, move.NewTableNumber, newRoundNumber, move.NewDirection);
                     appData.UpdateTableStatus(section.ID, move.NewTableNumber, newRoundNumber);
                     SetCookie(section.ID, move.NewTableNumber, move.NewDirection);
                 }

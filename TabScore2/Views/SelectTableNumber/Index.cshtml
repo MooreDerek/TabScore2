@@ -12,14 +12,14 @@
                 </p>
             </div>
             <div class="modal-body">
-                <p>@Strings["ErrorTableRegistered1"] @Model.TableNumber @Strings["ErrorTableRegistered3"]</p>
+                <p>@localizer["ErrorTableRegistered1"] @Model.TableNumber @localizer["ErrorTableRegistered3"]</p>
             </div>
             <div class="modal-footer" style="justify-content:space-between">
                 <button class="btn btn-lg btn-danger" onclick="modalLogOn()">
-                    <span class="fa fa-play-circle"></span> @Strings["Register"]
+                    <span class="fa fa-play-circle"></span> @localizer["Register"]
                 </button>
                 <button class="btn btn-lg btn-success" data-bs-dismiss="modal">
-                    @Strings["Cancel"] <span class="fa fa-times-circle"></span>
+                    @localizer["Cancel"] <span class="fa fa-times-circle"></span>
                 </button>
             </div>
         </div>
@@ -29,7 +29,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            @Strings["SelectTableNumber"]
+            @localizer["SelectTableNumber"]
         </h3>
     </div>
 </div>

@@ -20,8 +20,8 @@ namespace TabScore2.Controllers
 
         public ActionResult Index(int deviceNumber, Direction direction)
         {
-            ViewData["Title"] = utilities.Title(deviceNumber, "EnterPlayerIDs", TitleType.Location);
-            ViewData["Header"] = utilities.Header(deviceNumber, HeaderType.Location);
+            ViewData["Title"] = utilities.Title("EnterPlayerIDs", TitleType.Location, deviceNumber);
+            ViewData["Header"] = utilities.Header(HeaderType.Location, deviceNumber);
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
             EnterPlayerID enterPlayerID = utilities.CreateEnterPlayerIDModel(deviceNumber, direction);
             return View(enterPlayerID);
@@ -45,11 +45,11 @@ namespace TabScore2.Controllers
                         playerName = externalNamesDatabase.GetExternalPlayerName(playerID);
                         break;
                     case 2:
-                        playerName = "";
+                        playerName = string.Empty;
                         break;
                     case 3:
                         playerName = database.GetInternalPlayerName(playerID);
-                        if (playerName == "" || playerName.Contains('#') || playerName.Contains("Unknown"))
+                        if (playerName == string.Empty || playerName.Contains('#') || playerName.Contains("Unknown"))
                         {
                             playerName = externalNamesDatabase.GetExternalPlayerName(playerID);
                         }
@@ -62,19 +62,15 @@ namespace TabScore2.Controllers
             {
                 case Direction.North:
                     tableStatus.RoundData.NameNorth = playerName;
-                    tableStatus.RoundData.PlayerIDNorth = playerID;
                     break;
                 case Direction.South:
                     tableStatus.RoundData.NameSouth = playerName;
-                    tableStatus.RoundData.PlayerIDSouth = playerID;
                     break;
                 case Direction.East:
                     tableStatus.RoundData.NameEast = playerName;
-                    tableStatus.RoundData.PlayerIDEast = playerID;
                     break;
                 case Direction.West:
                     tableStatus.RoundData.NameWest = playerName;
-                    tableStatus.RoundData.PlayerIDWest = playerID;
                     break;
             }
             database.UpdatePlayer(tableStatus, direction, playerID, playerName);

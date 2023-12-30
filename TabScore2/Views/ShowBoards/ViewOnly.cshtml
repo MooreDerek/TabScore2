@@ -8,15 +8,15 @@
         <div class="modal-content">
             <div class="modal-header text-danger">
                 <p class="modal-title text-center">
-                    <h3>@Strings["Warning"]</h3>
+                    <h3>@localizer["Warning"]</h3>
                 </p>
             </div>
             <div class="modal-body">
-                <p>@Strings["ErrorWaitResults"]</p>
+                <p>@localizer["ErrorWaitResults"]</p>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-lg btn-success" data-bs-dismiss="modal">
-                    @Strings["OK"] <span class="fa fa-check-circle"></span>
+                    @localizer["OK"] <span class="fa fa-check-circle"></span>
                 </button>
             </div>
         </div>
@@ -28,15 +28,15 @@
         <div class="modal-content">
             <div class="modal-header text-danger">
                 <p class="modal-title text-center">
-                    <h3>@Strings["Warning"]</h3>
+                    <h3>@localizer["Warning"]</h3>
                 </p>
             </div>
             <div class="modal-body">
-                <p>@Strings["ErrorWaitResult"]</p>
+                <p>@localizer["ErrorWaitResult"]</p>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-lg btn-success" data-bs-dismiss="modal">
-                    @Strings["OK"] <span class="fa fa-check-circle"></span>
+                    @localizer["OK"] <span class="fa fa-check-circle"></span>
                 </button>
             </div>
         </div>
@@ -46,7 +46,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center p-0">
         <h5>
-            @Strings["NotScoring"]
+            @localizer["NotScoring"]
         </h5>
     </div>
 </div>
@@ -54,7 +54,7 @@
 <div class="row mt-3 mb-3">
     <div class="col-12 text-center p-0">
         <h3>
-            @Strings["Boards"]
+            @localizer["Boards"]
         </h3>
     </div>
 </div>
@@ -71,7 +71,7 @@
             @if (Result.Remarks != "Not played")
             {
                 <button class="btn btn-secondary btn-lg m-1 px-1" style="min-width: 5rem" ontouchstart="touchAvailable = true; View(@Result.BoardNumber)" onclick="if (!touchAvailable) View(@Result.BoardNumber)">
-                    @Strings["View"]
+                    @localizer["View"]
                 </button>
             }
         </div>

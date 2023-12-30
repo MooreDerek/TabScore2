@@ -2,19 +2,18 @@
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization;
 using TabScore2.DataServices;
 using TabScore2.Globals;
 using TabScore2.Models;
-using TabScore2.Resources;
+using TabScore2.UtilityServices;
 
 namespace TabScore2.Controllers
 {
-    public class SelectSectionController(IStringLocalizer<Strings> iLocalizer, IDatabase iDatabase) : Controller
+    public class SelectSectionController(IDatabase iDatabase, IUtilities iUtilities) : Controller
     {
-        private readonly IStringLocalizer<Strings> localizer = iLocalizer;
         private readonly IDatabase database = iDatabase;
-        
+        private readonly IUtilities utilities = iUtilities;
+
         public ActionResult Index()
         {
             SelectSection selectSection = [];
@@ -27,7 +26,7 @@ namespace TabScore2.Controllers
             else
             // Get section
             {
-                ViewData["Title"] = localizer["SelectSection"];
+                ViewData["Title"] = utilities.Title("SelectSection");
                 ViewData["Header"] = string.Empty;
                 ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
                 return View(selectSection);

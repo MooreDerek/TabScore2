@@ -6,7 +6,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            @Strings["Round"] @Model.RoundNumber
+            @localizer["Round"] @Model.RoundNumber
         </h3>
     </div>
 </div>
@@ -16,25 +16,25 @@
         @if (Model.LowBoard == Model.HighBoard)
         {
             <h3 style="color:green">
-                @Strings["Board"] @Model.LowBoard
+                @localizer["Board"] @Model.LowBoard
             </h3>
         }
         else
         {
             <h3 style="color:green">
-                @Strings["Boards"] @Model.LowBoard - @Model.HighBoard
+                @localizer["Boards"] @Model.LowBoard - @Model.HighBoard
             </h3>
         }
         @if (Model.BoardsFromTable == 0)
         {
             <h6>
-                [ @Strings["FromRelayTable"] ]
+                [ @localizer["FromRelayTable"] ]
             </h6>
         }
         else if (Model.BoardsFromTable > 0)
         {
             <h6>
-                [ @Strings["FromTable @Model.BoardsFromTable"] ]
+                [ @localizer["FromTable @Model.BoardsFromTable"] ]
             </h6>
         }
     </div>
@@ -46,7 +46,7 @@
     <div class="row mt-4">
         <div class="col-12 text-center">
             <h3 style="color:blue">
-                @Strings["North"]/@Strings["South"]: @Model.NumberNorth
+                @localizer["North"]/@localizer["South"]: @Model.NumberNorth
             </h3>
         </div>
     </div>
@@ -65,7 +65,7 @@
     <div class="row mt-4">
         <div class="col-12 text-center">
             <h3 style="color:blue">
-                @Strings["East"]/@Strings["West"]: @Model.NumberEast
+                @localizer["East"]/@localizer["West"]: @Model.NumberEast
             </h3>
         </div>
     </div>
@@ -84,7 +84,7 @@
     <div class="row mt-4">
         <div class="col-12 text-center">
             <h3 style="color:red">
-                @Strings["SittingOut"]
+                @localizer["SittingOut"]
             </h3>
         </div>
     </div>

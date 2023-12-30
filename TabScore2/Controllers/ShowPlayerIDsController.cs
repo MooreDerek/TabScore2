@@ -19,7 +19,7 @@ namespace TabScore2.Controllers
 
         public ActionResult Index(int deviceNumber, bool showWarning = false)
         {
-            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(deviceNumber);
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
             TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
 
             if (deviceStatus.NamesUpdateRequired) {
@@ -35,8 +35,8 @@ namespace TabScore2.Controllers
             deviceStatus.NamesUpdateRequired = true;  // We'll now need to update when we get to RoundInfo in case names change in the mean time
 
             ShowPlayerIDs showplayerIDs = utilities.CreateShowPlayerIDsModel(deviceNumber, showWarning);
-            ViewData["Title"] = utilities.Title(deviceNumber, "ShowPlayerIDs", TitleType.Location);
-            ViewData["Header"] = utilities.Header(deviceNumber, HeaderType.Round);
+            ViewData["Title"] = utilities.Title("ShowPlayerIDs", TitleType.Location, deviceNumber);
+            ViewData["Header"] = utilities.Header(HeaderType.Round, deviceNumber);
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
 
             if (database.IsIndividual)
@@ -53,7 +53,7 @@ namespace TabScore2.Controllers
         {
             TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
             database.GetNamesForRound(tableStatus);
-            appData.GetTabletDeviceStatus(deviceNumber).NamesUpdateRequired = false;  // No names update required on next screen as it's only just been done
+            appData.GetDeviceStatus(deviceNumber).NamesUpdateRequired = false;  // No names update required on next screen as it's only just been done
 
             // Check if all required names have been entered, and if not go back and wait
             if (tableStatus.RoundData.GotAllNames)

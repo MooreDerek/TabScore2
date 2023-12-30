@@ -10,6 +10,6 @@ namespace TabScore2.Classes
         public int Tables { get; set; }
         public int MissingPair { get; set; }
         public int Winners { get; set; }
-        public int TabletDevicesPerTable { get; set; } = 1;
+        public int DevicesPerTable { get; set; } = 1;
     }
 }

@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col-12 p-0 text-center">
                     <h3>
-                        @Strings["Board"] @Model.BoardNumber
+                        @localizer["Board"] @Model.BoardNumber
                     </h3>
                 </div>
             </div>
@@ -19,21 +19,21 @@
                     @if (Model.PercentageNS == string.Empty)
                     {
                         <h4>
-                            @Strings["Traveller"]
+                            @localizer["Traveller"]
                         </h4>
                     }
                     else
                     {
                         <h4>
-                            @Strings["N"]@Strings["S"]: @Model.PercentageNS - @Strings["E"]@Strings["W"]: @Model.PercentageEW
+                            @localizer["N"]@localizer["S"]: @Model.PercentageNS - @localizer["E"]@localizer["W"]: @Model.PercentageEW
                         </h4>
                     }
                 </div>
             </div>
         </div>
         <div class="col-3 p-0">
-            <button class="btn btn-outline-light btn-lg mr-2 my-2 px-0 float-end" ontouchstart="touchAvailable = true; handRecordClick()" onclick="if (!touchAvailable) handRecordClick()">
-                <img src="~/Resources/Cards Logo.png" />
+            <button class="btn btn-outline-light btn-lg px-2 py-1 float-end" ontouchstart="touchAvailable = true; handRecordClick()" onclick="if (!touchAvailable) handRecordClick()">
+                <img src="~/Cards Logo.png" />
             </button>
         </div>
     }
@@ -41,20 +41,20 @@
     {
         <div class="col-12 p-0 text-center">
             <h4>
-                @Strings["Board"] @Model.BoardNumber
+                @localizer["Board"] @Model.BoardNumber
             </h4>
         </div>
         <div class="col-12 p-0 text-center">
             @if (Model.PercentageNS == string.Empty)
             {
                 <h4>
-                    @Strings["Traveller"]
+                    @localizer["Traveller"]
                 </h4>
             }
             else
             {
                 <h4>
-                    @Strings["N"]@Strings["S"]: @Model.PercentageNS - @Strings["E"]@Strings["W"]: @Model.PercentageEW
+                    @localizer["N"]@localizer["S"]: @Model.PercentageNS - @localizer["E"]@localizer["W"]: @Model.PercentageEW
                 </h4>
             }
         </div>
@@ -66,13 +66,13 @@
         <table class="table-sm table-bordered text-center" style="margin:auto; width:50%">
             <thead class="thead-dark">
                 <tr>
-                    <th>@Strings["N"]@Strings["S"]</th>
-                    <th>@Strings["E"]@Strings["W"]</th>
-                    <th>@Html.Raw(Strings["Contract"])</th>
-                    <th>@Strings["ByOnTraveller"]</th>
-                    <th>@Html.Raw(Strings["Lead"])</th>
-                    <th>@Strings["N"]@Strings["S"] @Html.Raw(Strings["Score"])</th>
-                    <th>@Strings["E"]@Strings["W"] @Html.Raw(Strings["Score"])</th>
+                    <th>@localizer["N"]@localizer["S"]</th>
+                    <th>@localizer["E"]@localizer["W"]</th>
+                    <th>@Html.Raw(localizer["Contract"])</th>
+                    <th>@localizer["ByOnTraveller"]</th>
+                    <th>@Html.Raw(localizer["Lead"])</th>
+                    <th>@localizer["N"]@localizer["S"] @Html.Raw(localizer["Score"])</th>
+                    <th>@localizer["E"]@localizer["W"] @Html.Raw(localizer["Score"])</th>
                 </tr>
             </thead>
             <tbody>

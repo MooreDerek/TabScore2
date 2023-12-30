@@ -3,7 +3,6 @@
 
 using Microsoft.Extensions.Localization;
 using System.ComponentModel;
-using System.Drawing;
 using System.Reflection;
 using TabScore2.Classes;
 using TabScore2.DataServices;
@@ -77,11 +76,11 @@ namespace TabScore2.Forms
                     {
                         if (database.IsIndividual)
                         {
-                            section.TabletDevicesPerTable = 4;
+                            section.DevicesPerTable = 4;
                         }
                         else
                         {
-                            if (section.Winners == 1) section.TabletDevicesPerTable = 2;
+                            if (section.Winners == 1) section.DevicesPerTable = 2;
                         }
                     }
                 }

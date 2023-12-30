@@ -18,9 +18,13 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="wwwroot\" />
     <Folder Include="Views\" />
     <Folder Include="wwwroot\css\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Cards Logo.png" />
+    <None Include="wwwroot\Chequered Flag Logo.png" />
   </ItemGroup>
 
   <ItemGroup>

@@ -9,22 +9,21 @@ using TabScore2.UtilityServices;
 
 namespace TabScore2.Controllers
 {
-    public class ShowBoardsController(IAppData iAppData, IUtilities iUtilities, ISettings iSettings) : Controller
+    public class ShowBoardsController(IAppData iAppData, IUtilities iUtilities) : Controller
     {
         private readonly IAppData appData = iAppData;
         private readonly IUtilities utilities = iUtilities;
-        private readonly ISettings settings = iSettings;
 
         public ActionResult Index(int deviceNumber)
        {
             ShowBoards showBoards = utilities.CreateShowBoardsModel(deviceNumber);
             
-            if (settings.ShowTimer) ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
-            ViewData["Title"] = utilities.Title(deviceNumber, "ShowBoards", TitleType.Location);
-            ViewData["Header"] = utilities.Header(deviceNumber, HeaderType.FullPlain);
+            ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
+            ViewData["Title"] = utilities.Title("ShowBoards", TitleType.Location, deviceNumber);
+            ViewData["Header"] = utilities.Header(HeaderType.FullPlain, deviceNumber);
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
 
-            if (appData.GetTabletDeviceStatus(deviceNumber).Direction == Direction.North)
+            if (appData.GetDeviceStatus(deviceNumber).Direction == Direction.North)
             {
                 return View("Scoring", showBoards);
             }
@@ -43,9 +42,9 @@ namespace TabScore2.Controllers
             if (showBoards.First(x => x.BoardNumber == boardNumber).ContractLevel < 0)
             {
                 showBoards.Message = "NORESULT";
-                if (settings.ShowTimer) ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
-                ViewData["Title"] = utilities.Title(deviceNumber, "ShowBoards", TitleType.Location);
-                ViewData["Header"] = utilities.Header(deviceNumber, HeaderType.FullPlain);
+                ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
+                ViewData["Title"] = utilities.Title("ShowBoards", TitleType.Location, deviceNumber);
+                ViewData["Header"] = utilities.Header(HeaderType.FullPlain, deviceNumber);
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
                 return View("ViewOnly", showBoards);
             }
@@ -63,9 +62,9 @@ namespace TabScore2.Controllers
             if (!showBoards.GotAllResults)
             {
                 showBoards.Message = "NOTALLRESULTS";
-                if (settings.ShowTimer) ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
-                ViewData["Title"] = utilities.Title(deviceNumber, "ShowBoards", TitleType.Location);
-                ViewData["Header"] = utilities.Header(deviceNumber, HeaderType.FullPlain);
+                ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
+                ViewData["Title"] = utilities.Title("ShowBoards", TitleType.Location, deviceNumber);
+                ViewData["Header"] = utilities.Header(HeaderType.FullPlain, deviceNumber);
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
                 return View("ViewOnly", showBoards);
             }

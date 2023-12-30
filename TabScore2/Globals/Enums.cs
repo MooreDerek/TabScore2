@@ -5,8 +5,10 @@ namespace TabScore2.Globals
 {
     public enum TitleType
     {
+        Location,
         Plain,
-        Location
+        Section,
+        SectionTable
     }
 
     public enum HeaderType
@@ -14,7 +16,9 @@ namespace TabScore2.Globals
         Location,
         FullPlain,
         FullColoured,
-        Round
+        Round,
+        Section,
+        SectionTable
     }
 
     public enum LeadValidationOptions

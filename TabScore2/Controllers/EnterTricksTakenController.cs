@@ -26,9 +26,9 @@ namespace TabScore2.Controllers
 
             EnterContract enterContract = utilities.CreateEnterContractModel(deviceNumber, tableStatus.ResultData);
 
-            if (settings.ShowTimer) ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
-            ViewData["Title"] = utilities.Title(deviceNumber, "EnterTricksTaken", TitleType.Location);
-            ViewData["Header"] = utilities.Header(deviceNumber, HeaderType.FullColoured, tableStatus.ResultData.BoardNumber);
+            ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
+            ViewData["Title"] = utilities.Title("EnterTricksTaken", TitleType.Location, deviceNumber);
+            ViewData["Header"] = utilities.Header(HeaderType.FullColoured, deviceNumber, tableStatus.ResultData.BoardNumber);
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabledAndBack;
             if (settings.EnterResultsMethod == 1)
             {

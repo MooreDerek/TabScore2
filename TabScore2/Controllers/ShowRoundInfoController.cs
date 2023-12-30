@@ -18,14 +18,14 @@ namespace TabScore2.Controllers
 
         public ActionResult Index(int deviceNumber)
         {
-            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(deviceNumber);
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
 
-            ViewData["Title"] = utilities.Title(deviceNumber, "ShowRoundInfo", TitleType.Location);
-            ViewData["Header"] = utilities.Header(deviceNumber, HeaderType.Location);
+            ViewData["Title"] = utilities.Title("ShowRoundInfo", TitleType.Location, deviceNumber);
+            ViewData["Header"] = utilities.Header(HeaderType.Location, deviceNumber);
             Section section = database.GetSection(deviceStatus.SectionID);
             if (deviceStatus.TableNumber == 0)
             {
-                ShowRoundInfoSitout showRoundInfoSitout = new(deviceNumber, deviceStatus.PairNumber, deviceStatus.RoundNumber, section.TabletDevicesPerTable);
+                ShowRoundInfoSitout showRoundInfoSitout = new(deviceNumber, deviceStatus.PairNumber, deviceStatus.RoundNumber, section.DevicesPerTable);
                 deviceStatus.AtSitoutTable = true;
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
                 return View("Sitout", showRoundInfoSitout);
@@ -62,7 +62,7 @@ namespace TabScore2.Controllers
                 deviceStatus.AtSitoutTable = false;
             }
 
-            if (deviceStatus.RoundNumber == 1 || section.TabletDevicesPerTable > 1)
+            if (deviceStatus.RoundNumber == 1 || section.DevicesPerTable > 1)
             {
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
             }
@@ -84,7 +84,7 @@ namespace TabScore2.Controllers
         public ActionResult BackButtonClick(int deviceNumber)
         {
             // Only for one tablet device per table.  Reset to the previous round; RoundNumber > 1 else no Back button and cannot get here
-            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(deviceNumber);
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
             TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
             int newRoundNumber = deviceStatus.RoundNumber;  // Going back, so new round is current round!
             deviceStatus.RoundNumber--;

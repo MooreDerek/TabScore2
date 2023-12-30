@@ -8,18 +8,18 @@
         <div class="modal-content">
             <div class="modal-header text-danger">
                 <p class="modal-title text-center">
-                    <h3>@Strings["Warning"]</h3>
+                    <h3>@localizer["Warning"]</h3>
                 </p>
             </div>
             <div class="modal-body">
-                <p>@Strings["ErrorTableRegistered1"] @Model.TableNumber @Strings["ErrorTableRegistered2"] @Model.Direction @Strings["ErrorTableRegistered3"]</p>
+                <p>@localizer["ErrorTableRegistered1"] @Model.TableNumber @localizer["ErrorTableRegistered2"] @Model.Direction @localizer["ErrorTableRegistered3"]</p>
             </div>
             <div class="modal-footer" style="justify-content:space-between">
                 <button class="btn btn-lg btn-danger" ontouchstart="modalLogOn()" onclick="modalLogOn()">
-                    <span class="fa fa-play-circle"></span> @Strings["Register"]
+                    <span class="fa fa-play-circle"></span> @localizer["Register"]
                 </button>
                 <button class="btn btn-lg btn-success" data-bs-dismiss="modal">
-                    @Strings["Cancel"] <span class="fa fa-times-circle"></span>
+                    @localizer["Cancel"] <span class="fa fa-times-circle"></span>
                 </button>
             </div>
         </div>
@@ -29,7 +29,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center">
         <h3>
-            @Strings["SelectDirection"]
+            @localizer["SelectDirection"]
         </h3>
     </div>
 </div>
@@ -39,13 +39,13 @@
         @if (!Model.NorthSouthMissing)
         {
             <button id="dNorth" class="btn btn-secondary btn-lg m-1" style="width:4.5em" ontouchstart="touchAvailable = true; selectDirection('North')" onclick="if (!touchAvailable) selectDirection('North')">
-                @Strings["North"]
+                @localizer["North"]
             </button>
         }
         @if (!Model.EastWestMissing)
         {
             <button id="dEast" class="btn btn-secondary btn-lg m-1" style="width:4.5em" ontouchstart="touchAvailable = true; selectDirection('East')" onclick="if (!touchAvailable) selectDirection('East')">
-                @Strings["East"]
+                @localizer["East"]
             </button>
         }
     </div>
@@ -56,13 +56,13 @@
         @if (!Model.NorthSouthMissing)
         {
             <button id="dSouth" class="btn btn-secondary btn-lg m-1" style="width:4.5em" ontouchstart="touchAvailable = true; selectDirection('South')" onclick="if (!touchAvailable) selectDirection('South')">
-                @Strings["South"]
+                @localizer["South"]
             </button>
         }
         @if (!Model.EastWestMissing)
         {
             <button id="dWest" class="btn btn-secondary btn-lg m-1" style="width:4.5em" ontouchstart="touchAvailable = true; selectDirection('West')" onclick="if (!touchAvailable) selectDirection('West')">
-                @Strings["West"]
+                @localizer["West"]
             </button>
         }
     </div>

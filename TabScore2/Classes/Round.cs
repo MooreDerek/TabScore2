@@ -10,10 +10,6 @@ namespace TabScore2.Classes
         public int NumberEast { get; set; } = 0;  // Applies to EW pair in pairs and teams
         public int NumberSouth { get; set; } = 0;
         public int NumberWest { get; set; } = 0;
-        public string PlayerIDNorth { get; set; } = string.Empty;
-        public string PlayerIDSouth { get; set; } = string.Empty;
-        public string PlayerIDEast { get; set; } = string.Empty;
-        public string PlayerIDWest { get; set; } = string.Empty;
         public string NameNorth { get; set; } = string.Empty;
         public string NameSouth { get; set; } = string.Empty;
         public string NameEast { get; set; } = string.Empty;

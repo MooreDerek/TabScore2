@@ -2,20 +2,19 @@
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization;
 using TabScore2.Classes;
 using TabScore2.DataServices;
 using TabScore2.Globals;
 using TabScore2.Models;
-using TabScore2.Resources;
+using TabScore2.UtilityServices;
 
 namespace TabScore.Controllers
 {
-    public class SelectDirectionController(IStringLocalizer<Strings> iLocalizer, IDatabase iDatabase, IAppData iAppData, IHttpContextAccessor iHttpContextAccessor) : Controller
+    public class SelectDirectionController(IDatabase iDatabase, IAppData iAppData, IUtilities iUtilities, IHttpContextAccessor iHttpContextAccessor) : Controller
     {
-        private readonly IStringLocalizer<Strings> localizer = iLocalizer;
         private readonly IDatabase database = iDatabase;
         private readonly IAppData appData = iAppData;
+        private readonly IUtilities utilities = iUtilities;
         private readonly IHttpContextAccessor httpContextAccessor = iHttpContextAccessor;
 
         public ActionResult Index(int sectionID, int tableNumber, Direction direction = Direction.Null, bool confirm = false) 
@@ -24,8 +23,8 @@ namespace TabScore.Controllers
             Section section = database.GetSection(sectionID);
             SelectDirection selectDirection = new(tableStatus, section, direction, confirm);
 
-            ViewData["Title"] = $"{localizer["SelectDirection"]} - {section.Letter}{tableNumber}";
-            ViewData["Header"] = $"{localizer["Table"]} {section.Letter}{tableNumber}";
+            ViewData["Title"] = utilities.Title("SelectDirection", TitleType.SectionTable, sectionID, tableNumber);
+            ViewData["Header"] = utilities.Header(HeaderType.SectionTable, sectionID, tableNumber);
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
             if (database.IsIndividual)
             {
@@ -41,13 +40,13 @@ namespace TabScore.Controllers
         {
             TableStatus tableStatus = appData.GetTableStatus(sectionID, tableNumber);
 
-            // Check if tablet device is already registered for this location
-            if (appData.TabletDeviceStatusExists(sectionID, tableNumber) && confirm)
+            // Check if device is already registered for this location
+            if (appData.DeviceStatusExists(sectionID, tableNumber, direction) && confirm)
             {
                 // Ok to change to this tablet, so set cookie
                 SetCookie(sectionID, tableNumber, direction);
             }
-            else if (appData.TabletDeviceStatusExists(sectionID, tableNumber))
+            else if (appData.DeviceStatusExists(sectionID, tableNumber, direction))
             {
                 // Check if table number cookie has not been set - if so go back to confirm
                 if (!CheckCookie(sectionID, tableNumber, direction))
@@ -58,7 +57,7 @@ namespace TabScore.Controllers
             }
             else
             {
-                // Not on list of registered tablet devices, so need to add it
+                // Not on list of registered devices, so need to add it
                 int pairNumber = 0;
                 if (direction == Direction.North)
                 {
@@ -76,13 +75,13 @@ namespace TabScore.Controllers
                 {
                     pairNumber = tableStatus.RoundData.NumberWest;
                 }
-                appData.AddTabletDeviceStatus(sectionID, tableNumber, pairNumber, roundNumber, direction);
+                appData.AddDeviceStatus(sectionID, tableNumber, pairNumber, roundNumber, direction);
                 SetCookie(sectionID, tableNumber, direction);
             }
-            DeviceStatus deviceStatus = appData.GetTabletDeviceStatus(sectionID, tableNumber);
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(sectionID, tableNumber);
 
-            // deviceNumber is the key for identifying this particular tablet device and is used throughout the rest of the application
-            int deviceNumber = appData.GetTabLetDeviceNumber(deviceStatus);
+            // deviceNumber is the key for identifying this particular device and is used throughout the rest of the application
+            int deviceNumber = appData.GetDeviceNumber(deviceStatus);
 
             if (((direction == Direction.North) && tableStatus.ReadyForNextRoundNorth) || ((direction == Direction.East) && tableStatus.ReadyForNextRoundEast) || (direction == Direction.South && tableStatus.ReadyForNextRoundSouth) || (direction == Direction.West && tableStatus.ReadyForNextRoundWest))
             {

@@ -35,9 +35,9 @@ namespace TabScore2.Controllers
             ShowTraveller traveller = utilities.CreateShowTravellerModel(deviceNumber);
             traveller.FromView = fromView;
 
-            if (settings.ShowTimer) ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
-            ViewData["Title"] = utilities.Title(deviceNumber, "ShowTraveller", TitleType.Location);
-            ViewData["Header"] = utilities.Header(deviceNumber, HeaderType.FullColoured);
+            ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
+            ViewData["Title"] = utilities.Title("ShowTraveller", TitleType.Location, deviceNumber);
+            ViewData["Header"] = utilities.Header(HeaderType.FullColoured, deviceNumber, tableStatus.ResultData.BoardNumber);
             if (fromView)
             {
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;

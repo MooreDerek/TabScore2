@@ -15,15 +15,15 @@
         <div class="modal-content">
             <div class="modal-header text-primary">
                 <p class="modal-title text-center">
-                    <h3>@Strings["Warning"]</h3>
+                    <h3>@localizer["Warning"]</h3>
                 </p>
             </div>
             <div class="modal-body">
-                <p>@Strings["ErrorNoID"]</p>
+                <p>@localizer["ErrorNoID"]</p>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-lg btn-success" data-bs-dismiss="modal">
-                    @Strings["OK"] <span class="fa fa-check-circle"></span>
+                    @localizer["OK"] <span class="fa fa-check-circle"></span>
                 </button>
             </div>
         </div>
@@ -33,7 +33,7 @@
 <div class="row mt-5">
     <div class="col-12 text-center p-0">
         <h3>
-            @Strings["EnterID"] @Model.DisplayDirection
+            @localizer["EnterID"] @Model.DisplayDirection
         </h3>
     </div>
 </div>
@@ -47,7 +47,7 @@
 <div class="row mt-4">
     <div class="col-12 text-center p-0">
         <button id="nk" class="btn btn-secondary btn-lg m-1" onclick="unknown()">
-            @Strings["Unknown"]
+            @localizer["Unknown"]
         </button>
     </div>
 </div>
@@ -110,6 +110,6 @@
 
 <script>
     var urlOKButtonClick = '@Url.Action("OKButtonClick", "EnterPlayerID")?deviceNumber=@Model.TabletDeviceNumber&direction=@Model.Direction';
-    var stringUnknown = '@Strings["Unknown"]';
+    var stringUnknown = '@localizer["Unknown"]';
 </script>
 <script src="~/js/enterPlayerIdJS.js"></script>

@@ -10,12 +10,11 @@ using TabScore2.UtilityServices;
 
 namespace TabScore2.Controllers
 {
-    public class ConfirmResultController(IDatabase iDatabase, IAppData iAppData, IUtilities iUtilities, ISettings iSettings) : Controller
+    public class ConfirmResultController(IDatabase iDatabase, IAppData iAppData, IUtilities iUtilities) : Controller
     {
         private readonly IDatabase database = iDatabase;
         private readonly IAppData appData = iAppData;
         private readonly IUtilities utilities = iUtilities;
-        private readonly ISettings settings = iSettings;
 
         public ActionResult Index(int deviceNumber)
         {
@@ -27,9 +26,9 @@ namespace TabScore2.Controllers
 
             EnterContract enterContract = utilities.CreateEnterContractModel(deviceNumber, tableStatus.ResultData);
 
-            if (settings.ShowTimer) ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
-            ViewData["Title"] = utilities.Title(deviceNumber, "ConfirmResult", TitleType.Location);
-            ViewData["Header"] = utilities.Header(deviceNumber, HeaderType.FullPlain, tableStatus.ResultData.BoardNumber);
+            ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
+            ViewData["Title"] = utilities.Title("ConfirmResult", TitleType.Location, deviceNumber);
+            ViewData["Header"] = utilities.Header(HeaderType.FullPlain, deviceNumber, tableStatus.ResultData.BoardNumber);
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabledAndBack;
             return View(enterContract);
         }

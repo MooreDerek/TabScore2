@@ -3,26 +3,6 @@
 
 @model TabScore2.Models.ShowPlayerIDs
 
-<div id="notAllPlayerNumbersModal" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header text-danger">
-                <p class="modal-title text-center">
-                    <h3>@localizer["Warning"]</h3>
-                </p>
-            </div>
-            <div class="modal-body">
-                <p>@localizer["ErrorWaitAllIDs"]</p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-lg btn-success" data-bs-dismiss="modal">
-                    @localizer["OK"] <span class="fa fa-check-circle"></span>
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div id="notAllNamesModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -43,11 +23,11 @@
     </div>
 </div>
 
-<div class="row mt-5">
+<div class="row mt-4">
     <div class="col-12 text-center">
-        <h3>
+        <h2>
             @localizer["EnterEditPlayerIDs"]
-        </h3>
+        </h2>
     </div>
 </div>
 
@@ -104,7 +84,7 @@
 
 @if (Model.ShowMessage)
 {
-    <div class="row mt-5">
+    <div class="row mt-4">
         <div class="col-1">
         </div>
         <div class="col-10 text-center">
@@ -119,6 +99,26 @@
 
 @if (Model.ShowWarning)
 {
+    <div id="notAllPlayerNumbersModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header text-danger">
+                    <p class="modal-title text-center">
+                        <h3>@localizer["Warning"]</h3>
+                    </p>
+                </div>
+                <div class="modal-body">
+                    <p>@localizer["ErrorWaitAllIDs"]</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-lg btn-success" data-bs-dismiss="modal">
+                        @localizer["OK"] <span class="fa fa-check-circle"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         var notAllPlayerNumbersModal = new bootstrap.Modal(document.getElementById("notAllPlayerNumbersModal"), { backdrop: 'static' });
         notAllPlayerNumbersModal.show();

@@ -6,9 +6,9 @@
 
 <div class="row mt-4">
     <div class="col-12 text-center p-0">
-        <h3>
+        <h2>
             @localizer["Board"] @Model.BoardNumber
-        </h3>
+        </h2>
     </div>
 </div>
 
@@ -179,7 +179,7 @@
 </div>
 
 <script>
-    var model = @Html.Raw(Json.Serialize(Model));
+    var model = @Json.Serialize(Model);
     var isSubmitted = false;
     var stringN = '@localizer["N"]';
     var stringE = '@localizer["E"]';

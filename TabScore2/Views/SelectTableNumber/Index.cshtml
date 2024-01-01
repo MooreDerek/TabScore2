@@ -3,34 +3,11 @@
 
 @model TabScore2.Models.SelectTableNumber
 
-<div id="tableRegisteredModal" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header text-danger">
-                <p class="modal-title text-center">
-                    <h3>Warning</h3>
-                </p>
-            </div>
-            <div class="modal-body">
-                <p>@localizer["ErrorTableRegistered1"] @Model.TableNumber @localizer["ErrorTableRegistered3"]</p>
-            </div>
-            <div class="modal-footer" style="justify-content:space-between">
-                <button class="btn btn-lg btn-danger" onclick="modalLogOn()">
-                    <span class="fa fa-play-circle"></span> @localizer["Register"]
-                </button>
-                <button class="btn btn-lg btn-success" data-bs-dismiss="modal">
-                    @localizer["Cancel"] <span class="fa fa-times-circle"></span>
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row mt-5">
+<div class="row mt-4">
     <div class="col-12 text-center">
-        <h3>
+        <h2>
             @localizer["SelectTableNumber"]
-        </h3>
+        </h2>
     </div>
 </div>
 
@@ -116,9 +93,39 @@
 
 @if (Model.Confirm)
 {
+    <div id="tableRegisteredModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header text-danger">
+                    <p class="modal-title text-center">
+                        <h3>Warning</h3>
+                    </p>
+                </div>
+                <div class="modal-body">
+                    <p>@localizer["ErrorTableRegistered1"] @Model.TableNumber @localizer["ErrorTableRegistered3"]</p>
+                </div>
+                <div class="modal-footer" style="justify-content:space-between">
+                    <button class="btn btn-lg btn-danger" onclick="modalLogOn()">
+                        <span class="fa fa-play-circle"></span> @localizer["Register"]
+                    </button>
+                    <button class="btn btn-lg btn-success" data-bs-dismiss="modal">
+                        @localizer["Cancel"] <span class="fa fa-times-circle"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         var tableRegisteredModal = new bootstrap.Modal(document.getElementById("tableRegisteredModal"), { backdrop: 'static' });
         tableRegisteredModal.show();
+
+        function modalLogOn() {
+            if (!isSubmitted) {
+                isSubmitted = true;
+                location.href = '@Url.Action("OKButtonClick", "SelectTableNumber")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber&confirm=true';
+            }
+        }
     </script>
 }
 
@@ -140,13 +147,6 @@
         if (!isSubmitted) {
             isSubmitted = true;
             location.href = '@Url.Action("OKButtonClick", "SelectTableNumber")?sectionID=@Model.SectionID&tableNumber=' + tableNumber + '&confirm=false';
-        }
-    }
-
-    function modalLogOn() {
-        if (!isSubmitted) {
-            isSubmitted = true;
-            location.href = '@Url.Action("OKButtonClick", "SelectTableNumber")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber&confirm=true';
         }
     }
 </script>

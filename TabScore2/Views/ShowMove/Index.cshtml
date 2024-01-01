@@ -3,31 +3,11 @@
 
 @model TabScore2.Models.ShowMove
 
-<div id="newTableNotReadyModal" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header text-danger">
-                <p class="modal-title text-center">
-                    <h3>@localizer["Warning"]</h3>
-                </p>
-            </div>
-            <div class="modal-body">
-                <p>@localizer["ErrorTableNotReady1"] @Model.TableNotReadyNumber.ToString() @localizer["ErrorTableNotReady2"]</p>
-            </div>
-            <div class="modal-footer" style="justify-content:space-between">
-                <button class="btn btn-lg btn-success" data-bs-dismiss="modal">
-                    @localizer["OK"] <span class="fa fa-times-circle"></span>
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row mt-5">
+<div class="row mt-4">
     <div class="col-12 text-center">
-        <h3>
+        <h2>
             @localizer["MoveForRound"] @Model.NewRoundNumber
-        </h3>
+        </h2>
     </div>
 </div>
 
@@ -137,6 +117,26 @@
 
 @if (Model.TableNotReadyNumber > 0)
 {
+    <div id="newTableNotReadyModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header text-danger">
+                    <p class="modal-title text-center">
+                        <h3>@localizer["Warning"]</h3>
+                    </p>
+                </div>
+                <div class="modal-body">
+                    <p>@localizer["ErrorTableNotReady1"] @Model.TableNotReadyNumber.ToString() @localizer["ErrorTableNotReady2"]</p>
+                </div>
+                <div class="modal-footer" style="justify-content:space-between">
+                    <button class="btn btn-lg btn-success" data-bs-dismiss="modal">
+                        @localizer["OK"] <span class="fa fa-times-circle"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         var newTableNotReadyModal = new bootstrap.Modal(document.getElementById("newTableNotReadyModal"), { backdrop: 'static' });
         newTableNotReadyModal.show();

@@ -39,6 +39,7 @@ namespace TabScore2.Controllers
 
         public ActionResult OKButtonContract(int deviceNumber, int contractLevel, string contractSuit, string contractX, string declarerNSEW)
         {
+            contractX ??= string.Empty;
             Result result = appData.GetTableStatus(deviceNumber).ResultData;
             result.ContractLevel = contractLevel;
             result.ContractSuit = contractSuit;
@@ -51,10 +52,10 @@ namespace TabScore2.Controllers
         {
             Result result = appData.GetTableStatus(deviceNumber).ResultData;
             result.ContractLevel = 0;
-            result.ContractSuit = "";
-            result.ContractX = "";
-            result.DeclarerNSEW = "";
-            result.LeadCard = "";
+            result.ContractSuit = string.Empty;
+            result.ContractX = string.Empty;
+            result.DeclarerNSEW = string.Empty;
+            result.LeadCard = string.Empty;
             result.TricksTaken = -1;
             result.CalculateScore();
             return RedirectToAction("Index", "ConfirmResult", new { deviceNumber });
@@ -65,10 +66,10 @@ namespace TabScore2.Controllers
             TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
             Result result = tableStatus.ResultData;
             result.ContractLevel = -1;
-            result.ContractSuit = "";
-            result.ContractX = "";
-            result.DeclarerNSEW = "";
-            result.LeadCard = "";
+            result.ContractSuit = string.Empty;
+            result.ContractX = string.Empty;
+            result.DeclarerNSEW = string.Empty;
+            result.LeadCard = string.Empty;
             result.TricksTaken = -1;
             database.SetResult(tableStatus.SectionID, tableStatus.TableNumber, tableStatus.RoundNumber, result);
             return RedirectToAction("Index", "ShowBoards", new { deviceNumber });

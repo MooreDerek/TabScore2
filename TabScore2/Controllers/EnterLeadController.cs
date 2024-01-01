@@ -29,7 +29,7 @@ namespace TabScore2.Controllers
                 return RedirectToAction("Index", "ShowBoards", new { deviceNumber });
             }
 
-            if (tableStatus.ResultData.LeadCard == "")  // Lead not set, so use leadValidation value as passed to controller
+            if (tableStatus.ResultData.LeadCard == string.Empty)  // Lead not set, so use leadValidation value as passed to controller
             {
                 tableStatus.LeadValidation = leadValidation;
             }

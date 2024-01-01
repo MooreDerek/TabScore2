@@ -3,37 +3,13 @@
 
 @model TabScore2.Models.SelectDirection
 
-<div id="tableDirectionRegisteredModal" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header text-danger">
-                <p class="modal-title text-center">
-                    <h3>@localizer["Warning"]</h3>
-                </p>
-            </div>
-            <div class="modal-body">
-                <p>@localizer["ErrorTableRegistered1"] @Model.TableNumber @localizer["ErrorTableRegistered2"] @Model.Direction @localizer["ErrorTableRegistered3"]</p>
-            </div>
-            <div class="modal-footer" style="justify-content:space-between">
-                <button class="btn btn-lg btn-danger" ontouchstart="modalLogOn()" onclick="modalLogOn()">
-                    <span class="fa fa-play-circle"></span> @localizer["Register"]
-                </button>
-                <button class="btn btn-lg btn-success" data-bs-dismiss="modal">
-                    @localizer["Cancel"] <span class="fa fa-times-circle"></span>
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row mt-5">
+<div class="row mt-4">
     <div class="col-12 text-center">
-        <h3>
+        <h2>
             @localizer["SelectDirection"]
-        </h3>
+        </h2>
     </div>
 </div>
-
 
 @if (!Model.NorthSouthMissing)
 {
@@ -59,9 +35,39 @@
 
 @if (Model.Confirm)
 {
+    <div id="tableDirectionRegisteredModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header text-danger">
+                    <p class="modal-title text-center">
+                        <h3>@localizer["Warning"]</h3>
+                    </p>
+                </div>
+                <div class="modal-body">
+                    <p>@localizer["ErrorTableRegistered1"] @Model.TableNumber @localizer["ErrorTableRegistered2"] @Model.Direction @localizer["ErrorTableRegistered3"]</p>
+                </div>
+                <div class="modal-footer" style="justify-content:space-between">
+                    <button class="btn btn-lg btn-danger" ontouchstart="modalLogOn()" onclick="modalLogOn()">
+                        <span class="fa fa-play-circle"></span> @localizer["Register"]
+                    </button>
+                    <button class="btn btn-lg btn-success" data-bs-dismiss="modal">
+                        @localizer["Cancel"] <span class="fa fa-times-circle"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        var warningModal = new bootstrap.Modal(document.getElementById("tableDirectionRegisteredModal"), { backdrop: 'static' });
-        warningModal.show();
+        var tableDirectionRegisteredModal = new bootstrap.Modal(document.getElementById("tableDirectionRegisteredModal"), { backdrop: 'static' });
+        tableDirectionRegisteredModal.show();
+
+        function modalLogOn() {
+            if (!isSubmitted) {
+                isSubmitted = true;
+                location.href = '@Url.Action("OKButtonClick", "SelectDirection")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber&direction=@Model.Direction&roundNumber=@Model.RoundNumber&confirm=true';
+            }
+        }
     </script>
 }
 
@@ -82,13 +88,6 @@
         if (!isSubmitted) {
             isSubmitted = true;
             location.href = '@Url.Action("OKButtonClick", "SelectDirection")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber&direction=' + direction + '&roundNumber=@Model.RoundNumber&confirm=false';
-        }
-    }
-
-    function modalLogOn() {
-        if (!isSubmitted) {
-            isSubmitted = true;
-            location.href = '@Url.Action("OKButtonClick", "SelectDirection")?sectionID=@Model.SectionID&tableNumber=@Model.TableNumber&direction=@Model.Direction&roundNumber=@Model.RoundNumber&confirm=true';
         }
     }
 </script>

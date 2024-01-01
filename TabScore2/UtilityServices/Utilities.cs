@@ -193,6 +193,7 @@ namespace TabScore2.UtilityServices
                 ContractX = result.ContractX,
                 DeclarerNSEW = result.DeclarerNSEW,
                 LeadCard = result.LeadCard,
+                TricksTaken = result.TricksTaken,
                 LeadValidation = leadValidation,
                 Score = result.Score,
                 DeclarerNSEWDisplay = localizer[result.DeclarerNSEW],

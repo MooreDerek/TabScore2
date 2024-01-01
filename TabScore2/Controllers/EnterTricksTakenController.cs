@@ -43,9 +43,9 @@ namespace TabScore2.Controllers
         public ActionResult OKButtonClick(int deviceNumber, int tricksTaken)
         {
             TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
-            Result contractResult = tableStatus.ResultData;
-            contractResult.TricksTaken = tricksTaken;
-            contractResult.CalculateScore();
+            Result result = tableStatus.ResultData;
+            result.TricksTaken = tricksTaken;
+            result.CalculateScore();
             return RedirectToAction("Index", "ConfirmResult", new { deviceNumber });
         }
 
@@ -58,8 +58,8 @@ namespace TabScore2.Controllers
             else
             {
                 TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
-                Result contractResult = tableStatus.ResultData!;
-                return RedirectToAction("Index", "EnterContract", new { deviceNumber, boardNumber = contractResult.BoardNumber });
+                Result result = tableStatus.ResultData!;
+                return RedirectToAction("Index", "EnterContract", new { deviceNumber, boardNumber = result.BoardNumber });
             }
         }
     }

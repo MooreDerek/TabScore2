@@ -41,7 +41,7 @@ namespace TabScore2.Classes
             int diff = TricksTaken - ContractLevel - 6;
             if (diff < 0)      // Contract not made
             {
-                if (ContractX == "")
+                if (ContractX == string.Empty)
                 {
                     if (Vulnerable)
                     {
@@ -84,7 +84,7 @@ namespace TabScore2.Classes
                 // Basic score, game/part-score bonuses and making x/xx contract bonuses
                 if (ContractSuit == "C" || ContractSuit == "D")
                 {
-                    if (ContractX == "")
+                    if (ContractX == string.Empty)
                     {
                         score = 20 * (TricksTaken - 6);
                         if (ContractLevel <= 4)
@@ -130,7 +130,7 @@ namespace TabScore2.Classes
                 }
                 else   // Major suits and NT
                 {
-                    if (ContractX == "")
+                    if (ContractX == string.Empty)
                     {
                         score = 30 * (TricksTaken - 6);
                         if (ContractSuit == "NT")

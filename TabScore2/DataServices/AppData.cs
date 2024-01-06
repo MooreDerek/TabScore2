@@ -146,7 +146,6 @@ namespace TabScore2.DataServices
             }
             else  // DevicesPerTable == 1
             {
-                deviceStatus.Location = $"{localizer["Table"]} {deviceStatus.Location}";
                 deviceStatus.PerspectiveButtonOption = HandRecordPerspectiveButtonOptions.NSEW;
                 if (settings.HandRecordReversePerspective) deviceStatus.PerspectiveDirection = Direction.South;
                 else deviceStatus.PerspectiveDirection = Direction.North;

@@ -11,18 +11,18 @@ setTimeout(function () {
 }, 10000);
 
 function pollRankingListener() {
-    rankingList = JSON.parse(this.responseText);
+     rankingList = JSON.parse(this.responseText);
     var new_tbody = document.createElement("tbody");
     for (var i = 0; i < rankingList.length; i++) {
         var row = new_tbody.insertRow(i);
-        if (rankingList[i].PairNo == pairNS) row.className = "table-success";
-        if (rankingList[i].PairNo == pairEW) row.className = "table-warning";
+        if (rankingList[i].pairNo == pairNS) row.className = "table-success";
+        if (rankingList[i].pairNo == pairEW) row.className = "table-warning";
         var cellRank = row.insertCell(0);
         var cellPairNumber = row.insertCell(1);
         var cellScore = row.insertCell(2);
-        cellRank.innerHTML = rankingList[i].Rank;
-        cellPairNumber.innerHTML = rankingList[i].PairNo;
-        cellScore.innerHTML = rankingList[i].Score + "%";
+        cellRank.innerHTML = rankingList[i].rank;
+        cellPairNumber.innerHTML = rankingList[i].pairNo;
+        cellScore.innerHTML = rankingList[i].score + "%";
     }
     var old_tbody = document.getElementById("tableBody");
     old_tbody.parentNode.replaceChild(new_tbody, old_tbody);

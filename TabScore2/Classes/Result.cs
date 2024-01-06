@@ -18,7 +18,7 @@ namespace TabScore2.Classes
         public string ContractSuit { get; set; } = string.Empty;
         public string ContractX { get; set; } = string.Empty;
         public string LeadCard { get; set; } = string.Empty;
-        public int TricksTaken { get; set; }
+        public int TricksTaken { get; set; } = -1;
         public string Remarks { get; set; } = string.Empty;
         public int Score { get; set; }
         public double MatchpointsNS { get; set; }

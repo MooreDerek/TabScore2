@@ -113,7 +113,7 @@
     <value>El archivo TabScoreDB.txt no existe. Reinicie TabScoreStarter.exe</value>
   </data>
   <data name="ErrorNoDBSelected" xml:space="preserve">
-    <value>No se seleccionó ninguna base de datos de puntajes; por favor espere hasta que el Director del Torneo le indique que comience</value>
+    <value>No se seleccionó ninguna base de datos de puntajes.  Por favor espere hasta que el Director del Torneo le indique que comience</value>
   </data>
   <data name="ErrorPermanentDB" xml:space="preserve">
     <value>Error permanente de conexión de base de datos. Verifique el formato y los permisos de acceso para el archivo de la base de datos de puntajes y reinicie TabScoreStarter.exe</value>
@@ -474,5 +474,11 @@
   </data>
   <data name="StartScreen" xml:space="preserve">
     <value>Pantalla de inicio</value>
+  </data>
+  <data name="SessionPaused" xml:space="preserve">
+    <value>Sesión pausada</value>
+  </data>
+  <data name="Rd" xml:space="preserve">
+    <value>Rda</value>
   </data>
 </root>

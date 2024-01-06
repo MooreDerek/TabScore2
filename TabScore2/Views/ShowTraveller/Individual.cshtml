@@ -45,7 +45,7 @@
             </h2>
         </div>
         <div class="col-12 text-center p-0">
-            @if (Model.PercentageNS == "")
+            @if (Model.PercentageNS == string.Empty)
             {
                 <h4>
                     @localizer["Traveller"]
@@ -83,7 +83,7 @@
                         <tr class="table-success">
                             <td>@Result.NumberNorth+@Result.NumberSouth</td>
                             <td>@Result.NumberEast+@Result.NumberWest</td>
-                            <td>@Html.Raw(Result.DisplayContract)</td>
+                            <td style="white-space: nowrap">@Html.Raw(Result.DisplayContract)</td>
                             <td>@Result.DisplayDeclarerNSEW</td>
                             <td>@Html.Raw(Result.DisplayLeadCard)</td>
                             <td>@Html.Raw(Result.ScoreNS)</td>
@@ -95,7 +95,7 @@
                         <tr>
                             <td>@Result.NumberNorth+@Result.NumberSouth</td>
                             <td>@Result.NumberEast+@Result.NumberWest</td>
-                            <td>@Html.Raw(Result.DisplayContract)</td>
+                            <td style="white-space: nowrap">@Html.Raw(Result.DisplayContract)</td>
                             <td>@Result.DisplayDeclarerNSEW</td>
                             <td>@Html.Raw(Result.DisplayLeadCard)</td>
                             <td>@Html.Raw(@Result.ScoreNS)</td>

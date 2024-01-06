@@ -37,7 +37,7 @@ namespace TabScore2.Controllers
             {
                 tableStatus.LeadValidation = LeadValidationOptions.NoWarning;
             }
-            EnterContract enterContract = utilities.CreateEnterContractModel(deviceNumber, tableStatus.ResultData, tableStatus.LeadValidation);
+            EnterContract enterContract = utilities.CreateEnterContractModel(deviceNumber, tableStatus.ResultData, false, tableStatus.LeadValidation);
 
             ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
             ViewData["Title"] = utilities.Title("EnterLead", TitleType.Location, deviceNumber);

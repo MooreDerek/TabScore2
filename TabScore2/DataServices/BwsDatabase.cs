@@ -13,7 +13,7 @@ namespace TabScore2.DataServices
     {
         private static string? connectionString = null;
 
-        private static string pathToDatabase = "";
+        private static string pathToDatabase = string.Empty;
         public string PathToDatabase
         {
             get
@@ -45,9 +45,19 @@ namespace TabScore2.DataServices
                 pathToDatabase = value;
             }
         }
-        
+
         private static bool initializationComplete = false;
-        public bool InitializationComplete { get { return initializationComplete; } }
+        public bool InitializationComplete
+        {
+            get
+            {
+                return initializationComplete;
+            }
+            set
+            {
+                initializationComplete = value;
+            }
+        }
         
         public bool IsDatabaseConnectionOK()
         {
@@ -96,7 +106,7 @@ namespace TabScore2.DataServices
                         ODBCRetryHelper.ODBCRetry(() =>
                         {
                             object? queryResult = cmd.ExecuteScalar();
-                            if (queryResult == null || queryResult == DBNull.Value || Convert.ToString(queryResult) == "") isIndividual = false;
+                            if (queryResult == null || queryResult == DBNull.Value || Convert.ToString(queryResult) == string.Empty) isIndividual = false;
                         });
                     }
                     catch (OdbcException e)
@@ -130,7 +140,7 @@ namespace TabScore2.DataServices
             OdbcConnectionStringBuilder cs = new() { Driver = "Microsoft Access Driver (*.mdb)" };
             cs.Add("Dbq", pathToDatabase);
             cs.Add("Uid", "Admin");
-            cs.Add("Pwd", "");
+            cs.Add("Pwd", string.Empty);
             connectionString = cs.ToString();
 
             // Check a number of features in the Access scoring database to ensure that TabScore2 will work correctly
@@ -478,7 +488,7 @@ namespace TabScore2.DataServices
                         }
                         string? tempID = null;
                         if (readerStrID != null) tempID = Convert.ToString(readerStrID);
-                        if ((tempID == null || tempID == "") && readerID != null) tempID = Convert.ToString(Convert.ToInt32(readerID));
+                        if ((tempID == null || tempID == string.Empty) && readerID != null) tempID = Convert.ToString(Convert.ToInt32(readerID));
 
                         if (tempID != null)
                         {
@@ -557,21 +567,6 @@ namespace TabScore2.DataServices
             catch (OdbcException e)
             {
                 if (e.Errors.Count > 1 || e.Errors[0].SQLState != "42S02")  // Error other than HandRecord table does not exist
-                {
-                    throw;
-                }
-            }
-
-            // Validate HANDEVALUATION Table
-            SQLString = "CREATE TABLE HandEvaluation (Section SHORT, Board SHORT, NorthSpades SHORT, NorthHearts SHORT, NorthDiamonds SHORT, NorthClubs SHORT, NorthNoTrump SHORT, EastSpades SHORT, EastHearts SHORT, EastDiamonds SHORT, EastClubs SHORT, EastNoTrump SHORT, SouthSpades SHORT, SouthHearts SHORT, SouthDiamonds SHORT, SouthClubs SHORT, SouthNotrump SHORT, WestSpades SHORT, WestHearts SHORT, WestDiamonds SHORT, WestClubs SHORT, WestNoTrump SHORT, NorthHcp SHORT, EastHcp SHORT, SouthHcp SHORT, WestHcp SHORT)";
-            cmd = new OdbcCommand(SQLString, connection);
-            try
-            {
-                cmd.ExecuteNonQuery();
-            }
-            catch (OdbcException e)
-            {
-                if (e.Errors.Count > 1 || e.Errors[0].SQLState != "42S01")  // Error other than HandEvaluation table already exists
                 {
                     throw;
                 }
@@ -751,7 +746,6 @@ namespace TabScore2.DataServices
             {
                 cmd.Dispose();
             }
-            initializationComplete = true;
             return null;
         }
 
@@ -1074,18 +1068,34 @@ namespace TabScore2.DataServices
             }
             else
             {
-                if (result.DeclarerNSEW == "N" || result.DeclarerNSEW == "S" || result.DeclarerNSEW == "NS")
+                if (IsIndividual)
                 {
-                    declarer = result.NumberNorth;
+                    declarer = result.DeclarerNSEW switch
+                    {
+                        "N" => result.NumberNorth,
+                        "E" => result.NumberEast,
+                        "S" => result.NumberSouth,
+                        "W" => result.NumberWest,
+                        _ => 0
+                    };
                 }
                 else
                 {
-                    declarer = result.NumberEast;
+                    declarer = result.DeclarerNSEW switch
+                    {
+                        "N" => result.NumberNorth,
+                        "S" => result.NumberNorth,
+                        "NS" => result.NumberNorth,
+                        "E" => result.NumberEast,
+                        "W" => result.NumberEast,
+                        "EW" => result.NumberEast,
+                        _ => 0
+                    };
                 }
             }
             
             string leadCard;
-            if (result.LeadCard == null || result.LeadCard == "" || result.LeadCard == "SKIP")
+            if (result.LeadCard == null || result.LeadCard == string.Empty || result.LeadCard == "SKIP")
             {
                 leadCard = string.Empty;
             }
@@ -1469,7 +1479,7 @@ namespace TabScore2.DataServices
                     "S" => "W",
                     "E" => "N",
                     "W" => "S",
-                    _ => "",
+                    _ => string.Empty,
                 };
                 SQLString = $"SELECT Number, Name, Round, TimeLog FROM PlayerNumbers WHERE Section={tableStatus.SectionID} AND TabScorePairNo={pairNo} AND Direction='{otherDir}'";
                 cmd = new OdbcCommand(SQLString, conn);

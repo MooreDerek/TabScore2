@@ -57,7 +57,7 @@ namespace TabScore2.Controllers
             result.DeclarerNSEW = string.Empty;
             result.LeadCard = string.Empty;
             result.TricksTaken = -1;
-            result.CalculateScore();
+            result.Score = 0;
             return RedirectToAction("Index", "ConfirmResult", new { deviceNumber });
         }
         

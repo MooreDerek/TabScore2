@@ -18,22 +18,22 @@ function pollRankingListener() {
     var iRowNS = 0;
     for (var i = 0; i < rankingList.length; i++) {
         var row = null;
-        if (rankingList[i].Orientation == "E") {
+        if (rankingList[i].orientation == "E") {
             row = new_tbodyEW.insertRow(iRowEW);
-            if (rankingList[i].PairNo == pairEW) row.className = "table-warning";
+            if (rankingList[i].pairNo == pairEW) row.className = "table-warning";
             iRowEW++;
         }
         else {
             row = new_tbodyNS.insertRow(iRowNS);
-            if (rankingList[i].PairNo == pairNS) row.className = "table-success";
+            if (rankingList[i].pairNo == pairNS) row.className = "table-success";
             iRowNS++;
         }
         var cellRank = row.insertCell(0);
         var cellPairNumber = row.insertCell(1);
         var cellScore = row.insertCell(2);
-        cellRank.innerHTML = rankingList[i].Rank;
-        cellPairNumber.innerHTML = rankingList[i].PairNo;
-        cellScore.innerHTML = rankingList[i].Score + "%";
+        cellRank.innerHTML = rankingList[i].rank;
+        cellPairNumber.innerHTML = rankingList[i].pairNo;
+        cellScore.innerHTML = rankingList[i].score + "%";
     }
     var old_tbodyNS = document.getElementById("tableBodyNS");
     old_tbodyNS.parentNode.replaceChild(new_tbodyNS, old_tbodyNS);

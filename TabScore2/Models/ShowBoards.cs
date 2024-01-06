@@ -10,6 +10,6 @@ namespace TabScore2.Models
         public int TabletDeviceNumber { get; set; } = deviceNumber;
         public bool GotAllResults { get; set; } = true;
         public bool ShowViewButton { get; private set; } = showViewButton;
-        public string Message { get; set; } = "";
+        public string Message { get; set; } = string.Empty;
     }
 }

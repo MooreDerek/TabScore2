@@ -145,7 +145,7 @@
     <value>Auslassen</value>
   </data>
   <data name="ErrorNoDBSelected" xml:space="preserve">
-    <value>Keine Scoring-Datenbank ausgewählt; bitte warten Sie, bis der Turnierleiter Sie zum Starten auffordert</value>
+    <value>Keine Scoring-Datenbank ausgewählt.  Bitte warten Sie, bis der Turnierleiter Sie zum Starten auffordert</value>
   </data>
   <data name="ErrorNoID" xml:space="preserve">
     <value>Bitte wählen Sie eine Spieler-ID aus oder wählen Sie „Unbekannt“</value>
@@ -494,5 +494,11 @@
   </data>
   <data name="StartScreen" xml:space="preserve">
     <value>Startbildschirm</value>
+  </data>
+  <data name="SessionPaused" xml:space="preserve">
+    <value>Turnier pausiert</value>
+  </data>
+  <data name="Rd" xml:space="preserve">
+    <value>Rd</value>
   </data>
 </root>

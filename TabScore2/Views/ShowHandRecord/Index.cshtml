@@ -53,18 +53,25 @@
             <h5><span style="color:lightslategrey">&clubs;</span><span id="LC"></span></h5>
         </div>
     </div>
-    <div class="col-4 px-3 py-2" style="color: aqua; background-color:green">
-        <div class="row h-25">
-            <div id="T" class="col-12 text-center"></div>
+    <div class="col-4 px-3 py-1" style="background-color:green">
+        <div class="row">
+            <div id="TDir" class="col-12 my-0 text-center text-white h5"></div>
         </div>
-        <div class="row h-25 mt-3">
-            <div class="col-12" style="display: inline-block; vertical-align: middle;">
-                <span id="L" class="float-start"></span>
-                <span id="R" class="float-end"></span>
-            </div>
+        <div class="row">
+            <div id="THCP" class="col-12 text-center text-info"></div>
         </div>
-        <div class="row h-25 mt-3">
-            <div id="B" class="col-12 text-center"></div>
+        <div class="row align-items-center">
+            <div id="LDir" class="col-2 m-0 px-0 text-center text-white h5"></div>
+            <div id="LHCP" class="col-3 m-0 px-0 text-center text-info"></div>
+            <div class="col-2 m-0 px-0"></div>
+            <div id="RHCP" class="col-3 m-0 px-0 text-center text-info"></div>
+            <div id="RDir" class="col-2 m-0 px-0 text-center text-white h5"></div>
+        </div>
+        <div class="row">
+            <div id="BHCP" class="col-12 text-center text-info"></div>
+        </div>
+        <div class="row">
+            <div id="BDir" class="col-12 my-0 text-center text-white h5"></div>
         </div>
     </div>
     <div class="col-4 pl-4">
@@ -85,7 +92,7 @@
 
 <div class="row mt-2">
     <div class="col-4 p-0 text-center">
-        @if (Model.EvalNorthNT != -1)
+        @if (Model.EvalNorthNT != "###")
         {
             <table class="table-sm table-bordered text-center mt-1 bg-white" style="font-size:smaller; margin:auto; width:50%">
                 <thead>
@@ -186,7 +193,7 @@
     var stringS = '@localizer["S"]';
     var stringW = '@localizer["W"]';
 </script>
-<script src="~/js/showHandRecordJS.js"></script>
+<script src="~/js/ShowHandRecord.js"></script>
 <script>
     function OKButtonClick() {
         if (document.getElementById("OKButton").disabled) return;

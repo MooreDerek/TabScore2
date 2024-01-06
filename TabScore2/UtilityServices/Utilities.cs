@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Localization;
+﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+// Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
+
+using Microsoft.Extensions.Localization;
 using System.Text;
 using TabScore2.Classes;
 using TabScore2.DataServices;
@@ -56,7 +59,7 @@ namespace TabScore2.UtilityServices
                 showPlayerIDs.Add(CreatePlayerEntry(round, deviceStatus.Direction));
             }
 
-            showPlayerIDs.NumberOfBlankEntries = showPlayerIDs.FindAll(x => x.DisplayName == "").Count;
+            showPlayerIDs.NumberOfBlankEntries = showPlayerIDs.FindAll(x => x.DisplayName == string.Empty).Count;
             showPlayerIDs.ShowMessage = section.DevicesPerTable == 4 || (section.DevicesPerTable == 2 && showPlayerIDs.Count == 4);
             return showPlayerIDs;
         }
@@ -99,7 +102,7 @@ namespace TabScore2.UtilityServices
             ShowBoards showBoards = new(deviceNumber, settings.ShowTraveller);
             foreach (Result result in resultsList) 
             {
-                showBoards.Add(new ShowBoardsResult(result.BoardNumber, result.ContractLevel, GetDisplayContract(result), result.Remarks));
+                showBoards.Add(new ShowBoardsResult(result.BoardNumber, result.ContractLevel, GetContractDisplay(result, true), result.Remarks));
             }
 
             // Check to see if any boards don't have a result, and add dummies to the list
@@ -183,7 +186,7 @@ namespace TabScore2.UtilityServices
             return showMove;
         }
 
-        public EnterContract CreateEnterContractModel(int deviceNumber, Result result, LeadValidationOptions leadValidation = LeadValidationOptions.NoWarning)
+        public EnterContract CreateEnterContractModel(int deviceNumber, Result result, bool showTricks = false, LeadValidationOptions leadValidation = LeadValidationOptions.NoWarning)
         {
             EnterContract enterContract = new(deviceNumber)
             {
@@ -197,7 +200,7 @@ namespace TabScore2.UtilityServices
                 LeadValidation = leadValidation,
                 Score = result.Score,
                 DeclarerNSEWDisplay = localizer[result.DeclarerNSEW],
-                ContractDisplay = GetDisplayContract(result)
+                ContractDisplay = GetContractDisplay(result, showTricks)
             };
             return enterContract;
         }
@@ -377,47 +380,47 @@ namespace TabScore2.UtilityServices
             string K = localizer["K"];
             string Q = localizer["Q"];
             string J = localizer["J"];
-            string T = localizer["TenShorthand"];
-            showHandRecord.NorthSpades = hand.NorthSpades.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", T);
-            showHandRecord.NorthHearts = hand.NorthHearts.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", T);
-            showHandRecord.NorthDiamonds = hand.NorthDiamonds.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", T);
-            showHandRecord.NorthClubs = hand.NorthClubs.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", T);
-            showHandRecord.EastSpades = hand.EastSpades.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", T);
-            showHandRecord.EastHearts = hand.EastHearts.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", T);
-            showHandRecord.EastDiamonds = hand.EastDiamonds.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", T);
-            showHandRecord.EastClubs = hand.EastClubs.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", T);
-            showHandRecord.SouthSpades = hand.SouthSpades.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", T);
-            showHandRecord.SouthHearts = hand.SouthHearts.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", T);
-            showHandRecord.SouthDiamonds = hand.SouthDiamonds.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", T);
-            showHandRecord.SouthClubs = hand.SouthClubs.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", T);
-            showHandRecord.WestSpades = hand.WestSpades.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", T);
-            showHandRecord.WestHearts = hand.WestHearts.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", T);
-            showHandRecord.WestDiamonds = hand.WestDiamonds.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", T);
-            showHandRecord.WestClubs = hand.WestClubs.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", T);
+            string tenShorthand = localizer["TenShorthand"];
+            showHandRecord.NorthSpadesDisplay = hand.NorthSpades.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecord.NorthHeartsDisplay = hand.NorthHearts.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecord.NorthDiamondsDisplay = hand.NorthDiamonds.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecord.NorthClubsDisplay = hand.NorthClubs.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecord.EastSpadesDisplay = hand.EastSpades.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecord.EastHeartsDisplay = hand.EastHearts.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecord.EastDiamondsDisplay = hand.EastDiamonds.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecord.EastClubsDisplay = hand.EastClubs.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecord.SouthSpadesDisplay = hand.SouthSpades.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecord.SouthHeartsDisplay = hand.SouthHearts.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecord.SouthDiamondsDisplay = hand.SouthDiamonds.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecord.SouthClubsDisplay = hand.SouthClubs.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecord.WestSpadesDisplay = hand.WestSpades.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecord.WestHeartsDisplay = hand.WestHearts.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecord.WestDiamondsDisplay = hand.WestDiamonds.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecord.WestClubsDisplay = hand.WestClubs.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
 
             HandEvaluation? handEvaluation = appData.GetHandEvaluation(deviceStatus.SectionID, boardNumber);
             if (handEvaluation == null) return showHandRecord;
 
-            showHandRecord.EvalNorthNT = handEvaluation.NorthNotrump;
-            showHandRecord.EvalNorthSpades = handEvaluation.NorthSpades;
-            showHandRecord.EvalNorthHearts = handEvaluation.NorthHearts;
-            showHandRecord.EvalNorthDiamonds = handEvaluation.NorthDiamonds;
-            showHandRecord.EvalNorthClubs = handEvaluation.NorthClubs;
-            showHandRecord.EvalEastNT = handEvaluation.EastNotrump;
-            showHandRecord.EvalEastSpades = handEvaluation.EastSpades;
-            showHandRecord.EvalEastHearts = handEvaluation.EastHearts;
-            showHandRecord.EvalEastDiamonds = handEvaluation.EastDiamonds;
-            showHandRecord.EvalEastClubs = handEvaluation.EastClubs;
-            showHandRecord.EvalSouthNT = handEvaluation.SouthNotrump;
-            showHandRecord.EvalSouthSpades = handEvaluation.SouthSpades;
-            showHandRecord.EvalSouthHearts = handEvaluation.SouthHearts;
-            showHandRecord.EvalSouthDiamonds = handEvaluation.SouthDiamonds;
-            showHandRecord.EvalSouthClubs = handEvaluation.SouthClubs;
-            showHandRecord.EvalWestNT = handEvaluation.WestNotrump;
-            showHandRecord.EvalWestSpades = handEvaluation.WestSpades;
-            showHandRecord.EvalWestHearts = handEvaluation.WestHearts;
-            showHandRecord.EvalWestDiamonds = handEvaluation.WestDiamonds;
-            showHandRecord.EvalWestClubs = handEvaluation.WestClubs;
+            showHandRecord.EvalNorthNT = handEvaluation.NorthNotrump > 6 ? (handEvaluation.NorthNotrump - 6).ToString() : string.Empty;
+            showHandRecord.EvalNorthSpades = handEvaluation.NorthSpades > 6 ? (handEvaluation.NorthSpades - 6).ToString() : string.Empty;
+            showHandRecord.EvalNorthHearts = handEvaluation.NorthHearts > 6 ? (handEvaluation.NorthHearts - 6).ToString() : string.Empty;
+            showHandRecord.EvalNorthDiamonds = handEvaluation.NorthDiamonds > 6 ? (handEvaluation.NorthDiamonds - 6).ToString() : string.Empty;
+            showHandRecord.EvalNorthClubs = handEvaluation.NorthClubs > 6 ? (handEvaluation.NorthClubs - 6).ToString() : string.Empty;
+            showHandRecord.EvalEastNT = handEvaluation.EastNotrump > 6 ? (handEvaluation.EastNotrump - 6).ToString() : string.Empty;
+            showHandRecord.EvalEastSpades = handEvaluation.EastSpades > 6 ? (handEvaluation.EastSpades - 6).ToString() : string.Empty;
+            showHandRecord.EvalEastHearts = handEvaluation.EastHearts > 6 ? (handEvaluation.EastHearts - 6).ToString() : string.Empty;
+            showHandRecord.EvalEastDiamonds = handEvaluation.EastDiamonds > 6 ? (handEvaluation.EastDiamonds - 6).ToString() : string.Empty;
+            showHandRecord.EvalEastClubs = handEvaluation.EastClubs > 6 ? (handEvaluation.EastClubs - 6).ToString() : string.Empty;
+            showHandRecord.EvalSouthNT = handEvaluation.SouthNotrump > 6 ? (handEvaluation.SouthNotrump - 6).ToString() : string.Empty;
+            showHandRecord.EvalSouthSpades = handEvaluation.SouthSpades > 6 ? (handEvaluation.SouthSpades - 6).ToString() : string.Empty;
+            showHandRecord.EvalSouthHearts = handEvaluation.SouthHearts > 6 ? (handEvaluation.SouthHearts - 6).ToString() : string.Empty;
+            showHandRecord.EvalSouthDiamonds = handEvaluation.SouthDiamonds > 6 ? (handEvaluation.SouthDiamonds - 6).ToString() : string.Empty;
+            showHandRecord.EvalSouthClubs = handEvaluation.SouthClubs > 6 ? (handEvaluation.SouthClubs - 6).ToString() : string.Empty;
+            showHandRecord.EvalWestNT = handEvaluation.WestNotrump > 6 ? (handEvaluation.WestNotrump - 6).ToString() : string.Empty;
+            showHandRecord.EvalWestSpades = handEvaluation.WestSpades > 6 ? (handEvaluation.WestSpades - 6).ToString() : string.Empty;
+            showHandRecord.EvalWestHearts = handEvaluation.WestHearts > 6 ? (handEvaluation.WestHearts - 6).ToString() : string.Empty;
+            showHandRecord.EvalWestDiamonds = handEvaluation.WestDiamonds > 6 ? (handEvaluation.WestDiamonds - 6).ToString() : string.Empty;
+            showHandRecord.EvalWestClubs = handEvaluation.WestClubs > 6 ? (handEvaluation.WestClubs - 6).ToString() : string.Empty;
 
             showHandRecord.HCPNorth = handEvaluation.NorthHcp;
             showHandRecord.HCPSouth = handEvaluation.SouthHcp;
@@ -633,18 +636,18 @@ namespace TabScore2.UtilityServices
                 case HeaderType.Round:
                     // parameter1 = deviceNumber
                     DeviceStatus deviceStatus = appData.GetDeviceStatus(parameter1);
-                    return $"{deviceStatus.Location}: {localizer["Round"]} {deviceStatus.RoundNumber}";
+                    return $"{deviceStatus.Location}: {localizer["Rd"]} {deviceStatus.RoundNumber}";
                 case HeaderType.FullPlain:
                     // parameter1 = deviceNumber
                     deviceStatus = appData.GetDeviceStatus(parameter1);
                     TableStatus tableStatus = appData.GetTableStatus(parameter1);
                     if (database.IsIndividual)
                     {
-                        return $"{deviceStatus.Location}: {localizer["Round"]} {tableStatus.RoundNumber}: {tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth} v {tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}";
+                        return $"{deviceStatus.Location}: {localizer["Rd"]} {tableStatus.RoundNumber}: {tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth} v {tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}";
                     }
                     else
                     {
-                        return $"{deviceStatus.Location}: {localizer["Round"]} {tableStatus.RoundNumber}: {localizer["N"]}{localizer["S"]} {tableStatus.RoundData.NumberNorth} v {localizer["E"]}{localizer["W"]} {tableStatus.RoundData.NumberEast}";
+                        return $"{deviceStatus.Location}: {localizer["Rd"]} {tableStatus.RoundNumber}: {localizer["N"]}{localizer["S"]} {tableStatus.RoundData.NumberNorth} v {localizer["E"]}{localizer["W"]} {tableStatus.RoundData.NumberEast}";
                     }
                 case HeaderType.FullColoured:
                     // parameter1 = deviceNumber, parameter2 = boardNumber
@@ -652,11 +655,11 @@ namespace TabScore2.UtilityServices
                     tableStatus = appData.GetTableStatus(parameter1);
                     if (database.IsIndividual)
                     {
-                        return $"{deviceStatus.Location}: {localizer["Round"]} {tableStatus.RoundNumber}: {ColourPairByVulnerability("NS", parameter2, $"{tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth}")} v {ColourPairByVulnerability("EW", parameter2, $"{tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}")}";
+                        return $"{deviceStatus.Location}: {localizer["Rd"]} {tableStatus.RoundNumber}: {ColourPairByVulnerability("NS", parameter2, $"{tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth}")} v {ColourPairByVulnerability("EW", parameter2, $"{tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}")}";
                     }
                     else
                     {
-                        return $"{deviceStatus.Location}: {localizer["Round"]} {tableStatus.RoundNumber}: {ColourPairByVulnerability("NS", parameter2, $"{localizer["N"]}{localizer["S"]} {tableStatus.RoundData.NumberNorth}")} v {ColourPairByVulnerability("EW", parameter2, $"{localizer["E"]}{localizer["W"]} {tableStatus.RoundData.NumberEast}")}";
+                        return $"{deviceStatus.Location}: {localizer["Rd"]} {tableStatus.RoundNumber}: {ColourPairByVulnerability("NS", parameter2, $"{localizer["N"]}{localizer["S"]} {tableStatus.RoundData.NumberNorth}")} v {ColourPairByVulnerability("EW", parameter2, $"{localizer["E"]}{localizer["W"]} {tableStatus.RoundData.NumberEast}")}";
                     }
                 case HeaderType.Section:
                     // parameter1 = sectionID
@@ -671,13 +674,22 @@ namespace TabScore2.UtilityServices
 
         public string Title(string titleString, TitleType titleType = TitleType.Plain, int parameter1 = 0, int parameter2 = 0)
         {
-            return titleType switch
+            switch (titleType)
             {
-                TitleType.Location => $"{localizer[titleString]}: {appData.GetDeviceStatus(parameter1).Location}",  // parameter1 = deviceNumber
-                TitleType.Plain => $"{localizer[titleString]}",
-                TitleType.Section => $"{localizer[titleString]}: {localizer["Section"]} {database.GetSection(parameter1).Letter}",  // parameter1 = sectionID
-                TitleType.SectionTable => $"{localizer[titleString]}: {database.GetSection(parameter1).Letter}{parameter2}",  // parameter1 = sectionID, parameter2 = tableNumber
-                _ => string.Empty,
+                case TitleType.Location:
+                    // parameter1 = deviceNumber
+                    DeviceStatus deviceStatus = appData.GetDeviceStatus(parameter1);
+                    return $"{deviceStatus.Location}: {localizer["Rd"]} {deviceStatus.RoundNumber}: {localizer[titleString]}";
+                case TitleType.Plain:
+                    return $"{localizer[titleString]}";
+                case TitleType.Section:
+                    // parameter1 = sectionID
+                    return $"{localizer["Section"]} {database.GetSection(parameter1).Letter}: {localizer[titleString]}";
+                case TitleType.SectionTable:
+                    // parameter1 = sectionID, parameter2 = tableNumber
+                    return $"{database.GetSection(parameter1).Letter}{parameter2}: {localizer[titleString]}";
+                default:
+                    return string.Empty; 
             };
         }
 
@@ -800,7 +812,7 @@ namespace TabScore2.UtilityServices
             return new PlayerEntry(name.Replace("Unknown", localizer["Unknown"]), number, direction);
         }
 
-        private string GetDisplayContract(Result result)
+        private string GetContractDisplay(Result result, bool showTricks)
         {
             if (result.ContractLevel == -1)  // Board not played or arbitral result of some kind
             {
@@ -845,9 +857,9 @@ namespace TabScore2.UtilityServices
                 }
                 s.Append(result.ContractX);
 
-                string tricksTakenSymbol = string.Empty;
-                if (result.TricksTaken > 0)
+                if (showTricks)
                 {
+                    string tricksTakenSymbol;
                     int tricksTakenLevel = result.TricksTaken - result.ContractLevel - 6;
                     if (tricksTakenLevel == 0)
                     {
@@ -857,8 +869,9 @@ namespace TabScore2.UtilityServices
                     {
                         tricksTakenSymbol = tricksTakenLevel.ToString("+#;-#;0");
                     }
+                    s.Append(tricksTakenSymbol);
                 }
-                s.Append($"{tricksTakenSymbol} {localizer["by"]} ");
+                s.Append($" {localizer["by"]} ");
                 s.Append(localizer[result.DeclarerNSEW]);
                 return s.ToString();
             }
@@ -1255,120 +1268,5 @@ namespace TabScore2.UtilityServices
                 }
             }
         }
-
-
-
-
-
-        /*
-                public void InitializeResult(Result result, TableStatus tableStatus, int boardNumber)
-                {
-                    result.NumberNorth = tableStatus.RoundData.NumberNorth;
-                    result.NumberSouth = tableStatus.RoundData.NumberSouth;
-                    result.NumberEast = tableStatus.RoundData.NumberEast;
-                    result.NumberWest = tableStatus.RoundData.NumberWest;
-                    result.BoardNumber = boardNumber;
-
-                    DatabaseResult databaseResult = database.GetDatabaseResult(tableStatus.SectionID, tableStatus.TableNumber, tableStatus.RoundNumber, boardNumber);
-                    result.Remarks = databaseResult.Remarks;
-                    result.DeclarerNSEW = databaseResult.DeclarerNSEW;
-                    result.DeclarerNSEWDisplay = result.DeclarerNSEW switch
-                    {
-                        "N" => (string)localizer["N"],
-                        "S" => (string)localizer["S"],
-                        "E" => (string)localizer["E"],
-                        "W" => (string)localizer["W"],
-                        _ => ""
-                    };
-
-                    result.TricksTaken = databaseResult.TricksTaken;
-                    if (result.TricksTaken >= 0)
-                    {
-                        int tricksTakenLevel = result.TricksTaken - result.ContractLevel - 6;
-                        if (tricksTakenLevel == 0)
-                        {
-                            result.TricksTakenSymbol = "=";
-                        }
-                        else
-                        {
-                            result.TricksTakenSymbol = tricksTakenLevel.ToString("+#;-#;0");
-                        }
-                    }
-
-                    result.ContractLevel = databaseResult.ContractLevel;
-                    result.ContractSuit = databaseResult.ContractSuit;
-                    result.ContractX = databaseResult.ContractX;
-                    if (result.ContractLevel == -1)  // Board not played or arbitral result of some kind
-                    {
-                        result.ContractDisplay = $"<span style=\"color:red\">{localizer[result.Remarks]}</span>";
-                    }
-                    else if (result.ContractLevel == 0)
-                    {
-                        result.ContractDisplay = $"<span style=\"color:darkgreen\">{localizer["AllPass"]}</span>";
-                        result.ContractTravellerDisplay = $"<span style=\"color:darkgreen\">{localizer["Pass"]}</span>";
-                    }
-                    else if (result.ContractLevel > 0)
-                    {
-                        //Normal contract and result
-                        StringBuilder sb = new(string.Empty);
-                        sb.Append(result.ContractLevel);
-                        switch (result.ContractSuit)
-                        {
-                            case "NT":
-                                sb.Append(localizer["NT"]);
-                                break;
-                            case "S":
-                                sb.Append("<span style=\"color:black\">&spades;</span>");
-                                break;
-                            case "H":
-                                sb.Append("<span style=\"color:red\">&hearts;</span>");
-                                break;
-                            case "D":
-                                sb.Append("<span style=\"color:lightsalmon\">&diams;</span>");
-                                break;
-                            case "C":
-                                sb.Append("<span style=\"color:lightslategrey\">&clubs;</span>");
-                                break;
-                        }
-                        sb.Append(result.ContractX);
-                        result.ContractTravellerDisplay = sb.ToString();
-                        sb.Append($"{result.TricksTakenSymbol} {localizer["by"]} ");
-                        sb.Append(result.DeclarerNSEWDisplay);
-                        result.ContractDisplay = sb.ToString();
-                    }
-
-                    if (databaseResult.LeadCard.Length > 2 && databaseResult.LeadCard.Substring(1, 2) == "10")
-                    {
-                        LeadCard = string.Concat(databaseResult.LeadCard.AsSpan(0, 1), "T");
-                    }
-                    else
-                    {
-                        LeadCard = databaseResult.LeadCard;
-                    }
-                    if (LeadCard == string.Empty || LeadCard == "SKIP")
-                    {
-                        LeadCardDisplay = string.Empty;
-                    }
-                    else
-                    {
-                        LeadCardDisplay = LeadCard.Replace("S", "<span style=\"color:black\">&spades;</span>")
-                                                  .Replace("H", "<span style=\"color:red\">&hearts;</span>")
-                                                  .Replace("D", "<span style=\"color:lightsalmon\">&diams;</span>")
-                                                  .Replace("C", "<span style=\"color:lightslategrey\">&clubs;</span>")
-                                                  .Replace("T", localizer["TenShorthand"]);
-                    }
-                }
-
-                bool vul;
-                    if (DeclarerNSEW == "N" || DeclarerNSEW == "S")
-                    {
-                        vul = utilities.GetIsNSVulnerable(BoardNumber);
-                    }
-                    else
-                    {
-                        vul = utilities.GetIsEWVulnerable(BoardNumber);
-                    }
-
-                */
     }
 }

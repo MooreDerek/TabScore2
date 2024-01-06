@@ -42,7 +42,6 @@
             labelSessionStatus = new Label();
             databaseFileDialog = new OpenFileDialog();
             handRecordFileDialog = new OpenFileDialog();
-            analysisCalculationBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             SuspendLayout();
             // 
             // labelScoringDatabase
@@ -121,13 +120,6 @@
             // 
             resources.ApplyResources(handRecordFileDialog, "handRecordFileDialog");
             // 
-            // analysisCalculationBackgroundWorker
-            // 
-            analysisCalculationBackgroundWorker.WorkerReportsProgress = true;
-            analysisCalculationBackgroundWorker.DoWork += AnalysisCalculation_DoWork;
-            analysisCalculationBackgroundWorker.ProgressChanged += AnalysisCalculation_ProgressChanged;
-            analysisCalculationBackgroundWorker.RunWorkerCompleted += AnalysisCalculation_RunWorkerCompleted;
-            // 
             // MainForm
             // 
             resources.ApplyResources(this, "$this");
@@ -166,6 +158,5 @@
         private Label labelSessionStatus;
         private OpenFileDialog databaseFileDialog;
         private OpenFileDialog handRecordFileDialog;
-        private System.ComponentModel.BackgroundWorker analysisCalculationBackgroundWorker;
     }
 }

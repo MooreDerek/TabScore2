@@ -5,7 +5,7 @@ namespace TabScore2.Classes
 {
     public class InternalPlayerRecord
     {
-        public string ID { get; set; } = "";
-        public string Name { get; set; } = "";
+        public string ID { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
     }
 }

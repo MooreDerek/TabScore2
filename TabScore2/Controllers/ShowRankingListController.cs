@@ -87,7 +87,8 @@ namespace TabScore2.Controllers
 
         public JsonResult PollRanking(int deviceNumber)
         {
-            List<Ranking> rankingList = utilities.GetRankings(deviceNumber);
+            int sectionID = appData.GetDeviceStatus(deviceNumber).SectionID;
+            List<Ranking> rankingList = utilities.GetRankings(sectionID);
             return Json(rankingList);
         }
     }

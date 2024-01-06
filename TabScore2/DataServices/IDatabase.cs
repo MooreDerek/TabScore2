@@ -11,7 +11,7 @@ namespace TabScore2.DataServices
     {
         // GENERAL
         string PathToDatabase { get; set; }
-        bool InitializationComplete { get; }
+        bool InitializationComplete { get; set; }
         bool IsIndividual { get; }
         string? Initialize();
         public bool IsDatabaseConnectionOK();
@@ -33,7 +33,6 @@ namespace TabScore2.DataServices
         Result GetResult(int sectionID, int tableNumber, int roundNumber, int boardNumber);
         void SetResult(int sectionID, int tableNumber, int roundNumber, Result result);
         List<Result> GetResultsList(int sectionID, int lowBoard = 0, int highBoard = 0, int tableNumber = 0, int roundNumber = 0);
-        List<Ranking> GetRankingList(int sectionID);
 
         // PLAYERNAMES
         string GetInternalPlayerName(string playerID);
@@ -52,5 +51,8 @@ namespace TabScore2.DataServices
         // SETTINGS
         DatabaseSettings GetDatabaseSettings();
         void UpdateDatabaseSettings(DatabaseSettings databaseSettings);
+
+        // RANKINGLIST
+        List<Ranking> GetRankingList(int sectionID);
     }
 }

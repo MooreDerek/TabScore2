@@ -16,21 +16,7 @@ namespace TabScore2
             WebApplicationBuilder webAppBuilder = WebApplication.CreateSlimBuilder();
             webAppBuilder.Services.AddLocalization();
             webAppBuilder.Services.AddControllersWithViews();
-            webAppBuilder.Services.AddWebOptimizer(pipeline => 
-            {
-                pipeline.AddCssBundle("/css/coreCSS.css", "lib/bootstrap/css/bootstrap.min.css", "lib/font-awesome/css/all.min.css");
-                pipeline.AddJavaScriptBundle("/js/enterContractJS.js", "js/EnterContract.js");
-                pipeline.AddJavaScriptBundle("/js/enterHandRecordJS.js", "js/EnterContract.js");
-                pipeline.AddJavaScriptBundle("/js/enterLeadJS.js", "js/EnterLead.js");
-                pipeline.AddJavaScriptBundle("/js/enterPlayerIdJS.js", "js/EnterPlayerID.js");
-                pipeline.AddJavaScriptBundle("/js/individualRankingListJS.js", "js/IndividualRankingList.js");
-                pipeline.AddJavaScriptBundle("/js/mainLayoutJS.js", "js/MainLayout.js");
-                pipeline.AddJavaScriptBundle("/js/oneWinnerRankingListJS.js", "js/OneWinnerRankingList.js");
-                pipeline.AddJavaScriptBundle("/js/showHandRecordJS.js", "js/ShowHandRecord.js");
-                pipeline.AddJavaScriptBundle("/js/totalTricksJS.js", "js/TotalTricks.js");
-                pipeline.AddJavaScriptBundle("/js/tricksPlusMinusJS.js", "js/TricksPlusMinus.js");
-                pipeline.AddJavaScriptBundle("/js/twoWinnersRankingListJS.js", "js/TwoWinnersRankingList.js");
-            });
+//            webAppBuilder.Services.AddWebOptimizer();
             webAppBuilder.Services.AddSingleton<IUtilities, Utilities>();
             webAppBuilder.Services.AddSingleton<IDatabase, BwsDatabase>();
             webAppBuilder.Services.AddSingleton<IExternalNamesDatabase, ExternalNamesDatabase>();
@@ -38,8 +24,8 @@ namespace TabScore2
             webAppBuilder.Services.AddSingleton<IAppData, AppData>();
             webAppBuilder.Services.AddHttpContextAccessor();
             WebApplication webApp = webAppBuilder.Build();
-//            webApp.UseExceptionHandler("/ErrorScreen/Index");
-            webApp.UseWebOptimizer(); 
+            webApp.UseExceptionHandler("/ErrorScreen/Index"); 
+//            webApp.UseWebOptimizer(); 
             webApp.UseStaticFiles();
             webApp.UseRouting();
             webApp.MapControllerRoute(name: "default", pattern: "{controller=StartScreen}/{action=Index}");

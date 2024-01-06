@@ -196,7 +196,7 @@
     <value>Please enter a result (or Skip = Not played) for every board</value>
   </data>
   <data name="ErrorNoDBSelected" xml:space="preserve">
-    <value>No Scoring Database selected; please wait until the Tournament Director tells you to start</value>
+    <value>No scoring database selected.  Please wait until the Tournament Director tells you to start</value>
   </data>
   <data name="ErrorNoID" xml:space="preserve">
     <value>Please select a player ID, or select 'Unknown'</value>
@@ -494,5 +494,11 @@
   </data>
   <data name="NoDatabasePath" xml:space="preserve">
     <value>No database path specified</value>
+  </data>
+  <data name="SessionPaused" xml:space="preserve">
+    <value>Session paused</value>
+  </data>
+  <data name="Rd" xml:space="preserve">
+    <value>Rd</value>
   </data>
 </root>

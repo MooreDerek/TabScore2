@@ -17,7 +17,8 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
         // Flag to prevent both touch and click events
         var touchAvailable = false;
     </script>
-    <link rel="stylesheet" href="~/css/coreCSS.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
     <script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
 </head>
 
@@ -25,7 +26,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
     <div id="headerRow" class="container-fluid fixed-top" style="min-height: 45px; background-color: bisque; border-bottom-style: solid">
         <div class="row my-2">
             <div id="header" class="col-12 px-2">
-                <h6 class="my-auto">@Html.Raw(ViewData["Header"])</h6>
+                <h5 class="my-auto">@Html.Raw(ViewData["Header"])</h5>
             </div>
             <div id="battery" class="col-1 my-auto px-2" style="display:none">
                 <h3><span id="bl"></span></h3>
@@ -97,7 +98,7 @@ Licensed under the Apache License, Version 2.0; you may not use this file except
             var timerSeconds = -1;
         </script>
     }
-    <script src="~/js/mainLayoutJS.js"></script>
+    <script src="~/js/MainLayout.js"></script>
 </body>
 
 </html>

@@ -22,7 +22,7 @@ namespace TabScore2.Controllers
 
             showHandRecord.FromView = fromView;
             DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
-            showHandRecord.PerspectiveDirection = deviceStatus.PerspectiveDirection;
+            showHandRecord.PerspectiveDirection = deviceStatus.PerspectiveDirection.ToString();
             showHandRecord.PerspectiveButtonOption = deviceStatus.PerspectiveButtonOption;
 
             ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);

@@ -21,7 +21,7 @@ namespace TabScore2.Controllers
         public ActionResult Index(int deviceNumber, int newRoundNumber, int tableNotReadyNumber = -1)
         {
             DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
-            if (newRoundNumber > database.GetNumberOfRoundsInEvent(deviceStatus.SectionID))  // Session complete
+            if (newRoundNumber > database.GetNumberOfRoundsInEvent(deviceStatus.SectionID, newRoundNumber))  // Session complete
             {
                 if (settings.ShowRanking == 2)
                 {
@@ -128,7 +128,7 @@ namespace TabScore2.Controllers
             }
 
             // Refresh settings for the start of the round.  Only done once per round.
-            settings.DatabaseRefresh(newRoundNumber);
+            settings.GetFromDatabase(newRoundNumber);
             return RedirectToAction("Index", "ShowPlayerIDs", new { deviceNumber });
         }
 

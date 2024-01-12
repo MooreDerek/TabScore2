@@ -6,7 +6,7 @@ using TabScore2.Classes;
 namespace TabScore2.DataServices
 {
     // Settings contains an internal copy of those values from the database Settings table needed by the application.
-    // They are refreshed at the start of every round in case of any changes
+    // They are refreshed once at the start of every round in case of any changes
     // Settings that are specific to TabScore2 are instead stored as Properties, and persist from session to session
 
     public class Settings(IDatabase iDatabase) : ISettings
@@ -14,11 +14,10 @@ namespace TabScore2.DataServices
         private readonly IDatabase database = iDatabase;
         private static int settingsRoundNumber = 0;
 
-        public void DatabaseRefresh(int roundNumber)
+        public void GetFromDatabase(int roundNumber)
         {
             if (roundNumber <= settingsRoundNumber) return;
             DatabaseSettings databaseSettings = database.GetDatabaseSettings();
-            settingsRoundNumber++;
             ShowTraveller = databaseSettings.ShowTraveller;
             ShowPercentage = databaseSettings.ShowPercentage;
             EnterLeadCard = databaseSettings.EnterLeadCard;
@@ -28,6 +27,26 @@ namespace TabScore2.DataServices
             NumberEntryEachRound = databaseSettings.NumberEntryEachRound;
             NameSource = databaseSettings.NameSource;
             EnterResultsMethod = databaseSettings.EnterResultsMethod;
+            ManualHandRecordEntry = databaseSettings.ManualHandRecordEntry;
+            if (roundNumber == settingsRoundNumber + 1) settingsRoundNumber = roundNumber;
+        }
+
+        public void UpdateDatabase()
+        {
+            DatabaseSettings databaseSettings = new()
+            {
+                ShowTraveller = ShowTraveller,
+                ShowPercentage = ShowPercentage,
+                EnterLeadCard = EnterLeadCard,
+                ValidateLeadCard = ValidateLeadCard,
+                ShowRanking = ShowRanking,
+                ShowHandRecord = ShowHandRecord,
+                NumberEntryEachRound = NumberEntryEachRound,
+                NameSource = NameSource,
+                EnterResultsMethod = EnterResultsMethod,
+                ManualHandRecordEntry = ManualHandRecordEntry
+            };
+            database.UpdateDatabaseSettings(databaseSettings);
         }
 
         // Database settings
@@ -42,7 +61,7 @@ namespace TabScore2.DataServices
         public int NameSource { get; set; }
         public bool ManualHandRecordEntry { get; set; }
 
-        // Application properties
+        // Application property settings
         public bool TabletsMove {
             get { return Properties.Settings.Default.TabletsMove; }
             set { Properties.Settings.Default.TabletsMove = value; Properties.Settings.Default.Save(); }
@@ -71,6 +90,11 @@ namespace TabScore2.DataServices
         {
             get { return Properties.Settings.Default.DoubleDummy; }
             set { Properties.Settings.Default.DoubleDummy = value; Properties.Settings.Default.Save(); }
+        }
+        public int SuppressRankingList
+        {
+            get { return Properties.Settings.Default.SuppressRankingList; }
+            set { Properties.Settings.Default.SuppressRankingList = value; Properties.Settings.Default.Save(); }
         }
     }
 }

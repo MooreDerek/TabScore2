@@ -514,4 +514,7 @@ tablet device at your current location</value>
   <data name="Rd" xml:space="preserve">
     <value>Rd</value>
   </data>
+  <data name="ClosingMessage" xml:space="preserve">
+    <value>Are you sure you want to shut down TabScore2?</value>
+  </data>
 </root>

@@ -11,13 +11,15 @@ namespace TabScore2.Forms
 {
     public partial class MainForm : Form
     {
+        private readonly IServiceProvider serviceProvider;
         private readonly IStringLocalizer<Strings> localizer;
         private readonly IDatabase database;
         private readonly IAppData appData;
         private readonly ISettings settings;
 
-        public MainForm(IStringLocalizer<Strings> iLocalizer, IDatabase iDatabase, IAppData iAppData, ISettings iSettings)
+        public MainForm(IServiceProvider iServiceProvider, IStringLocalizer<Strings> iLocalizer, IDatabase iDatabase, IAppData iAppData, ISettings iSettings)
         {
+            serviceProvider = iServiceProvider; 
             localizer = iLocalizer;
             database = iDatabase;
             appData = iAppData;
@@ -76,14 +78,18 @@ namespace TabScore2.Forms
 
         private void ButtonSettings_Click(object sender, EventArgs e)
         {
-            //            SettingsForm frmOptions = new SettingsForm(connectionString, new Point(Location.X + 30, Location.Y + 30));
-            //            frmOptions.ShowDialog();
+            // Two-step process to inject SettingsForm with a free parameter
+            Func<Point, SettingsForm> settingsFormTemplate = serviceProvider.GetRequiredService<Func<Point, SettingsForm>>();
+            SettingsForm settingsForm = settingsFormTemplate(new Point(Location.X + 30, Location.Y + 30));
+            settingsForm.ShowDialog();
         }
 
         private void ButtonResultsViewer_Click(object sender, EventArgs e)
         {
-            //            ViewResultsForm frmResultsViewer = new ViewResultsForm(connectionString, new Point(Location.X + 30, Location.Y + 30));
-            //            frmResultsViewer.ShowDialog();
+            // Two-step process to inject ViewResultsForm with a free parameter
+            Func<Point, ViewResultsForm> viewResultsFormTemplate = serviceProvider.GetRequiredService<Func<Point, ViewResultsForm>>();
+            ViewResultsForm viewResultsForm = viewResultsFormTemplate(new Point(Location.X + 30, Location.Y + 30));
+            viewResultsForm.ShowDialog();
         }
 
         private void MainForm_Closing(object sender, FormClosingEventArgs e)

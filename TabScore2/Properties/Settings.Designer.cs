@@ -37,7 +37,7 @@ namespace TabScore2.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool ShowTimer {
             get {
                 return ((bool)(this["ShowTimer"]));
@@ -85,13 +85,25 @@ namespace TabScore2.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool DoubleDummy {
             get {
                 return ((bool)(this["DoubleDummy"]));
             }
             set {
                 this["DoubleDummy"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int SuppressRankingList {
+            get {
+                return ((int)(this["SuppressRankingList"]));
+            }
+            set {
+                this["SuppressRankingList"] = value;
             }
         }
     }

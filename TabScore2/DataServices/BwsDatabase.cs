@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using System.Data.Odbc;
+using System.Net.NetworkInformation;
 using System.Text;
 using TabScore2.Classes;
 using TabScore2.Globals;
@@ -788,27 +789,33 @@ namespace TabScore2.DataServices
         }
 
         // ROUND
-        public int GetNumberOfRoundsInEvent(int sectionID)
+        private static int roundsInEventRoundNumber = 0;
+        private static int numberOfRoundsInEvent = 1;
+        public int GetNumberOfRoundsInEvent(int sectionID, int roundNumber = 999)
         {
-            // Find out how many rounds there are in the event
-            // Need to re-query database in case rounds are added/removed by scoring program
-            object? queryResult = null;
-            using (OdbcConnection connection = new(connectionString))
+            // Need to re-query the database each round in case rounds are added/removed by scoring program
+            if (roundNumber >= roundsInEventRoundNumber) 
             {
-                connection.Open();
-                string SQLString = $"SELECT MAX(Round) FROM RoundData WHERE Section={sectionID}";
-                OdbcCommand cmd = new(SQLString, connection);
-                try
+                object? queryResult = null;
+                using (OdbcConnection connection = new(connectionString))
                 {
-                    ODBCRetryHelper.ODBCRetry(() =>
+                    connection.Open();
+                    string SQLString = $"SELECT MAX(Round) FROM RoundData WHERE Section={sectionID}";
+                    OdbcCommand cmd = new(SQLString, connection);
+                    try
                     {
-                        queryResult = cmd.ExecuteScalar();
-                    });
+                        ODBCRetryHelper.ODBCRetry(() =>
+                        {
+                            queryResult = cmd.ExecuteScalar();
+                        });
+                    }
+                    catch { }
+                    cmd.Dispose();
                 }
-                catch { }
-                cmd.Dispose();
+                roundsInEventRoundNumber++;
+                numberOfRoundsInEvent = Convert.ToInt32(queryResult);
             }
-            return Convert.ToInt32(queryResult);
+            return numberOfRoundsInEvent;
         }
 
         public int GetNumberOfLastRoundWithResults(int sectionID, int tableNumber)
@@ -1167,11 +1174,11 @@ namespace TabScore2.DataServices
             {
                 if (IsIndividual)
                 {
-                    SQLString = $"SELECT Board, [NS/EW], Contract, Result, Remarks, PairNS, PairEW, South, West FROM ReceivedData WHERE Section={sectionID}";
+                    SQLString = $"SELECT Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW, South, West FROM ReceivedData WHERE Section={sectionID}";
                 }
                 else
                 {
-                    SQLString = $"SELECT Board, [NS/EW], Contract, Result, Remarks, PairNS, PairEW FROM ReceivedData WHERE Section={sectionID}";
+                    SQLString = $"SELECT Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW FROM ReceivedData WHERE Section={sectionID}";
                 }
             }
             else if (highBoard == 0)  // Need all results for board = lowBoard
@@ -1269,6 +1276,71 @@ namespace TabScore2.DataServices
                 cmd!.Dispose();
             }
             return resultsList;
+        }
+
+        public List<FullResult> GetFullResultsList()
+        {
+            string SQLString = $"SELECT SectionID, [Table], Round, Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW FROM ReceivedData";
+            List<FullResult> fullResultsList = [];
+            using OdbcConnection connection = new(connectionString);
+            connection.Open();
+            OdbcCommand? cmd = null;
+            OdbcDataReader? reader = null;
+            try
+            {
+                cmd = new OdbcCommand(SQLString, connection);
+                ODBCRetryHelper.ODBCRetry(() =>
+                {
+                    reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        FullResult fullResult = new()
+                        {
+                            SectionID = reader.GetInt32(0),
+                            TableNumber = reader.GetInt32(1),
+                            RoundNumber = reader.GetInt32(2),
+                            BoardNumber = reader.GetInt32(3),
+                            DeclarerNSEW = reader.GetString(4),
+                            Remarks = reader.GetString(8),
+                            NumberNorth = reader.GetInt32(9),
+                            NumberEast = reader.GetInt32(10)
+                        };
+                        string tempContract = reader.GetString(5);
+
+                        if ((fullResult.Remarks == string.Empty || fullResult.Remarks == "Wrong direction") && tempContract.Length > 2)
+                            if (tempContract == "PASS")
+                            {
+                                fullResult.ContractLevel = 0;
+                            }
+                            else  // Hopefully the database contains a valid contract
+                            {
+                                string[] temp = tempContract.Split(' ');
+                                fullResult.ContractLevel = Convert.ToInt32(temp[0]);
+                                fullResult.ContractSuit = temp[1];
+                                if (temp.Length > 2) fullResult.ContractX = temp[2];
+                                fullResult.LeadCard = reader.GetString(6).Replace("10", "T");  // Use T for ten internally
+                                fullResult.TricksTakenSymbol = reader.GetString(7);
+                            }
+                        else
+                        {
+                            fullResult.ContractLevel = -1;  // Board not played
+                        }
+                        fullResultsList.Add(fullResult);
+                    }
+                });
+            }
+            finally
+            {
+                reader!.Close();
+                cmd!.Dispose();
+            }
+            
+            foreach (FullResult fullResult in fullResultsList)
+            {
+                fullResult.SectionLetter = GetSection(fullResult.SectionID).Letter;
+            }
+            
+            return fullResultsList;
         }
 
         // PLAYERNAMES

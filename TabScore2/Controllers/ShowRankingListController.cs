@@ -20,42 +20,45 @@ namespace TabScore2.Controllers
         public ActionResult Index(int deviceNumber)
         {
             DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
-            if (settings.ShowRanking == 1 && deviceStatus.RoundNumber > 1)  // Show ranking list only from round 2 onwards
+            if (settings.ShowRanking != 1  // Don't show ranking list at all
+               || deviceStatus.RoundNumber < 2  // Show ranking list only from round 2 onwards
+               || deviceStatus.RoundNumber > database.GetNumberOfRoundsInEvent(deviceStatus.SectionID, deviceStatus.RoundNumber) - settings.SuppressRankingList)  // Show ranking list suppressed for this round
             {
-                ShowRankingList showRankingList = utilities.CreateRankingListModel(deviceNumber);
-                    
-                // Only show the ranking list if it contains something meaningful
-                if (showRankingList.Count > 1 && showRankingList[0].ScoreDecimal != 0.0)
-                {
-                    ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
-                    ViewData["Title"] = utilities.Title("ShowRankingList", TitleType.Location, deviceNumber);
-                    ViewData["Header"] = utilities.Header(HeaderType.Round, deviceNumber);
-                    if (deviceStatus.AtSitoutTable)
-                    {
-                        // Can't go back to ShowBoards if it's a sitout and there are no boards to play, so no 'Back' button
-                        ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
-                    }
-                    else
-                    {
-                        ViewData["ButtonOptions"] = ButtonOptions.OKEnabledAndBack;
-                    }
-
-                    if (database.IsIndividual)
-                    {
-                        return View("Individual", showRankingList);
-                    }
-                    else if (showRankingList.Exists(x => x.Orientation == "E"))
-                    {
-                        return View("TwoWinners", showRankingList);
-                    }
-                    else
-                    {
-                        return View("OneWinner", showRankingList);
-                    }
-                }
+                return RedirectToAction("Index", "ShowMove", new { deviceNumber, newRoundNumber = deviceStatus.RoundNumber + 1 });
             }
-            return RedirectToAction("Index", "ShowMove", new { deviceNumber, newRoundNumber = deviceStatus.RoundNumber + 1 });
-        }
+
+            ShowRankingList showRankingList = utilities.CreateRankingListModel(deviceNumber);
+            if (showRankingList.Count <= 1 || showRankingList[0].ScoreDecimal == 0.0)  // Only show the ranking list if it contains something meaningful
+            {
+                return RedirectToAction("Index", "ShowMove", new { deviceNumber, newRoundNumber = deviceStatus.RoundNumber + 1 });
+            }
+
+            ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
+            ViewData["Title"] = utilities.Title("ShowRankingList", TitleType.Location, deviceNumber);
+            ViewData["Header"] = utilities.Header(HeaderType.Round, deviceNumber);
+            if (deviceStatus.AtSitoutTable)
+            {
+                // Can't go back to ShowBoards if it's a sitout and there are no boards to play, so no 'Back' button
+                ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
+            }
+            else
+            {
+                ViewData["ButtonOptions"] = ButtonOptions.OKEnabledAndBack;
+            }
+
+            if (database.IsIndividual)
+            {
+                return View("Individual", showRankingList);
+            }
+            else if (showRankingList.Exists(x => x.Orientation == "E"))
+            {
+                return View("TwoWinners", showRankingList);
+            }
+            else
+            {
+                return View("OneWinner", showRankingList);
+            }
+    }
 
         public ActionResult Final(int deviceNumber)
         {

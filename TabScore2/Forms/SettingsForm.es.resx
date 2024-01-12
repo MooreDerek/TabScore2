@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AdditionalMinutesPerRoundLabel.Text" xml:space="preserve">
+    <value>Minutos adicionales por ronda</value>
+  </data>
+  <data name="CanxButton.Text" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="EnterLeadCardCheckbox.Text" xml:space="preserve">
+    <value>Introducir la salida</value>
+  </data>
+  <data name="EnterResultsMethodCombobox.Items" xml:space="preserve">
+    <value>Bazas más o menos</value>
+  </data>
+  <data name="EnterResultsMethodCombobox.Items1" xml:space="preserve">
+    <value>Total de bazas ganadas</value>
+  </data>
+  <data name="EnterResultsMethodGroup.Text" xml:space="preserve">
+    <value>Ingrese el método de resultados</value>
+  </data>
+  <data name="HandRecordGroup.Text" xml:space="preserve">
+    <value>Registro de la mano</value>
+  </data>
+  <data name="HandRecordReversePerspectiveCheckbox.Text" xml:space="preserve">
+    <value>Perspectiva inversa del registro de la mano</value>
+  </data>
+  <data name="LeadCardGroup.Text" xml:space="preserve">
+    <value>Salida</value>
+  </data>
+  <data name="ManualHandEntryCheckbox.Text" xml:space="preserve">
+    <value>Permitir entrada manual de registros</value>
+  </data>
+  <data name="MinutesPerBoardLabel.Text" xml:space="preserve">
+    <value>minutos por tablilla</value>
+  </data>
+  <data name="NameSourceCombobox.Items" xml:space="preserve">
+    <value>Base de datos interna</value>
+  </data>
+  <data name="NameSourceCombobox.Items1" xml:space="preserve">
+    <value>Base de datos externa</value>
+  </data>
+  <data name="NameSourceCombobox.Items2" xml:space="preserve">
+    <value>Sin fuente de nombres</value>
+  </data>
+  <data name="NameSourceCombobox.Items3" xml:space="preserve">
+    <value>Base de datos interna primero, luego externa</value>
+  </data>
+  <data name="NumberEntryEachRoundCheckbox.Text" xml:space="preserve">
+    <value>Entrada del ID de jugador en cada ronda</value>
+  </data>
+  <data name="PlayersGroup.Text" xml:space="preserve">
+    <value>Nombres/IDs de jugadores</value>
+  </data>
+  <data name="RankingListGroup.Text" xml:space="preserve">
+    <value>Listado de clasificación</value>
+  </data>
+  <data name="RoundTimerGroupBox.Text" xml:space="preserve">
+    <value>Reloj de ronda</value>
+  </data>
+  <data name="SaveButton.Text" xml:space="preserve">
+    <value>Guardar y cerrar</value>
+  </data>
+  <data name="ShowHandRecordCheckbox.Text" xml:space="preserve">
+    <value>Mostrar registro de la mano</value>
+  </data>
+  <data name="ShowPercentageCheckbox.Text" xml:space="preserve">
+    <value>Mostrar porcentaje sobre el viajero</value>
+  </data>
+  <data name="ShowRankingCombobox.Items" xml:space="preserve">
+    <value>No mostrar</value>
+  </data>
+  <data name="ShowRankingCombobox.Items1" xml:space="preserve">
+    <value>Mostrar después de cada ronda</value>
+  </data>
+  <data name="ShowRankingCombobox.Items2" xml:space="preserve">
+    <value>Mostrar al final de la sesión</value>
+  </data>
+  <data name="ShowTimerCheckbox.Text" xml:space="preserve">
+    <value>Mostrar reloj de ronda</value>
+  </data>
+  <data name="ShowTravellerCheckbox.Text" xml:space="preserve">
+    <value>Mostrar viajero</value>
+  </data>
+  <data name="TabletModePersonalRadioButton.Text" xml:space="preserve">
+    <value>Personal - las tabletas se mueven con los jugadores</value>
+  </data>
+  <data name="TabletModeTraditionalRadioButton.Text" xml:space="preserve">
+    <value>Tradicional - 1 tableta por mesa</value>
+  </data>
+  <data name="TabletMovesGroupBox.Text" xml:space="preserve">
+    <value>Modo de dispositivo de mesa</value>
+  </data>
+  <data name="TravellerGroup.Text" xml:space="preserve">
+    <value>Viajero de la mano</value>
+  </data>
+  <data name="ValidateLeadCardCheckbox.Text" xml:space="preserve">
+    <value>Validar salida</value>
+  </data>
+  <data name="SuppressRankingListLabel.Text" xml:space="preserve">
+    <value>No mostrar el listado de clasificación para las x rondas finales</value>
+  </data>
+  <data name="DoubleDummyCheckbox.Text" xml:space="preserve">
+    <value>Realizar análisis double dummy</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>TabScore2 - Configuración</value>
+  </data>
+</root>

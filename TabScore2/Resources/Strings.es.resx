@@ -481,4 +481,7 @@
   <data name="Rd" xml:space="preserve">
     <value>Rda</value>
   </data>
+  <data name="ClosingMessage" xml:space="preserve">
+    <value>¿Estás seguro de que quieres cerrar TabScore2?</value>
+  </data>
 </root>

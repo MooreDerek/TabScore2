@@ -23,8 +23,8 @@ namespace TabScore.Controllers
             {
                 return RedirectToAction("Index", "ShowTraveller", new { deviceNumber, boardNumber });
             }
-            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
 
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
             if (database.GetHand(deviceStatus.SectionID, boardNumber) != null)
             {
                 // Hand record already exists, so no need to enter it
@@ -46,22 +46,22 @@ namespace TabScore.Controllers
             {
                 SectionID = appData.GetDeviceStatus(deviceNumber).SectionID,
                 BoardNumber = boardNumber,
-                NorthSpades = NS,
-                NorthHearts = NH,
-                NorthDiamonds = ND,
-                NorthClubs = NC,
-                SouthSpades = SS,
-                SouthHearts = SH,
-                SouthDiamonds = SD,
-                SouthClubs = SC,
-                EastSpades = ES,
-                EastHearts = EH,
-                EastDiamonds = ED,
-                EastClubs = EC,
-                WestSpades = WS,
-                WestHearts = WH,
-                WestDiamonds = WD,
-                WestClubs = WC
+                NorthSpades = NS ?? string.Empty,
+                NorthHearts = NH ?? string.Empty,
+                NorthDiamonds = ND ?? string.Empty,
+                NorthClubs = NC ?? string.Empty,
+                SouthSpades = SS ?? string.Empty,
+                SouthHearts = SH ?? string.Empty,
+                SouthDiamonds = SD ?? string.Empty,
+                SouthClubs = SC ?? string.Empty,
+                EastSpades = ES ?? string.Empty,
+                EastHearts = EH ?? string.Empty,
+                EastDiamonds = ED ?? string.Empty,
+                EastClubs = EC ?? string.Empty,
+                WestSpades = WS ?? string.Empty,
+                WestHearts = WH ?? string.Empty,
+                WestDiamonds = WD ?? string.Empty,
+                WestClubs = WC ?? string.Empty
             };
             database.AddHand(hand);
             if (settings.DoubleDummy) appData.AddHandEvaluation(hand);

@@ -2,7 +2,9 @@
 {
     public interface ISettings
     {
-        void DatabaseRefresh(int roundNumber);
+        void GetFromDatabase(int roundNumber);
+        void UpdateDatabase();
+
         bool ShowTraveller { get; set; }
         bool ShowPercentage { get; set; }
         bool EnterLeadCard { get; set; }
@@ -19,5 +21,8 @@
         int AdditionalSecondsPerRound { get; set; }
         bool ManualHandRecordEntry { get; set; }
         bool DoubleDummy { get; set; }
+        int SuppressRankingList { get; set; }
+
+
     }
 }

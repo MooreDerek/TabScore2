@@ -671,7 +671,7 @@ function OKButtonClick() {
     if (document.getElementById("OKButton").disabled) return;
     if (!isSubmitted) {
         isSubmitted = true;
-        location.href = urlShowBoards;
+        location.href = urlOKButtonClick + makeReturnString();
     }
 }
 

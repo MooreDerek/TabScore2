@@ -24,7 +24,7 @@ namespace TabScore2.DataServices
         void RegisterTable(int sectionID, int tableNumber);
 
         // ROUND
-        int GetNumberOfRoundsInEvent(int sectionID);
+        int GetNumberOfRoundsInEvent(int sectionID, int roundNumber = 999);
         int GetNumberOfLastRoundWithResults(int sectionID, int tableNumber);
         public List<Round> GetRoundsList(int sectionID, int roundNumber);
         void GetRoundData(TableStatus tableStatus);
@@ -33,6 +33,7 @@ namespace TabScore2.DataServices
         Result GetResult(int sectionID, int tableNumber, int roundNumber, int boardNumber);
         void SetResult(int sectionID, int tableNumber, int roundNumber, Result result);
         List<Result> GetResultsList(int sectionID, int lowBoard = 0, int highBoard = 0, int tableNumber = 0, int roundNumber = 0);
+        List<FullResult> GetFullResultsList();
 
         // PLAYERNAMES
         string GetInternalPlayerName(string playerID);

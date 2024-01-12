@@ -31,7 +31,7 @@ namespace TabScore2.Controllers
                 TempData["WarningMessage"] = "ErrorNoDBSelected";
                 return RedirectToAction("Index", "StartScreen");
             }
-            settings.DatabaseRefresh(1);
+            settings.GetFromDatabase(1);
             return RedirectToAction("Index", "SelectSection");
         }
     }

@@ -1,4 +1,7 @@
-﻿namespace TabScore2.Forms
+﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+// Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
+
+namespace TabScore2.Forms
 {
     partial class MainForm
     {
@@ -136,6 +139,7 @@
             Controls.Add(labelPathToDatabase);
             Controls.Add(labelScoringDatabase);
             FormBorderStyle = FormBorderStyle.Fixed3D;
+            MaximizeBox = false;
             Name = "MainForm";
             FormClosing += MainForm_Closing;
             Load += MainForm_Load;

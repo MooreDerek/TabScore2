@@ -120,15 +120,15 @@
 
 
 <div class="row mt-2">
-    <div class="col-4 align-self-center">
+    <div class="col-3 px-0">
         <button id="skipButton" class="btn btn-outline-danger float-end" ontouchstart="touchAvailable = true; skip()" onclick="if (!touchAvailable) skip()">
             @localizer["Skip"]
         </button>
     </div>
-    <div class="col-4 text-center p-0">
+    <div class="col-6 text-center p-0">
         <span class="fa fa-arrow-circle-down fa-2x px-2"></span><span id="count" style="font-size:1.6rem">0</span><span class="fa fa-arrow-circle-up fa-2x px-2"></span>
     </div>
-    <div class="col-4 text-left align-self-center">
+    <div class="col-3 px-0">
         <button id="remainderButton" class="btn d-none" ontouchstart="touchAvailable = true; remainder()" onclick="if (!touchAvailable) remainder()">
             @localizer["All"] <span class="fa fa-arrow-down"></span>
         </button>

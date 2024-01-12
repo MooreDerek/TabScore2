@@ -1,0 +1,370 @@
+﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+// Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
+
+namespace TabScore2.Forms
+{
+    partial class SettingsForm
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
+            TravellerGroup = new GroupBox();
+            ShowPercentageCheckbox = new CheckBox();
+            ShowTravellerCheckbox = new CheckBox();
+            PlayersGroup = new GroupBox();
+            NameSourceCombobox = new ComboBox();
+            NumberEntryEachRoundCheckbox = new CheckBox();
+            RankingListGroup = new GroupBox();
+            SuppressRankingListLabel = new Label();
+            SuppressRankingListNud = new NumericUpDown();
+            ShowRankingCombobox = new ComboBox();
+            LeadCardGroup = new GroupBox();
+            ValidateLeadCardCheckbox = new CheckBox();
+            EnterLeadCardCheckbox = new CheckBox();
+            CanxButton = new Button();
+            SaveButton = new Button();
+            EnterResultsMethodGroup = new GroupBox();
+            EnterResultsMethodCombobox = new ComboBox();
+            TabletMovesGroupBox = new GroupBox();
+            TabletModePersonalRadioButton = new RadioButton();
+            TabletModeTraditionalRadioButton = new RadioButton();
+            RoundTimerGroupBox = new GroupBox();
+            AdditionalMinutesPerRoundLabel = new Label();
+            AdditionalMinutesPerRoundNud = new NumericUpDown();
+            MinutesPerBoardLabel = new Label();
+            MinutesPerBoardNud = new NumericUpDown();
+            ShowTimerCheckbox = new CheckBox();
+            HandRecordGroup = new GroupBox();
+            DoubleDummyCheckbox = new CheckBox();
+            ShowHandRecordCheckbox = new CheckBox();
+            HandRecordReversePerspectiveCheckbox = new CheckBox();
+            ManualHandEntryCheckbox = new CheckBox();
+            TravellerGroup.SuspendLayout();
+            PlayersGroup.SuspendLayout();
+            RankingListGroup.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)SuppressRankingListNud).BeginInit();
+            LeadCardGroup.SuspendLayout();
+            EnterResultsMethodGroup.SuspendLayout();
+            TabletMovesGroupBox.SuspendLayout();
+            RoundTimerGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)AdditionalMinutesPerRoundNud).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)MinutesPerBoardNud).BeginInit();
+            HandRecordGroup.SuspendLayout();
+            SuspendLayout();
+            // 
+            // TravellerGroup
+            // 
+            TravellerGroup.Controls.Add(ShowPercentageCheckbox);
+            TravellerGroup.Controls.Add(ShowTravellerCheckbox);
+            resources.ApplyResources(TravellerGroup, "TravellerGroup");
+            TravellerGroup.Name = "TravellerGroup";
+            TravellerGroup.TabStop = false;
+            // 
+            // ShowPercentageCheckbox
+            // 
+            resources.ApplyResources(ShowPercentageCheckbox, "ShowPercentageCheckbox");
+            ShowPercentageCheckbox.Name = "ShowPercentageCheckbox";
+            ShowPercentageCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // ShowTravellerCheckbox
+            // 
+            resources.ApplyResources(ShowTravellerCheckbox, "ShowTravellerCheckbox");
+            ShowTravellerCheckbox.Name = "ShowTravellerCheckbox";
+            ShowTravellerCheckbox.UseVisualStyleBackColor = true;
+            ShowTravellerCheckbox.CheckedChanged += ShowTraveller_CheckedChanged;
+            // 
+            // PlayersGroup
+            // 
+            PlayersGroup.Controls.Add(NameSourceCombobox);
+            PlayersGroup.Controls.Add(NumberEntryEachRoundCheckbox);
+            resources.ApplyResources(PlayersGroup, "PlayersGroup");
+            PlayersGroup.Name = "PlayersGroup";
+            PlayersGroup.TabStop = false;
+            // 
+            // NameSourceCombobox
+            // 
+            resources.ApplyResources(NameSourceCombobox, "NameSourceCombobox");
+            NameSourceCombobox.FormattingEnabled = true;
+            NameSourceCombobox.Items.AddRange(new object[] { resources.GetString("NameSourceCombobox.Items"), resources.GetString("NameSourceCombobox.Items1"), resources.GetString("NameSourceCombobox.Items2"), resources.GetString("NameSourceCombobox.Items3") });
+            NameSourceCombobox.Name = "NameSourceCombobox";
+            NameSourceCombobox.SelectedIndexChanged += NameSourceCombobox_SelectedIndexChanged;
+            // 
+            // NumberEntryEachRoundCheckbox
+            // 
+            resources.ApplyResources(NumberEntryEachRoundCheckbox, "NumberEntryEachRoundCheckbox");
+            NumberEntryEachRoundCheckbox.Name = "NumberEntryEachRoundCheckbox";
+            NumberEntryEachRoundCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // RankingListGroup
+            // 
+            RankingListGroup.Controls.Add(SuppressRankingListLabel);
+            RankingListGroup.Controls.Add(SuppressRankingListNud);
+            RankingListGroup.Controls.Add(ShowRankingCombobox);
+            resources.ApplyResources(RankingListGroup, "RankingListGroup");
+            RankingListGroup.Name = "RankingListGroup";
+            RankingListGroup.TabStop = false;
+            // 
+            // SuppressRankingListLabel
+            // 
+            resources.ApplyResources(SuppressRankingListLabel, "SuppressRankingListLabel");
+            SuppressRankingListLabel.Name = "SuppressRankingListLabel";
+            // 
+            // SuppressRankingListNud
+            // 
+            resources.ApplyResources(SuppressRankingListNud, "SuppressRankingListNud");
+            SuppressRankingListNud.Maximum = new decimal(new int[] { 5, 0, 0, 0 });
+            SuppressRankingListNud.Name = "SuppressRankingListNud";
+            // 
+            // ShowRankingCombobox
+            // 
+            resources.ApplyResources(ShowRankingCombobox, "ShowRankingCombobox");
+            ShowRankingCombobox.FormattingEnabled = true;
+            ShowRankingCombobox.Items.AddRange(new object[] { resources.GetString("ShowRankingCombobox.Items"), resources.GetString("ShowRankingCombobox.Items1"), resources.GetString("ShowRankingCombobox.Items2") });
+            ShowRankingCombobox.Name = "ShowRankingCombobox";
+            ShowRankingCombobox.SelectedIndexChanged += ShowRankingCombobox_SelectedIndexChanged;
+            // 
+            // LeadCardGroup
+            // 
+            LeadCardGroup.Controls.Add(ValidateLeadCardCheckbox);
+            LeadCardGroup.Controls.Add(EnterLeadCardCheckbox);
+            resources.ApplyResources(LeadCardGroup, "LeadCardGroup");
+            LeadCardGroup.Name = "LeadCardGroup";
+            LeadCardGroup.TabStop = false;
+            // 
+            // ValidateLeadCardCheckbox
+            // 
+            resources.ApplyResources(ValidateLeadCardCheckbox, "ValidateLeadCardCheckbox");
+            ValidateLeadCardCheckbox.Name = "ValidateLeadCardCheckbox";
+            ValidateLeadCardCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // EnterLeadCardCheckbox
+            // 
+            resources.ApplyResources(EnterLeadCardCheckbox, "EnterLeadCardCheckbox");
+            EnterLeadCardCheckbox.Name = "EnterLeadCardCheckbox";
+            EnterLeadCardCheckbox.UseVisualStyleBackColor = true;
+            EnterLeadCardCheckbox.CheckedChanged += EnterLeadCard_CheckedChanged;
+            // 
+            // CanxButton
+            // 
+            resources.ApplyResources(CanxButton, "CanxButton");
+            CanxButton.Name = "CanxButton";
+            CanxButton.UseVisualStyleBackColor = true;
+            CanxButton.Click += CancelButton_Click;
+            // 
+            // SaveButton
+            // 
+            resources.ApplyResources(SaveButton, "SaveButton");
+            SaveButton.Name = "SaveButton";
+            SaveButton.UseVisualStyleBackColor = true;
+            SaveButton.Click += SaveButton_Click;
+            // 
+            // EnterResultsMethodGroup
+            // 
+            EnterResultsMethodGroup.Controls.Add(EnterResultsMethodCombobox);
+            resources.ApplyResources(EnterResultsMethodGroup, "EnterResultsMethodGroup");
+            EnterResultsMethodGroup.Name = "EnterResultsMethodGroup";
+            EnterResultsMethodGroup.TabStop = false;
+            // 
+            // EnterResultsMethodCombobox
+            // 
+            resources.ApplyResources(EnterResultsMethodCombobox, "EnterResultsMethodCombobox");
+            EnterResultsMethodCombobox.FormattingEnabled = true;
+            EnterResultsMethodCombobox.Items.AddRange(new object[] { resources.GetString("EnterResultsMethodCombobox.Items"), resources.GetString("EnterResultsMethodCombobox.Items1") });
+            EnterResultsMethodCombobox.Name = "EnterResultsMethodCombobox";
+            // 
+            // TabletMovesGroupBox
+            // 
+            TabletMovesGroupBox.Controls.Add(TabletModePersonalRadioButton);
+            TabletMovesGroupBox.Controls.Add(TabletModeTraditionalRadioButton);
+            resources.ApplyResources(TabletMovesGroupBox, "TabletMovesGroupBox");
+            TabletMovesGroupBox.Name = "TabletMovesGroupBox";
+            TabletMovesGroupBox.TabStop = false;
+            // 
+            // TabletModePersonalRadioButton
+            // 
+            resources.ApplyResources(TabletModePersonalRadioButton, "TabletModePersonalRadioButton");
+            TabletModePersonalRadioButton.Name = "TabletModePersonalRadioButton";
+            TabletModePersonalRadioButton.TabStop = true;
+            TabletModePersonalRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // TabletModeTraditionalRadioButton
+            // 
+            resources.ApplyResources(TabletModeTraditionalRadioButton, "TabletModeTraditionalRadioButton");
+            TabletModeTraditionalRadioButton.Name = "TabletModeTraditionalRadioButton";
+            TabletModeTraditionalRadioButton.TabStop = true;
+            TabletModeTraditionalRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // RoundTimerGroupBox
+            // 
+            RoundTimerGroupBox.Controls.Add(AdditionalMinutesPerRoundLabel);
+            RoundTimerGroupBox.Controls.Add(AdditionalMinutesPerRoundNud);
+            RoundTimerGroupBox.Controls.Add(MinutesPerBoardLabel);
+            RoundTimerGroupBox.Controls.Add(MinutesPerBoardNud);
+            RoundTimerGroupBox.Controls.Add(ShowTimerCheckbox);
+            resources.ApplyResources(RoundTimerGroupBox, "RoundTimerGroupBox");
+            RoundTimerGroupBox.Name = "RoundTimerGroupBox";
+            RoundTimerGroupBox.TabStop = false;
+            // 
+            // AdditionalMinutesPerRoundLabel
+            // 
+            resources.ApplyResources(AdditionalMinutesPerRoundLabel, "AdditionalMinutesPerRoundLabel");
+            AdditionalMinutesPerRoundLabel.Name = "AdditionalMinutesPerRoundLabel";
+            // 
+            // AdditionalMinutesPerRoundNud
+            // 
+            AdditionalMinutesPerRoundNud.DecimalPlaces = 1;
+            resources.ApplyResources(AdditionalMinutesPerRoundNud, "AdditionalMinutesPerRoundNud");
+            AdditionalMinutesPerRoundNud.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
+            AdditionalMinutesPerRoundNud.Maximum = new decimal(new int[] { 5, 0, 0, 0 });
+            AdditionalMinutesPerRoundNud.Name = "AdditionalMinutesPerRoundNud";
+            AdditionalMinutesPerRoundNud.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            // 
+            // MinutesPerBoardLabel
+            // 
+            resources.ApplyResources(MinutesPerBoardLabel, "MinutesPerBoardLabel");
+            MinutesPerBoardLabel.Name = "MinutesPerBoardLabel";
+            // 
+            // MinutesPerBoardNud
+            // 
+            MinutesPerBoardNud.DecimalPlaces = 1;
+            resources.ApplyResources(MinutesPerBoardNud, "MinutesPerBoardNud");
+            MinutesPerBoardNud.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
+            MinutesPerBoardNud.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
+            MinutesPerBoardNud.Minimum = new decimal(new int[] { 4, 0, 0, 0 });
+            MinutesPerBoardNud.Name = "MinutesPerBoardNud";
+            MinutesPerBoardNud.Value = new decimal(new int[] { 65, 0, 0, 65536 });
+            // 
+            // ShowTimerCheckbox
+            // 
+            resources.ApplyResources(ShowTimerCheckbox, "ShowTimerCheckbox");
+            ShowTimerCheckbox.Name = "ShowTimerCheckbox";
+            ShowTimerCheckbox.UseVisualStyleBackColor = true;
+            ShowTimerCheckbox.CheckedChanged += ShowTimerCheckbox_CheckedChanged;
+            // 
+            // HandRecordGroup
+            // 
+            HandRecordGroup.Controls.Add(DoubleDummyCheckbox);
+            HandRecordGroup.Controls.Add(ShowHandRecordCheckbox);
+            HandRecordGroup.Controls.Add(HandRecordReversePerspectiveCheckbox);
+            HandRecordGroup.Controls.Add(ManualHandEntryCheckbox);
+            resources.ApplyResources(HandRecordGroup, "HandRecordGroup");
+            HandRecordGroup.Name = "HandRecordGroup";
+            HandRecordGroup.TabStop = false;
+            // 
+            // DoubleDummyCheckbox
+            // 
+            resources.ApplyResources(DoubleDummyCheckbox, "DoubleDummyCheckbox");
+            DoubleDummyCheckbox.Name = "DoubleDummyCheckbox";
+            DoubleDummyCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // ShowHandRecordCheckbox
+            // 
+            resources.ApplyResources(ShowHandRecordCheckbox, "ShowHandRecordCheckbox");
+            ShowHandRecordCheckbox.Name = "ShowHandRecordCheckbox";
+            ShowHandRecordCheckbox.UseVisualStyleBackColor = true;
+            ShowHandRecordCheckbox.CheckedChanged += ShowHandRecord_CheckedChanged;
+            // 
+            // HandRecordReversePerspectiveCheckbox
+            // 
+            resources.ApplyResources(HandRecordReversePerspectiveCheckbox, "HandRecordReversePerspectiveCheckbox");
+            HandRecordReversePerspectiveCheckbox.Name = "HandRecordReversePerspectiveCheckbox";
+            HandRecordReversePerspectiveCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // ManualHandEntryCheckbox
+            // 
+            resources.ApplyResources(ManualHandEntryCheckbox, "ManualHandEntryCheckbox");
+            ManualHandEntryCheckbox.Name = "ManualHandEntryCheckbox";
+            ManualHandEntryCheckbox.UseVisualStyleBackColor = true;
+            ManualHandEntryCheckbox.CheckedChanged += ManualHandRecordEntryCheckbox_CheckedChanged;
+            // 
+            // SettingsForm
+            // 
+            resources.ApplyResources(this, "$this");
+            AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(HandRecordGroup);
+            Controls.Add(RoundTimerGroupBox);
+            Controls.Add(TabletMovesGroupBox);
+            Controls.Add(EnterResultsMethodGroup);
+            Controls.Add(SaveButton);
+            Controls.Add(CanxButton);
+            Controls.Add(PlayersGroup);
+            Controls.Add(RankingListGroup);
+            Controls.Add(LeadCardGroup);
+            Controls.Add(TravellerGroup);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "SettingsForm";
+            Load += SettingsForm_Load;
+            TravellerGroup.ResumeLayout(false);
+            PlayersGroup.ResumeLayout(false);
+            RankingListGroup.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)SuppressRankingListNud).EndInit();
+            LeadCardGroup.ResumeLayout(false);
+            EnterResultsMethodGroup.ResumeLayout(false);
+            TabletMovesGroupBox.ResumeLayout(false);
+            RoundTimerGroupBox.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)AdditionalMinutesPerRoundNud).EndInit();
+            ((System.ComponentModel.ISupportInitialize)MinutesPerBoardNud).EndInit();
+            HandRecordGroup.ResumeLayout(false);
+            ResumeLayout(false);
+        }
+
+        #endregion
+        private System.Windows.Forms.GroupBox TravellerGroup;
+        private System.Windows.Forms.CheckBox ShowPercentageCheckbox;
+        private System.Windows.Forms.CheckBox ShowTravellerCheckbox;
+        private System.Windows.Forms.GroupBox PlayersGroup;
+        private System.Windows.Forms.ComboBox NameSourceCombobox;
+        private System.Windows.Forms.CheckBox NumberEntryEachRoundCheckbox;
+        private System.Windows.Forms.GroupBox RankingListGroup;
+        private System.Windows.Forms.ComboBox ShowRankingCombobox;
+        private System.Windows.Forms.GroupBox LeadCardGroup;
+        private System.Windows.Forms.CheckBox ValidateLeadCardCheckbox;
+        private System.Windows.Forms.CheckBox EnterLeadCardCheckbox;
+        private System.Windows.Forms.Button CanxButton;
+        private System.Windows.Forms.Button SaveButton;
+        private System.Windows.Forms.GroupBox EnterResultsMethodGroup;
+        private System.Windows.Forms.ComboBox EnterResultsMethodCombobox;
+        private System.Windows.Forms.GroupBox TabletMovesGroupBox;
+        private System.Windows.Forms.RadioButton TabletModePersonalRadioButton;
+        private System.Windows.Forms.RadioButton TabletModeTraditionalRadioButton;
+        private System.Windows.Forms.GroupBox RoundTimerGroupBox;
+        private System.Windows.Forms.Label AdditionalMinutesPerRoundLabel;
+        private System.Windows.Forms.NumericUpDown AdditionalMinutesPerRoundNud;
+        private System.Windows.Forms.Label MinutesPerBoardLabel;
+        private System.Windows.Forms.NumericUpDown MinutesPerBoardNud;
+        private System.Windows.Forms.CheckBox ShowTimerCheckbox;
+        private System.Windows.Forms.GroupBox HandRecordGroup;
+        private System.Windows.Forms.CheckBox HandRecordReversePerspectiveCheckbox;
+        private System.Windows.Forms.CheckBox DoubleDummyCheckbox;
+        private System.Windows.Forms.CheckBox ShowHandRecordCheckbox;
+        private System.Windows.Forms.CheckBox ManualHandEntryCheckbox;
+        private Label SuppressRankingListLabel;
+        private NumericUpDown SuppressRankingListNud;
+    }
+}

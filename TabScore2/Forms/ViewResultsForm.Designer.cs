@@ -32,140 +32,123 @@ namespace TabScore2.Forms
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ViewResultsForm));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.EditResultButton = new System.Windows.Forms.Button();
-            this.dataGridViewResults = new System.Windows.Forms.DataGridView();
-            this.Section = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Table = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Round = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Board = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.PairNS = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.PairEW = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.CloseButton = new System.Windows.Forms.Button();
-            this.tableLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResults)).BeginInit();
-            this.SuspendLayout();
-            // 
-            // tableLayoutPanel1
-            // 
-            resources.ApplyResources(this.tableLayoutPanel1, "tableLayoutPanel1");
-            this.tableLayoutPanel1.Controls.Add(this.EditResultButton, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.dataGridViewResults, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.CloseButton, 1, 1);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            EditResultButton = new Button();
+            DataGridViewResults = new DataGridView();
+            Section = new DataGridViewTextBoxColumn();
+            Table = new DataGridViewTextBoxColumn();
+            Round = new DataGridViewTextBoxColumn();
+            Board = new DataGridViewTextBoxColumn();
+            North = new DataGridViewTextBoxColumn();
+            East = new DataGridViewTextBoxColumn();
+            CloseButton = new Button();
+            ((System.ComponentModel.ISupportInitialize)DataGridViewResults).BeginInit();
+            SuspendLayout();
             // 
             // EditResultButton
             // 
-            resources.ApplyResources(this.EditResultButton, "EditResultButton");
-            this.EditResultButton.Name = "EditResultButton";
-            this.EditResultButton.UseVisualStyleBackColor = true;
-            this.EditResultButton.Click += new System.EventHandler(this.EditResultButton_Click);
+            resources.ApplyResources(EditResultButton, "EditResultButton");
+            EditResultButton.Name = "EditResultButton";
+            EditResultButton.UseVisualStyleBackColor = true;
+            EditResultButton.Click += EditResultButton_Click;
             // 
-            // dataGridViewResults
+            // DataGridViewResults
             // 
-            this.dataGridViewResults.AllowUserToAddRows = false;
-            this.dataGridViewResults.AllowUserToDeleteRows = false;
-            this.dataGridViewResults.AllowUserToResizeColumns = false;
-            this.dataGridViewResults.AllowUserToResizeRows = false;
-            this.dataGridViewResults.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.ControlDark;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewResults.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.dataGridViewResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewResults.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Section,
-            this.Table,
-            this.Round,
-            this.Board,
-            this.PairNS,
-            this.PairEW});
-            this.tableLayoutPanel1.SetColumnSpan(this.dataGridViewResults, 2);
-            resources.ApplyResources(this.dataGridViewResults, "dataGridViewResults");
-            this.dataGridViewResults.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.dataGridViewResults.GridColor = System.Drawing.SystemColors.Control;
-            this.dataGridViewResults.MultiSelect = false;
-            this.dataGridViewResults.Name = "dataGridViewResults";
-            this.dataGridViewResults.ReadOnly = true;
-            this.dataGridViewResults.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            this.dataGridViewResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewResults.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridViewResults_CellContentClick);
+            DataGridViewResults.AllowUserToAddRows = false;
+            DataGridViewResults.AllowUserToDeleteRows = false;
+            DataGridViewResults.AllowUserToResizeColumns = false;
+            DataGridViewResults.AllowUserToResizeRows = false;
+            DataGridViewResults.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.ControlDark;
+            dataGridViewCellStyle1.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            DataGridViewResults.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            DataGridViewResults.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            DataGridViewResults.Columns.AddRange(new DataGridViewColumn[] { Section, Table, Round, Board, North, East });
+            DataGridViewResults.EditMode = DataGridViewEditMode.EditProgrammatically;
+            DataGridViewResults.GridColor = SystemColors.Control;
+            resources.ApplyResources(DataGridViewResults, "DataGridViewResults");
+            DataGridViewResults.MultiSelect = false;
+            DataGridViewResults.Name = "DataGridViewResults";
+            DataGridViewResults.ReadOnly = true;
+            DataGridViewResults.RowHeadersVisible = false;
+            DataGridViewResults.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            DataGridViewResults.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            DataGridViewResults.CellContentClick += DataGridViewResults_CellContentClick;
             // 
             // Section
             // 
-            resources.ApplyResources(this.Section, "Section");
-            this.Section.Name = "Section";
-            this.Section.ReadOnly = true;
+            resources.ApplyResources(Section, "Section");
+            Section.Name = "Section";
+            Section.ReadOnly = true;
             // 
             // Table
             // 
-            resources.ApplyResources(this.Table, "Table");
-            this.Table.Name = "Table";
-            this.Table.ReadOnly = true;
+            resources.ApplyResources(Table, "Table");
+            Table.Name = "Table";
+            Table.ReadOnly = true;
             // 
             // Round
             // 
-            resources.ApplyResources(this.Round, "Round");
-            this.Round.Name = "Round";
-            this.Round.ReadOnly = true;
+            resources.ApplyResources(Round, "Round");
+            Round.Name = "Round";
+            Round.ReadOnly = true;
             // 
             // Board
             // 
-            resources.ApplyResources(this.Board, "Board");
-            this.Board.Name = "Board";
-            this.Board.ReadOnly = true;
+            resources.ApplyResources(Board, "Board");
+            Board.Name = "Board";
+            Board.ReadOnly = true;
             // 
-            // PairNS
+            // North
             // 
-            resources.ApplyResources(this.PairNS, "PairNS");
-            this.PairNS.Name = "PairNS";
-            this.PairNS.ReadOnly = true;
+            resources.ApplyResources(North, "North");
+            North.Name = "North";
+            North.ReadOnly = true;
             // 
-            // PairEW
+            // East
             // 
-            resources.ApplyResources(this.PairEW, "PairEW");
-            this.PairEW.Name = "PairEW";
-            this.PairEW.ReadOnly = true;
+            resources.ApplyResources(East, "East");
+            East.Name = "East";
+            East.ReadOnly = true;
             // 
             // CloseButton
             // 
-            resources.ApplyResources(this.CloseButton, "CloseButton");
-            this.CloseButton.Name = "CloseButton";
-            this.CloseButton.UseVisualStyleBackColor = true;
-            this.CloseButton.Click += new System.EventHandler(this.CloseButton_Click);
+            resources.ApplyResources(CloseButton, "CloseButton");
+            CloseButton.Name = "CloseButton";
+            CloseButton.UseVisualStyleBackColor = true;
+            CloseButton.Click += CloseButton_Click;
             // 
             // ViewResultsForm
             // 
             resources.ApplyResources(this, "$this");
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.tableLayoutPanel1);
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.Name = "ViewResultsForm";
-            this.Load += new System.EventHandler(this.ViewResultsForm_Load);
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewResults)).EndInit();
-            this.ResumeLayout(false);
-
+            AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(DataGridViewResults);
+            Controls.Add(EditResultButton);
+            Controls.Add(CloseButton);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
+            MinimizeBox = false;
+            Name = "ViewResultsForm";
+            Load += ViewResultsForm_Load;
+            ((System.ComponentModel.ISupportInitialize)DataGridViewResults).EndInit();
+            ResumeLayout(false);
         }
 
         #endregion
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Button EditResultButton;
-        private System.Windows.Forms.DataGridView dataGridViewResults;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Section;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Table;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Round;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Board;
-        private System.Windows.Forms.DataGridViewTextBoxColumn PairNS;
-        private System.Windows.Forms.DataGridViewTextBoxColumn PairEW;
+        private System.Windows.Forms.DataGridView DataGridViewResults;
         private System.Windows.Forms.Button CloseButton;
+        private DataGridViewTextBoxColumn Section;
+        private DataGridViewTextBoxColumn Table;
+        private DataGridViewTextBoxColumn Round;
+        private DataGridViewTextBoxColumn Board;
+        private DataGridViewTextBoxColumn North;
+        private DataGridViewTextBoxColumn East;
     }
 
 }

@@ -274,18 +274,7 @@ namespace TabScore2.UtilityServices
                                 break;
                         }
                         s.Append(result.ContractX);
-                        if (result.TricksTaken > 0)
-                        {
-                            int tricksTakenLevel = result.TricksTaken - result.ContractLevel - 6;
-                            if (tricksTakenLevel == 0)
-                            {
-                                s.Append('=');
-                            }
-                            else
-                            {
-                                s.Append(tricksTakenLevel.ToString("+#;-#;0"));
-                            }
-                        }
+                        s.Append(result.TricksTakenSymbol);
                         travellerResult.DisplayContract = s.ToString();
                         travellerResult.DisplayDeclarerNSEW = localizer[result.DeclarerNSEW];
 

@@ -55,10 +55,6 @@ namespace TabScore2.Forms
         {
             if (handRecordFileDialog.ShowDialog() == DialogResult.OK)
             {
-                labelSessionStatus.Text = localizer["SessionPaused"];
-                labelSessionStatus.ForeColor = Color.OrangeRed;
-                database.InitializationComplete = false;
-
                 labelPathToHandRecordFile.Text = handRecordFileDialog.FileName;
                 database.GetHandsFromFile(new StreamReader(handRecordFileDialog.FileName));
                 if (database.HandsCount == 0)
@@ -67,12 +63,19 @@ namespace TabScore2.Forms
                 }
                 else
                 {
+                    buttonSettings.Enabled = false;
+                    buttonResultsViewer.Enabled = false;
+                    labelSessionStatus.Text = localizer["SessionPaused"];
+                    labelSessionStatus.ForeColor = Color.OrangeRed;
+                    database.InitializationComplete = false;
+                    Refresh();
                     AnalyseHands();
+                    buttonSettings.Enabled = true;
+                    buttonResultsViewer.Enabled = true;
+                    labelSessionStatus.Text = localizer["SessionRunning"];
+                    labelSessionStatus.ForeColor = Color.Green;
+                    database.InitializationComplete = true;
                 }
-
-                labelSessionStatus.Text = localizer["SessionRunning"];
-                labelSessionStatus.ForeColor = Color.Green;
-                database.InitializationComplete = true;
             }
         }
 
@@ -113,6 +116,8 @@ namespace TabScore2.Forms
             else
             {
                 labelPathToDatabase.Text = database.PathToDatabase;
+                buttonSettings.Enabled = false;
+                buttonResultsViewer.Enabled = false;
                 buttonSettings.Visible = true;
                 buttonResultsViewer.Visible = true;
                 buttonAddDatabaseFile.Visible = false;
@@ -135,13 +140,15 @@ namespace TabScore2.Forms
                 }
 
                 // Analyse any hand records in the database
-                buttonAddHandRecordFile.Visible = true;
                 if (database.HandsCount > 0)
                 {
                     labelPathToHandRecordFile.Text = localizer["IncludedInDatabase"];
                     AnalyseHands();
                 }
 
+                buttonAddHandRecordFile.Visible = true;
+                buttonSettings.Enabled = true;
+                buttonResultsViewer.Enabled = true;
                 labelSessionStatus.Text = localizer["SessionRunning"];
                 labelSessionStatus.ForeColor = Color.Green;
                 database.InitializationComplete = true;

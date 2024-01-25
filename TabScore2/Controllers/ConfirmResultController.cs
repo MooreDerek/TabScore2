@@ -35,16 +35,14 @@ namespace TabScore2.Controllers
 
         public ActionResult OKButtonClick(int deviceNumber)
         {
-            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
-            Result result = tableStatus.ResultData;
-            database.SetResult(tableStatus.SectionID, tableStatus.TableNumber, tableStatus.RoundNumber, result);
+            Result result = appData.GetTableStatus(deviceNumber).ResultData;
+            database.SetResult(result);
             return RedirectToAction("Index", "EnterHandRecord", new { deviceNumber, boardNumber = result.BoardNumber });
         }
 
         public ActionResult BackButtonClick(int deviceNumber)
         {
-            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
-            Result result = tableStatus.ResultData;
+            Result result = appData.GetTableStatus(deviceNumber).ResultData;
             if (result.ContractLevel == 0)  // This was passed out, so Back goes all the way to Enter Contract screen
             {
                 return RedirectToAction("Index", "EnterContract", new { deviceNumber, boardNumber = result.BoardNumber });

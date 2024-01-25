@@ -63,15 +63,14 @@ namespace TabScore2.Controllers
         
         public ActionResult OKButtonSkip(int deviceNumber)
         {
-            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
-            Result result = tableStatus.ResultData;
+            Result result = appData.GetTableStatus(deviceNumber).ResultData;
             result.ContractLevel = -1;
             result.ContractSuit = string.Empty;
             result.ContractX = string.Empty;
             result.DeclarerNSEW = string.Empty;
             result.LeadCard = string.Empty;
             result.TricksTaken = -1;
-            database.SetResult(tableStatus.SectionID, tableStatus.TableNumber, tableStatus.RoundNumber, result);
+            database.SetResult(result);
             return RedirectToAction("Index", "ShowBoards", new { deviceNumber });
         }
     }

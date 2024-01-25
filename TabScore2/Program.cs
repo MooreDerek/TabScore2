@@ -1,7 +1,7 @@
 // TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
-using Microsoft.Extensions.DependencyInjection;
+using TabScore2.Classes;
 using TabScore2.DataServices;
 using TabScore2.Forms;
 using TabScore2.UtilityServices;
@@ -43,7 +43,7 @@ namespace TabScore2
             desktopBuilder.Services.AddSingleton<IDatabase, BwsDatabase>();
             desktopBuilder.Services.AddSingleton<ISettings, Settings>();
             desktopBuilder.Services.AddSingleton<IAppData, AppData>();
-            
+
             // Create services for forms with free parameters
             desktopBuilder.Services.AddTransient<Func<Point, SettingsForm>>(
                 container =>
@@ -52,7 +52,18 @@ namespace TabScore2
                         ISettings iSettings = container.GetRequiredService<ISettings>();
                         return new SettingsForm(iSettings, location);
                     });
-
+            desktopBuilder.Services.AddTransient<Func<Point, ViewResultsForm>>(
+                container =>
+                    location =>
+                    {
+                        return new ViewResultsForm(container, location);
+                    });
+            desktopBuilder.Services.AddTransient<Func<Result, Point, EditResultForm>>(
+                container =>
+                    (result, location) =>
+                    {
+                        return new EditResultForm(container, result, location);
+                    });
             IHost host = desktopBuilder.Build();
             IServiceProvider services = host.Services;
             Application.Run(services.GetRequiredService<MainForm>());

@@ -2757,6 +2757,9 @@
         AKxBgAGsQYABrEHAA6xB8A+sQQ==
 </value>
   </data>
+  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
+    <value>Manual</value>
+  </data>
   <data name="$this.Text" xml:space="preserve">
     <value>TabScore2 - Settings</value>
   </data>

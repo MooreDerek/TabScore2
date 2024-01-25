@@ -1051,12 +1051,12 @@ namespace TabScore2.DataServices
             return result;
         }
 
-        public void SetResult(int sectionID, int tableNumber, int roundNumber, Result result)
+        public void SetResult(Result result)
         {
             using OdbcConnection connection = new(connectionString);
             // Delete any previous result
             connection.Open();
-            string SQLString = $"DELETE FROM ReceivedData WHERE Section={sectionID} AND [Table]={tableNumber} AND Round={roundNumber} AND Board={result.BoardNumber}";
+            string SQLString = $"DELETE FROM ReceivedData WHERE Section={result.SectionID} AND [Table]={result.TableNumber} AND Round={result.RoundNumber} AND Board={result.BoardNumber}";
             OdbcCommand cmd = new(SQLString, connection);
             try
             {
@@ -1129,31 +1129,13 @@ namespace TabScore2.DataServices
                 }
             }
 
-            string tricksTakenSymbol;
-            if (result.TricksTaken == -1)
-            {
-                tricksTakenSymbol = string.Empty;
-            }
-            else
-            {
-                int tricksTakenLevel = result.TricksTaken - result.ContractLevel - 6;
-                if (tricksTakenLevel == 0)
-                {
-                    tricksTakenSymbol = "=";
-                }
-                else
-                {
-                    tricksTakenSymbol = tricksTakenLevel.ToString("+#;-#;0");
-                }
-            }
-
             if (IsIndividual)
             {
-                SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, South, West, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({sectionID}, {tableNumber}, {roundNumber}, {result.BoardNumber}, {result.NumberNorth}, {result.NumberEast}, {result.NumberSouth}, {result.NumberWest}, {declarer}, '{result.DeclarerNSEW}', '{contract}', '{tricksTakenSymbol}', '{leadCard}', '{result.Remarks}', #{DateTime.Now:yyyy-MM-dd}#, #{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, False, False, False, False, False, False)";
+                SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, South, West, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({result.SectionID}, {result.TableNumber}, {result.RoundNumber}, {result.BoardNumber}, {result.NumberNorth}, {result.NumberEast}, {result.NumberSouth}, {result.NumberWest}, {declarer}, '{result.DeclarerNSEW}', '{contract}', '{result.TricksTakenSymbol}', '{leadCard}', '{result.Remarks}', #{DateTime.Now:yyyy-MM-dd}#, #{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, False, False, False, False, False, False)";
             }
             else
             {
-                SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({sectionID}, {tableNumber}, {roundNumber}, {result.BoardNumber}, {result.NumberNorth}, {result.NumberEast}, {declarer}, '{result.DeclarerNSEW}', '{contract}', '{tricksTakenSymbol}', '{leadCard}', '{result.Remarks}', #{DateTime.Now:yyyy-MM-dd}#, #{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, False, False, False, False, False, False)";
+                SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({result.SectionID}, {result.TableNumber}, {result.RoundNumber}, {result.BoardNumber}, {result.NumberNorth}, {result.NumberEast}, {declarer}, '{result.DeclarerNSEW}', '{contract}', '{result.TricksTakenSymbol}', '{leadCard}', '{result.Remarks}', #{DateTime.Now:yyyy-MM-dd}#, #{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, False, False, False, False, False, False)";
             }
             cmd = new OdbcCommand(SQLString, connection);
             try
@@ -1167,40 +1149,44 @@ namespace TabScore2.DataServices
             cmd.Dispose();
         }
 
-        public List<Result> GetResultsList(int sectionID, int lowBoard = 0, int highBoard = 0, int tableNumber = 0, int roundNumber = 0)
+        public List<Result> GetResultsList(int sectionID = 0, int lowBoard = 0, int highBoard = 0, int tableNumber = 0, int roundNumber = 0)
         {
             string SQLString;
-            if (lowBoard == 0)  // Need all results for section
+            if (sectionID == 0)  // Need all results
+            {
+                SQLString = $"SELECT Section, [Table], Round, Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW FROM ReceivedData";
+            }
+            else if (lowBoard == 0)  // Need all results for section
             {
                 if (IsIndividual)
                 {
-                    SQLString = $"SELECT Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW, South, West FROM ReceivedData WHERE Section={sectionID}";
+                    SQLString = $"SELECT Section, [Table], Round, Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW, South, West FROM ReceivedData WHERE Section={sectionID}";
                 }
                 else
                 {
-                    SQLString = $"SELECT Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW FROM ReceivedData WHERE Section={sectionID}";
+                    SQLString = $"SELECT Section, [Table], Round, Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW FROM ReceivedData WHERE Section={sectionID}";
                 }
             }
             else if (highBoard == 0)  // Need all results for board = lowBoard
             {
                 if (IsIndividual)
                 {
-                    SQLString = $"SELECT Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW, South, West FROM ReceivedData WHERE Section={sectionID} AND Board={lowBoard}";
+                    SQLString = $"SELECT Section, [Table], Round, Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW, South, West FROM ReceivedData WHERE Section={sectionID} AND Board={lowBoard}";
                 }
                 else
                 {
-                    SQLString = $"SELECT Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW FROM ReceivedData WHERE Section={sectionID} AND Board={lowBoard}";
+                    SQLString = $"SELECT Section, [Table], Round, Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW FROM ReceivedData WHERE Section={sectionID} AND Board={lowBoard}";
                 }
             }
             else  // Need just the results for this table and round
             {
                 if (IsIndividual)
                 {
-                    SQLString = $"SELECT Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW, South, West FROM ReceivedData WHERE Section={sectionID} AND [Table]={tableNumber} AND Round={roundNumber} AND Board>={lowBoard} AND Board<={highBoard}";
+                    SQLString = $"SELECT Section, [Table], Round, Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW, South, West FROM ReceivedData WHERE Section={sectionID} AND [Table]={tableNumber} AND Round={roundNumber} AND Board>={lowBoard} AND Board<={highBoard}";
                 }
                 else
                 {
-                    SQLString = $"SELECT Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW FROM ReceivedData WHERE Section={sectionID} AND [Table]={tableNumber} AND Round={roundNumber} AND Board>={lowBoard} AND Board<={highBoard}";
+                    SQLString = $"SELECT Section, [Table], Round, Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW FROM ReceivedData WHERE Section={sectionID} AND [Table]={tableNumber} AND Round={roundNumber} AND Board>={lowBoard} AND Board<={highBoard}";
                 }
             }
             List<Result> resultsList = [];
@@ -1218,12 +1204,22 @@ namespace TabScore2.DataServices
                     {
                         Result result = new()
                         {
-                            BoardNumber = reader.GetInt32(0),
-                            DeclarerNSEW = reader.GetString(1),
-                            Remarks = reader.GetString(5)
+                            SectionID = reader.GetInt32(0),
+                            TableNumber = reader.GetInt32(1),
+                            RoundNumber = reader.GetInt32(2),
+                            BoardNumber = reader.GetInt32(3),
+                            Remarks = reader.GetString(8),
+                            NumberNorth = reader.GetInt32(9),
+                            NumberEast = reader.GetInt32(10)
                         };
-                        string tempContract = reader.GetString(2);
+                        if (IsIndividual && sectionID != 0)
+                        {
+                            result.NumberSouth = reader.GetInt32(11);
+                            result.NumberWest = reader.GetInt32(12);
+                        }
+                        result.SectionLetter = GetSection(result.SectionID).Letter;
 
+                        string tempContract = reader.GetString(5);
                         if ((result.Remarks == string.Empty || result.Remarks == "Wrong direction") && tempContract.Length > 2)
                             if (tempContract == "PASS")
                             {
@@ -1231,40 +1227,29 @@ namespace TabScore2.DataServices
                             }
                             else  // Hopefully the database contains a valid contract
                             {
+                                result.DeclarerNSEW = reader.GetString(4);
                                 string[] temp = tempContract.Split(' ');
                                 result.ContractLevel = Convert.ToInt32(temp[0]);
                                 result.ContractSuit = temp[1];
                                 if (temp.Length > 2) result.ContractX = temp[2];
-                                result.LeadCard = reader.GetString(3).Replace("10", "T");  // Use T for ten internally
-                                string tricksTakenSymbol = reader.GetString(4);
-                                if (tricksTakenSymbol == string.Empty)
+                                result.LeadCard = reader.GetString(6).Replace("10", "T");  // Use T for ten internally
+                                result.TricksTakenSymbol = reader.GetString(7);
+                                if (result.TricksTakenSymbol == string.Empty)
                                 {
                                     result.TricksTaken = -1;
                                 }
-                                else if (tricksTakenSymbol == "=")
+                                else if (result.TricksTakenSymbol == "=")
                                 {
                                     result.TricksTaken = result.ContractLevel + 6;
                                 }
                                 else
                                 {
-                                    result.TricksTaken = result.ContractLevel + Convert.ToInt32(tricksTakenSymbol) + 6;
+                                    result.TricksTaken = result.ContractLevel + Convert.ToInt32(result.TricksTakenSymbol) + 6;
                                 }
                             }
                         else
                         {
                             result.ContractLevel = -1;  // Board not played
-                        }
-                        if (IsIndividual)
-                        {
-                            result.NumberNorth = reader.GetInt32(6);
-                            result.NumberEast = reader.GetInt32(7);
-                            result.NumberSouth = reader.GetInt32(8);
-                            result.NumberWest = reader.GetInt32(9);
-                        }
-                        else
-                        {
-                            result.NumberNorth = reader.GetInt32(6);
-                            result.NumberEast = reader.GetInt32(7);
                         }
                         resultsList.Add(result);
                     }
@@ -1276,71 +1261,6 @@ namespace TabScore2.DataServices
                 cmd!.Dispose();
             }
             return resultsList;
-        }
-
-        public List<FullResult> GetFullResultsList()
-        {
-            string SQLString = $"SELECT SectionID, [Table], Round, Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW FROM ReceivedData";
-            List<FullResult> fullResultsList = [];
-            using OdbcConnection connection = new(connectionString);
-            connection.Open();
-            OdbcCommand? cmd = null;
-            OdbcDataReader? reader = null;
-            try
-            {
-                cmd = new OdbcCommand(SQLString, connection);
-                ODBCRetryHelper.ODBCRetry(() =>
-                {
-                    reader = cmd.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        FullResult fullResult = new()
-                        {
-                            SectionID = reader.GetInt32(0),
-                            TableNumber = reader.GetInt32(1),
-                            RoundNumber = reader.GetInt32(2),
-                            BoardNumber = reader.GetInt32(3),
-                            DeclarerNSEW = reader.GetString(4),
-                            Remarks = reader.GetString(8),
-                            NumberNorth = reader.GetInt32(9),
-                            NumberEast = reader.GetInt32(10)
-                        };
-                        string tempContract = reader.GetString(5);
-
-                        if ((fullResult.Remarks == string.Empty || fullResult.Remarks == "Wrong direction") && tempContract.Length > 2)
-                            if (tempContract == "PASS")
-                            {
-                                fullResult.ContractLevel = 0;
-                            }
-                            else  // Hopefully the database contains a valid contract
-                            {
-                                string[] temp = tempContract.Split(' ');
-                                fullResult.ContractLevel = Convert.ToInt32(temp[0]);
-                                fullResult.ContractSuit = temp[1];
-                                if (temp.Length > 2) fullResult.ContractX = temp[2];
-                                fullResult.LeadCard = reader.GetString(6).Replace("10", "T");  // Use T for ten internally
-                                fullResult.TricksTakenSymbol = reader.GetString(7);
-                            }
-                        else
-                        {
-                            fullResult.ContractLevel = -1;  // Board not played
-                        }
-                        fullResultsList.Add(fullResult);
-                    }
-                });
-            }
-            finally
-            {
-                reader!.Close();
-                cmd!.Dispose();
-            }
-            
-            foreach (FullResult fullResult in fullResultsList)
-            {
-                fullResult.SectionLetter = GetSection(fullResult.SectionID).Letter;
-            }
-            
-            return fullResultsList;
         }
 
         // PLAYERNAMES

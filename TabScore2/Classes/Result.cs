@@ -7,6 +7,10 @@ namespace TabScore2.Classes
 {
     public class Result
     {
+        public int SectionID { get; set; }
+        public string SectionLetter { get; set; } = string.Empty;
+        public int TableNumber { get; set; }
+        public int RoundNumber { get; set; }
         public int BoardNumber { get; set; } = 0;
         public int NumberNorth { get; set; }
         public int NumberEast { get; set; }
@@ -19,6 +23,7 @@ namespace TabScore2.Classes
         public string ContractX { get; set; } = string.Empty;
         public string LeadCard { get; set; } = string.Empty;
         public int TricksTaken { get; set; } = -1;
+        public string TricksTakenSymbol { get; set; } = string.Empty;
         public string Remarks { get; set; } = string.Empty;
         public int Score { get; set; }
         public double MatchpointsNS { get; set; }

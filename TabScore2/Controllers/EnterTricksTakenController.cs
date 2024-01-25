@@ -42,9 +42,24 @@ namespace TabScore2.Controllers
 
         public ActionResult OKButtonClick(int deviceNumber, int tricksTaken)
         {
-            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
-            Result result = tableStatus.ResultData;
+            Result result = appData.GetTableStatus(deviceNumber).ResultData;
             result.TricksTaken = tricksTaken;
+            if (tricksTaken == -1)
+            {
+                result.TricksTakenSymbol = string.Empty;
+            }
+            else
+            {
+                int tricksTakenLevel = tricksTaken - result.ContractLevel - 6;
+                if (tricksTakenLevel == 0)
+                {
+                    result.TricksTakenSymbol = "=";
+                }
+                else
+                {
+                    result.TricksTakenSymbol = tricksTakenLevel.ToString("+#;-#;0");
+                }
+            }
             result.CalculateScore();
             return RedirectToAction("Index", "ConfirmResult", new { deviceNumber });
         }

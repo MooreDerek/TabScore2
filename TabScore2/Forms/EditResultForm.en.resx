@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="labelSection.Text" xml:space="preserve">
+    <value>Section</value>
+  </data>
+  <data name="labelTable.Text" xml:space="preserve">
+    <value>Table</value>
+  </data>
+  <data name="labelRound.Text" xml:space="preserve">
+    <value>Round</value>
+  </data>
+  <data name="labelBoard.Text" xml:space="preserve">
+    <value>Board</value>
+  </data>
+  <data name="labelNorth.Text" xml:space="preserve">
+    <value>North</value>
+  </data>
+  <data name="labelEast.Text" xml:space="preserve">
+    <value>East</value>
+  </data>
+  <data name="comboBoxContractLevel.Items" xml:space="preserve">
+    <value>PASS</value>
+  </data>
+  <data name="labelSuit.Text" xml:space="preserve">
+    <value>Suit</value>
+  </data>
+  <data name="comboBoxSuit.Items" xml:space="preserve">
+    <value>NT</value>
+  </data>
+  <data name="comboBoxSuit.Items1" xml:space="preserve">
+    <value>S</value>
+  </data>
+  <data name="comboBoxSuit.Items2" xml:space="preserve">
+    <value>H</value>
+  </data>
+  <data name="comboBoxSuit.Items3" xml:space="preserve">
+    <value>D</value>
+  </data>
+  <data name="comboBoxSuit.Items4" xml:space="preserve">
+    <value>C</value>
+  </data>
+  <data name="labelDouble.Text" xml:space="preserve">
+    <value>Double</value>
+  </data>
+  <data name="comboBoxDeclarer.Items" xml:space="preserve">
+    <value>N</value>
+  </data>
+  <data name="comboBoxDeclarer.Items1" xml:space="preserve">
+    <value>S</value>
+  </data>
+  <data name="comboBoxDeclarer.Items2" xml:space="preserve">
+    <value>E</value>
+  </data>
+  <data name="comboBoxDeclarer.Items3" xml:space="preserve">
+    <value>W</value>
+  </data>
+  <data name="labelDeclarer.Text" xml:space="preserve">
+    <value>Declarer</value>
+  </data>
+  <data name="comboBoxLead.Items1" xml:space="preserve">
+    <value>C2</value>
+  </data>
+  <data name="comboBoxLead.Items2" xml:space="preserve">
+    <value>C3</value>
+  </data>
+  <data name="comboBoxLead.Items3" xml:space="preserve">
+    <value>C4</value>
+  </data>
+  <data name="comboBoxLead.Items4" xml:space="preserve">
+    <value>C5</value>
+  </data>
+  <data name="comboBoxLead.Items5" xml:space="preserve">
+    <value>C6</value>
+  </data>
+  <data name="comboBoxLead.Items6" xml:space="preserve">
+    <value>C7</value>
+  </data>
+  <data name="comboBoxLead.Items7" xml:space="preserve">
+    <value>C8</value>
+  </data>
+  <data name="comboBoxLead.Items8" xml:space="preserve">
+    <value>C9</value>
+  </data>
+  <data name="comboBoxLead.Items9" xml:space="preserve">
+    <value>CT</value>
+  </data>
+  <data name="comboBoxLead.Items10" xml:space="preserve">
+    <value>CJ</value>
+  </data>
+  <data name="comboBoxLead.Items11" xml:space="preserve">
+    <value>CQ</value>
+  </data>
+  <data name="comboBoxLead.Items12" xml:space="preserve">
+    <value>CK</value>
+  </data>
+  <data name="comboBoxLead.Items13" xml:space="preserve">
+    <value>CA</value>
+  </data>
+  <data name="comboBoxLead.Items14" xml:space="preserve">
+    <value>D2</value>
+  </data>
+  <data name="comboBoxLead.Items15" xml:space="preserve">
+    <value>D3</value>
+  </data>
+  <data name="comboBoxLead.Items16" xml:space="preserve">
+    <value>D4</value>
+  </data>
+  <data name="comboBoxLead.Items17" xml:space="preserve">
+    <value>D5</value>
+  </data>
+  <data name="comboBoxLead.Items18" xml:space="preserve">
+    <value>D6</value>
+  </data>
+  <data name="comboBoxLead.Items19" xml:space="preserve">
+    <value>D7</value>
+  </data>
+  <data name="comboBoxLead.Items20" xml:space="preserve">
+    <value>D8</value>
+  </data>
+  <data name="comboBoxLead.Items21" xml:space="preserve">
+    <value>D9</value>
+  </data>
+  <data name="comboBoxLead.Items22" xml:space="preserve">
+    <value>DT</value>
+  </data>
+  <data name="comboBoxLead.Items23" xml:space="preserve">
+    <value>DJ</value>
+  </data>
+  <data name="comboBoxLead.Items24" xml:space="preserve">
+    <value>DQ</value>
+  </data>
+  <data name="comboBoxLead.Items25" xml:space="preserve">
+    <value>DK</value>
+  </data>
+  <data name="comboBoxLead.Items26" xml:space="preserve">
+    <value>DA</value>
+  </data>
+  <data name="comboBoxLead.Items27" xml:space="preserve">
+    <value>H2</value>
+  </data>
+  <data name="comboBoxLead.Items28" xml:space="preserve">
+    <value>H3</value>
+  </data>
+  <data name="comboBoxLead.Items29" xml:space="preserve">
+    <value>H4</value>
+  </data>
+  <data name="comboBoxLead.Items30" xml:space="preserve">
+    <value>H5</value>
+  </data>
+  <data name="comboBoxLead.Items31" xml:space="preserve">
+    <value>H6</value>
+  </data>
+  <data name="comboBoxLead.Items32" xml:space="preserve">
+    <value>H7</value>
+  </data>
+  <data name="comboBoxLead.Items33" xml:space="preserve">
+    <value>H8</value>
+  </data>
+  <data name="comboBoxLead.Items34" xml:space="preserve">
+    <value>H9</value>
+  </data>
+  <data name="comboBoxLead.Items35" xml:space="preserve">
+    <value>HT</value>
+  </data>
+  <data name="comboBoxLead.Items36" xml:space="preserve">
+    <value>HJ</value>
+  </data>
+  <data name="comboBoxLead.Items37" xml:space="preserve">
+    <value>HQ</value>
+  </data>
+  <data name="comboBoxLead.Items38" xml:space="preserve">
+    <value>HK</value>
+  </data>
+  <data name="comboBoxLead.Items39" xml:space="preserve">
+    <value>HA</value>
+  </data>
+  <data name="comboBoxLead.Items40" xml:space="preserve">
+    <value>S2</value>
+  </data>
+  <data name="comboBoxLead.Items41" xml:space="preserve">
+    <value>S3</value>
+  </data>
+  <data name="comboBoxLead.Items42" xml:space="preserve">
+    <value>S4</value>
+  </data>
+  <data name="comboBoxLead.Items43" xml:space="preserve">
+    <value>S5</value>
+  </data>
+  <data name="comboBoxLead.Items44" xml:space="preserve">
+    <value>S6</value>
+  </data>
+  <data name="comboBoxLead.Items45" xml:space="preserve">
+    <value>S7</value>
+  </data>
+  <data name="comboBoxLead.Items46" xml:space="preserve">
+    <value>S8</value>
+  </data>
+  <data name="comboBoxLead.Items47" xml:space="preserve">
+    <value>S9</value>
+  </data>
+  <data name="comboBoxLead.Items48" xml:space="preserve">
+    <value>ST</value>
+  </data>
+  <data name="comboBoxLead.Items49" xml:space="preserve">
+    <value>SJ</value>
+  </data>
+  <data name="comboBoxLead.Items50" xml:space="preserve">
+    <value>SQ</value>
+  </data>
+  <data name="comboBoxLead.Items51" xml:space="preserve">
+    <value>SK</value>
+  </data>
+  <data name="comboBoxLead.Items52" xml:space="preserve">
+    <value>SA</value>
+  </data>
+  <data name="labelLead.Text" xml:space="preserve">
+    <value>Lead</value>
+  </data>
+  <data name="labelResult.Text" xml:space="preserve">
+    <value>Result</value>
+  </data>
+  <data name="comboBoxRemarks.Items1" xml:space="preserve">
+    <value>Not played</value>
+  </data>
+  <data name="comboBoxRemarks.Items11" xml:space="preserve">
+    <value>Arbitral score</value>
+  </data>
+  <data name="comboBoxRemarks.Items12" xml:space="preserve">
+    <value>Wrong direction</value>
+  </data>
+  <data name="labelRemarks.Text" xml:space="preserve">
+    <value>Remarks (Not played, Arbitral score, Wrong direction)</value>
+  </data>
+  <data name="buttonSave.Text" xml:space="preserve">
+    <value>Save and close</value>
+  </data>
+  <data name="buttonCancel.Text" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="labelLevel.Text" xml:space="preserve">
+    <value>Level</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>TabScore2 - Edit result</value>
+  </data>
+</root>

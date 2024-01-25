@@ -20,6 +20,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
+		RESX_NeutralResourcesLanguage = en-US
+		RESX_EnableXlifSync = True
+		RESX_CultureCountyOverrides = 
 		SolutionGuid = {EA91F9F8-CC08-450B-AAA7-CFBEF8232623}
 	EndGlobalSection
 EndGlobal

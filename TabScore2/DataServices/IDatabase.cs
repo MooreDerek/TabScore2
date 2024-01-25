@@ -31,9 +31,8 @@ namespace TabScore2.DataServices
 
         // RESULT = RECEIVEDDATA
         Result GetResult(int sectionID, int tableNumber, int roundNumber, int boardNumber);
-        void SetResult(int sectionID, int tableNumber, int roundNumber, Result result);
-        List<Result> GetResultsList(int sectionID, int lowBoard = 0, int highBoard = 0, int tableNumber = 0, int roundNumber = 0);
-        List<FullResult> GetFullResultsList();
+        void SetResult(Result result);
+        List<Result> GetResultsList(int sectionID = 0, int lowBoard = 0, int highBoard = 0, int tableNumber = 0, int roundNumber = 0);
 
         // PLAYERNAMES
         string GetInternalPlayerName(string playerID);

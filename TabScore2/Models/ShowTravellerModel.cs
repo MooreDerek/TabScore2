@@ -5,7 +5,7 @@ using TabScore2.Classes;
 
 namespace TabScore2.Models
 {
-    public class ShowTraveller(int deviceNumber, int boardNumber) : List<TravellerResult>
+    public class ShowTravellerModel(int deviceNumber, int boardNumber) : List<TravellerResult>
     {
         public int TabletDeviceNumber { get; private set; } = deviceNumber;
         public int BoardNumber { get; private set; } = boardNumber;

@@ -20,9 +20,9 @@ namespace TabScore2.UtilityServices
         private static readonly char[] arbitralScoreSeparators = ['%', '-'];
 
         // PUBLIC CLASSES TO CREATE VIEW MODELS
-        public ShowPlayerIDs CreateShowPlayerIDsModel(int deviceNumber, bool showWarning)
+        public ShowPlayerIDsModel CreateShowPlayerIDsModel(int deviceNumber, bool showWarning)
         {
-            ShowPlayerIDs showPlayerIDs = new(deviceNumber, showWarning);
+            ShowPlayerIDsModel showPlayerIDsModel = new(deviceNumber, showWarning);
             DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
             TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
             Round round = tableStatus.RoundData;
@@ -32,48 +32,48 @@ namespace TabScore2.UtilityServices
             {
                 if (round.NumberNorth != 0 && round.NumberNorth != section.MissingPair)
                 {
-                    showPlayerIDs.Add(CreatePlayerEntry(round, Direction.North));
-                    showPlayerIDs.Add(CreatePlayerEntry(round, Direction.South));
+                    showPlayerIDsModel.Add(CreatePlayerEntry(round, Direction.North));
+                    showPlayerIDsModel.Add(CreatePlayerEntry(round, Direction.South));
                 }
                 if (round.NumberEast != 0 && round.NumberEast != section.MissingPair)
                 {
-                    showPlayerIDs.Add(CreatePlayerEntry(round, Direction.East));
-                    showPlayerIDs.Add(CreatePlayerEntry(round, Direction.West));
+                    showPlayerIDsModel.Add(CreatePlayerEntry(round, Direction.East));
+                    showPlayerIDsModel.Add(CreatePlayerEntry(round, Direction.West));
                 }
             }
             else if (section.DevicesPerTable == 2)
             {
                 if (deviceStatus.Direction == Direction.North)
                 {
-                    showPlayerIDs.Add(CreatePlayerEntry(round, Direction.North));
-                    showPlayerIDs.Add(CreatePlayerEntry(round, Direction.South));
+                    showPlayerIDsModel.Add(CreatePlayerEntry(round, Direction.North));
+                    showPlayerIDsModel.Add(CreatePlayerEntry(round, Direction.South));
                 }
                 else
                 {
-                    showPlayerIDs.Add(CreatePlayerEntry(round, Direction.East));
-                    showPlayerIDs.Add(CreatePlayerEntry(round, Direction.West));
+                    showPlayerIDsModel.Add(CreatePlayerEntry(round, Direction.East));
+                    showPlayerIDsModel.Add(CreatePlayerEntry(round, Direction.West));
                 }
             }
             else  // tabletDevicesPerTable == 4
             {
-                showPlayerIDs.Add(CreatePlayerEntry(round, deviceStatus.Direction));
+                showPlayerIDsModel.Add(CreatePlayerEntry(round, deviceStatus.Direction));
             }
 
-            showPlayerIDs.NumberOfBlankEntries = showPlayerIDs.FindAll(x => x.DisplayName == string.Empty).Count;
-            showPlayerIDs.ShowMessage = section.DevicesPerTable == 4 || (section.DevicesPerTable == 2 && showPlayerIDs.Count == 4);
-            return showPlayerIDs;
+            showPlayerIDsModel.NumberOfBlankEntries = showPlayerIDsModel.FindAll(x => x.DisplayName == string.Empty).Count;
+            showPlayerIDsModel.ShowMessage = section.DevicesPerTable == 4 || (section.DevicesPerTable == 2 && showPlayerIDsModel.Count == 4);
+            return showPlayerIDsModel;
         }
 
-        public EnterPlayerID CreateEnterPlayerIDModel(int deviceNumber, Direction direction)
+        public EnterPlayerIDModel CreateEnterPlayerIDModel(int deviceNumber, Direction direction)
         {
-            EnterPlayerID enterPlayerID = new(deviceNumber, direction)
+            EnterPlayerIDModel enterPlayerIDModel = new(deviceNumber, direction)
             {
                 DisplayDirection = localizer[direction.ToString()]
             };
-            return enterPlayerID;
+            return enterPlayerIDModel;
         }
 
-        public ShowRoundInfo CreateShowRoundInfoModel(int deviceNumber) 
+        public ShowRoundInfoModel CreateShowRoundInfoModel(int deviceNumber) 
         {
             TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
             Round round = tableStatus.RoundData;
@@ -94,43 +94,43 @@ namespace TabScore2.UtilityServices
             };
         }
 
-        public ShowBoards CreateShowBoardsModel(int deviceNumber)
+        public ShowBoardsModel CreateShowBoardsModel(int deviceNumber)
         {
             TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
             List<Result> resultsList = database.GetResultsList(tableStatus.SectionID, tableStatus.RoundData.LowBoard, tableStatus.RoundData.HighBoard, tableStatus.TableNumber, tableStatus.RoundNumber);
 
-            ShowBoards showBoards = new(deviceNumber, settings.ShowTraveller);
+            ShowBoardsModel showBoardsModel = new(deviceNumber, settings.ShowTraveller);
             foreach (Result result in resultsList) 
             {
-                showBoards.Add(new ShowBoardsResult(result.BoardNumber, result.ContractLevel, GetContractDisplay(result, true), result.Remarks));
+                showBoardsModel.Add(new ShowBoardsResult(result.BoardNumber, result.ContractLevel, GetContractDisplay(result, true), result.Remarks));
             }
 
             // Check to see if any boards don't have a result, and add dummies to the list
             for (int iBoard = tableStatus.RoundData.LowBoard; iBoard <= tableStatus.RoundData.HighBoard; iBoard++)
             {
-                if (showBoards.Find(x => x.BoardNumber == iBoard) == null)
+                if (showBoardsModel.Find(x => x.BoardNumber == iBoard) == null)
                 {
                     ShowBoardsResult showBoardsResult = new(iBoard, -999, string.Empty, string.Empty);
-                    showBoards.Add(showBoardsResult);
-                    showBoards.GotAllResults = false;
+                    showBoardsModel.Add(showBoardsResult);
+                    showBoardsModel.GotAllResults = false;
                 }
             }
-            showBoards.Sort((x, y) => x.BoardNumber.CompareTo(y.BoardNumber));
-            return showBoards;
+            showBoardsModel.Sort((x, y) => x.BoardNumber.CompareTo(y.BoardNumber));
+            return showBoardsModel;
         }
 
-        public ShowMove CreateShowMoveModel(int deviceNumber, int newRoundNumber, int tableNotReadyNumber)
+        public ShowMoveModel CreateShowMoveModel(int deviceNumber, int newRoundNumber, int tableNotReadyNumber)
         {
             DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
             TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
             Section section = database.GetSection(deviceStatus.SectionID);
 
-            ShowMove showMove = [];
-            showMove.TabletDeviceNumber = deviceNumber;
-            showMove.Direction = deviceStatus.Direction;
-            showMove.NewRoundNumber = newRoundNumber;
-            showMove.TableNotReadyNumber = tableNotReadyNumber;
-            showMove.TabletDevicesPerTable = section.DevicesPerTable;
+            ShowMoveModel showMoveModel = [];
+            showMoveModel.TabletDeviceNumber = deviceNumber;
+            showMoveModel.Direction = deviceStatus.Direction;
+            showMoveModel.NewRoundNumber = newRoundNumber;
+            showMoveModel.TableNotReadyNumber = tableNotReadyNumber;
+            showMoveModel.TabletDevicesPerTable = section.DevicesPerTable;
             int missingPair = section.MissingPair;
 
             List<Round> roundsList = database.GetRoundsList(deviceStatus.SectionID, newRoundNumber);
@@ -140,55 +140,55 @@ namespace TabScore2.UtilityServices
                 {
                     if (tableStatus.RoundData.NumberNorth != 0)
                     {
-                        showMove.Add(GetMove(roundsList, tableStatus.TableNumber, tableStatus.RoundData.NumberNorth, Direction.North));
+                        showMoveModel.Add(GetMove(roundsList, tableStatus.TableNumber, tableStatus.RoundData.NumberNorth, Direction.North));
                     }
                     if (tableStatus.RoundData.NumberSouth != 0)
                     {
-                        showMove.Add(GetMove(roundsList, tableStatus.TableNumber, tableStatus.RoundData.NumberSouth, Direction.South));
+                        showMoveModel.Add(GetMove(roundsList, tableStatus.TableNumber, tableStatus.RoundData.NumberSouth, Direction.South));
                     }
                     if (tableStatus.RoundData.NumberEast != 0)
                     {
-                        showMove.Add(GetMove(roundsList, tableStatus.TableNumber, tableStatus.RoundData.NumberEast, Direction.East));
+                        showMoveModel.Add(GetMove(roundsList, tableStatus.TableNumber, tableStatus.RoundData.NumberEast, Direction.East));
                     }
                     if (tableStatus.RoundData.NumberWest != 0)
                     {
-                        showMove.Add(GetMove(roundsList, tableStatus.TableNumber, tableStatus.RoundData.NumberWest, Direction.West));
+                        showMoveModel.Add(GetMove(roundsList, tableStatus.TableNumber, tableStatus.RoundData.NumberWest, Direction.West));
                     }
                 }
                 else  // Not individual
                 {
                     if (tableStatus.RoundData.NumberNorth != 0 && tableStatus.RoundData.NumberNorth != missingPair)
                     {
-                        showMove.Add(GetMove(roundsList, tableStatus.TableNumber, tableStatus.RoundData.NumberNorth, Direction.North));
+                        showMoveModel.Add(GetMove(roundsList, tableStatus.TableNumber, tableStatus.RoundData.NumberNorth, Direction.North));
                     }
                     if (tableStatus.RoundData.NumberEast != 0 && tableStatus.RoundData.NumberEast != missingPair)
                     {
-                        showMove.Add(GetMove(roundsList, tableStatus.TableNumber, tableStatus.RoundData.NumberEast, Direction.East));
+                        showMoveModel.Add(GetMove(roundsList, tableStatus.TableNumber, tableStatus.RoundData.NumberEast, Direction.East));
                     }
                 }
             }
             else  // TabletDevicesPerTable > 1, so only need move for single player/pair.  tableStatus could be null (at phantom table), so use deviceStatus
             {
-                showMove.Add(GetMove(roundsList, tableStatus.TableNumber, deviceStatus.PairNumber, deviceStatus.Direction));
+                showMoveModel.Add(GetMove(roundsList, tableStatus.TableNumber, deviceStatus.PairNumber, deviceStatus.Direction));
             }
 
-            showMove.BoardsNewTable = -999;
+            showMoveModel.BoardsNewTable = -999;
             if (tableStatus != null)  // tableStatus==null => phantom table, so no boards to worry about
             {
                 // Show boards move only to North (or North/South) unless missing, in which case only show to East (or East/West)
-                showMove.LowBoard = tableStatus.RoundData.LowBoard;
-                showMove.HighBoard = tableStatus.RoundData.HighBoard;
-                if (showMove.Direction == Direction.North || ((tableStatus.RoundData.NumberNorth == 0 || tableStatus.RoundData.NumberNorth == missingPair) && showMove.Direction == Direction.East))
+                showMoveModel.LowBoard = tableStatus.RoundData.LowBoard;
+                showMoveModel.HighBoard = tableStatus.RoundData.HighBoard;
+                if (showMoveModel.Direction == Direction.North || ((tableStatus.RoundData.NumberNorth == 0 || tableStatus.RoundData.NumberNorth == missingPair) && showMoveModel.Direction == Direction.East))
                 {
-                    showMove.BoardsNewTable = GetBoardsNewTableNumber(roundsList, tableStatus.TableNumber, tableStatus.RoundData.LowBoard);
+                    showMoveModel.BoardsNewTable = GetBoardsNewTableNumber(roundsList, tableStatus.TableNumber, tableStatus.RoundData.LowBoard);
                 }
             }
-            return showMove;
+            return showMoveModel;
         }
 
-        public EnterContract CreateEnterContractModel(int deviceNumber, Result result, bool showTricks = false, LeadValidationOptions leadValidation = LeadValidationOptions.NoWarning)
+        public EnterContractModel CreateEnterContractModel(int deviceNumber, Result result, bool showTricks = false, LeadValidationOptions leadValidation = LeadValidationOptions.NoWarning)
         {
-            EnterContract enterContract = new(deviceNumber)
+            EnterContractModel enterContractModel = new(deviceNumber)
             {
                 BoardNumber = result.BoardNumber,
                 ContractLevel = result.ContractLevel,
@@ -202,14 +202,14 @@ namespace TabScore2.UtilityServices
                 DeclarerNSEWDisplay = localizer[result.DeclarerNSEW],
                 ContractDisplay = GetContractDisplay(result, showTricks)
             };
-            return enterContract;
+            return enterContractModel;
         }
 
-        public ShowTraveller CreateShowTravellerModel(int deviceNumber)
+        public ShowTravellerModel CreateShowTravellerModel(int deviceNumber)
         {
             TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
             int currentBoardNumber = tableStatus.ResultData!.BoardNumber; 
-            ShowTraveller showTraveller = new(deviceNumber, currentBoardNumber);
+            ShowTravellerModel showTravellerModel = new(deviceNumber, currentBoardNumber);
             List<Result> resultsList = database.GetResultsList(tableStatus.SectionID, currentBoardNumber);
 
             // Set maximum match points based on total number of results (including Not Played) for Neuberg formula
@@ -317,16 +317,16 @@ namespace TabScore2.UtilityServices
                     if (result.NumberNorth == tableStatus.RoundData.NumberNorth)
                     {
                         int intPercentageNS = Convert.ToInt32(travellerResult.SortPercentage);
-                        showTraveller.PercentageNS = Convert.ToString(intPercentageNS) + "%";
-                        showTraveller.PercentageEW = Convert.ToString(100 - intPercentageNS) + "%";
+                        showTravellerModel.PercentageNS = Convert.ToString(intPercentageNS) + "%";
+                        showTravellerModel.PercentageEW = Convert.ToString(100 - intPercentageNS) + "%";
                         travellerResult.Highlight = true;
                     }
                 }
-                showTraveller.Add(travellerResult);
+                showTravellerModel.Add(travellerResult);
             }
 
-            showTraveller.Sort((x, y) => y.SortPercentage.CompareTo(x.SortPercentage));  // Sort traveller into descending percentage order
-            if (!settings.ShowPercentage) showTraveller.PercentageNS = string.Empty;   // Don't show percentage
+            showTravellerModel.Sort((x, y) => y.SortPercentage.CompareTo(x.SortPercentage));  // Sort traveller into descending percentage order
+            if (!settings.ShowPercentage) showTravellerModel.PercentageNS = string.Empty;   // Don't show percentage
 
             // Determine if there is a hand record to view
             if (settings.ShowHandRecord && database.HandsCount > 0)
@@ -334,21 +334,21 @@ namespace TabScore2.UtilityServices
                 Hand? hand = database.GetHand(tableStatus.SectionID, currentBoardNumber);
                 if (hand != null)
                 {
-                    showTraveller.HandRecord = true;
+                    showTravellerModel.HandRecord = true;
                 }
                 else    // Can't find matching hand record, so try default SectionID = 1
                 {
                     hand = database.GetHand(1, currentBoardNumber);
                     if (hand != null)
                     {
-                        showTraveller.HandRecord = true;
+                        showTravellerModel.HandRecord = true;
                     }
                 }
             }
-            return showTraveller;
+            return showTravellerModel;
         }
 
-        public ShowHandRecord? CreateShowHandRecordModel(int deviceNumber, int boardNumber)
+        public ShowHandRecordModel? CreateShowHandRecordModel(int deviceNumber, int boardNumber)
         {
             DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
             Hand? hand = database.GetHand(deviceStatus.SectionID, boardNumber);
@@ -363,86 +363,125 @@ namespace TabScore2.UtilityServices
                 3 => (string)localizer["W"],
                 _ => "#",
             };
-            ShowHandRecord showHandRecord = new(deviceNumber, boardNumber, dealer);
+            ShowHandRecordModel showHandRecordModel = new(deviceNumber, boardNumber, dealer);
             // Set dealer based on board number
             string A = localizer["A"];
             string K = localizer["K"];
             string Q = localizer["Q"];
             string J = localizer["J"];
             string tenShorthand = localizer["TenShorthand"];
-            showHandRecord.NorthSpadesDisplay = hand.NorthSpades.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
-            showHandRecord.NorthHeartsDisplay = hand.NorthHearts.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
-            showHandRecord.NorthDiamondsDisplay = hand.NorthDiamonds.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
-            showHandRecord.NorthClubsDisplay = hand.NorthClubs.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
-            showHandRecord.EastSpadesDisplay = hand.EastSpades.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
-            showHandRecord.EastHeartsDisplay = hand.EastHearts.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
-            showHandRecord.EastDiamondsDisplay = hand.EastDiamonds.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
-            showHandRecord.EastClubsDisplay = hand.EastClubs.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
-            showHandRecord.SouthSpadesDisplay = hand.SouthSpades.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
-            showHandRecord.SouthHeartsDisplay = hand.SouthHearts.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
-            showHandRecord.SouthDiamondsDisplay = hand.SouthDiamonds.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
-            showHandRecord.SouthClubsDisplay = hand.SouthClubs.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
-            showHandRecord.WestSpadesDisplay = hand.WestSpades.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
-            showHandRecord.WestHeartsDisplay = hand.WestHearts.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
-            showHandRecord.WestDiamondsDisplay = hand.WestDiamonds.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
-            showHandRecord.WestClubsDisplay = hand.WestClubs.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecordModel.NorthSpadesDisplay = hand.NorthSpades.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecordModel.NorthHeartsDisplay = hand.NorthHearts.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecordModel.NorthDiamondsDisplay = hand.NorthDiamonds.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecordModel.NorthClubsDisplay = hand.NorthClubs.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecordModel.EastSpadesDisplay = hand.EastSpades.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecordModel.EastHeartsDisplay = hand.EastHearts.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecordModel.EastDiamondsDisplay = hand.EastDiamonds.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecordModel.EastClubsDisplay = hand.EastClubs.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecordModel.SouthSpadesDisplay = hand.SouthSpades.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecordModel.SouthHeartsDisplay = hand.SouthHearts.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecordModel.SouthDiamondsDisplay = hand.SouthDiamonds.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecordModel.SouthClubsDisplay = hand.SouthClubs.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecordModel.WestSpadesDisplay = hand.WestSpades.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecordModel.WestHeartsDisplay = hand.WestHearts.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecordModel.WestDiamondsDisplay = hand.WestDiamonds.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
+            showHandRecordModel.WestClubsDisplay = hand.WestClubs.Replace("A", A).Replace("K", K).Replace("Q", Q).Replace("J", J).Replace("T", tenShorthand);
 
             HandEvaluation? handEvaluation = appData.GetHandEvaluation(deviceStatus.SectionID, boardNumber);
-            if (handEvaluation == null) return showHandRecord;
+            if (handEvaluation == null) return showHandRecordModel;
 
-            showHandRecord.EvalNorthNT = handEvaluation.NorthNotrump > 6 ? (handEvaluation.NorthNotrump - 6).ToString() : string.Empty;
-            showHandRecord.EvalNorthSpades = handEvaluation.NorthSpades > 6 ? (handEvaluation.NorthSpades - 6).ToString() : string.Empty;
-            showHandRecord.EvalNorthHearts = handEvaluation.NorthHearts > 6 ? (handEvaluation.NorthHearts - 6).ToString() : string.Empty;
-            showHandRecord.EvalNorthDiamonds = handEvaluation.NorthDiamonds > 6 ? (handEvaluation.NorthDiamonds - 6).ToString() : string.Empty;
-            showHandRecord.EvalNorthClubs = handEvaluation.NorthClubs > 6 ? (handEvaluation.NorthClubs - 6).ToString() : string.Empty;
-            showHandRecord.EvalEastNT = handEvaluation.EastNotrump > 6 ? (handEvaluation.EastNotrump - 6).ToString() : string.Empty;
-            showHandRecord.EvalEastSpades = handEvaluation.EastSpades > 6 ? (handEvaluation.EastSpades - 6).ToString() : string.Empty;
-            showHandRecord.EvalEastHearts = handEvaluation.EastHearts > 6 ? (handEvaluation.EastHearts - 6).ToString() : string.Empty;
-            showHandRecord.EvalEastDiamonds = handEvaluation.EastDiamonds > 6 ? (handEvaluation.EastDiamonds - 6).ToString() : string.Empty;
-            showHandRecord.EvalEastClubs = handEvaluation.EastClubs > 6 ? (handEvaluation.EastClubs - 6).ToString() : string.Empty;
-            showHandRecord.EvalSouthNT = handEvaluation.SouthNotrump > 6 ? (handEvaluation.SouthNotrump - 6).ToString() : string.Empty;
-            showHandRecord.EvalSouthSpades = handEvaluation.SouthSpades > 6 ? (handEvaluation.SouthSpades - 6).ToString() : string.Empty;
-            showHandRecord.EvalSouthHearts = handEvaluation.SouthHearts > 6 ? (handEvaluation.SouthHearts - 6).ToString() : string.Empty;
-            showHandRecord.EvalSouthDiamonds = handEvaluation.SouthDiamonds > 6 ? (handEvaluation.SouthDiamonds - 6).ToString() : string.Empty;
-            showHandRecord.EvalSouthClubs = handEvaluation.SouthClubs > 6 ? (handEvaluation.SouthClubs - 6).ToString() : string.Empty;
-            showHandRecord.EvalWestNT = handEvaluation.WestNotrump > 6 ? (handEvaluation.WestNotrump - 6).ToString() : string.Empty;
-            showHandRecord.EvalWestSpades = handEvaluation.WestSpades > 6 ? (handEvaluation.WestSpades - 6).ToString() : string.Empty;
-            showHandRecord.EvalWestHearts = handEvaluation.WestHearts > 6 ? (handEvaluation.WestHearts - 6).ToString() : string.Empty;
-            showHandRecord.EvalWestDiamonds = handEvaluation.WestDiamonds > 6 ? (handEvaluation.WestDiamonds - 6).ToString() : string.Empty;
-            showHandRecord.EvalWestClubs = handEvaluation.WestClubs > 6 ? (handEvaluation.WestClubs - 6).ToString() : string.Empty;
+            showHandRecordModel.EvalNorthNT = handEvaluation.NorthNotrump > 6 ? (handEvaluation.NorthNotrump - 6).ToString() : string.Empty;
+            showHandRecordModel.EvalNorthSpades = handEvaluation.NorthSpades > 6 ? (handEvaluation.NorthSpades - 6).ToString() : string.Empty;
+            showHandRecordModel.EvalNorthHearts = handEvaluation.NorthHearts > 6 ? (handEvaluation.NorthHearts - 6).ToString() : string.Empty;
+            showHandRecordModel.EvalNorthDiamonds = handEvaluation.NorthDiamonds > 6 ? (handEvaluation.NorthDiamonds - 6).ToString() : string.Empty;
+            showHandRecordModel.EvalNorthClubs = handEvaluation.NorthClubs > 6 ? (handEvaluation.NorthClubs - 6).ToString() : string.Empty;
+            showHandRecordModel.EvalEastNT = handEvaluation.EastNotrump > 6 ? (handEvaluation.EastNotrump - 6).ToString() : string.Empty;
+            showHandRecordModel.EvalEastSpades = handEvaluation.EastSpades > 6 ? (handEvaluation.EastSpades - 6).ToString() : string.Empty;
+            showHandRecordModel.EvalEastHearts = handEvaluation.EastHearts > 6 ? (handEvaluation.EastHearts - 6).ToString() : string.Empty;
+            showHandRecordModel.EvalEastDiamonds = handEvaluation.EastDiamonds > 6 ? (handEvaluation.EastDiamonds - 6).ToString() : string.Empty;
+            showHandRecordModel.EvalEastClubs = handEvaluation.EastClubs > 6 ? (handEvaluation.EastClubs - 6).ToString() : string.Empty;
+            showHandRecordModel.EvalSouthNT = handEvaluation.SouthNotrump > 6 ? (handEvaluation.SouthNotrump - 6).ToString() : string.Empty;
+            showHandRecordModel.EvalSouthSpades = handEvaluation.SouthSpades > 6 ? (handEvaluation.SouthSpades - 6).ToString() : string.Empty;
+            showHandRecordModel.EvalSouthHearts = handEvaluation.SouthHearts > 6 ? (handEvaluation.SouthHearts - 6).ToString() : string.Empty;
+            showHandRecordModel.EvalSouthDiamonds = handEvaluation.SouthDiamonds > 6 ? (handEvaluation.SouthDiamonds - 6).ToString() : string.Empty;
+            showHandRecordModel.EvalSouthClubs = handEvaluation.SouthClubs > 6 ? (handEvaluation.SouthClubs - 6).ToString() : string.Empty;
+            showHandRecordModel.EvalWestNT = handEvaluation.WestNotrump > 6 ? (handEvaluation.WestNotrump - 6).ToString() : string.Empty;
+            showHandRecordModel.EvalWestSpades = handEvaluation.WestSpades > 6 ? (handEvaluation.WestSpades - 6).ToString() : string.Empty;
+            showHandRecordModel.EvalWestHearts = handEvaluation.WestHearts > 6 ? (handEvaluation.WestHearts - 6).ToString() : string.Empty;
+            showHandRecordModel.EvalWestDiamonds = handEvaluation.WestDiamonds > 6 ? (handEvaluation.WestDiamonds - 6).ToString() : string.Empty;
+            showHandRecordModel.EvalWestClubs = handEvaluation.WestClubs > 6 ? (handEvaluation.WestClubs - 6).ToString() : string.Empty;
 
-            showHandRecord.HCPNorth = handEvaluation.NorthHcp;
-            showHandRecord.HCPSouth = handEvaluation.SouthHcp;
-            showHandRecord.HCPEast = handEvaluation.EastHcp;
-            showHandRecord.HCPWest = handEvaluation.WestHcp;
+            showHandRecordModel.HCPNorth = handEvaluation.NorthHcp;
+            showHandRecordModel.HCPSouth = handEvaluation.SouthHcp;
+            showHandRecordModel.HCPEast = handEvaluation.EastHcp;
+            showHandRecordModel.HCPWest = handEvaluation.WestHcp;
 
-            return showHandRecord;
+            // Set perspective options based on combination of settings and number of devices per table
+            Section section = database.GetSection(deviceStatus.SectionID);
+            if (section.DevicesPerTable == 4)
+            {
+                showHandRecordModel.PerspectiveButtonOption = HandRecordPerspectiveButtonOptions.None;
+                showHandRecordModel.PerspectiveFromDirection = deviceStatus.Direction.ToString();
+            }
+            else if (section.DevicesPerTable == 2)
+            {
+                if (deviceStatus.Direction == Direction.North)
+                {
+                    showHandRecordModel.PerspectiveButtonOption = HandRecordPerspectiveButtonOptions.NS;
+                    if (settings.ShowHandRecordFromDirection == "North")
+                    {
+                        showHandRecordModel.PerspectiveFromDirection = "North";
+                    }
+                    else
+                    {
+                        showHandRecordModel.PerspectiveFromDirection = "South";
+                    }
+                }
+                else
+                {
+                    showHandRecordModel.PerspectiveButtonOption = HandRecordPerspectiveButtonOptions.EW;
+                    if (settings.ShowHandRecordFromDirection == "East")
+                    {
+                        showHandRecordModel.PerspectiveFromDirection = "East";
+                    }
+                    else
+                    {
+                        showHandRecordModel.PerspectiveFromDirection = "West";
+                    }
+                }
+            }
+            else  // DevicesPerTable == 1
+            {
+                showHandRecordModel.PerspectiveButtonOption = HandRecordPerspectiveButtonOptions.NSEW;
+                showHandRecordModel.PerspectiveFromDirection = settings.ShowHandRecordFromDirection;
+            }
+            return showHandRecordModel;
         }
 
-        public ShowRankingList CreateRankingListModel(int deviceNumber)
+        public ShowRankingListModel CreateRankingListModel(int deviceNumber)
         {
             DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
-            ShowRankingList showRankingList = [];
-            showRankingList.TabletDeviceNumber = deviceNumber;
-            showRankingList.RoundNumber = deviceStatus.RoundNumber;
+            ShowRankingListModel showRankingListModel = [];
+            showRankingListModel.TabletDeviceNumber = deviceNumber;
+            showRankingListModel.RoundNumber = deviceStatus.RoundNumber;
 
             // Set player numbers to highlight appropriate rows of ranking list
             if (database.GetSection(deviceStatus.SectionID).DevicesPerTable == 1)
             {
                 TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
-                showRankingList.NumberNorth = tableStatus.RoundData.NumberNorth;
-                showRankingList.NumberEast = tableStatus.RoundData.NumberEast;
-                showRankingList.NumberSouth = tableStatus.RoundData.NumberSouth;
-                showRankingList.NumberWest = tableStatus.RoundData.NumberWest;
+                showRankingListModel.NumberNorth = tableStatus.RoundData.NumberNorth;
+                showRankingListModel.NumberEast = tableStatus.RoundData.NumberEast;
+                showRankingListModel.NumberSouth = tableStatus.RoundData.NumberSouth;
+                showRankingListModel.NumberWest = tableStatus.RoundData.NumberWest;
             }
             else  // More than one tablet device per table
             {
                 // Only need to highlight one row entry, so use NumberNorth as proxy
-                showRankingList.NumberNorth = deviceStatus.PairNumber;
+                showRankingListModel.NumberNorth = deviceStatus.PairNumber;
             }
 
-            showRankingList.AddRange(GetRankings(deviceStatus.SectionID));
-            return showRankingList;
+            showRankingListModel.AddRange(GetRankings(deviceStatus.SectionID));
+            return showRankingListModel;
         }
 
 

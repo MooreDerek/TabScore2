@@ -6,7 +6,7 @@ using TabScore2.Globals;
 
 namespace TabScore2.Models
 {
-    public class ShowMove : List<Move>
+    public class ShowMoveModel : List<Move>
     {
         public int TabletDeviceNumber { get; set; }
         public Direction Direction { get; set; }

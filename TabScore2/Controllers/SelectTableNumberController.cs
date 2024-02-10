@@ -21,11 +21,11 @@ namespace TabScore2.Controllers
         public ActionResult Index(int sectionID, int tableNumber = 0, bool confirm = false) 
         {
             Section section = database.GetSection(sectionID);
-            SelectTableNumber selectTableNumber = new(section, tableNumber, confirm);
+            SelectTableNumberModel selectTableNumberModel = new(section, tableNumber, confirm);
             ViewData["Title"] = utilities.Title("SelectTableNumber", TitleType.Section, sectionID);
             ViewData["Header"] = utilities.Header(HeaderType.Section, sectionID);
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
-            return View(selectTableNumber);   
+            return View(selectTableNumberModel);   
         }
 
         public ActionResult OKButtonClick(int sectionID, int tableNumber, bool confirm)

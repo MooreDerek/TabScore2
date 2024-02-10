@@ -5,13 +5,13 @@ using TabScore2.Globals;
 
 namespace TabScore2.Models
 {
-    public class ShowHandRecord(int deviceNumber, int boardNumber, string dealer)
+    public class ShowHandRecordModel(int deviceNumber, int boardNumber, string dealer)
     {
         public int TabletDeviceNumber { get; set; } = deviceNumber;
         public int BoardNumber { get; set; } = boardNumber;
         public string Dealer { get; set; } = dealer;
         public bool FromView { get; set; } = false;
-        public string PerspectiveDirection { get; set; } = string.Empty;
+        public string PerspectiveFromDirection { get; set; } = "South";
         public HandRecordPerspectiveButtonOptions PerspectiveButtonOption { get; set; }
 
         public string NorthSpadesDisplay { get; set; } = "###";

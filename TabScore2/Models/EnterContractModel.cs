@@ -5,7 +5,7 @@ using TabScore2.Globals;
 
 namespace TabScore2.Models
 {
-    public class EnterContract(int deviceNumber)
+    public class EnterContractModel(int deviceNumber)
     {
         public int TabletDeviceNumber { get; private set; } = deviceNumber;
         public int BoardNumber { get; set; } = 0;

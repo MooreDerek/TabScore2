@@ -1,7 +1,7 @@
 ﻿<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore2.Models.ShowPlayerIDs
+@model TabScore2.Models.ShowPlayerIDsModel
 
 <div id="notAllNamesModal" class="modal fade">
     <div class="modal-dialog">
@@ -36,7 +36,7 @@
     <div class="row mt-3">
         <div class="col-12 text-center p-0">
             <h3 style="color:blue">
-                @localizer[playerEntry.Direction.ToString()]:
+                @localizer[playerEntry.Direction.ToString()]: @playerEntry.Number
             </h3>
         </div>
     </div>

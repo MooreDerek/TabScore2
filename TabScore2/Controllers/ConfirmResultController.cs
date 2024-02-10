@@ -24,13 +24,13 @@ namespace TabScore2.Controllers
                 return RedirectToAction("Index", "ShowBoards", new { deviceNumber });
             }
 
-            EnterContract enterContract = utilities.CreateEnterContractModel(deviceNumber, tableStatus.ResultData, true);
+            EnterContractModel enterContractModel = utilities.CreateEnterContractModel(deviceNumber, tableStatus.ResultData, true);
 
             ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
             ViewData["Title"] = utilities.Title("ConfirmResult", TitleType.Location, deviceNumber);
             ViewData["Header"] = utilities.Header(HeaderType.FullColoured, deviceNumber, tableStatus.ResultData.BoardNumber);
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabledAndBack;
-            return View(enterContract);
+            return View(enterContractModel);
         }
 
         public ActionResult OKButtonClick(int deviceNumber)

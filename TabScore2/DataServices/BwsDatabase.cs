@@ -365,75 +365,78 @@ namespace TabScore2.DataServices
             cmd = new OdbcCommand(SQLString, connection);
             cmd.ExecuteNonQuery();
 
-            // Add a new field 'TabScorePairNo' to table 'PlayerNumbers' if it doesn't exist and populate it if possible
+            // Try adding a new field 'TabScorePairNo' to table 'PlayerNumbers' to see if it already exists
             SQLString = "ALTER TABLE PlayerNumbers ADD TabScorePairNo SHORT";
             cmd = new OdbcCommand(SQLString, connection);
             try
             {
                 cmd.ExecuteNonQuery();
+
+                // TabScorePairNo didn't already exist (no error), so now we must populate it.  Use pair/player numbers from Round 1
+                SQLString = "SELECT Section, [Table], Direction FROM PlayerNumbers";
+                cmd = new OdbcCommand(SQLString, connection);
+                reader = cmd.ExecuteReader();
+                OdbcCommand cmd2 = new();
+                while (reader.Read())
+                {
+                    int section = reader.GetInt32(0);
+                    int table = reader.GetInt32(1);
+                    string direction = reader.GetString(2);
+                    if (IsIndividual)
+                    {
+                        switch (direction)
+                        {
+                            case "N":
+                                SQLString = $"SELECT NSPair FROM RoundData WHERE Section={section} AND [Table]={table} AND ROUND=1";
+                                break;
+                            case "S":
+                                SQLString = $"SELECT South FROM RoundData WHERE Section={section} AND [Table]={table} AND ROUND=1";
+                                break;
+                            case "E":
+                                SQLString = $"SELECT EWPair FROM RoundData WHERE Section={section} AND [Table]={table} AND ROUND=1";
+                                break;
+                            case "W":
+                                SQLString = $"SELECT West FROM RoundData WHERE Section={section} AND [Table]={table} AND ROUND=1";
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        switch (direction)
+                        {
+                            case "N":
+                            case "S":
+                                SQLString = $"SELECT NSPair FROM RoundData WHERE Section={section} AND [Table]={table} AND ROUND=1";
+                                break;
+                            case "E":
+                            case "W":
+                                SQLString = $"SELECT EWPair FROM RoundData WHERE Section={section} AND [Table]={table} AND ROUND=1";
+                                break;
+                        }
+                    }
+                    cmd2 = new OdbcCommand(SQLString, connection);
+                    object? queryResult = cmd2.ExecuteScalar();
+                    if (queryResult != null)
+                    {
+                        string? pairNo = queryResult.ToString();
+                        if (pairNo != null)
+                        {
+                            SQLString = $"UPDATE PlayerNumbers SET TabScorePairNo={pairNo} WHERE Section={section} AND [Table]={table} AND Direction='{direction}'";
+                            cmd2 = new OdbcCommand(SQLString, connection);
+                            cmd2.ExecuteNonQuery();
+                        }
+                    }
+                }
+                cmd2.Dispose();
             }
             catch (OdbcException e)
             {
+                // If TabScorePairNo already existed, nothing to do.  Otherwise an unexpected error occurred
                 if (e.Errors.Count != 1 || e.Errors[0].SQLState != "HYS21")
                 {
                     throw;
                 }
             }
-            SQLString = "SELECT Section, [Table], Direction FROM PlayerNumbers";
-            cmd = new OdbcCommand(SQLString, connection);
-            reader = cmd.ExecuteReader();
-            OdbcCommand cmd2 = new();
-            while (reader.Read())
-            {
-                int section = reader.GetInt32(0);
-                int table = reader.GetInt32(1);
-                string direction = reader.GetString(2);
-                if (IsIndividual)
-                {
-                    switch (direction)
-                    {
-                        case "N":
-                            SQLString = $"SELECT NSPair FROM RoundData WHERE Section={section} AND [Table]={table} AND ROUND=1";
-                            break;
-                        case "S":
-                            SQLString = $"SELECT South FROM RoundData WHERE Section={section} AND [Table]={table} AND ROUND=1";
-                            break;
-                        case "E":
-                            SQLString = $"SELECT EWPair FROM RoundData WHERE Section={section} AND [Table]={table} AND ROUND=1";
-                            break;
-                        case "W":
-                            SQLString = $"SELECT West FROM RoundData WHERE Section={section} AND [Table]={table} AND ROUND=1";
-                            break;
-                    }
-                }
-                else
-                {
-                    switch (direction)
-                    {
-                        case "N":
-                        case "S":
-                            SQLString = $"SELECT NSPair FROM RoundData WHERE Section={section} AND [Table]={table} AND ROUND=1";
-                            break;
-                        case "E":
-                        case "W":
-                            SQLString = $"SELECT EWPair FROM RoundData WHERE Section={section} AND [Table]={table} AND ROUND=1";
-                            break;
-                    }
-                }
-                cmd2 = new OdbcCommand(SQLString, connection);
-                object? queryResult = cmd2.ExecuteScalar();
-                if (queryResult != null)
-                {
-                    string? pairNo = queryResult.ToString();
-                    if (pairNo != null)
-                    {
-                        SQLString = $"UPDATE PlayerNumbers SET TabScorePairNo={pairNo} WHERE Section={section} AND [Table]={table} AND Direction='{direction}'";
-                        cmd2 = new OdbcCommand(SQLString, connection);
-                        cmd2.ExecuteNonQuery();
-                    }
-                }
-            }
-            cmd2.Dispose();
 
             // Validate PLAYERNAMES Table
             SQLString = "CREATE TABLE PlayerNames (ID LONG, [Name] VARCHAR(40), strID VARCHAR(8))";
@@ -991,6 +994,9 @@ namespace TabScore2.DataServices
         {
             Result result = new()
             {
+                SectionID = sectionID,
+                TableNumber = tableNumber,
+                RoundNumber = roundNumber,
                 BoardNumber = boardNumber
             };
             if (boardNumber == 0) return result;

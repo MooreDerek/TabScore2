@@ -13,8 +13,6 @@ namespace TabScore2.Classes
         public Direction Direction { get; set; } = direction;
         public string? Location { get; set; }
         public int RoundNumber { get; set; } = roundNumber;
-        public Direction PerspectiveDirection { get; set; }
-        public HandRecordPerspectiveButtonOptions PerspectiveButtonOption { get; set; }
         public bool NamesUpdateRequired { get; set; } = true;
         public bool AtSitoutTable { get; set; }
     }

@@ -16,12 +16,12 @@ namespace TabScore2.Controllers
 
         public ActionResult Index()
         {
-            SelectSection selectSection = [];
-            selectSection.AddRange(database.GetSectionsList());
+            SelectSectionModel selectSectionModel = [];
+            selectSectionModel.AddRange(database.GetSectionsList());
             // Check if only one section - if so use it
-            if (selectSection.Count == 1)
+            if (selectSectionModel.Count == 1)
             {
-                return RedirectToAction("Index", "SelectTableNumber", new { sectionID = selectSection[0].ID });
+                return RedirectToAction("Index", "SelectTableNumber", new { sectionID = selectSectionModel[0].ID });
             }
             else
             // Get section
@@ -29,7 +29,7 @@ namespace TabScore2.Controllers
                 ViewData["Title"] = utilities.Title("SelectSection");
                 ViewData["Header"] = string.Empty;
                 ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
-                return View(selectSection);
+                return View(selectSectionModel);
             }
         }
     }

@@ -24,7 +24,7 @@ namespace TabScore2.Controllers
                 return RedirectToAction("Index", "ShowBoards", new { deviceNumber });
             }
 
-            EnterContract enterContract = utilities.CreateEnterContractModel(deviceNumber, tableStatus.ResultData);
+            EnterContractModel enterContractModel = utilities.CreateEnterContractModel(deviceNumber, tableStatus.ResultData);
 
             ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
             ViewData["Title"] = utilities.Title("EnterTricksTaken", TitleType.Location, deviceNumber);
@@ -32,11 +32,11 @@ namespace TabScore2.Controllers
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabledAndBack;
             if (settings.EnterResultsMethod == 1)
             {
-                return View("TotalTricks", enterContract);
+                return View("TotalTricks", enterContractModel);
             }
             else
             {
-                return View("TricksPlusMinus", enterContract);
+                return View("TricksPlusMinus", enterContractModel);
             }
         }
 

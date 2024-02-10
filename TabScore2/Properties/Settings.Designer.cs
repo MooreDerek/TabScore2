@@ -73,13 +73,13 @@ namespace TabScore2.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool HandRecordReversePerspective {
+        [global::System.Configuration.DefaultSettingValueAttribute("South")]
+        public string ShowHandRecordFromDirection {
             get {
-                return ((bool)(this["HandRecordReversePerspective"]));
+                return ((string)(this["ShowHandRecordFromDirection"]));
             }
             set {
-                this["HandRecordReversePerspective"] = value;
+                this["ShowHandRecordFromDirection"] = value;
             }
         }
         
@@ -98,12 +98,24 @@ namespace TabScore2.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int SuppressRankingList {
+        public int SuppressRankingListForLastXRounds {
             get {
-                return ((int)(this["SuppressRankingList"]));
+                return ((int)(this["SuppressRankingListForLastXRounds"]));
             }
             set {
-                this["SuppressRankingList"] = value;
+                this["SuppressRankingListForLastXRounds"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int SuppressRankingListForFirstXRounds {
+            get {
+                return ((int)(this["SuppressRankingListForFirstXRounds"]));
+            }
+            set {
+                this["SuppressRankingListForFirstXRounds"] = value;
             }
         }
     }

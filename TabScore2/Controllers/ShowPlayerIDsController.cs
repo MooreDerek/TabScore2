@@ -34,18 +34,18 @@ namespace TabScore2.Controllers
             }
             deviceStatus.NamesUpdateRequired = true;  // We'll now need to update when we get to RoundInfo in case names change in the mean time
 
-            ShowPlayerIDs showplayerIDs = utilities.CreateShowPlayerIDsModel(deviceNumber, showWarning);
+            ShowPlayerIDsModel showplayerIDsModel = utilities.CreateShowPlayerIDsModel(deviceNumber, showWarning);
             ViewData["Title"] = utilities.Title("ShowPlayerIDs", TitleType.Location, deviceNumber);
             ViewData["Header"] = utilities.Header(HeaderType.Round, deviceNumber);
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
 
             if (database.IsIndividual)
             {
-                return View("Individual", showplayerIDs);
+                return View("Individual", showplayerIDsModel);
             }
             else
             {
-                return View("Pair", showplayerIDs);
+                return View("Pair", showplayerIDsModel);
             }
         }
 

@@ -9,15 +9,15 @@ namespace TabScore2.UtilityServices
 {
     public interface IUtilities
     {
-        ShowPlayerIDs CreateShowPlayerIDsModel(int deviceNumber, bool showWarning);
-        EnterPlayerID CreateEnterPlayerIDModel(int deviceNumber, Direction direction);
-        ShowRoundInfo CreateShowRoundInfoModel(int deviceNumber);
-        ShowBoards CreateShowBoardsModel(int deviceNumber);
-        ShowMove CreateShowMoveModel(int deviceNumber, int newRoundNumber, int tableNotReadyNumber);
-        EnterContract CreateEnterContractModel(int deviceNumber, Result result, bool showTricks = false, LeadValidationOptions leadValidation = LeadValidationOptions.NoWarning);
-        ShowTraveller CreateShowTravellerModel(int deviceNumber);
-        ShowHandRecord? CreateShowHandRecordModel(int deviceNumber, int boardNumber);
-        ShowRankingList CreateRankingListModel(int deviceNumber);
+        ShowPlayerIDsModel CreateShowPlayerIDsModel(int deviceNumber, bool showWarning);
+        EnterPlayerIDModel CreateEnterPlayerIDModel(int deviceNumber, Direction direction);
+        ShowRoundInfoModel CreateShowRoundInfoModel(int deviceNumber);
+        ShowBoardsModel CreateShowBoardsModel(int deviceNumber);
+        ShowMoveModel CreateShowMoveModel(int deviceNumber, int newRoundNumber, int tableNotReadyNumber);
+        EnterContractModel CreateEnterContractModel(int deviceNumber, Result result, bool showTricks = false, LeadValidationOptions leadValidation = LeadValidationOptions.NoWarning);
+        ShowTravellerModel CreateShowTravellerModel(int deviceNumber);
+        ShowHandRecordModel? CreateShowHandRecordModel(int deviceNumber, int boardNumber);
+        ShowRankingListModel CreateRankingListModel(int deviceNumber);
         
         Move GetMove(List<Round> roundsList, int tableNumber, int pairNumber, Direction direction);
         int GetBoardsFromTableNumber(TableStatus tableStatus);

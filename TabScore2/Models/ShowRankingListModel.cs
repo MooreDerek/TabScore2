@@ -5,7 +5,7 @@ using TabScore2.Classes;
 
 namespace TabScore2.Models
 {
-    public class ShowRankingList : List<Ranking>
+    public class ShowRankingListModel : List<Ranking>
     {
         public int TabletDeviceNumber { get; set; }
         public int RoundNumber { get; set; }

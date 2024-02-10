@@ -66,10 +66,10 @@ namespace TabScore2.DataServices
             get { return Properties.Settings.Default.TabletsMove; }
             set { Properties.Settings.Default.TabletsMove = value; Properties.Settings.Default.Save(); }
         }
-        public bool HandRecordReversePerspective
+        public string ShowHandRecordFromDirection
         {
-            get { return Properties.Settings.Default.HandRecordReversePerspective; }
-            set { Properties.Settings.Default.HandRecordReversePerspective = value; Properties.Settings.Default.Save(); }
+            get { return Properties.Settings.Default.ShowHandRecordFromDirection; }
+            set { Properties.Settings.Default.ShowHandRecordFromDirection = value; Properties.Settings.Default.Save(); }
         }
         public bool ShowTimer
         {
@@ -91,10 +91,15 @@ namespace TabScore2.DataServices
             get { return Properties.Settings.Default.DoubleDummy; }
             set { Properties.Settings.Default.DoubleDummy = value; Properties.Settings.Default.Save(); }
         }
-        public int SuppressRankingList
+        public int SuppressRankingListForFirstXRounds
         {
-            get { return Properties.Settings.Default.SuppressRankingList; }
-            set { Properties.Settings.Default.SuppressRankingList = value; Properties.Settings.Default.Save(); }
+            get { return Properties.Settings.Default.SuppressRankingListForLastXRounds; }
+            set { Properties.Settings.Default.SuppressRankingListForFirstXRounds = value; Properties.Settings.Default.Save(); }
+        }
+        public int SuppressRankingListForLastXRounds
+        {
+            get { return Properties.Settings.Default.SuppressRankingListForLastXRounds; }
+            set { Properties.Settings.Default.SuppressRankingListForLastXRounds = value; Properties.Settings.Default.Save(); }
         }
     }
 }

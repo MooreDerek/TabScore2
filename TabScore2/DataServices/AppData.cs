@@ -99,8 +99,7 @@ namespace TabScore2.DataServices
 
         private void SetDeviceStatusLocation(DeviceStatus deviceStatus)
         {
-            Section? section = database.GetSection(deviceStatus.SectionID);
-            if (section == null) return;
+            Section section = database.GetSection(deviceStatus.SectionID);
             deviceStatus.Location = section.Letter + deviceStatus.TableNumber.ToString();
             if (section.DevicesPerTable == 4)
             {
@@ -123,32 +122,18 @@ namespace TabScore2.DataServices
                         deviceStatus.Location += localizer["Sitout"];
                         break;
                 }
-                deviceStatus.PerspectiveButtonOption = HandRecordPerspectiveButtonOptions.None;
-                deviceStatus.PerspectiveDirection = deviceStatus.Direction;
             }
             else if (section.DevicesPerTable == 2)
             {
                 if (deviceStatus.Direction == Direction.North)
                 {
                     deviceStatus.Location += $" {localizer["N"]}{localizer["S"]}";
-                    deviceStatus.PerspectiveButtonOption = HandRecordPerspectiveButtonOptions.NS;
-                    if (settings.HandRecordReversePerspective) deviceStatus.PerspectiveDirection = Direction.South;
-                    else deviceStatus.PerspectiveDirection = Direction.North;
                 }
                 else if (deviceStatus.Direction == Direction.East)
                 {
                     deviceStatus.Location += $" {localizer["E"]}{localizer["W"]}";
-                    deviceStatus.PerspectiveButtonOption = HandRecordPerspectiveButtonOptions.EW;
-                    if (settings.HandRecordReversePerspective) deviceStatus.PerspectiveDirection = Direction.West;
-                    else deviceStatus.PerspectiveDirection = Direction.East;
                 }
                 else deviceStatus.Location += $" {localizer["Sitout"]}";
-            }
-            else  // DevicesPerTable == 1
-            {
-                deviceStatus.PerspectiveButtonOption = HandRecordPerspectiveButtonOptions.NSEW;
-                if (settings.HandRecordReversePerspective) deviceStatus.PerspectiveDirection = Direction.South;
-                else deviceStatus.PerspectiveDirection = Direction.North;
             }
         }
 

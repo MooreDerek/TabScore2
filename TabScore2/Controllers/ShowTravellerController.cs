@@ -32,8 +32,8 @@ namespace TabScore2.Controllers
                 tableStatus.ResultData = database.GetResult(tableStatus.SectionID, tableStatus.TableNumber, tableStatus.RoundNumber, boardNumber);
             }
            
-            ShowTraveller traveller = utilities.CreateShowTravellerModel(deviceNumber);
-            traveller.FromView = fromView;
+            ShowTravellerModel showTravellerModel = utilities.CreateShowTravellerModel(deviceNumber);
+            showTravellerModel.FromView = fromView;
 
             ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
             ViewData["Title"] = utilities.Title("ShowTraveller", TitleType.Location, deviceNumber);
@@ -49,11 +49,11 @@ namespace TabScore2.Controllers
 
             if (database.IsIndividual)
             {
-                return View("Individual", traveller);
+                return View("Individual", showTravellerModel);
             }
             else
             {
-                return View("Pairs", traveller);
+                return View("Pairs", showTravellerModel);
             }
         }
     }

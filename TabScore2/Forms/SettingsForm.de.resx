@@ -138,9 +138,6 @@
   <data name="HandRecordGroup.Text" xml:space="preserve">
     <value>Verteilung</value>
   </data>
-  <data name="HandRecordReversePerspectiveCheckbox.Text" xml:space="preserve">
-    <value>Verteilungsdiagramm drehen</value>
-  </data>
   <data name="LeadCardGroup.Text" xml:space="preserve">
     <value>Ausspiel</value>
   </data>
@@ -213,13 +210,31 @@
   <data name="ValidateLeadCardCheckbox.Text" xml:space="preserve">
     <value>Ausspiel validieren</value>
   </data>
-  <data name="SuppressRankingListLabel.Text" xml:space="preserve">
-    <value>Rangliste für die letzten x Runden nicht anzeigen</value>
-  </data>
   <data name="DoubleDummyCheckbox.Text" xml:space="preserve">
     <value>Double-Dummy-Analyse durchführen</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>TabScore2 – Einstellungen</value>
+  </data>
+  <data name="FromPerspectiveOfCombobox.Items" xml:space="preserve">
+    <value>Nord</value>
+  </data>
+  <data name="FromPerspectiveOfCombobox.Items2" xml:space="preserve">
+    <value>Ost</value>
+  </data>
+  <data name="FromPerspectiveOfCombobox.Items1" xml:space="preserve">
+    <value>Süd</value>
+  </data>
+  <data name="FromPerspectiveOfCombobox.Items3" xml:space="preserve">
+    <value>West</value>
+  </data>
+  <data name="SuppressRankingListLastXLabel.Text" xml:space="preserve">
+    <value>Rangliste für die letzten x Runden nicht anzeigen</value>
+  </data>
+  <data name="SuppressRankingListFirstXLabel.Text" xml:space="preserve">
+    <value>Rangliste für die ersten x Runden nicht anzeigen</value>
+  </data>
+  <data name="FromPerspectiveOfLabel.Text" xml:space="preserve">
+    <value>Aus der Perspektive von</value>
   </data>
 </root>

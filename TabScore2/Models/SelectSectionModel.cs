@@ -5,7 +5,7 @@ using TabScore2.Classes;
 
 namespace TabScore2.Models
 {
-    public class SelectSection : List <Section> 
+    public class SelectSectionModel : List <Section> 
     {
     }
 }

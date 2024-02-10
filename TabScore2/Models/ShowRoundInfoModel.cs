@@ -3,7 +3,7 @@
 
 namespace TabScore2.Models
 {
-    public class ShowRoundInfo(int deviceNumber)
+    public class ShowRoundInfoModel(int deviceNumber)
     {
         public int TabletDeviceNumber { get; private set; } = deviceNumber;
         public int RoundNumber { get; set; }

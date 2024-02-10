@@ -5,7 +5,7 @@ using TabScore2.Classes;
 
 namespace TabScore2.Models
 {
-    public class ShowBoards(int deviceNumber, bool showViewButton) : List<ShowBoardsResult>
+    public class ShowBoardsModel(int deviceNumber, bool showViewButton) : List<ShowBoardsResult>
     {
         public int TabletDeviceNumber { get; set; } = deviceNumber;
         public bool GotAllResults { get; set; } = true;

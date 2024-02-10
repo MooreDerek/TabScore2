@@ -28,13 +28,13 @@ namespace TabScore2.Controllers
             result.NumberWest = tableStatus.RoundData.NumberWest;
             tableStatus.ResultData = result;
 
-            EnterContract enterContract = utilities.CreateEnterContractModel(deviceNumber, result);
+            EnterContractModel enterContractModel = utilities.CreateEnterContractModel(deviceNumber, result);
 
             ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
             ViewData["Title"] = utilities.Title("EnterContract", TitleType.Location, deviceNumber);
             ViewData["Header"] = utilities.Header(HeaderType.FullColoured, deviceNumber, result.BoardNumber);
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabledAndBack;
-            return View(enterContract);
+            return View(enterContractModel);
         }
 
         public ActionResult OKButtonContract(int deviceNumber, int contractLevel, string contractSuit, string contractX, string declarerNSEW)

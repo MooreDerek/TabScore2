@@ -37,13 +37,13 @@ namespace TabScore2.Controllers
             {
                 tableStatus.LeadValidation = LeadValidationOptions.NoWarning;
             }
-            EnterContract enterContract = utilities.CreateEnterContractModel(deviceNumber, tableStatus.ResultData, false, tableStatus.LeadValidation);
+            EnterContractModel enterContractModel = utilities.CreateEnterContractModel(deviceNumber, tableStatus.ResultData, false, tableStatus.LeadValidation);
 
             ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
             ViewData["Title"] = utilities.Title("EnterLead", TitleType.Location, deviceNumber);
             ViewData["Header"] = utilities.Header(HeaderType.FullColoured, deviceNumber, tableStatus.ResultData.BoardNumber);
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabledAndBack;
-            return View(enterContract);
+            return View(enterContractModel);
         }
 
         public ActionResult OKButtonClick(int deviceNumber, string card)

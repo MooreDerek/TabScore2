@@ -39,8 +39,10 @@ namespace TabScore2.Forms
             NameSourceCombobox = new ComboBox();
             NumberEntryEachRoundCheckbox = new CheckBox();
             RankingListGroup = new GroupBox();
-            SuppressRankingListLabel = new Label();
-            SuppressRankingListNud = new NumericUpDown();
+            SuppressRankingListLastXLabel = new Label();
+            SuppressRankingListLastXNud = new NumericUpDown();
+            SuppressRankingListFirstXLabel = new Label();
+            SuppressRankingListFirstXNud = new NumericUpDown();
             ShowRankingCombobox = new ComboBox();
             LeadCardGroup = new GroupBox();
             ValidateLeadCardCheckbox = new CheckBox();
@@ -59,14 +61,16 @@ namespace TabScore2.Forms
             MinutesPerBoardNud = new NumericUpDown();
             ShowTimerCheckbox = new CheckBox();
             HandRecordGroup = new GroupBox();
+            FromPerspectiveOfCombobox = new ComboBox();
+            FromPerspectiveOfLabel = new Label();
             DoubleDummyCheckbox = new CheckBox();
             ShowHandRecordCheckbox = new CheckBox();
-            HandRecordReversePerspectiveCheckbox = new CheckBox();
             ManualHandEntryCheckbox = new CheckBox();
             TravellerGroup.SuspendLayout();
             PlayersGroup.SuspendLayout();
             RankingListGroup.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)SuppressRankingListNud).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)SuppressRankingListLastXNud).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)SuppressRankingListFirstXNud).BeginInit();
             LeadCardGroup.SuspendLayout();
             EnterResultsMethodGroup.SuspendLayout();
             TabletMovesGroupBox.SuspendLayout();
@@ -121,23 +125,37 @@ namespace TabScore2.Forms
             // 
             // RankingListGroup
             // 
-            RankingListGroup.Controls.Add(SuppressRankingListLabel);
-            RankingListGroup.Controls.Add(SuppressRankingListNud);
+            RankingListGroup.Controls.Add(SuppressRankingListLastXLabel);
+            RankingListGroup.Controls.Add(SuppressRankingListLastXNud);
+            RankingListGroup.Controls.Add(SuppressRankingListFirstXLabel);
+            RankingListGroup.Controls.Add(SuppressRankingListFirstXNud);
             RankingListGroup.Controls.Add(ShowRankingCombobox);
             resources.ApplyResources(RankingListGroup, "RankingListGroup");
             RankingListGroup.Name = "RankingListGroup";
             RankingListGroup.TabStop = false;
             // 
-            // SuppressRankingListLabel
+            // SuppressRankingListLastXLabel
             // 
-            resources.ApplyResources(SuppressRankingListLabel, "SuppressRankingListLabel");
-            SuppressRankingListLabel.Name = "SuppressRankingListLabel";
+            resources.ApplyResources(SuppressRankingListLastXLabel, "SuppressRankingListLastXLabel");
+            SuppressRankingListLastXLabel.Name = "SuppressRankingListLastXLabel";
             // 
-            // SuppressRankingListNud
+            // SuppressRankingListLastXNud
             // 
-            resources.ApplyResources(SuppressRankingListNud, "SuppressRankingListNud");
-            SuppressRankingListNud.Maximum = new decimal(new int[] { 5, 0, 0, 0 });
-            SuppressRankingListNud.Name = "SuppressRankingListNud";
+            resources.ApplyResources(SuppressRankingListLastXNud, "SuppressRankingListLastXNud");
+            SuppressRankingListLastXNud.Maximum = new decimal(new int[] { 5, 0, 0, 0 });
+            SuppressRankingListLastXNud.Name = "SuppressRankingListLastXNud";
+            // 
+            // SuppressRankingListFirstXLabel
+            // 
+            resources.ApplyResources(SuppressRankingListFirstXLabel, "SuppressRankingListFirstXLabel");
+            SuppressRankingListFirstXLabel.Name = "SuppressRankingListFirstXLabel";
+            // 
+            // SuppressRankingListFirstXNud
+            // 
+            resources.ApplyResources(SuppressRankingListFirstXNud, "SuppressRankingListFirstXNud");
+            SuppressRankingListFirstXNud.Maximum = new decimal(new int[] { 5, 0, 0, 0 });
+            SuppressRankingListFirstXNud.Name = "SuppressRankingListFirstXNud";
+            SuppressRankingListFirstXNud.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // ShowRankingCombobox
             // 
@@ -267,13 +285,26 @@ namespace TabScore2.Forms
             // 
             // HandRecordGroup
             // 
+            HandRecordGroup.Controls.Add(FromPerspectiveOfCombobox);
+            HandRecordGroup.Controls.Add(FromPerspectiveOfLabel);
             HandRecordGroup.Controls.Add(DoubleDummyCheckbox);
             HandRecordGroup.Controls.Add(ShowHandRecordCheckbox);
-            HandRecordGroup.Controls.Add(HandRecordReversePerspectiveCheckbox);
             HandRecordGroup.Controls.Add(ManualHandEntryCheckbox);
             resources.ApplyResources(HandRecordGroup, "HandRecordGroup");
             HandRecordGroup.Name = "HandRecordGroup";
             HandRecordGroup.TabStop = false;
+            // 
+            // FromPerspectiveOfCombobox
+            // 
+            resources.ApplyResources(FromPerspectiveOfCombobox, "FromPerspectiveOfCombobox");
+            FromPerspectiveOfCombobox.FormattingEnabled = true;
+            FromPerspectiveOfCombobox.Items.AddRange(new object[] { resources.GetString("FromPerspectiveOfCombobox.Items"), resources.GetString("FromPerspectiveOfCombobox.Items1"), resources.GetString("FromPerspectiveOfCombobox.Items2"), resources.GetString("FromPerspectiveOfCombobox.Items3") });
+            FromPerspectiveOfCombobox.Name = "FromPerspectiveOfCombobox";
+            // 
+            // FromPerspectiveOfLabel
+            // 
+            resources.ApplyResources(FromPerspectiveOfLabel, "FromPerspectiveOfLabel");
+            FromPerspectiveOfLabel.Name = "FromPerspectiveOfLabel";
             // 
             // DoubleDummyCheckbox
             // 
@@ -287,12 +318,6 @@ namespace TabScore2.Forms
             ShowHandRecordCheckbox.Name = "ShowHandRecordCheckbox";
             ShowHandRecordCheckbox.UseVisualStyleBackColor = true;
             ShowHandRecordCheckbox.CheckedChanged += ShowHandRecord_CheckedChanged;
-            // 
-            // HandRecordReversePerspectiveCheckbox
-            // 
-            resources.ApplyResources(HandRecordReversePerspectiveCheckbox, "HandRecordReversePerspectiveCheckbox");
-            HandRecordReversePerspectiveCheckbox.Name = "HandRecordReversePerspectiveCheckbox";
-            HandRecordReversePerspectiveCheckbox.UseVisualStyleBackColor = true;
             // 
             // ManualHandEntryCheckbox
             // 
@@ -323,7 +348,8 @@ namespace TabScore2.Forms
             TravellerGroup.ResumeLayout(false);
             PlayersGroup.ResumeLayout(false);
             RankingListGroup.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)SuppressRankingListNud).EndInit();
+            ((System.ComponentModel.ISupportInitialize)SuppressRankingListLastXNud).EndInit();
+            ((System.ComponentModel.ISupportInitialize)SuppressRankingListFirstXNud).EndInit();
             LeadCardGroup.ResumeLayout(false);
             EnterResultsMethodGroup.ResumeLayout(false);
             TabletMovesGroupBox.ResumeLayout(false);
@@ -360,11 +386,15 @@ namespace TabScore2.Forms
         private System.Windows.Forms.NumericUpDown MinutesPerBoardNud;
         private System.Windows.Forms.CheckBox ShowTimerCheckbox;
         private System.Windows.Forms.GroupBox HandRecordGroup;
-        private System.Windows.Forms.CheckBox HandRecordReversePerspectiveCheckbox;
         private System.Windows.Forms.CheckBox DoubleDummyCheckbox;
         private System.Windows.Forms.CheckBox ShowHandRecordCheckbox;
         private System.Windows.Forms.CheckBox ManualHandEntryCheckbox;
-        private Label SuppressRankingListLabel;
-        private NumericUpDown SuppressRankingListNud;
+        private Label SuppressRankingListFirstXLabel;
+        private NumericUpDown SuppressRankingListFirstXNud;
+        private Label SuppressRankingListLastXLabel;
+        private NumericUpDown SuppressRankingListLastXNud;
+        private Label FromPerspectiveOfLabel;
+        private ComboBox comboBox1;
+        private ComboBox FromPerspectiveOfCombobox;
     }
 }

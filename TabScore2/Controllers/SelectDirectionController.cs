@@ -21,18 +21,18 @@ namespace TabScore.Controllers
         {
             TableStatus tableStatus = appData.GetTableStatus(sectionID, tableNumber);
             Section section = database.GetSection(sectionID);
-            SelectDirection selectDirection = new(tableStatus, section, direction, confirm);
+            SelectDirectionModel selectDirectionModel = new(tableStatus, section, direction, confirm);
 
             ViewData["Title"] = utilities.Title("SelectDirection", TitleType.SectionTable, sectionID, tableNumber);
             ViewData["Header"] = utilities.Header(HeaderType.SectionTable, sectionID, tableNumber);
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
             if (database.IsIndividual)
             {
-                return View("Individual", selectDirection);
+                return View("Individual", selectDirectionModel);
             }
             else
             {
-                return View("Pair", selectDirection);
+                return View("Pair", selectDirectionModel);
             }
         }
 

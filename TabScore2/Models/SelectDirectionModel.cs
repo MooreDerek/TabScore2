@@ -6,7 +6,7 @@ using TabScore2.Globals;
 
 namespace TabScore2.Models
 {
-    public class SelectDirection(TableStatus tableStatus, Section section, Direction direction, bool confirm)
+    public class SelectDirectionModel(TableStatus tableStatus, Section section, Direction direction, bool confirm)
     {
         public int SectionID { get; set; } = tableStatus.SectionID;
         public int TableNumber { get; set; } = tableStatus.TableNumber;

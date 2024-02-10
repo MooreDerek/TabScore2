@@ -23,8 +23,8 @@ namespace TabScore2.Controllers
             ViewData["Title"] = utilities.Title("EnterPlayerIDs", TitleType.Location, deviceNumber);
             ViewData["Header"] = utilities.Header(HeaderType.Location, deviceNumber);
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
-            EnterPlayerID enterPlayerID = utilities.CreateEnterPlayerIDModel(deviceNumber, direction);
-            return View(enterPlayerID);
+            EnterPlayerIDModel enterPlayerIDModel = utilities.CreateEnterPlayerIDModel(deviceNumber, direction);
+            return View(enterPlayerIDModel);
         }
 
         public ActionResult OKButtonClick(int deviceNumber, Direction direction, string playerID)

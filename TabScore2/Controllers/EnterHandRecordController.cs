@@ -30,13 +30,13 @@ namespace TabScore.Controllers
                 // Hand record already exists, so no need to enter it
                 return RedirectToAction("Index", "ShowTraveller", new { deviceNumber, boardNumber });
             }
-            EnterHandRecord enterHandRecord = new(deviceNumber, deviceStatus.SectionID, boardNumber);
+            EnterHandRecordModel enterHandRecordModel = new(deviceNumber, deviceStatus.SectionID, boardNumber);
             
             ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
             ViewData["Title"] = utilities.Title("EnterHandRecord", TitleType.Location, deviceNumber);
             ViewData["Header"] = utilities.Header(HeaderType.FullColoured, deviceNumber, boardNumber);
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabledAndBack;
-            return View(enterHandRecord);
+            return View(enterHandRecordModel);
         }
 
         public ActionResult OKButtonClick(int deviceNumber, string NS, string NH, string ND, string NC, string SS, string SH, string SD, string SC, string ES, string EH, string ED, string EC, string WS, string WH, string WD, string WC)

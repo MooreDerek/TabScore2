@@ -8,6 +8,7 @@ namespace TabScore2.Forms
     public partial class SettingsForm : Form
     {
         private readonly ISettings settings;
+        private readonly List<string> fromDirection = ["North", "South", "East", "West"];
 
         public SettingsForm(ISettings iSettings, Point location)
         {
@@ -22,7 +23,7 @@ namespace TabScore2.Forms
             ShowTravellerCheckbox.Checked = settings.ShowTraveller;
             ShowPercentageCheckbox.Checked = settings.ShowPercentage;
             ShowHandRecordCheckbox.Checked = settings.ShowHandRecord;
-            HandRecordReversePerspectiveCheckbox.Checked = settings.HandRecordReversePerspective;
+            FromPerspectiveOfCombobox.SelectedIndex = fromDirection.FindIndex(x => x == settings.ShowHandRecordFromDirection);
             ShowRankingCombobox.SelectedIndex = settings.ShowRanking;
             EnterLeadCardCheckbox.Checked = settings.EnterLeadCard;
             ValidateLeadCardCheckbox.Checked = settings.ValidateLeadCard;
@@ -36,16 +37,18 @@ namespace TabScore2.Forms
             ShowTimerCheckbox.Checked = settings.ShowTimer;
             MinutesPerBoardNud.Value = Convert.ToDecimal(settings.SecondsPerBoard) / 60;
             AdditionalMinutesPerRoundNud.Value = Convert.ToDecimal(settings.AdditionalSecondsPerRound) / 60;
-            SuppressRankingListNud.Value = settings.SuppressRankingList;
+            SuppressRankingListFirstXNud.Value = settings.SuppressRankingListForFirstXRounds;
+            SuppressRankingListLastXNud.Value = settings.SuppressRankingListForLastXRounds;
 
             ShowPercentageCheckbox.Enabled = ShowTravellerCheckbox.Checked;
             ShowHandRecordCheckbox.Enabled = ShowTravellerCheckbox.Checked;
-            HandRecordReversePerspectiveCheckbox.Enabled = ShowTravellerCheckbox.Checked && ShowHandRecordCheckbox.Checked;
+            FromPerspectiveOfCombobox.Enabled = FromPerspectiveOfLabel.Enabled = (ShowTravellerCheckbox.Checked && ShowHandRecordCheckbox.Checked);
             ValidateLeadCardCheckbox.Enabled = EnterLeadCardCheckbox.Checked;
             DoubleDummyCheckbox.Enabled = ManualHandEntryCheckbox.Checked;
             NumberEntryEachRoundCheckbox.Enabled = !(NameSourceCombobox.SelectedIndex == 2);
             MinutesPerBoardNud.Enabled = AdditionalMinutesPerRoundNud.Enabled = MinutesPerBoardLabel.Enabled = AdditionalMinutesPerRoundLabel.Enabled = ShowTimerCheckbox.Checked;
-            SuppressRankingListLabel.Enabled = SuppressRankingListNud.Enabled = (ShowRankingCombobox.SelectedIndex == 1);
+            SuppressRankingListFirstXLabel.Enabled = SuppressRankingListFirstXNud.Enabled = (ShowRankingCombobox.SelectedIndex == 1);
+            SuppressRankingListLastXLabel.Enabled = SuppressRankingListLastXNud.Enabled = (ShowRankingCombobox.SelectedIndex == 1);
         }
 
         private void CancelButton_Click(object sender, EventArgs e)
@@ -57,7 +60,7 @@ namespace TabScore2.Forms
         {
             settings.ShowTraveller = ShowTravellerCheckbox.Checked;
             settings.ShowPercentage = settings.ShowHandRecord = ShowHandRecordCheckbox.Checked;
-            settings.HandRecordReversePerspective = HandRecordReversePerspectiveCheckbox.Checked;
+            settings.ShowHandRecordFromDirection = fromDirection[FromPerspectiveOfCombobox.SelectedIndex];
             settings.ShowRanking = ShowRankingCombobox.SelectedIndex;
             settings.EnterLeadCard = EnterLeadCardCheckbox.Checked;
             settings.ValidateLeadCard = ValidateLeadCardCheckbox.Checked;
@@ -70,7 +73,8 @@ namespace TabScore2.Forms
             settings.ShowTimer = ShowTimerCheckbox.Checked;
             settings.SecondsPerBoard = Convert.ToInt32(MinutesPerBoardNud.Value * 60);
             settings.AdditionalSecondsPerRound = Convert.ToInt32(AdditionalMinutesPerRoundNud.Value * 60);
-            settings.SuppressRankingList = Convert.ToInt32(SuppressRankingListNud.Value);
+            settings.SuppressRankingListForFirstXRounds = Convert.ToInt32(SuppressRankingListFirstXNud.Value);
+            settings.SuppressRankingListForLastXRounds = Convert.ToInt32(SuppressRankingListLastXNud.Value);
             settings.UpdateDatabase();
             Close();
         }
@@ -78,12 +82,12 @@ namespace TabScore2.Forms
         private void ShowTraveller_CheckedChanged(object sender, EventArgs e)
         {
             ShowPercentageCheckbox.Enabled = ShowHandRecordCheckbox.Enabled = ShowTravellerCheckbox.Checked;
-            HandRecordReversePerspectiveCheckbox.Enabled = ShowTravellerCheckbox.Checked && ShowHandRecordCheckbox.Checked;
+            FromPerspectiveOfCombobox.Enabled = FromPerspectiveOfLabel.Enabled = (ShowTravellerCheckbox.Checked && ShowHandRecordCheckbox.Checked);
         }
 
         private void ShowHandRecord_CheckedChanged(object sender, EventArgs e)
         {
-            HandRecordReversePerspectiveCheckbox.Enabled = ShowTravellerCheckbox.Checked && ShowHandRecordCheckbox.Checked;
+            FromPerspectiveOfCombobox.Enabled = FromPerspectiveOfLabel.Enabled = (ShowTravellerCheckbox.Checked && ShowHandRecordCheckbox.Checked);
         }
 
         private void EnterLeadCard_CheckedChanged(object sender, EventArgs e)
@@ -103,7 +107,8 @@ namespace TabScore2.Forms
 
         private void ShowRankingCombobox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SuppressRankingListLabel.Enabled = SuppressRankingListNud.Enabled = (ShowRankingCombobox.SelectedIndex == 1);
+            SuppressRankingListFirstXLabel.Enabled = SuppressRankingListFirstXNud.Enabled = (ShowRankingCombobox.SelectedIndex == 1);
+            SuppressRankingListLastXLabel.Enabled = SuppressRankingListLastXNud.Enabled = (ShowRankingCombobox.SelectedIndex == 1);
         }
 
         private void NameSourceCombobox_SelectedIndexChanged(object sender, EventArgs e)

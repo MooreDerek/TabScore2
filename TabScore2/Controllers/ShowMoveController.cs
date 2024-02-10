@@ -55,14 +55,14 @@ namespace TabScore2.Controllers
                 }
             }
 
-            ShowMove showMove = utilities.CreateShowMoveModel(deviceNumber, newRoundNumber, tableNotReadyNumber);
+            ShowMoveModel showMoveModel = utilities.CreateShowMoveModel(deviceNumber, newRoundNumber, tableNotReadyNumber);
 
             ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
             ViewData["Title"] = utilities.Title("ShowMove", TitleType.Location, deviceNumber);
             ViewData["Header"] = utilities.Header(HeaderType.Location, deviceNumber);
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
 
-            return View(showMove);
+            return View(showMoveModel);
         }
 
         public ActionResult OKButtonClick(int deviceNumber, int newRoundNumber)

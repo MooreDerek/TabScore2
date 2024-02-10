@@ -177,10 +177,10 @@
     <value>Segoe UI, 9.75pt, style=Bold</value>
   </data>
   <data name="TravellerGroup.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 80</value>
+    <value>12, 79</value>
   </data>
   <data name="TravellerGroup.Size" type="System.Drawing.Size, System.Drawing">
-    <value>367, 85</value>
+    <value>367, 91</value>
   </data>
   <data name="TravellerGroup.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -267,10 +267,10 @@
     <value>Segoe UI, 9.75pt, style=Bold</value>
   </data>
   <data name="PlayersGroup.Location" type="System.Drawing.Point, System.Drawing">
-    <value>396, 105</value>
+    <value>396, 134</value>
   </data>
   <data name="PlayersGroup.Size" type="System.Drawing.Size, System.Drawing">
-    <value>444, 79</value>
+    <value>444, 81</value>
   </data>
   <data name="PlayersGroup.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -290,60 +290,117 @@
   <data name="&gt;&gt;PlayersGroup.ZOrder" xml:space="preserve">
     <value>6</value>
   </data>
-  <data name="SuppressRankingListLabel.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="SuppressRankingListLastXLabel.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
-  </data>
-  <data name="SuppressRankingListLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 55</value>
-  </data>
-  <data name="SuppressRankingListLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>229, 23</value>
-  </data>
-  <data name="SuppressRankingListLabel.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="SuppressRankingListLabel.Text" xml:space="preserve">
-    <value>Don't show ranking list for final x rounds</value>
-  </data>
-  <data name="&gt;&gt;SuppressRankingListLabel.Name" xml:space="preserve">
-    <value>SuppressRankingListLabel</value>
-  </data>
-  <data name="&gt;&gt;SuppressRankingListLabel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;SuppressRankingListLabel.Parent" xml:space="preserve">
-    <value>RankingListGroup</value>
-  </data>
-  <data name="&gt;&gt;SuppressRankingListLabel.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="SuppressRankingListNud.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI, 9pt</value>
-  </data>
-  <data name="SuppressRankingListNud.Location" type="System.Drawing.Point, System.Drawing">
-    <value>379, 53</value>
-  </data>
-  <data name="SuppressRankingListNud.Size" type="System.Drawing.Size, System.Drawing">
-    <value>59, 23</value>
-  </data>
-  <data name="SuppressRankingListNud.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="SuppressRankingListNud.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
+  <data name="SuppressRankingListLastXLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
-  <data name="&gt;&gt;SuppressRankingListNud.Name" xml:space="preserve">
-    <value>SuppressRankingListNud</value>
+  <data name="SuppressRankingListLastXLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 85</value>
   </data>
-  <data name="&gt;&gt;SuppressRankingListNud.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="SuppressRankingListLastXLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>367, 23</value>
   </data>
-  <data name="&gt;&gt;SuppressRankingListNud.Parent" xml:space="preserve">
+  <data name="SuppressRankingListLastXLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="SuppressRankingListLastXLabel.Text" xml:space="preserve">
+    <value>Don't show ranking list for last x rounds</value>
+  </data>
+  <data name="&gt;&gt;SuppressRankingListLastXLabel.Name" xml:space="preserve">
+    <value>SuppressRankingListLastXLabel</value>
+  </data>
+  <data name="&gt;&gt;SuppressRankingListLastXLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;SuppressRankingListLastXLabel.Parent" xml:space="preserve">
     <value>RankingListGroup</value>
   </data>
-  <data name="&gt;&gt;SuppressRankingListNud.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;SuppressRankingListLastXLabel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="SuppressRankingListLastXNud.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9pt</value>
+  </data>
+  <data name="SuppressRankingListLastXNud.Location" type="System.Drawing.Point, System.Drawing">
+    <value>379, 83</value>
+  </data>
+  <data name="SuppressRankingListLastXNud.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 23</value>
+  </data>
+  <data name="SuppressRankingListLastXNud.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="SuppressRankingListLastXNud.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;SuppressRankingListLastXNud.Name" xml:space="preserve">
+    <value>SuppressRankingListLastXNud</value>
+  </data>
+  <data name="&gt;&gt;SuppressRankingListLastXNud.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;SuppressRankingListLastXNud.Parent" xml:space="preserve">
+    <value>RankingListGroup</value>
+  </data>
+  <data name="&gt;&gt;SuppressRankingListLastXNud.ZOrder" xml:space="preserve">
     <value>1</value>
+  </data>
+  <data name="SuppressRankingListFirstXLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9pt</value>
+  </data>
+  <data name="SuppressRankingListFirstXLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 55</value>
+  </data>
+  <data name="SuppressRankingListFirstXLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>367, 23</value>
+  </data>
+  <data name="SuppressRankingListFirstXLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="SuppressRankingListFirstXLabel.Text" xml:space="preserve">
+    <value>Don't show ranking list for first x rounds</value>
+  </data>
+  <data name="&gt;&gt;SuppressRankingListFirstXLabel.Name" xml:space="preserve">
+    <value>SuppressRankingListFirstXLabel</value>
+  </data>
+  <data name="&gt;&gt;SuppressRankingListFirstXLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;SuppressRankingListFirstXLabel.Parent" xml:space="preserve">
+    <value>RankingListGroup</value>
+  </data>
+  <data name="&gt;&gt;SuppressRankingListFirstXLabel.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="SuppressRankingListFirstXNud.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9pt</value>
+  </data>
+  <data name="SuppressRankingListFirstXNud.Location" type="System.Drawing.Point, System.Drawing">
+    <value>379, 53</value>
+  </data>
+  <data name="SuppressRankingListFirstXNud.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 23</value>
+  </data>
+  <data name="SuppressRankingListFirstXNud.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="SuppressRankingListFirstXNud.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;SuppressRankingListFirstXNud.Name" xml:space="preserve">
+    <value>SuppressRankingListFirstXNud</value>
+  </data>
+  <data name="&gt;&gt;SuppressRankingListFirstXNud.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;SuppressRankingListFirstXNud.Parent" xml:space="preserve">
+    <value>RankingListGroup</value>
+  </data>
+  <data name="&gt;&gt;SuppressRankingListFirstXNud.ZOrder" xml:space="preserve">
+    <value>3</value>
   </data>
   <data name="ShowRankingCombobox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
@@ -376,7 +433,7 @@
     <value>RankingListGroup</value>
   </data>
   <data name="&gt;&gt;ShowRankingCombobox.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>4</value>
   </data>
   <data name="RankingListGroup.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9.75pt, style=Bold</value>
@@ -385,7 +442,7 @@
     <value>396, 12</value>
   </data>
   <data name="RankingListGroup.Size" type="System.Drawing.Size, System.Drawing">
-    <value>444, 87</value>
+    <value>444, 116</value>
   </data>
   <data name="RankingListGroup.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -463,10 +520,10 @@
     <value>Segoe UI, 9.75pt, style=Bold</value>
   </data>
   <data name="LeadCardGroup.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 321</value>
+    <value>12, 339</value>
   </data>
   <data name="LeadCardGroup.Size" type="System.Drawing.Size, System.Drawing">
-    <value>367, 82</value>
+    <value>367, 86</value>
   </data>
   <data name="LeadCardGroup.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
@@ -490,7 +547,7 @@
     <value>Segoe UI, 9.75pt, style=Bold</value>
   </data>
   <data name="CanxButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>654, 433</value>
+    <value>654, 445</value>
   </data>
   <data name="CanxButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>186, 33</value>
@@ -517,7 +574,7 @@
     <value>Segoe UI, 9.75pt, style=Bold</value>
   </data>
   <data name="SaveButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 433</value>
+    <value>12, 445</value>
   </data>
   <data name="SaveButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>186, 33</value>
@@ -655,10 +712,10 @@
     <value>Segoe UI, 9.75pt, style=Bold</value>
   </data>
   <data name="TabletMovesGroupBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>396, 190</value>
+    <value>396, 221</value>
   </data>
   <data name="TabletMovesGroupBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>444, 100</value>
+    <value>444, 86</value>
   </data>
   <data name="TabletMovesGroupBox.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -817,10 +874,10 @@
     <value>Segoe UI, 9.75pt, style=Bold</value>
   </data>
   <data name="RoundTimerGroupBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>396, 296</value>
+    <value>396, 313</value>
   </data>
   <data name="RoundTimerGroupBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>444, 114</value>
+    <value>444, 112</value>
   </data>
   <data name="RoundTimerGroupBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -840,6 +897,72 @@
   <data name="&gt;&gt;RoundTimerGroupBox.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
+  <data name="FromPerspectiveOfCombobox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9pt</value>
+  </data>
+  <data name="FromPerspectiveOfCombobox.Items" xml:space="preserve">
+    <value>North</value>
+  </data>
+  <data name="FromPerspectiveOfCombobox.Items1" xml:space="preserve">
+    <value>South</value>
+  </data>
+  <data name="FromPerspectiveOfCombobox.Items2" xml:space="preserve">
+    <value>East</value>
+  </data>
+  <data name="FromPerspectiveOfCombobox.Items3" xml:space="preserve">
+    <value>West</value>
+  </data>
+  <data name="FromPerspectiveOfCombobox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>282, 55</value>
+  </data>
+  <data name="FromPerspectiveOfCombobox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>79, 23</value>
+  </data>
+  <data name="FromPerspectiveOfCombobox.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;FromPerspectiveOfCombobox.Name" xml:space="preserve">
+    <value>FromPerspectiveOfCombobox</value>
+  </data>
+  <data name="&gt;&gt;FromPerspectiveOfCombobox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;FromPerspectiveOfCombobox.Parent" xml:space="preserve">
+    <value>HandRecordGroup</value>
+  </data>
+  <data name="&gt;&gt;FromPerspectiveOfCombobox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="FromPerspectiveOfLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9pt</value>
+  </data>
+  <data name="FromPerspectiveOfLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="FromPerspectiveOfLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 58</value>
+  </data>
+  <data name="FromPerspectiveOfLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>253, 23</value>
+  </data>
+  <data name="FromPerspectiveOfLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="FromPerspectiveOfLabel.Text" xml:space="preserve">
+    <value>From the perspective of</value>
+  </data>
+  <data name="&gt;&gt;FromPerspectiveOfLabel.Name" xml:space="preserve">
+    <value>FromPerspectiveOfLabel</value>
+  </data>
+  <data name="&gt;&gt;FromPerspectiveOfLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;FromPerspectiveOfLabel.Parent" xml:space="preserve">
+    <value>HandRecordGroup</value>
+  </data>
+  <data name="&gt;&gt;FromPerspectiveOfLabel.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
   <data name="DoubleDummyCheckbox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
   </data>
@@ -853,7 +976,7 @@
     <value>1</value>
   </data>
   <data name="DoubleDummyCheckbox.Text" xml:space="preserve">
-    <value>Perform double dummy analysis</value>
+    <value>Double dummy analysis for entered hands</value>
   </data>
   <data name="&gt;&gt;DoubleDummyCheckbox.Name" xml:space="preserve">
     <value>DoubleDummyCheckbox</value>
@@ -865,7 +988,7 @@
     <value>HandRecordGroup</value>
   </data>
   <data name="&gt;&gt;DoubleDummyCheckbox.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>2</value>
   </data>
   <data name="ShowHandRecordCheckbox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
@@ -892,34 +1015,7 @@
     <value>HandRecordGroup</value>
   </data>
   <data name="&gt;&gt;ShowHandRecordCheckbox.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="HandRecordReversePerspectiveCheckbox.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI, 9pt</value>
-  </data>
-  <data name="HandRecordReversePerspectiveCheckbox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 54</value>
-  </data>
-  <data name="HandRecordReversePerspectiveCheckbox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>355, 24</value>
-  </data>
-  <data name="HandRecordReversePerspectiveCheckbox.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="HandRecordReversePerspectiveCheckbox.Text" xml:space="preserve">
-    <value>Hand record reverse perspective</value>
-  </data>
-  <data name="&gt;&gt;HandRecordReversePerspectiveCheckbox.Name" xml:space="preserve">
-    <value>HandRecordReversePerspectiveCheckbox</value>
-  </data>
-  <data name="&gt;&gt;HandRecordReversePerspectiveCheckbox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;HandRecordReversePerspectiveCheckbox.Parent" xml:space="preserve">
-    <value>HandRecordGroup</value>
-  </data>
-  <data name="&gt;&gt;HandRecordReversePerspectiveCheckbox.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="ManualHandEntryCheckbox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
@@ -946,16 +1042,16 @@
     <value>HandRecordGroup</value>
   </data>
   <data name="&gt;&gt;ManualHandEntryCheckbox.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="HandRecordGroup.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9.75pt, style=Bold</value>
   </data>
   <data name="HandRecordGroup.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 171</value>
+    <value>12, 179</value>
   </data>
   <data name="HandRecordGroup.Size" type="System.Drawing.Size, System.Drawing">
-    <value>367, 144</value>
+    <value>367, 150</value>
   </data>
   <data name="HandRecordGroup.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -982,7 +1078,7 @@
     <value>7, 15</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>853, 481</value>
+    <value>853, 490</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

@@ -39,13 +39,9 @@ namespace TabScore2.Forms
             boxEast.Text = result.NumberEast.ToString();
 
             // Set up combo boxes
-            if (result.ContractLevel < 0)
+            if (result.ContractLevel >= 0)
             {
-                comboBoxContractLevel.SelectedIndex = -1;
-            }
-            else
-            {
-                comboBoxContractLevel.SelectedIndex = result.ContractLevel;
+                comboBoxContractLevel.SelectedIndex = result.ContractLevel;  // Fires SelectedIndexChanged event
                 if (result.ContractLevel > 0)
                 {
                     comboBoxSuit.SelectedIndex = suitsDatabase.FindIndex(x => x == result.ContractSuit);
@@ -65,7 +61,6 @@ namespace TabScore2.Forms
 
         private void ComboBoxContractLevel_SelectedIndexChanged(object sender, EventArgs e)
         {
-            comboBoxTricksTaken.Items.Clear();
             if (comboBoxContractLevel.SelectedIndex <= 0)
             {
                 // "PASS" or not selected
@@ -74,6 +69,7 @@ namespace TabScore2.Forms
                 comboBoxDeclarer.SelectedIndex = -1;
                 comboBoxLead.SelectedIndex = -1;
                 comboBoxTricksTaken.SelectedIndex = -1;
+                comboBoxTricksTaken.Items.Clear();
                 comboBoxSuit.Enabled = false;
                 comboBoxDouble.Enabled = false;
                 comboBoxDeclarer.Enabled = false;
@@ -83,6 +79,7 @@ namespace TabScore2.Forms
             else
             {
                 // Set up possible values for tricks taken combo box
+                comboBoxTricksTaken.Items.Clear();
                 int contractLevel = Convert.ToInt32(comboBoxContractLevel.Text);  // Will be in the range 1-7
                 for (int i = contractLevel + 6; i > 0; i--)
                 {
@@ -116,6 +113,11 @@ namespace TabScore2.Forms
             {
                 comboBoxContractLevel.SelectedIndex = -1;
                 comboBoxContractLevel.Enabled = false;
+                comboBoxSuit.Enabled = false;
+                comboBoxDouble.Enabled = false;
+                comboBoxDeclarer.Enabled = false;
+                comboBoxLead.Enabled = false;
+                comboBoxTricksTaken.Enabled = false;
             }
         }
 

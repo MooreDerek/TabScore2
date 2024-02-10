@@ -15,14 +15,13 @@
         int NameSource { get; set; }
         int EnterResultsMethod { get; set; }
         bool TabletsMove { get; set; }
-        bool HandRecordReversePerspective { get; set; }
+        string ShowHandRecordFromDirection { get; set; }
         bool ShowTimer { get; set; }
         int SecondsPerBoard { get; set; }
         int AdditionalSecondsPerRound { get; set; }
         bool ManualHandRecordEntry { get; set; }
         bool DoubleDummy { get; set; }
-        int SuppressRankingList { get; set; }
-
-
+        int SuppressRankingListForFirstXRounds { get; set; }
+        int SuppressRankingListForLastXRounds { get; set; }
     }
 }

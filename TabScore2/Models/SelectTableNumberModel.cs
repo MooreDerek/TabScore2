@@ -5,7 +5,7 @@ using TabScore2.Classes;
 
 namespace TabScore2.Models
 {
-    public class SelectTableNumber(Section section, int tableNumber, bool confirm)
+    public class SelectTableNumberModel(Section section, int tableNumber, bool confirm)
     {
         public int SectionID { get; set; } = section.ID;
         public int TableNumber { get; set; } = tableNumber;

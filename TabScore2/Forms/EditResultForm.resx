@@ -263,6 +263,9 @@
   <data name="&gt;&gt;labelEast.ZOrder" xml:space="preserve">
     <value>22</value>
   </data>
+  <data name="comboBoxContractLevel.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="comboBoxContractLevel.Items" xml:space="preserve">
     <value>PASS</value>
   </data>
@@ -339,6 +342,9 @@
   <data name="&gt;&gt;labelSuit.ZOrder" xml:space="preserve">
     <value>20</value>
   </data>
+  <data name="comboBoxSuit.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="comboBoxSuit.Items" xml:space="preserve">
     <value>NT</value>
   </data>
@@ -399,6 +405,9 @@
   <data name="&gt;&gt;labelDouble.ZOrder" xml:space="preserve">
     <value>18</value>
   </data>
+  <data name="comboBoxDouble.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="comboBoxDouble.Items" xml:space="preserve">
     <value />
     <comment>@Invariant</comment>
@@ -431,6 +440,9 @@
   </data>
   <data name="&gt;&gt;comboBoxDouble.ZOrder" xml:space="preserve">
     <value>17</value>
+  </data>
+  <data name="comboBoxDeclarer.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="comboBoxDeclarer.Items" xml:space="preserve">
     <value>N</value>
@@ -488,6 +500,9 @@
   </data>
   <data name="&gt;&gt;labelDeclarer.ZOrder" xml:space="preserve">
     <value>15</value>
+  </data>
+  <data name="comboBoxLead.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="comboBoxLead.Items" xml:space="preserve">
     <value />
@@ -693,6 +708,9 @@
   </data>
   <data name="&gt;&gt;labelLead.ZOrder" xml:space="preserve">
     <value>13</value>
+  </data>
+  <data name="comboBoxTricksTaken.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="comboBoxTricksTaken.Items" xml:space="preserve">
     <value />

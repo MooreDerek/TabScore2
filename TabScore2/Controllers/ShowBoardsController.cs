@@ -16,7 +16,7 @@ namespace TabScore2.Controllers
 
         public ActionResult Index(int deviceNumber)
        {
-            ShowBoards showBoards = utilities.CreateShowBoardsModel(deviceNumber);
+            ShowBoardsModel showBoardsModel = utilities.CreateShowBoardsModel(deviceNumber);
             
             ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
             ViewData["Title"] = utilities.Title("ShowBoards", TitleType.Location, deviceNumber);
@@ -25,28 +25,28 @@ namespace TabScore2.Controllers
 
             if (appData.GetDeviceStatus(deviceNumber).Direction == Direction.North)
             {
-                return View("Scoring", showBoards);
+                return View("Scoring", showBoardsModel);
             }
             else
             {
-                showBoards.Message = "NOMESSAGE";
-                return View("ViewOnly", showBoards);
+                showBoardsModel.Message = "NOMESSAGE";
+                return View("ViewOnly", showBoardsModel);
             }
        }
 
         public ActionResult ViewResult(int deviceNumber, int boardNumber)
         {
             // Only used by ViewOnly view, for tablet device that is not being used for scoring, to check if result has been entered for this board
-            ShowBoards showBoards = utilities.CreateShowBoardsModel(deviceNumber);
+            ShowBoardsModel showBoardsModel = utilities.CreateShowBoardsModel(deviceNumber);
                         
-            if (showBoards.First(x => x.BoardNumber == boardNumber).ContractLevel < 0)
+            if (showBoardsModel.First(x => x.BoardNumber == boardNumber).ContractLevel < 0)
             {
-                showBoards.Message = "NORESULT";
+                showBoardsModel.Message = "NORESULT";
                 ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
                 ViewData["Title"] = utilities.Title("ShowBoards", TitleType.Location, deviceNumber);
                 ViewData["Header"] = utilities.Header(HeaderType.FullPlain, deviceNumber);
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
-                return View("ViewOnly", showBoards);
+                return View("ViewOnly", showBoardsModel);
             }
             else
             {
@@ -57,16 +57,16 @@ namespace TabScore2.Controllers
         public ActionResult OKButtonClick(int deviceNumber)
         {
             // Only used by ViewOnly view, for tablet device that is not being used for scoring, to check if all results have been entered
-            ShowBoards showBoards = utilities.CreateShowBoardsModel(deviceNumber);
+            ShowBoardsModel showBoardsModel = utilities.CreateShowBoardsModel(deviceNumber);
 
-            if (!showBoards.GotAllResults)
+            if (!showBoardsModel.GotAllResults)
             {
-                showBoards.Message = "NOTALLRESULTS";
+                showBoardsModel.Message = "NOTALLRESULTS";
                 ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
                 ViewData["Title"] = utilities.Title("ShowBoards", TitleType.Location, deviceNumber);
                 ViewData["Header"] = utilities.Header(HeaderType.FullPlain, deviceNumber);
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
-                return View("ViewOnly", showBoards);
+                return View("ViewOnly", showBoardsModel);
             }
             else
             {

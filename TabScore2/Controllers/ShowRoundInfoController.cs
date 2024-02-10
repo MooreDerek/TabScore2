@@ -25,10 +25,10 @@ namespace TabScore2.Controllers
             Section section = database.GetSection(deviceStatus.SectionID);
             if (deviceStatus.TableNumber == 0)
             {
-                ShowRoundInfoSitout showRoundInfoSitout = new(deviceNumber, deviceStatus.PairNumber, deviceStatus.RoundNumber, section.DevicesPerTable);
+                ShowRoundInfoSitoutModel showRoundInfoSitoutModel = new(deviceNumber, deviceStatus.PairNumber, deviceStatus.RoundNumber, section.DevicesPerTable);
                 deviceStatus.AtSitoutTable = true;
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
-                return View("Sitout", showRoundInfoSitout);
+                return View("Sitout", showRoundInfoSitoutModel);
             }
 
             // Update player names if not just immediately done in ShowPlayerIDs
@@ -36,10 +36,10 @@ namespace TabScore2.Controllers
             if (deviceStatus.NamesUpdateRequired) database.GetNamesForRound(tableStatus);
             deviceStatus.NamesUpdateRequired = true;
 
-            ShowRoundInfo showRoundInfo = utilities.CreateShowRoundInfoModel(deviceNumber);
+            ShowRoundInfoModel showRoundInfoModel = utilities.CreateShowRoundInfoModel(deviceNumber);
             if (deviceStatus.RoundNumber > 1)
             {
-                showRoundInfo.BoardsFromTable = utilities.GetBoardsFromTableNumber(tableStatus);
+                showRoundInfoModel.BoardsFromTable = utilities.GetBoardsFromTableNumber(tableStatus);
             }
             
             // Check if a sitout table
@@ -47,14 +47,14 @@ namespace TabScore2.Controllers
             {
                 tableStatus.ReadyForNextRoundNorth = true;
                 tableStatus.ReadyForNextRoundSouth = true;
-                showRoundInfo.NSMissing = true;
+                showRoundInfoModel.NSMissing = true;
                 deviceStatus.AtSitoutTable = true;
             }
             else if (tableStatus.RoundData.NumberEast == 0 || tableStatus.RoundData.NumberEast == section.MissingPair)
             {
                 tableStatus.ReadyForNextRoundEast = true;
                 tableStatus.ReadyForNextRoundWest = true;
-                showRoundInfo.EWMissing = true;
+                showRoundInfoModel.EWMissing = true;
                 deviceStatus.AtSitoutTable = true;
             }
             else
@@ -73,11 +73,11 @@ namespace TabScore2.Controllers
             }
             if (database.IsIndividual)
             {
-                return View("Individual", showRoundInfo);
+                return View("Individual", showRoundInfoModel);
             }
             else
             {
-                return View("Pair", showRoundInfo);
+                return View("Pair", showRoundInfoModel);
             }
         }
 

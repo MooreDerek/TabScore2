@@ -94,9 +94,9 @@ namespace TabScore2.Forms
             // 
             // comboBoxContractLevel
             // 
+            resources.ApplyResources(comboBoxContractLevel, "comboBoxContractLevel");
             comboBoxContractLevel.FormattingEnabled = true;
             comboBoxContractLevel.Items.AddRange(new object[] { resources.GetString("comboBoxContractLevel.Items"), resources.GetString("comboBoxContractLevel.Items1"), resources.GetString("comboBoxContractLevel.Items2"), resources.GetString("comboBoxContractLevel.Items3"), resources.GetString("comboBoxContractLevel.Items4"), resources.GetString("comboBoxContractLevel.Items5"), resources.GetString("comboBoxContractLevel.Items6"), resources.GetString("comboBoxContractLevel.Items7") });
-            resources.ApplyResources(comboBoxContractLevel, "comboBoxContractLevel");
             comboBoxContractLevel.Name = "comboBoxContractLevel";
             comboBoxContractLevel.SelectedIndexChanged += ComboBoxContractLevel_SelectedIndexChanged;
             // 
@@ -107,9 +107,9 @@ namespace TabScore2.Forms
             // 
             // comboBoxSuit
             // 
+            resources.ApplyResources(comboBoxSuit, "comboBoxSuit");
             comboBoxSuit.FormattingEnabled = true;
             comboBoxSuit.Items.AddRange(new object[] { resources.GetString("comboBoxSuit.Items"), resources.GetString("comboBoxSuit.Items1"), resources.GetString("comboBoxSuit.Items2"), resources.GetString("comboBoxSuit.Items3"), resources.GetString("comboBoxSuit.Items4") });
-            resources.ApplyResources(comboBoxSuit, "comboBoxSuit");
             comboBoxSuit.Name = "comboBoxSuit";
             // 
             // labelDouble
@@ -119,16 +119,16 @@ namespace TabScore2.Forms
             // 
             // comboBoxDouble
             // 
+            resources.ApplyResources(comboBoxDouble, "comboBoxDouble");
             comboBoxDouble.FormattingEnabled = true;
             comboBoxDouble.Items.AddRange(new object[] { resources.GetString("comboBoxDouble.Items"), resources.GetString("comboBoxDouble.Items1"), resources.GetString("comboBoxDouble.Items2") });
-            resources.ApplyResources(comboBoxDouble, "comboBoxDouble");
             comboBoxDouble.Name = "comboBoxDouble";
             // 
             // comboBoxDeclarer
             // 
+            resources.ApplyResources(comboBoxDeclarer, "comboBoxDeclarer");
             comboBoxDeclarer.FormattingEnabled = true;
             comboBoxDeclarer.Items.AddRange(new object[] { resources.GetString("comboBoxDeclarer.Items"), resources.GetString("comboBoxDeclarer.Items1"), resources.GetString("comboBoxDeclarer.Items2"), resources.GetString("comboBoxDeclarer.Items3") });
-            resources.ApplyResources(comboBoxDeclarer, "comboBoxDeclarer");
             comboBoxDeclarer.Name = "comboBoxDeclarer";
             // 
             // labelDeclarer
@@ -138,9 +138,9 @@ namespace TabScore2.Forms
             // 
             // comboBoxLead
             // 
+            resources.ApplyResources(comboBoxLead, "comboBoxLead");
             comboBoxLead.FormattingEnabled = true;
             comboBoxLead.Items.AddRange(new object[] { resources.GetString("comboBoxLead.Items"), resources.GetString("comboBoxLead.Items1"), resources.GetString("comboBoxLead.Items2"), resources.GetString("comboBoxLead.Items3"), resources.GetString("comboBoxLead.Items4"), resources.GetString("comboBoxLead.Items5"), resources.GetString("comboBoxLead.Items6"), resources.GetString("comboBoxLead.Items7"), resources.GetString("comboBoxLead.Items8"), resources.GetString("comboBoxLead.Items9"), resources.GetString("comboBoxLead.Items10"), resources.GetString("comboBoxLead.Items11"), resources.GetString("comboBoxLead.Items12"), resources.GetString("comboBoxLead.Items13"), resources.GetString("comboBoxLead.Items14"), resources.GetString("comboBoxLead.Items15"), resources.GetString("comboBoxLead.Items16"), resources.GetString("comboBoxLead.Items17"), resources.GetString("comboBoxLead.Items18"), resources.GetString("comboBoxLead.Items19"), resources.GetString("comboBoxLead.Items20"), resources.GetString("comboBoxLead.Items21"), resources.GetString("comboBoxLead.Items22"), resources.GetString("comboBoxLead.Items23"), resources.GetString("comboBoxLead.Items24"), resources.GetString("comboBoxLead.Items25"), resources.GetString("comboBoxLead.Items26"), resources.GetString("comboBoxLead.Items27"), resources.GetString("comboBoxLead.Items28"), resources.GetString("comboBoxLead.Items29"), resources.GetString("comboBoxLead.Items30"), resources.GetString("comboBoxLead.Items31"), resources.GetString("comboBoxLead.Items32"), resources.GetString("comboBoxLead.Items33"), resources.GetString("comboBoxLead.Items34"), resources.GetString("comboBoxLead.Items35"), resources.GetString("comboBoxLead.Items36"), resources.GetString("comboBoxLead.Items37"), resources.GetString("comboBoxLead.Items38"), resources.GetString("comboBoxLead.Items39"), resources.GetString("comboBoxLead.Items40"), resources.GetString("comboBoxLead.Items41"), resources.GetString("comboBoxLead.Items42"), resources.GetString("comboBoxLead.Items43"), resources.GetString("comboBoxLead.Items44"), resources.GetString("comboBoxLead.Items45"), resources.GetString("comboBoxLead.Items46"), resources.GetString("comboBoxLead.Items47"), resources.GetString("comboBoxLead.Items48"), resources.GetString("comboBoxLead.Items49"), resources.GetString("comboBoxLead.Items50"), resources.GetString("comboBoxLead.Items51"), resources.GetString("comboBoxLead.Items52") });
-            resources.ApplyResources(comboBoxLead, "comboBoxLead");
             comboBoxLead.Name = "comboBoxLead";
             // 
             // labelLead
@@ -150,9 +150,9 @@ namespace TabScore2.Forms
             // 
             // comboBoxTricksTaken
             // 
+            resources.ApplyResources(comboBoxTricksTaken, "comboBoxTricksTaken");
             comboBoxTricksTaken.FormattingEnabled = true;
             comboBoxTricksTaken.Items.AddRange(new object[] { resources.GetString("comboBoxTricksTaken.Items") });
-            resources.ApplyResources(comboBoxTricksTaken, "comboBoxTricksTaken");
             comboBoxTricksTaken.Name = "comboBoxTricksTaken";
             // 
             // labelResult

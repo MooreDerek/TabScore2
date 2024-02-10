@@ -3,7 +3,7 @@
 
 namespace TabScore2.Models
 {
-    public class EnterHandRecord(int deviceNumber, int sectionID, int boardNumber)
+    public class EnterHandRecordModel(int deviceNumber, int sectionID, int boardNumber)
     {
         public int TabletDeviceNumber { get; private set; } = deviceNumber;
         public int SectionID { get; private set; } = sectionID;

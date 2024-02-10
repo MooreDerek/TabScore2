@@ -14,14 +14,17 @@
     <Setting Name="AdditionalSecondsPerRound" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">60</Value>
     </Setting>
-    <Setting Name="HandRecordReversePerspective" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+    <Setting Name="ShowHandRecordFromDirection" Type="System.String" Scope="User">
+      <Value Profile="(Default)">South</Value>
     </Setting>
     <Setting Name="DoubleDummy" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="SuppressRankingList" Type="System.Int32" Scope="User">
+    <Setting Name="SuppressRankingListForLastXRounds" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="SuppressRankingListForFirstXRounds" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
     </Setting>
   </Settings>
 </SettingsFile>

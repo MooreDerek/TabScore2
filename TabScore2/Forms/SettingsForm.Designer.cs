@@ -394,7 +394,6 @@ namespace TabScore2.Forms
         private Label SuppressRankingListLastXLabel;
         private NumericUpDown SuppressRankingListLastXNud;
         private Label FromPerspectiveOfLabel;
-        private ComboBox comboBox1;
         private ComboBox FromPerspectiveOfCombobox;
     }
 }

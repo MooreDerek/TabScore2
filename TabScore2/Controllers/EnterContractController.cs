@@ -19,14 +19,17 @@ namespace TabScore2.Controllers
         public ActionResult Index(int deviceNumber, int boardNumber)
         {
             TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
-
-            // Get result (if any), and set pair/player numbers
-            Result result = database.GetResult(tableStatus.SectionID, tableStatus.TableNumber, tableStatus.RoundNumber, boardNumber);
-            result.NumberNorth = tableStatus.RoundData.NumberNorth;
-            result.NumberEast = tableStatus.RoundData.NumberEast;
-            result.NumberSouth = tableStatus.RoundData.NumberSouth;
-            result.NumberWest = tableStatus.RoundData.NumberWest;
-            tableStatus.ResultData = result;
+            Result result = tableStatus.ResultData;
+            if (tableStatus.ResultData.BoardNumber != boardNumber)
+            {
+                // No result set for this board yet, so get result (if any) from database and set pair/player numbers
+                result = database.GetResult(tableStatus.SectionID, tableStatus.TableNumber, tableStatus.RoundNumber, boardNumber);
+                result.NumberNorth = tableStatus.RoundData.NumberNorth;
+                result.NumberEast = tableStatus.RoundData.NumberEast;
+                result.NumberSouth = tableStatus.RoundData.NumberSouth;
+                result.NumberWest = tableStatus.RoundData.NumberWest;
+                tableStatus.ResultData = result;
+            }
 
             EnterContractModel enterContractModel = utilities.CreateEnterContractModel(deviceNumber, result);
 
@@ -45,6 +48,7 @@ namespace TabScore2.Controllers
             result.ContractSuit = contractSuit;
             result.ContractX = contractX;
             result.DeclarerNSEW = declarerNSEW;
+            result.Remarks = string.Empty;
             return RedirectToAction("Index", "EnterLead", new { deviceNumber, leadValidation = LeadValidationOptions.Validate });
         }
 
@@ -57,7 +61,7 @@ namespace TabScore2.Controllers
             result.DeclarerNSEW = string.Empty;
             result.LeadCard = string.Empty;
             result.TricksTaken = -1;
-            result.Score = 0;
+            result.Remarks = string.Empty;
             return RedirectToAction("Index", "ConfirmResult", new { deviceNumber });
         }
         
@@ -70,6 +74,7 @@ namespace TabScore2.Controllers
             result.DeclarerNSEW = string.Empty;
             result.LeadCard = string.Empty;
             result.TricksTaken = -1;
+            result.Remarks = "Not played";
             database.SetResult(result);
             return RedirectToAction("Index", "ShowBoards", new { deviceNumber });
         }

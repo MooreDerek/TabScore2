@@ -93,7 +93,7 @@ namespace TabScore2.DataServices
         }
         public int SuppressRankingListForFirstXRounds
         {
-            get { return Properties.Settings.Default.SuppressRankingListForLastXRounds; }
+            get { return Properties.Settings.Default.SuppressRankingListForFirstXRounds; }
             set { Properties.Settings.Default.SuppressRankingListForFirstXRounds = value; Properties.Settings.Default.Save(); }
         }
         public int SuppressRankingListForLastXRounds

@@ -129,7 +129,7 @@
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="ShowPercentageCheckbox.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="ShowPercentageCheckbox.Text" xml:space="preserve">
     <value>Show percentage on traveller</value>
@@ -156,7 +156,7 @@
     <value>355, 24</value>
   </data>
   <data name="ShowTravellerCheckbox.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
+    <value>0</value>
   </data>
   <data name="ShowTravellerCheckbox.Text" xml:space="preserve">
     <value>Show traveller</value>
@@ -183,7 +183,7 @@
     <value>367, 91</value>
   </data>
   <data name="TravellerGroup.TabIndex" type="System.Int32, mscorlib">
-    <value>9</value>
+    <value>3</value>
   </data>
   <data name="TravellerGroup.Text" xml:space="preserve">
     <value>Traveller</value>
@@ -243,7 +243,7 @@
     <value>6, 53</value>
   </data>
   <data name="NumberEntryEachRoundCheckbox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>389, 24</value>
+    <value>432, 24</value>
   </data>
   <data name="NumberEntryEachRoundCheckbox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -273,7 +273,7 @@
     <value>444, 81</value>
   </data>
   <data name="PlayersGroup.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
+    <value>7</value>
   </data>
   <data name="PlayersGroup.Text" xml:space="preserve">
     <value>Player names/IDs</value>
@@ -304,7 +304,7 @@
     <value>367, 23</value>
   </data>
   <data name="SuppressRankingListLastXLabel.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="SuppressRankingListLastXLabel.Text" xml:space="preserve">
     <value>Don't show ranking list for last x rounds</value>
@@ -331,7 +331,7 @@
     <value>59, 23</value>
   </data>
   <data name="SuppressRankingListLastXNud.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="SuppressRankingListLastXNud.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
     <value>Center</value>
@@ -358,7 +358,7 @@
     <value>367, 23</value>
   </data>
   <data name="SuppressRankingListFirstXLabel.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="SuppressRankingListFirstXLabel.Text" xml:space="preserve">
     <value>Don't show ranking list for first x rounds</value>
@@ -385,7 +385,7 @@
     <value>59, 23</value>
   </data>
   <data name="SuppressRankingListFirstXNud.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="SuppressRankingListFirstXNud.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
     <value>Center</value>
@@ -445,7 +445,7 @@
     <value>444, 116</value>
   </data>
   <data name="RankingListGroup.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
+    <value>6</value>
   </data>
   <data name="RankingListGroup.Text" xml:space="preserve">
     <value>Ranking list</value>
@@ -526,7 +526,7 @@
     <value>367, 86</value>
   </data>
   <data name="LeadCardGroup.TabIndex" type="System.Int32, mscorlib">
-    <value>8</value>
+    <value>5</value>
   </data>
   <data name="LeadCardGroup.Text" xml:space="preserve">
     <value>Lead card</value>
@@ -553,7 +553,7 @@
     <value>186, 33</value>
   </data>
   <data name="CanxButton.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
+    <value>1</value>
   </data>
   <data name="CanxButton.Text" xml:space="preserve">
     <value>Cancel</value>
@@ -580,7 +580,7 @@
     <value>186, 33</value>
   </data>
   <data name="SaveButton.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
+    <value>0</value>
   </data>
   <data name="SaveButton.Text" xml:space="preserve">
     <value>Save and close</value>
@@ -637,7 +637,7 @@
     <value>367, 59</value>
   </data>
   <data name="EnterResultsMethodGroup.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
+    <value>2</value>
   </data>
   <data name="EnterResultsMethodGroup.Text" xml:space="preserve">
     <value>Results entry method</value>
@@ -664,7 +664,7 @@
     <value>432, 24</value>
   </data>
   <data name="TabletModePersonalRadioButton.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="TabletModePersonalRadioButton.Text" xml:space="preserve">
     <value>Personal - tablets move with players</value>
@@ -691,7 +691,7 @@
     <value>432, 24</value>
   </data>
   <data name="TabletModeTraditionalRadioButton.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
+    <value>0</value>
   </data>
   <data name="TabletModeTraditionalRadioButton.Text" xml:space="preserve">
     <value>Traditional - 1 tablet per table</value>
@@ -718,7 +718,7 @@
     <value>444, 86</value>
   </data>
   <data name="TabletMovesGroupBox.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
+    <value>8</value>
   </data>
   <data name="TabletMovesGroupBox.Text" xml:space="preserve">
     <value>Table-top device mode</value>
@@ -745,7 +745,7 @@
     <value>367, 23</value>
   </data>
   <data name="AdditionalMinutesPerRoundLabel.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+    <value>3</value>
   </data>
   <data name="AdditionalMinutesPerRoundLabel.Text" xml:space="preserve">
     <value>Additional minutes per round</value>
@@ -772,7 +772,7 @@
     <value>59, 23</value>
   </data>
   <data name="AdditionalMinutesPerRoundNud.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
+    <value>4</value>
   </data>
   <data name="AdditionalMinutesPerRoundNud.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
     <value>Center</value>
@@ -799,7 +799,7 @@
     <value>367, 23</value>
   </data>
   <data name="MinutesPerBoardLabel.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
+    <value>1</value>
   </data>
   <data name="MinutesPerBoardLabel.Text" xml:space="preserve">
     <value>Minutes per board</value>
@@ -826,7 +826,7 @@
     <value>59, 23</value>
   </data>
   <data name="MinutesPerBoardNud.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
+    <value>2</value>
   </data>
   <data name="MinutesPerBoardNud.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
     <value>Center</value>
@@ -853,7 +853,7 @@
     <value>432, 24</value>
   </data>
   <data name="ShowTimerCheckbox.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
+    <value>0</value>
   </data>
   <data name="ShowTimerCheckbox.Text" xml:space="preserve">
     <value>Show round timer</value>
@@ -880,7 +880,7 @@
     <value>444, 112</value>
   </data>
   <data name="RoundTimerGroupBox.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
+    <value>9</value>
   </data>
   <data name="RoundTimerGroupBox.Text" xml:space="preserve">
     <value>Round timer</value>
@@ -919,7 +919,7 @@
     <value>79, 23</value>
   </data>
   <data name="FromPerspectiveOfCombobox.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="&gt;&gt;FromPerspectiveOfCombobox.Name" xml:space="preserve">
     <value>FromPerspectiveOfCombobox</value>
@@ -946,7 +946,7 @@
     <value>253, 23</value>
   </data>
   <data name="FromPerspectiveOfLabel.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
+    <value>1</value>
   </data>
   <data name="FromPerspectiveOfLabel.Text" xml:space="preserve">
     <value>From the perspective of</value>
@@ -973,7 +973,7 @@
     <value>355, 24</value>
   </data>
   <data name="DoubleDummyCheckbox.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
+    <value>4</value>
   </data>
   <data name="DoubleDummyCheckbox.Text" xml:space="preserve">
     <value>Double dummy analysis for entered hands</value>
@@ -1000,7 +1000,7 @@
     <value>355, 24</value>
   </data>
   <data name="ShowHandRecordCheckbox.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
+    <value>0</value>
   </data>
   <data name="ShowHandRecordCheckbox.Text" xml:space="preserve">
     <value>Show hand record</value>
@@ -1054,7 +1054,7 @@
     <value>367, 150</value>
   </data>
   <data name="HandRecordGroup.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+    <value>4</value>
   </data>
   <data name="HandRecordGroup.Text" xml:space="preserve">
     <value>Hand record</value>

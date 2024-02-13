@@ -16,6 +16,9 @@ namespace TabScore2.Controllers
 
         public ActionResult Index(int deviceNumber)
        {
+            // Clear result data as we'll be selecting a new board
+            appData.GetTableStatus(deviceNumber).ResultData = new();
+
             ShowBoardsModel showBoardsModel = utilities.CreateShowBoardsModel(deviceNumber);
             
             ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);

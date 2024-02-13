@@ -25,13 +25,14 @@ namespace TabScore2.Classes
         public int TricksTaken { get; set; } = -1;
         public string TricksTakenSymbol { get; set; } = string.Empty;
         public string Remarks { get; set; } = string.Empty;
-        public int Score { get; set; }
+        public int Score { get; set; } = 0;
         public double MatchpointsNS { get; set; }
         public double MatchpointsEW { get; set; }
 
         public void CalculateScore()
         {
             if (DeclarerNSEW == null) return;
+            if (ContractLevel <= 0) return;
             if (DeclarerNSEW == "N" || DeclarerNSEW == "S")
             {
                 Vulnerable = Global.IsNSVulnerable(BoardNumber);
@@ -40,7 +41,6 @@ namespace TabScore2.Classes
             {
                 Vulnerable = Global.IsEWVulnerable(BoardNumber);
             }
-            if (ContractLevel <= 0) return;
 
             int score;
             int diff = TricksTaken - ContractLevel - 6;
@@ -70,7 +70,7 @@ namespace TabScore2.Classes
                         if (diff == -2) score -= 100;
                     }
                 }
-                else  // x = "xx"
+                else  // ContractX = "xx"
                 {
                     if (Vulnerable)
                     {
@@ -117,7 +117,7 @@ namespace TabScore2.Classes
                             else score += 300;
                         }
                     }
-                    else    // x = "xx"
+                    else    // ContractX = "xx"
                     {
                         score = 80 * ContractLevel + 100;
                         if (Vulnerable) score += 400 * diff;
@@ -151,7 +151,7 @@ namespace TabScore2.Classes
                                 else score += 300;
                             }
                         }
-                        else      // Major suit
+                        else    // Major suit
                         {
                             if (ContractLevel <= 3)
                             {
@@ -180,7 +180,7 @@ namespace TabScore2.Classes
                             else score += 300;
                         }
                     }
-                    else    // x = "xx"
+                    else    // ContractX = "xx"
                     {
                         score = 120 * ContractLevel + 100;
                         if (ContractSuit == "NT") score += 40;

@@ -163,7 +163,7 @@
     <value>635, 24</value>
   </data>
   <data name="labelPathToDatabase.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+    <value>2</value>
   </data>
   <data name="labelPathToDatabase.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>
@@ -229,7 +229,7 @@
     <value>112, 17</value>
   </data>
   <data name="labelHandRecordFile.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="labelHandRecordFile.Text" xml:space="preserve">
     <value>Hand record file:</value>
@@ -259,7 +259,7 @@
     <value>635, 24</value>
   </data>
   <data name="labelPathToHandRecordFile.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+    <value>5</value>
   </data>
   <data name="labelPathToHandRecordFile.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>
@@ -292,7 +292,7 @@
     <value>218, 28</value>
   </data>
   <data name="buttonAddHandRecordFile.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
+    <value>4</value>
   </data>
   <data name="buttonAddHandRecordFile.Text" xml:space="preserve">
     <value>Add hand record file...</value>
@@ -322,7 +322,7 @@
     <value>451, 26</value>
   </data>
   <data name="progressBarAnalysing.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+    <value>7</value>
   </data>
   <data name="progressBarAnalysing.Visible" type="System.Boolean, mscorlib">
     <value>False</value>
@@ -352,7 +352,7 @@
     <value>112, 17</value>
   </data>
   <data name="labelAnalysing.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+    <value>6</value>
   </data>
   <data name="labelAnalysing.Text" xml:space="preserve">
     <value>Analysis complete</value>
@@ -385,7 +385,7 @@
     <value>100, 34</value>
   </data>
   <data name="buttonSettings.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
+    <value>8</value>
   </data>
   <data name="buttonSettings.Text" xml:space="preserve">
     <value>Settings</value>
@@ -415,7 +415,7 @@
     <value>106, 34</value>
   </data>
   <data name="buttonResultsViewer.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
+    <value>9</value>
   </data>
   <data name="buttonResultsViewer.Text" xml:space="preserve">
     <value>View results</value>
@@ -451,7 +451,7 @@
     <value>142, 21</value>
   </data>
   <data name="labelSessionStatus.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+    <value>10</value>
   </data>
   <data name="labelSessionStatus.Text" xml:space="preserve">
     <value>Session not started</value>

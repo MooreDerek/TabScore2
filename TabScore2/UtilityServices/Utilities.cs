@@ -84,7 +84,7 @@ namespace TabScore2.UtilityServices
                 NumberNorth = round.NumberNorth,
                 NumberEast = round.NumberEast,
                 NumberSouth = round.NumberSouth,
-                NumberWest = round.NumberNorth,
+                NumberWest = round.NumberWest,
                 DisplayNameNorth = round.NameNorth.Replace("Unknown", unknown),
                 DisplayNameSouth = round.NameSouth.Replace("Unknown", unknown),
                 DisplayNameEast = round.NameEast.Replace("Unknown", unknown),
@@ -956,6 +956,7 @@ namespace TabScore2.UtilityServices
             int maxResultsPerBoard = 1;
             foreach (Result result in resultsList)
             {
+                result.CalculateScore();
                 ResultsPerBoard? resultsPerBoard = resultsPerBoardList.Find(x => x.BoardNumber == result.BoardNumber);
                 if (resultsPerBoard == null)
                 {
@@ -1137,6 +1138,7 @@ namespace TabScore2.UtilityServices
             int maxResultsPerBoard = 1;
             foreach (Result result in resultsList)
             {
+                result.CalculateScore();
                 ResultsPerBoard? resultsPerBoard = resultsPerBoardList.Find(x => x.BoardNumber == result.BoardNumber);
                 if (resultsPerBoard == null)
                 {

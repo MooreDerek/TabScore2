@@ -20,7 +20,9 @@ namespace TabScore2.Controllers
         public ActionResult Index(int deviceNumber)
         {
             DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
-            if (settings.ShowRanking != 1  // Don't show ranking list at all
+            
+            // Only show ranking list settings criteria are met
+            if (settings.ShowRanking != 1  
                || deviceStatus.RoundNumber <= settings.SuppressRankingListForFirstXRounds
                || deviceStatus.RoundNumber > database.GetNumberOfRoundsInEvent(deviceStatus.SectionID, deviceStatus.RoundNumber) - settings.SuppressRankingListForLastXRounds)
             {
@@ -28,7 +30,8 @@ namespace TabScore2.Controllers
             }
 
             ShowRankingListModel showRankingListModel = utilities.CreateRankingListModel(deviceNumber);
-            if (showRankingListModel.Count <= 1 || showRankingListModel[0].ScoreDecimal == 0.0)  // Only show the ranking list if it contains something meaningful
+            // Only show the ranking list if it contains something meaningful
+            if (showRankingListModel.Count <= 1 || showRankingListModel[0].ScoreDecimal == 0.0)
             {
                 return RedirectToAction("Index", "ShowMove", new { deviceNumber, newRoundNumber = deviceStatus.RoundNumber + 1 });
             }

@@ -178,7 +178,7 @@
     <value>443, 340</value>
   </data>
   <data name="DataGridViewResults.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="&gt;&gt;DataGridViewResults.Name" xml:space="preserve">
     <value>DataGridViewResults</value>
@@ -202,7 +202,7 @@
     <value>128, 27</value>
   </data>
   <data name="CloseButton.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
+    <value>1</value>
   </data>
   <data name="CloseButton.Text" xml:space="preserve">
     <value>Close</value>

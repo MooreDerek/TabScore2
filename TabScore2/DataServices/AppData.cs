@@ -146,9 +146,9 @@ namespace TabScore2.DataServices
             RoundTimer? roundTimer = roundTimerList.Find(x => x.SectionID == deviceStatus.SectionID && x.RoundNumber == deviceStatus.RoundNumber);
             if (roundTimer == null)  // Round not yet started, so create initial timer data for this section and round 
             {
+                if (deviceStatus.TableNumber == 0) return -1;  // At a phantom table, so can't create timer data
                 DateTime startTime = DateTime.Now;
-                TableStatus? tableStatus = GetTableStatus(deviceNumber);
-                if (tableStatus == null) return -1;  // No data, so don't show timer
+                TableStatus tableStatus = GetTableStatus(deviceNumber);
                 int secondsPerRound = (tableStatus.RoundData.HighBoard - tableStatus.RoundData.LowBoard + 1) * settings.SecondsPerBoard + settings.AdditionalSecondsPerRound;
                 roundTimerList.Add(new RoundTimer
                 {

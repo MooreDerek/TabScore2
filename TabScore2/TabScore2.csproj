@@ -11,12 +11,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Remove="Forms\TabScoreForm.de.resx" />
-    <EmbeddedResource Remove="Forms\TabScoreForm.en.resx" />
-    <EmbeddedResource Remove="Forms\TabScoreForm.es.resx" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="Views\" />
     <Folder Include="wwwroot\css\" />
@@ -28,25 +22,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ElmahCore" Version="2.1.2" />
     <PackageReference Include="LigerShark.WebOptimizer.Core" Version="3.0.396" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.0" />
     <PackageReference Include="System.Data.Odbc" Version="8.0.0" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Properties\Settings.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-
+  
 </Project>

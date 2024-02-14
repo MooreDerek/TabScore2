@@ -13,8 +13,30 @@ namespace TabScore2.DataServices
     {
         private readonly IDatabase database = iDatabase;
         private static int settingsRoundNumber = 0;
+        private static bool sessionStarted = false;
 
-        public void GetFromDatabase(int roundNumber)
+        public void SetTabletDevicesPerTable()
+        {
+            if (sessionStarted) return;
+            foreach (Section section in database.GetSectionsList())
+            {
+                section.DevicesPerTable = 1;
+                if (TabletsMove)
+                {
+                    if (database.IsIndividual)
+                    {
+                        section.DevicesPerTable = 4;
+                    }
+                    else
+                    {
+                        if (section.Winners == 1) section.DevicesPerTable = 2;
+                    }
+                }
+            }
+            sessionStarted = true;
+        }
+        
+        public void GetFromDatabase(int roundNumber = 1)
         {
             if (roundNumber <= settingsRoundNumber) return;
             DatabaseSettings databaseSettings = database.GetDatabaseSettings();

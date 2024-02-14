@@ -122,7 +122,6 @@ namespace TabScore2.UtilityServices
         public ShowMoveModel CreateShowMoveModel(int deviceNumber, int newRoundNumber, int tableNotReadyNumber)
         {
             DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
-            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
             Section section = database.GetSection(deviceStatus.SectionID);
 
             ShowMoveModel showMoveModel = [];
@@ -136,6 +135,7 @@ namespace TabScore2.UtilityServices
             List<Round> roundsList = database.GetRoundsList(deviceStatus.SectionID, newRoundNumber);
             if (section.DevicesPerTable == 1)
             {
+                TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
                 if (database.IsIndividual)
                 {
                     if (tableStatus.RoundData.NumberNorth != 0)
@@ -167,15 +167,16 @@ namespace TabScore2.UtilityServices
                     }
                 }
             }
-            else  // TabletDevicesPerTable > 1, so only need move for single player/pair.  tableStatus could be null (at phantom table), so use deviceStatus
+            else  // TabletDevicesPerTable > 1, so only need move for single player/pair.  Could be at phantom table, so use deviceStatus info
             {
-                showMoveModel.Add(GetMove(roundsList, tableStatus.TableNumber, deviceStatus.PairNumber, deviceStatus.Direction));
+                showMoveModel.Add(GetMove(roundsList, deviceStatus.TableNumber, deviceStatus.PairNumber, deviceStatus.Direction));
             }
 
-            showMoveModel.BoardsNewTable = -999;
-            if (tableStatus != null)  // tableStatus==null => phantom table, so no boards to worry about
+            showMoveModel.BoardsNewTable = -999;  // Default is not to show boards move
+            if (deviceStatus.TableNumber != 0)    // If at a phantom table, there are no boards to worry about
             {
                 // Show boards move only to North (or North/South) unless missing, in which case only show to East (or East/West)
+                TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
                 showMoveModel.LowBoard = tableStatus.RoundData.LowBoard;
                 showMoveModel.HighBoard = tableStatus.RoundData.HighBoard;
                 if (showMoveModel.Direction == Direction.North || ((tableStatus.RoundData.NumberNorth == 0 || tableStatus.RoundData.NumberNorth == missingPair) && showMoveModel.Direction == Direction.East))

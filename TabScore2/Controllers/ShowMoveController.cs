@@ -33,25 +33,27 @@ namespace TabScore2.Controllers
                 }
             }
 
-            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
-            if (tableStatus.RoundNumber < newRoundNumber)
+            if (deviceStatus.TableNumber != 0)  // Not at phantom table, so update table status
             {
-                // No tablet device has yet advanced this table to the next round, so show that this one is ready to do so
-                if (deviceStatus.Direction == Direction.North)
+                TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
+                if (tableStatus.RoundNumber < newRoundNumber)
                 {
-                    tableStatus.ReadyForNextRoundNorth = true;
-                }
-                else if (deviceStatus.Direction == Direction.East)
-                {
-                    tableStatus.ReadyForNextRoundEast = true;
-                }
-                else if (deviceStatus.Direction == Direction.South)
-                {
-                    tableStatus.ReadyForNextRoundSouth = true;
-                }
-                else if (deviceStatus.Direction == Direction.West)
-                {
-                    tableStatus.ReadyForNextRoundWest = true;
+                    // No tablet device has yet advanced this table to the next round, so show that this one is ready to do so
+                    switch (deviceStatus.Direction)
+                    {
+                        case Direction.North:
+                            tableStatus.ReadyForNextRoundNorth = true;
+                            break;
+                        case Direction.South:
+                            tableStatus.ReadyForNextRoundSouth = true;
+                            break;
+                        case Direction.East:
+                            tableStatus.ReadyForNextRoundEast = true;
+                            break;
+                        case Direction.West:
+                            tableStatus.ReadyForNextRoundWest = true;
+                            break;
+                    }
                 }
             }
 

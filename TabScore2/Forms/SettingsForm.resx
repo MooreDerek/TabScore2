@@ -180,7 +180,7 @@
     <value>12, 79</value>
   </data>
   <data name="TravellerGroup.Size" type="System.Drawing.Size, System.Drawing">
-    <value>367, 91</value>
+    <value>367, 87</value>
   </data>
   <data name="TravellerGroup.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -200,30 +200,6 @@
   <data name="&gt;&gt;TravellerGroup.ZOrder" xml:space="preserve">
     <value>9</value>
   </data>
-  <data name="NameSourceCombobox.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI, 9pt</value>
-  </data>
-  <data name="NameSourceCombobox.Items" xml:space="preserve">
-    <value>Internal database</value>
-  </data>
-  <data name="NameSourceCombobox.Items1" xml:space="preserve">
-    <value>External database</value>
-  </data>
-  <data name="NameSourceCombobox.Items2" xml:space="preserve">
-    <value>No name source</value>
-  </data>
-  <data name="NameSourceCombobox.Items3" xml:space="preserve">
-    <value>Internal database first, then external</value>
-  </data>
-  <data name="NameSourceCombobox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 24</value>
-  </data>
-  <data name="NameSourceCombobox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>432, 23</value>
-  </data>
-  <data name="NameSourceCombobox.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
   <data name="&gt;&gt;NameSourceCombobox.Name" xml:space="preserve">
     <value>NameSourceCombobox</value>
   </data>
@@ -235,21 +211,6 @@
   </data>
   <data name="&gt;&gt;NameSourceCombobox.ZOrder" xml:space="preserve">
     <value>0</value>
-  </data>
-  <data name="NumberEntryEachRoundCheckbox.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI, 9pt</value>
-  </data>
-  <data name="NumberEntryEachRoundCheckbox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 53</value>
-  </data>
-  <data name="NumberEntryEachRoundCheckbox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>432, 24</value>
-  </data>
-  <data name="NumberEntryEachRoundCheckbox.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="NumberEntryEachRoundCheckbox.Text" xml:space="preserve">
-    <value>Player ID entry each round</value>
   </data>
   <data name="&gt;&gt;NumberEntryEachRoundCheckbox.Name" xml:space="preserve">
     <value>NumberEntryEachRoundCheckbox</value>
@@ -289,6 +250,72 @@
   </data>
   <data name="&gt;&gt;PlayersGroup.ZOrder" xml:space="preserve">
     <value>6</value>
+  </data>
+  <data name="NameSourceCombobox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9pt</value>
+  </data>
+  <data name="NameSourceCombobox.Items" xml:space="preserve">
+    <value>Internal database</value>
+  </data>
+  <data name="NameSourceCombobox.Items1" xml:space="preserve">
+    <value>External database</value>
+  </data>
+  <data name="NameSourceCombobox.Items2" xml:space="preserve">
+    <value>No name source</value>
+  </data>
+  <data name="NameSourceCombobox.Items3" xml:space="preserve">
+    <value>Internal database first, then external</value>
+  </data>
+  <data name="NameSourceCombobox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 24</value>
+  </data>
+  <data name="NameSourceCombobox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>432, 23</value>
+  </data>
+  <data name="NameSourceCombobox.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="NumberEntryEachRoundCheckbox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9pt</value>
+  </data>
+  <data name="NumberEntryEachRoundCheckbox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 53</value>
+  </data>
+  <data name="NumberEntryEachRoundCheckbox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>432, 24</value>
+  </data>
+  <data name="NumberEntryEachRoundCheckbox.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="NumberEntryEachRoundCheckbox.Text" xml:space="preserve">
+    <value>Player ID entry each round</value>
+  </data>
+  <data name="RankingListGroup.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9.75pt, style=Bold</value>
+  </data>
+  <data name="RankingListGroup.Location" type="System.Drawing.Point, System.Drawing">
+    <value>396, 12</value>
+  </data>
+  <data name="RankingListGroup.Size" type="System.Drawing.Size, System.Drawing">
+    <value>444, 116</value>
+  </data>
+  <data name="RankingListGroup.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="RankingListGroup.Text" xml:space="preserve">
+    <value>Ranking list</value>
+  </data>
+  <data name="&gt;&gt;RankingListGroup.Name" xml:space="preserve">
+    <value>RankingListGroup</value>
+  </data>
+  <data name="&gt;&gt;RankingListGroup.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;RankingListGroup.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;RankingListGroup.ZOrder" xml:space="preserve">
+    <value>7</value>
   </data>
   <data name="SuppressRankingListLastXLabel.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
@@ -435,44 +462,17 @@
   <data name="&gt;&gt;ShowRankingCombobox.ZOrder" xml:space="preserve">
     <value>4</value>
   </data>
-  <data name="RankingListGroup.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI, 9.75pt, style=Bold</value>
-  </data>
-  <data name="RankingListGroup.Location" type="System.Drawing.Point, System.Drawing">
-    <value>396, 12</value>
-  </data>
-  <data name="RankingListGroup.Size" type="System.Drawing.Size, System.Drawing">
-    <value>444, 116</value>
-  </data>
-  <data name="RankingListGroup.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="RankingListGroup.Text" xml:space="preserve">
-    <value>Ranking list</value>
-  </data>
-  <data name="&gt;&gt;RankingListGroup.Name" xml:space="preserve">
-    <value>RankingListGroup</value>
-  </data>
-  <data name="&gt;&gt;RankingListGroup.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;RankingListGroup.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;RankingListGroup.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
   <data name="ValidateLeadCardCheckbox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
   </data>
   <data name="ValidateLeadCardCheckbox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 22</value>
+    <value>6, 54</value>
   </data>
   <data name="ValidateLeadCardCheckbox.Size" type="System.Drawing.Size, System.Drawing">
     <value>355, 24</value>
   </data>
   <data name="ValidateLeadCardCheckbox.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="ValidateLeadCardCheckbox.Text" xml:space="preserve">
     <value>Validate lead card</value>
@@ -493,13 +493,13 @@
     <value>Segoe UI, 9pt</value>
   </data>
   <data name="EnterLeadCardCheckbox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 52</value>
+    <value>6, 24</value>
   </data>
   <data name="EnterLeadCardCheckbox.Size" type="System.Drawing.Size, System.Drawing">
     <value>355, 24</value>
   </data>
   <data name="EnterLeadCardCheckbox.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
+    <value>0</value>
   </data>
   <data name="EnterLeadCardCheckbox.Text" xml:space="preserve">
     <value>Enter lead card</value>
@@ -597,6 +597,33 @@
   <data name="&gt;&gt;SaveButton.ZOrder" xml:space="preserve">
     <value>4</value>
   </data>
+  <data name="EnterResultsMethodGroup.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9.75pt, style=Bold</value>
+  </data>
+  <data name="EnterResultsMethodGroup.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 12</value>
+  </data>
+  <data name="EnterResultsMethodGroup.Size" type="System.Drawing.Size, System.Drawing">
+    <value>367, 59</value>
+  </data>
+  <data name="EnterResultsMethodGroup.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="EnterResultsMethodGroup.Text" xml:space="preserve">
+    <value>Results entry method</value>
+  </data>
+  <data name="&gt;&gt;EnterResultsMethodGroup.Name" xml:space="preserve">
+    <value>EnterResultsMethodGroup</value>
+  </data>
+  <data name="&gt;&gt;EnterResultsMethodGroup.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;EnterResultsMethodGroup.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;EnterResultsMethodGroup.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
   <data name="EnterResultsMethodCombobox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
   </data>
@@ -627,48 +654,6 @@
   <data name="&gt;&gt;EnterResultsMethodCombobox.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="EnterResultsMethodGroup.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI, 9.75pt, style=Bold</value>
-  </data>
-  <data name="EnterResultsMethodGroup.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 12</value>
-  </data>
-  <data name="EnterResultsMethodGroup.Size" type="System.Drawing.Size, System.Drawing">
-    <value>367, 59</value>
-  </data>
-  <data name="EnterResultsMethodGroup.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="EnterResultsMethodGroup.Text" xml:space="preserve">
-    <value>Results entry method</value>
-  </data>
-  <data name="&gt;&gt;EnterResultsMethodGroup.Name" xml:space="preserve">
-    <value>EnterResultsMethodGroup</value>
-  </data>
-  <data name="&gt;&gt;EnterResultsMethodGroup.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;EnterResultsMethodGroup.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;EnterResultsMethodGroup.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="TabletModePersonalRadioButton.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI, 9pt</value>
-  </data>
-  <data name="TabletModePersonalRadioButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 54</value>
-  </data>
-  <data name="TabletModePersonalRadioButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>432, 24</value>
-  </data>
-  <data name="TabletModePersonalRadioButton.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="TabletModePersonalRadioButton.Text" xml:space="preserve">
-    <value>Personal - tablets move with players</value>
-  </data>
   <data name="&gt;&gt;TabletModePersonalRadioButton.Name" xml:space="preserve">
     <value>TabletModePersonalRadioButton</value>
   </data>
@@ -680,21 +665,6 @@
   </data>
   <data name="&gt;&gt;TabletModePersonalRadioButton.ZOrder" xml:space="preserve">
     <value>0</value>
-  </data>
-  <data name="TabletModeTraditionalRadioButton.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI, 9pt</value>
-  </data>
-  <data name="TabletModeTraditionalRadioButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 24</value>
-  </data>
-  <data name="TabletModeTraditionalRadioButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>432, 24</value>
-  </data>
-  <data name="TabletModeTraditionalRadioButton.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="TabletModeTraditionalRadioButton.Text" xml:space="preserve">
-    <value>Traditional - 1 tablet per table</value>
   </data>
   <data name="&gt;&gt;TabletModeTraditionalRadioButton.Name" xml:space="preserve">
     <value>TabletModeTraditionalRadioButton</value>
@@ -735,20 +705,35 @@
   <data name="&gt;&gt;TabletMovesGroupBox.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="AdditionalMinutesPerRoundLabel.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="TabletModePersonalRadioButton.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
   </data>
-  <data name="AdditionalMinutesPerRoundLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 81</value>
+  <data name="TabletModePersonalRadioButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 54</value>
   </data>
-  <data name="AdditionalMinutesPerRoundLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>367, 23</value>
+  <data name="TabletModePersonalRadioButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>432, 24</value>
   </data>
-  <data name="AdditionalMinutesPerRoundLabel.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
+  <data name="TabletModePersonalRadioButton.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
   </data>
-  <data name="AdditionalMinutesPerRoundLabel.Text" xml:space="preserve">
-    <value>Additional minutes per round</value>
+  <data name="TabletModePersonalRadioButton.Text" xml:space="preserve">
+    <value>Personal - tablets move with players</value>
+  </data>
+  <data name="TabletModeTraditionalRadioButton.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9pt</value>
+  </data>
+  <data name="TabletModeTraditionalRadioButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 24</value>
+  </data>
+  <data name="TabletModeTraditionalRadioButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>432, 24</value>
+  </data>
+  <data name="TabletModeTraditionalRadioButton.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="TabletModeTraditionalRadioButton.Text" xml:space="preserve">
+    <value>Traditional - 1 tablet per table</value>
   </data>
   <data name="&gt;&gt;AdditionalMinutesPerRoundLabel.Name" xml:space="preserve">
     <value>AdditionalMinutesPerRoundLabel</value>
@@ -762,21 +747,6 @@
   <data name="&gt;&gt;AdditionalMinutesPerRoundLabel.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="AdditionalMinutesPerRoundNud.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI, 9pt</value>
-  </data>
-  <data name="AdditionalMinutesPerRoundNud.Location" type="System.Drawing.Point, System.Drawing">
-    <value>379, 79</value>
-  </data>
-  <data name="AdditionalMinutesPerRoundNud.Size" type="System.Drawing.Size, System.Drawing">
-    <value>59, 23</value>
-  </data>
-  <data name="AdditionalMinutesPerRoundNud.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="AdditionalMinutesPerRoundNud.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
   <data name="&gt;&gt;AdditionalMinutesPerRoundNud.Name" xml:space="preserve">
     <value>AdditionalMinutesPerRoundNud</value>
   </data>
@@ -788,21 +758,6 @@
   </data>
   <data name="&gt;&gt;AdditionalMinutesPerRoundNud.ZOrder" xml:space="preserve">
     <value>1</value>
-  </data>
-  <data name="MinutesPerBoardLabel.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI, 9pt</value>
-  </data>
-  <data name="MinutesPerBoardLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 53</value>
-  </data>
-  <data name="MinutesPerBoardLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>367, 23</value>
-  </data>
-  <data name="MinutesPerBoardLabel.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="MinutesPerBoardLabel.Text" xml:space="preserve">
-    <value>Minutes per board</value>
   </data>
   <data name="&gt;&gt;MinutesPerBoardLabel.Name" xml:space="preserve">
     <value>MinutesPerBoardLabel</value>
@@ -816,21 +771,6 @@
   <data name="&gt;&gt;MinutesPerBoardLabel.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="MinutesPerBoardNud.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI, 9pt</value>
-  </data>
-  <data name="MinutesPerBoardNud.Location" type="System.Drawing.Point, System.Drawing">
-    <value>379, 49</value>
-  </data>
-  <data name="MinutesPerBoardNud.Size" type="System.Drawing.Size, System.Drawing">
-    <value>59, 23</value>
-  </data>
-  <data name="MinutesPerBoardNud.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="MinutesPerBoardNud.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
   <data name="&gt;&gt;MinutesPerBoardNud.Name" xml:space="preserve">
     <value>MinutesPerBoardNud</value>
   </data>
@@ -842,21 +782,6 @@
   </data>
   <data name="&gt;&gt;MinutesPerBoardNud.ZOrder" xml:space="preserve">
     <value>3</value>
-  </data>
-  <data name="ShowTimerCheckbox.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI, 9pt</value>
-  </data>
-  <data name="ShowTimerCheckbox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 22</value>
-  </data>
-  <data name="ShowTimerCheckbox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>432, 24</value>
-  </data>
-  <data name="ShowTimerCheckbox.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="ShowTimerCheckbox.Text" xml:space="preserve">
-    <value>Show round timer</value>
   </data>
   <data name="&gt;&gt;ShowTimerCheckbox.Name" xml:space="preserve">
     <value>ShowTimerCheckbox</value>
@@ -897,6 +822,81 @@
   <data name="&gt;&gt;RoundTimerGroupBox.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
+  <data name="AdditionalMinutesPerRoundLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9pt</value>
+  </data>
+  <data name="AdditionalMinutesPerRoundLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 81</value>
+  </data>
+  <data name="AdditionalMinutesPerRoundLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>367, 23</value>
+  </data>
+  <data name="AdditionalMinutesPerRoundLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="AdditionalMinutesPerRoundLabel.Text" xml:space="preserve">
+    <value>Additional minutes per round</value>
+  </data>
+  <data name="AdditionalMinutesPerRoundNud.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9pt</value>
+  </data>
+  <data name="AdditionalMinutesPerRoundNud.Location" type="System.Drawing.Point, System.Drawing">
+    <value>379, 79</value>
+  </data>
+  <data name="AdditionalMinutesPerRoundNud.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 23</value>
+  </data>
+  <data name="AdditionalMinutesPerRoundNud.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="AdditionalMinutesPerRoundNud.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="MinutesPerBoardLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9pt</value>
+  </data>
+  <data name="MinutesPerBoardLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 53</value>
+  </data>
+  <data name="MinutesPerBoardLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>367, 23</value>
+  </data>
+  <data name="MinutesPerBoardLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="MinutesPerBoardLabel.Text" xml:space="preserve">
+    <value>Minutes per board</value>
+  </data>
+  <data name="MinutesPerBoardNud.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9pt</value>
+  </data>
+  <data name="MinutesPerBoardNud.Location" type="System.Drawing.Point, System.Drawing">
+    <value>379, 49</value>
+  </data>
+  <data name="MinutesPerBoardNud.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 23</value>
+  </data>
+  <data name="MinutesPerBoardNud.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="MinutesPerBoardNud.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="ShowTimerCheckbox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9pt</value>
+  </data>
+  <data name="ShowTimerCheckbox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 22</value>
+  </data>
+  <data name="ShowTimerCheckbox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>432, 24</value>
+  </data>
+  <data name="ShowTimerCheckbox.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="ShowTimerCheckbox.Text" xml:space="preserve">
+    <value>Show round timer</value>
+  </data>
   <data name="FromPerspectiveOfCombobox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
   </data>
@@ -913,7 +913,7 @@
     <value>West</value>
   </data>
   <data name="FromPerspectiveOfCombobox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>282, 55</value>
+    <value>282, 51</value>
   </data>
   <data name="FromPerspectiveOfCombobox.Size" type="System.Drawing.Size, System.Drawing">
     <value>79, 23</value>
@@ -940,7 +940,7 @@
     <value>NoControl</value>
   </data>
   <data name="FromPerspectiveOfLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 58</value>
+    <value>6, 54</value>
   </data>
   <data name="FromPerspectiveOfLabel.Size" type="System.Drawing.Size, System.Drawing">
     <value>253, 23</value>
@@ -967,7 +967,7 @@
     <value>Segoe UI, 9pt</value>
   </data>
   <data name="DoubleDummyCheckbox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 114</value>
+    <value>6, 110</value>
   </data>
   <data name="DoubleDummyCheckbox.Size" type="System.Drawing.Size, System.Drawing">
     <value>355, 24</value>
@@ -1021,7 +1021,7 @@
     <value>Segoe UI, 9pt</value>
   </data>
   <data name="ManualHandEntryCheckbox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 84</value>
+    <value>6, 80</value>
   </data>
   <data name="ManualHandEntryCheckbox.Size" type="System.Drawing.Size, System.Drawing">
     <value>355, 24</value>
@@ -1048,10 +1048,10 @@
     <value>Segoe UI, 9.75pt, style=Bold</value>
   </data>
   <data name="HandRecordGroup.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 179</value>
+    <value>12, 180</value>
   </data>
   <data name="HandRecordGroup.Size" type="System.Drawing.Size, System.Drawing">
-    <value>367, 150</value>
+    <value>367, 143</value>
   </data>
   <data name="HandRecordGroup.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>

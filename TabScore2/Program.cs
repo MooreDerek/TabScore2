@@ -1,6 +1,8 @@
 // TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
+using ElmahCore;
+using ElmahCore.Mvc;
 using TabScore2.Classes;
 using TabScore2.DataServices;
 using TabScore2.Forms;
@@ -20,6 +22,10 @@ namespace TabScore2
             webAppBuilder.Services.AddLocalization();
             webAppBuilder.Services.AddControllersWithViews();
             webAppBuilder.Services.AddWebOptimizer();
+            webAppBuilder.Services.AddElmah<XmlFileErrorLog>(options =>
+            {
+                options.LogPath = "~/log";
+            }); 
             webAppBuilder.Services.AddSingleton<IUtilities, Utilities>();
             webAppBuilder.Services.AddSingleton<IDatabase, BwsDatabase>();
             webAppBuilder.Services.AddSingleton<IExternalNamesDatabase, ExternalNamesDatabase>();
@@ -28,6 +34,7 @@ namespace TabScore2
             webAppBuilder.Services.AddHttpContextAccessor();
             WebApplication webApp = webAppBuilder.Build();
             webApp.UseExceptionHandler("/ErrorScreen/Index");
+            webApp.UseElmah();
             webApp.UseWebOptimizer();
             webApp.UseStaticFiles();
             webApp.UseRouting();

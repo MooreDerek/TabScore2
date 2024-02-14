@@ -2,7 +2,8 @@
 {
     public interface ISettings
     {
-        void GetFromDatabase(int roundNumber);
+        void SetTabletDevicesPerTable();
+        void GetFromDatabase(int roundNumber = 1);
         void UpdateDatabase();
 
         bool ShowTraveller { get; set; }

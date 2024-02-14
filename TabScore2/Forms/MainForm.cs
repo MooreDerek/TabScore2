@@ -15,15 +15,13 @@ namespace TabScore2.Forms
         private readonly IStringLocalizer<Strings> localizer;
         private readonly IDatabase database;
         private readonly IAppData appData;
-        private readonly ISettings settings;
 
-        public MainForm(IServiceProvider iServiceProvider, IStringLocalizer<Strings> iLocalizer, IDatabase iDatabase, IAppData iAppData, ISettings iSettings)
+        public MainForm(IServiceProvider iServiceProvider, IStringLocalizer<Strings> iLocalizer, IDatabase iDatabase, IAppData iAppData)
         {
             serviceProvider = iServiceProvider; 
             localizer = iLocalizer;
             database = iDatabase;
             appData = iAppData;
-            settings = iSettings;
             InitializeComponent();
         }
 
@@ -121,23 +119,6 @@ namespace TabScore2.Forms
                 buttonSettings.Visible = true;
                 buttonResultsViewer.Visible = true;
                 buttonAddDatabaseFile.Visible = false;
-
-                // Set the number of devices per table - possibly different for each section depending on the movements
-                foreach (Section section in database.GetSectionsList())
-                {
-                    // Default DevicesPerTable = 1
-                    if (settings.TabletsMove)
-                    {
-                        if (database.IsIndividual)
-                        {
-                            section.DevicesPerTable = 4;
-                        }
-                        else
-                        {
-                            if (section.Winners == 1) section.DevicesPerTable = 2;
-                        }
-                    }
-                }
 
                 // Analyse any hand records in the database
                 if (database.HandsCount > 0)

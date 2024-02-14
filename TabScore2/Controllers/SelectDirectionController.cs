@@ -78,7 +78,7 @@ namespace TabScore.Controllers
                 appData.AddDeviceStatus(sectionID, tableNumber, pairNumber, roundNumber, direction);
                 SetCookie(sectionID, tableNumber, direction);
             }
-            DeviceStatus deviceStatus = appData.GetDeviceStatus(sectionID, tableNumber);
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(sectionID, tableNumber, direction);
 
             // deviceNumber is the key for identifying this particular device and is used throughout the rest of the application
             int deviceNumber = appData.GetDeviceNumber(deviceStatus);

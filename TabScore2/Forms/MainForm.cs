@@ -18,7 +18,7 @@ namespace TabScore2.Forms
 
         public MainForm(IServiceProvider iServiceProvider, IStringLocalizer<Strings> iLocalizer, IDatabase iDatabase, IAppData iAppData)
         {
-            serviceProvider = iServiceProvider; 
+            serviceProvider = iServiceProvider;
             localizer = iLocalizer;
             database = iDatabase;
             appData = iAppData;
@@ -28,7 +28,10 @@ namespace TabScore2.Forms
         private void MainForm_Load(object sender, EventArgs e)
         {
             Text = $"TabScore2 - {localizer["Version"]} {Assembly.GetExecutingAssembly().GetName().Version}";
+        }
 
+        private void MainForm_Shown(object sender, EventArgs e)
+        {
             if (database.PathToDatabase == string.Empty)
             {
                 buttonAddDatabaseFile.Visible = true;

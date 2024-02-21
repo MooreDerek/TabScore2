@@ -18,14 +18,11 @@ namespace TabScore2
             // ----------------------------------------
             // Configure, build and run web application
             // ----------------------------------------
-            WebApplicationBuilder webAppBuilder = WebApplication.CreateSlimBuilder();
+            WebApplicationBuilder webAppBuilder = WebApplication.CreateBuilder();
             webAppBuilder.Services.AddLocalization();
             webAppBuilder.Services.AddControllersWithViews();
             webAppBuilder.Services.AddWebOptimizer();
-            webAppBuilder.Services.AddElmah<XmlFileErrorLog>(options =>
-            {
-                options.LogPath = "~/log";
-            }); 
+            webAppBuilder.Services.AddElmah<XmlFileErrorLog>(options => { options.LogPath = "~/log"; }); 
             webAppBuilder.Services.AddSingleton<IUtilities, Utilities>();
             webAppBuilder.Services.AddSingleton<IDatabase, BwsDatabase>();
             webAppBuilder.Services.AddSingleton<IExternalNamesDatabase, ExternalNamesDatabase>();

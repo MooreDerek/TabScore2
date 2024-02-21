@@ -153,4 +153,7 @@
   <data name="buttonSettings.Text" xml:space="preserve">
     <value>Configuración</value>
   </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>TabScore2 - Mirar resultados</value>
+  </data>
 </root>

@@ -143,6 +143,7 @@ namespace TabScore2.Forms
             Name = "MainForm";
             FormClosing += MainForm_Closing;
             Load += MainForm_Load;
+            Shown += MainForm_Shown;
             ResumeLayout(false);
             PerformLayout();
         }

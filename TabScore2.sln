@@ -5,14 +5,36 @@ VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabScore2", "TabScore2\TabScore2.csproj", "{13247710-4BA2-45B8-80AB-D54AA321268D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TabScore2 Documents", "TabScore2 Documents", "{6ADC25B3-EDB9-4D8A-8ABA-01AFBE5BA570}"
+	ProjectSection(SolutionItems) = preProject
+		TabScore2 Documents\InstallerNotice TabScore2Setup.rtf = TabScore2 Documents\InstallerNotice TabScore2Setup.rtf
+		TabScore2 Documents\LICENSE = TabScore2 Documents\LICENSE
+		TabScore2 Documents\NOTICE = TabScore2 Documents\NOTICE
+		TabScore2 Documents\TabScore2 493x312.bmp = TabScore2 Documents\TabScore2 493x312.bmp
+		TabScore2 Documents\TabScore2 493x58.bmp = TabScore2 Documents\TabScore2 493x58.bmp
+		TabScore2 Documents\TabScore2 ReadMe 1.0.0.txt = TabScore2 Documents\TabScore2 ReadMe 1.0.0.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|ARM64 = Debug|ARM64
+		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
+		Release|ARM64 = Release|ARM64
+		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{13247710-4BA2-45B8-80AB-D54AA321268D}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{13247710-4BA2-45B8-80AB-D54AA321268D}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{13247710-4BA2-45B8-80AB-D54AA321268D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{13247710-4BA2-45B8-80AB-D54AA321268D}.Debug|x64.Build.0 = Debug|Any CPU
 		{13247710-4BA2-45B8-80AB-D54AA321268D}.Debug|x86.ActiveCfg = Debug|x86
 		{13247710-4BA2-45B8-80AB-D54AA321268D}.Debug|x86.Build.0 = Debug|x86
+		{13247710-4BA2-45B8-80AB-D54AA321268D}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{13247710-4BA2-45B8-80AB-D54AA321268D}.Release|ARM64.Build.0 = Release|Any CPU
+		{13247710-4BA2-45B8-80AB-D54AA321268D}.Release|x64.ActiveCfg = Release|Any CPU
+		{13247710-4BA2-45B8-80AB-D54AA321268D}.Release|x64.Build.0 = Release|Any CPU
 		{13247710-4BA2-45B8-80AB-D54AA321268D}.Release|x86.ActiveCfg = Release|x86
 		{13247710-4BA2-45B8-80AB-D54AA321268D}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
@@ -20,9 +42,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_NeutralResourcesLanguage = en-US
-		RESX_EnableXlifSync = True
-		RESX_CultureCountyOverrides = 
 		SolutionGuid = {EA91F9F8-CC08-450B-AAA7-CFBEF8232623}
+		RESX_CultureCountyOverrides = 
+		RESX_EnableXlifSync = True
+		RESX_NeutralResourcesLanguage = en-US
 	EndGlobalSection
 EndGlobal

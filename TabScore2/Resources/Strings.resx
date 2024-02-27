@@ -211,9 +211,6 @@ tablet device at your current location</value>
   <data name="EnterLead" xml:space="preserve">
     <value>Enter lead</value>
   </data>
-  <data name="ErrorNoID" xml:space="preserve">
-    <value>Please select a player ID, or select 'Unknown'</value>
-  </data>
   <data name="Unknown" xml:space="preserve">
     <value>Unknown</value>
   </data>

@@ -198,9 +198,6 @@
   <data name="ErrorNoDBSelected" xml:space="preserve">
     <value>No scoring database selected.  Please wait until the Tournament Director tells you to start</value>
   </data>
-  <data name="ErrorNoID" xml:space="preserve">
-    <value>Please select a player ID, or select 'Unknown'</value>
-  </data>
   <data name="ErrorNoTabScoreDBtxt" xml:space="preserve">
     <value>File TabScoreDB.txt doesn't exist.  Please re-start TabScoreStarter.exe</value>
   </data>

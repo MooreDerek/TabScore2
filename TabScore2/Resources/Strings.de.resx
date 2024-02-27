@@ -147,9 +147,6 @@
   <data name="ErrorNoDBSelected" xml:space="preserve">
     <value>Keine Scoring-Datenbank ausgewählt.  Bitte warten Sie, bis der Turnierleiter Sie zum Starten auffordert</value>
   </data>
-  <data name="ErrorNoID" xml:space="preserve">
-    <value>Bitte wählen Sie eine Spieler-ID aus oder wählen Sie „Unbekannt“</value>
-  </data>
   <data name="Unknown" xml:space="preserve">
     <value>Unbekannt</value>
   </data>

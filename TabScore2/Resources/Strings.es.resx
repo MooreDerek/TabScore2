@@ -190,9 +190,6 @@
   <data name="EnterLead" xml:space="preserve">
     <value>Introducir la salida</value>
   </data>
-  <data name="ErrorNoID" xml:space="preserve">
-    <value>Seleccione un ID de jugador o seleccione 'Desconocido'</value>
-  </data>
   <data name="Unknown" xml:space="preserve">
     <value>Desconocido</value>
   </data>

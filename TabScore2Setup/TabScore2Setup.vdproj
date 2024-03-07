@@ -19,6 +19,12 @@
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
+        "Entry"
+        {
+        "MsmKey" = "8:_9E13CED6027D4845B2D52E0565C9C934"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
     }
     "Configurations"
     {
@@ -75,6 +81,20 @@
     {
         "CustomAction"
         {
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_D2CDDC6AF2D849E682EA302FD0DF8D8F"
+            {
+            "Name" = "8:OpenPort.EXE"
+            "Condition" = "8:"
+            "Object" = "8:_9E13CED6027D4845B2D52E0565C9C934"
+            "FileType" = "3:2"
+            "InstallAction" = "3:1"
+            "Arguments" = "8:/Install"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_69136D61_A0FB_4A6D_9EC3_BB3DD0312BDB"
+            "InstallerClass" = "11:FALSE"
+            "CustomActionData" = "8:"
+            }
         }
         "DefaultFeature"
         {
@@ -100,6 +120,26 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9E13CED6027D4845B2D52E0565C9C934"
+            {
+            "SourcePath" = "8:..\\TabScore2\\OpenPort.EXE"
+            "TargetName" = "8:OpenPort.EXE"
+            "Tag" = "8:"
+            "Folder" = "8:_C9E3BD3ACB624197BA272930965366D9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
@@ -157,7 +197,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:TabScore2Setup"
         "ProductCode" = "8:{0F31BAD3-3CC3-467A-B602-66F5AC8F2ED7}"
-        "PackageCode" = "8:{09886DE7-BF2B-4085-BD1F-C2F9D797552F}"
+        "PackageCode" = "8:{C2E0713D-78C2-427B-9969-566980F60A0B}"
         "UpgradeCode" = "8:{2F642C2F-55EC-496B-811E-67C20D7B39EF}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

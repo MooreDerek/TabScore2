@@ -736,7 +736,7 @@ namespace TabScore2.UtilityServices
             }
 
             string cardSuit = card[..1];
-            string cardValue = card[1..1];
+            string cardValue = card.Substring(1,1);
 
             switch (tableStatus.ResultData.DeclarerNSEW)
             {

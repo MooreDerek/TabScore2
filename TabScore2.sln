@@ -15,8 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TabScore2 Documents", "TabS
 		TabScore2 Documents\TabScore2 ReadMe 1.0.0.txt = TabScore2 Documents\TabScore2 ReadMe 1.0.0.txt
 	EndProjectSection
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "TabScore2Setup", "TabScore2Setup\TabScore2Setup.vdproj", "{B446B5A6-EB55-4B0A-9B85-6E597C82AEB1}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM64 = Debug|ARM64
@@ -39,20 +37,14 @@ Global
 		{13247710-4BA2-45B8-80AB-D54AA321268D}.Release|x64.Build.0 = Release|Any CPU
 		{13247710-4BA2-45B8-80AB-D54AA321268D}.Release|x86.ActiveCfg = Release|x86
 		{13247710-4BA2-45B8-80AB-D54AA321268D}.Release|x86.Build.0 = Release|x86
-		{B446B5A6-EB55-4B0A-9B85-6E597C82AEB1}.Debug|ARM64.ActiveCfg = Debug
-		{B446B5A6-EB55-4B0A-9B85-6E597C82AEB1}.Debug|x64.ActiveCfg = Debug
-		{B446B5A6-EB55-4B0A-9B85-6E597C82AEB1}.Debug|x86.ActiveCfg = Debug
-		{B446B5A6-EB55-4B0A-9B85-6E597C82AEB1}.Release|ARM64.ActiveCfg = Release
-		{B446B5A6-EB55-4B0A-9B85-6E597C82AEB1}.Release|x64.ActiveCfg = Release
-		{B446B5A6-EB55-4B0A-9B85-6E597C82AEB1}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_NeutralResourcesLanguage = en-US
-		RESX_EnableXlifSync = True
-		RESX_CultureCountyOverrides = 
 		SolutionGuid = {EA91F9F8-CC08-450B-AAA7-CFBEF8232623}
+		RESX_CultureCountyOverrides = 
+		RESX_EnableXlifSync = True
+		RESX_NeutralResourcesLanguage = en-US
 	EndGlobalSection
 EndGlobal

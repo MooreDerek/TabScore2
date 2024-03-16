@@ -15,6 +15,9 @@ namespace TabScore2
         [STAThread]
         static void Main(string[] args)
         {
+            // The following line is needed in case the scoring software starts TabScore2 from a different working directory
+            Directory.SetCurrentDirectory(Application.StartupPath);
+
             // ----------------------------------------
             // Configure, build and run web application
             // ----------------------------------------

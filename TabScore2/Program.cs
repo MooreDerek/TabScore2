@@ -28,7 +28,7 @@ namespace TabScore2
             WebApplicationBuilder webAppBuilder = WebApplication.CreateBuilder(webApplicationOptions);
             webAppBuilder.Services.AddLocalization();
             webAppBuilder.Services.AddControllersWithViews();
-            webAppBuilder.Services.AddWebOptimizer();
+            webAppBuilder.Services.AddWebOptimizer(options => { options.EnableDiskCache = false; });
             string logPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             webAppBuilder.Services.AddElmah<XmlFileErrorLog>(options => { options.LogPath = logPath; }); 
             webAppBuilder.Services.AddSingleton<IUtilities, Utilities>();

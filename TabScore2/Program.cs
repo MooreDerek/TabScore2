@@ -15,17 +15,22 @@ namespace TabScore2
         [STAThread]
         static void Main(string[] args)
         {
-            // The following line is needed in case the scoring software starts TabScore2 from a different working directory
-            Directory.SetCurrentDirectory(Application.StartupPath);
-
             // ----------------------------------------
             // Configure, build and run web application
             // ----------------------------------------
-            WebApplicationBuilder webAppBuilder = WebApplication.CreateBuilder();
+            WebApplicationOptions webApplicationOptions = new();
+            bool isDevelopment = string.Equals(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"), "Development", StringComparison.CurrentCultureIgnoreCase);
+            if (!isDevelopment) {
+                // In the production environment, the scoring program may start TabScore2 using a different current working directory
+                webApplicationOptions = new() { ContentRootPath = Application.StartupPath };
+            }
+
+            WebApplicationBuilder webAppBuilder = WebApplication.CreateBuilder(webApplicationOptions);
             webAppBuilder.Services.AddLocalization();
             webAppBuilder.Services.AddControllersWithViews();
             webAppBuilder.Services.AddWebOptimizer();
-            webAppBuilder.Services.AddElmah<XmlFileErrorLog>(options => { options.LogPath = "~/log"; }); 
+            string logPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            webAppBuilder.Services.AddElmah<XmlFileErrorLog>(options => { options.LogPath = logPath; }); 
             webAppBuilder.Services.AddSingleton<IUtilities, Utilities>();
             webAppBuilder.Services.AddSingleton<IDatabase, BwsDatabase>();
             webAppBuilder.Services.AddSingleton<IExternalNamesDatabase, ExternalNamesDatabase>();

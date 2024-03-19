@@ -27,7 +27,6 @@ namespace TabScore2
             webAppBuilder.Services.AddLocalization();
             webAppBuilder.Services.AddControllersWithViews();
             webAppBuilder.Services.AddWebOptimizer(options => { options.EnableDiskCache = false; });
-            string logPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             webAppBuilder.Services.AddSingleton<IUtilities, Utilities>();
             webAppBuilder.Services.AddSingleton<IDatabase, BwsDatabase>();
             webAppBuilder.Services.AddSingleton<IExternalNamesDatabase, ExternalNamesDatabase>();

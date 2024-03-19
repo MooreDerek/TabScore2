@@ -1,6 +1,7 @@
 ﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using TabScore2.DataServices;
 using TabScore2.Globals;
@@ -15,6 +16,21 @@ namespace TabScore.Controllers
         
         public ActionResult Index()
         {
+            IExceptionHandlerFeature? exceptionFeature = HttpContext.Features.Get<IExceptionHandlerFeature>();
+            if (exceptionFeature != null)
+            {
+                // Log the exception to a file for diagnostics
+                string logPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "TabScore2");
+                Directory.CreateDirectory(logPath);
+                string exceptionFileName = $"TabScore2Exception{DateTime.Now:yyMMddHHmmss}.txt";
+                StreamWriter outputFile = new(Path.Combine(logPath, exceptionFileName));
+                outputFile.WriteLine(exceptionFeature.Endpoint!.ToString());
+                outputFile.WriteLine(exceptionFeature.Error!.ToString());
+                outputFile.WriteLine(exceptionFeature.Path!.ToString());
+                outputFile.WriteLine(exceptionFeature.RouteValues!.ToString());
+                outputFile.Close();
+            }
+
             ViewData["Title"] = utilities.Title("ErrorScreen");
             ViewData["Header"] = string.Empty;
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;

@@ -130,7 +130,7 @@ namespace TabScore2.Controllers
             }
 
             // Refresh settings for the start of the round.  Only done once per round.
-            settings.GetFromDatabase(newRoundNumber);
+            database.GetDatabaseSettings(newRoundNumber);
             return RedirectToAction("Index", "ShowPlayerIDs", new { deviceNumber });
         }
 

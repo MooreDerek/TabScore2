@@ -10,11 +10,12 @@ using TabScore2.UtilityServices;
 
 namespace TabScore.Controllers
 {
-    public class SelectDirectionController(IDatabase iDatabase, IAppData iAppData, IUtilities iUtilities, IHttpContextAccessor iHttpContextAccessor) : Controller
+    public class SelectDirectionController(IDatabase iDatabase, IAppData iAppData, IUtilities iUtilities, ISettings iSettings, IHttpContextAccessor iHttpContextAccessor) : Controller
     {
         private readonly IDatabase database = iDatabase;
         private readonly IAppData appData = iAppData;
         private readonly IUtilities utilities = iUtilities;
+        private readonly ISettings settings = iSettings;
         private readonly IHttpContextAccessor httpContextAccessor = iHttpContextAccessor;
 
         public ActionResult Index(int sectionID, int tableNumber, Direction direction = Direction.Null, bool confirm = false) 
@@ -26,7 +27,7 @@ namespace TabScore.Controllers
             ViewData["Title"] = utilities.Title("SelectDirection", TitleType.SectionTable, sectionID, tableNumber);
             ViewData["Header"] = utilities.Header(HeaderType.SectionTable, sectionID, tableNumber);
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
-            if (database.IsIndividual)
+            if (settings.IsIndividual)
             {
                 return View("Individual", selectDirectionModel);
             }

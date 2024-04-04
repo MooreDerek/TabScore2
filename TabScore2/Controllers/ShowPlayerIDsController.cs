@@ -23,7 +23,13 @@ namespace TabScore2.Controllers
             TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
 
             if (deviceStatus.NamesUpdateRequired) {
-                database.GetNamesForRound(tableStatus);  // Update names from database if not done very recently
+                // Update names from database if not done very recently
+                Names names = database.GetNamesForRound(tableStatus.SectionID, tableStatus.RoundNumber, tableStatus.RoundData.NumberNorth, tableStatus.RoundData.NumberEast, tableStatus.RoundData.NumberSouth, tableStatus.RoundData.NumberWest);
+                tableStatus.RoundData.NameNorth = names.NameNorth;
+                tableStatus.RoundData.NameEast = names.NameEast;
+                tableStatus.RoundData.NameSouth = names.NameSouth;
+                tableStatus.RoundData.NameWest = names.NameWest;
+                tableStatus.RoundData.GotAllNames = names.GotAllNames;
             }
 
             if (tableStatus.RoundData.GotAllNames && deviceStatus.RoundNumber > 1 && !settings.NumberEntryEachRound)
@@ -39,7 +45,7 @@ namespace TabScore2.Controllers
             ViewData["Header"] = utilities.Header(HeaderType.Round, deviceNumber);
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
 
-            if (database.IsIndividual)
+            if (settings.IsIndividual)
             {
                 return View("Individual", showplayerIDsModel);
             }
@@ -52,7 +58,13 @@ namespace TabScore2.Controllers
         public ActionResult OKButtonClick(int deviceNumber)
         {
             TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
-            database.GetNamesForRound(tableStatus);
+            Names names = database.GetNamesForRound(tableStatus.SectionID, tableStatus.RoundNumber, tableStatus.RoundData.NumberNorth, tableStatus.RoundData.NumberEast, tableStatus.RoundData.NumberSouth, tableStatus.RoundData.NumberWest);
+            tableStatus.RoundData.NameNorth = names.NameNorth;
+            tableStatus.RoundData.NameEast = names.NameEast;
+            tableStatus.RoundData.NameSouth = names.NameSouth;
+            tableStatus.RoundData.NameWest = names.NameWest;
+            tableStatus.RoundData.GotAllNames = names.GotAllNames;
+
             appData.GetDeviceStatus(deviceNumber).NamesUpdateRequired = false;  // No names update required on next screen as it's only just been done
 
             // Check if all required names have been entered, and if not go back and wait

@@ -2,10 +2,6 @@
 {
     public interface ISettings
     {
-        void SetTabletDevicesPerTable();
-        void GetFromDatabase(int roundNumber = 1);
-        void UpdateDatabase();
-
         bool ShowTraveller { get; set; }
         bool ShowPercentage { get; set; }
         bool EnterLeadCard { get; set; }
@@ -24,5 +20,9 @@
         bool DoubleDummy { get; set; }
         int SuppressRankingListForFirstXRounds { get; set; }
         int SuppressRankingListForLastXRounds { get; set; }
+        
+        string PathToDatabase { get; set; }
+        bool DatabaseReady { get; set; }
+        bool IsIndividual { get; set; }
     }
 }

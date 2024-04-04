@@ -2,7 +2,9 @@
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using Microsoft.Extensions.Localization;
+using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Text;
 using TabScore2.Classes;
 using TabScore2.Globals;
 using TabScore2.Resources;
@@ -51,7 +53,7 @@ namespace TabScore2.DataServices
         {
             TableStatus tableStatus = GetTableStatus(sectionID, tableNumber)!;
             tableStatus.RoundNumber = roundNumber;
-            database.GetRoundData(tableStatus);
+            tableStatus.RoundData = database.GetRoundData(sectionID, tableNumber, roundNumber);
             tableStatus.ReadyForNextRoundNorth = false;
             tableStatus.ReadyForNextRoundSouth = false;
             tableStatus.ReadyForNextRoundEast = false;
@@ -197,7 +199,7 @@ namespace TabScore2.DataServices
         }
 
         #pragma warning disable SYSLIB1054 // Use 'LibraryImportAttribute' instead of 'DllImportAttribute' to generate P/Invoke marshalling code at compile time
-        [DllImport("dds.dll", CallingConvention = CallingConvention.StdCall)]
+        [DllImport("dds64.dll", CallingConvention = CallingConvention.StdCall)]
         private static extern void CalcDDtablePBN(ddTableDealPBN tableDealPBN, ref ddTableResults tablep);
 
         public void AddHandEvaluation(Hand hand)
@@ -205,10 +207,152 @@ namespace TabScore2.DataServices
             if (hand.BoardNumber == 0 || hand.NorthSpades == "###") return;  // No valid hand
             HandEvaluation handEvaluation = new(hand.SectionID, hand.BoardNumber);
 
-            ddTableDealPBN tdp = new() { cards = new char[80] };
-            for (int i = 0; i < hand.PBN.Length; i++)
+            StringBuilder pbnString = new();
+            switch ((hand.BoardNumber - 1) % 4)
             {
-                tdp.cards[i] = Convert.ToChar(hand.PBN.Substring(i, 1));
+                case 0:
+                    pbnString.Append("N:");
+                    pbnString.Append(hand.NorthSpades);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.NorthHearts);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.NorthDiamonds);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.NorthClubs);
+                    pbnString.Append(' ');
+                    pbnString.Append(hand.EastSpades);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.EastHearts);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.EastDiamonds);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.EastClubs);
+                    pbnString.Append(' ');
+                    pbnString.Append(hand.SouthSpades);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.SouthHearts);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.SouthDiamonds);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.SouthClubs);
+                    pbnString.Append(' ');
+                    pbnString.Append(hand.WestSpades);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.WestHearts);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.WestDiamonds);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.WestClubs);
+                    break;
+                case 1:
+                    pbnString.Append("E:");
+                    pbnString.Append(hand.EastSpades);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.EastHearts);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.EastDiamonds);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.EastClubs);
+                    pbnString.Append(' ');
+                    pbnString.Append(hand.SouthSpades);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.SouthHearts);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.SouthDiamonds);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.SouthClubs);
+                    pbnString.Append(' ');
+                    pbnString.Append(hand.WestSpades);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.WestHearts);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.WestDiamonds);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.WestClubs);
+                    pbnString.Append(' ');
+                    pbnString.Append(hand.NorthSpades);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.NorthHearts);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.NorthDiamonds);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.NorthClubs);
+                    break;
+                case 2:
+                    pbnString.Append("S:");
+                    pbnString.Append(hand.SouthSpades);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.SouthHearts);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.SouthDiamonds);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.SouthClubs);
+                    pbnString.Append(' ');
+                    pbnString.Append(hand.WestSpades);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.WestHearts);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.WestDiamonds);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.WestClubs);
+                    pbnString.Append(' ');
+                    pbnString.Append(hand.NorthSpades);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.NorthHearts);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.NorthDiamonds);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.NorthClubs);
+                    pbnString.Append(' ');
+                    pbnString.Append(hand.EastSpades);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.EastHearts);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.EastDiamonds);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.EastClubs);
+                    break;
+                case 3:
+                    pbnString.Append("W:");
+                    pbnString.Append(hand.WestSpades);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.WestHearts);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.WestDiamonds);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.WestClubs);
+                    pbnString.Append(' ');
+                    pbnString.Append(hand.NorthSpades);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.NorthHearts);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.NorthDiamonds);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.NorthClubs);
+                    pbnString.Append(' ');
+                    pbnString.Append(hand.EastSpades);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.EastHearts);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.EastDiamonds);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.EastClubs);
+                    pbnString.Append(' ');
+                    pbnString.Append(hand.SouthSpades);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.SouthHearts);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.SouthDiamonds);
+                    pbnString.Append('.');
+                    pbnString.Append(hand.SouthClubs);
+                    break;
+            }
+            string pbn = pbnString.ToString();
+
+            ddTableDealPBN tdp = new() { cards = new char[80] };
+            for (int i = 0; i < pbn.Length; i++)
+            {
+                tdp.cards[i] = Convert.ToChar(pbn.Substring(i, 1));
             }
             ddTableResults tr = new();
             CalcDDtablePBN(tdp, ref tr);

@@ -49,7 +49,7 @@ namespace TabScore2.Controllers
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabledAndBack;
             }
 
-            if (database.IsIndividual)
+            if (settings.IsIndividual)
             {
                 return View("Individual", showRankingListModel);
             }
@@ -77,7 +77,7 @@ namespace TabScore2.Controllers
             ViewData["Title"] = utilities.Title("ShowFinalRankingList", TitleType.Location, deviceNumber);
             ViewData["Header"] = utilities.Header(HeaderType.Round, deviceNumber);
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
-            if (database.IsIndividual)
+            if (settings.IsIndividual)
             {
                 return View("Individual", showRankingListModel);
             }

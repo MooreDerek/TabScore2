@@ -7,11 +7,13 @@ namespace TabScore2.Forms
 {
     public partial class SettingsForm : Form
     {
+        private readonly IDatabase database;
         private readonly ISettings settings;
         private readonly List<string> fromDirection = ["North", "South", "East", "West"];
 
-        public SettingsForm(ISettings iSettings, Point location)
+        public SettingsForm(IDatabase iDatabase, ISettings iSettings, Point location)
         {
+            database = iDatabase;
             settings = iSettings;
             InitializeComponent();
             Location = location;
@@ -19,7 +21,7 @@ namespace TabScore2.Forms
 
         private void SettingsForm_Load(object sender, EventArgs e)
         {
-            settings.GetFromDatabase(9999);  // Force settings refresh without updating settings round number
+            database.GetDatabaseSettings(9999);  // Force settings refresh without updating settings round number
             ShowTravellerCheckbox.Checked = settings.ShowTraveller;
             ShowPercentageCheckbox.Checked = settings.ShowPercentage;
             ShowHandRecordCheckbox.Checked = settings.ShowHandRecord;
@@ -75,7 +77,7 @@ namespace TabScore2.Forms
             settings.AdditionalSecondsPerRound = Convert.ToInt32(AdditionalMinutesPerRoundNud.Value * 60);
             settings.SuppressRankingListForFirstXRounds = Convert.ToInt32(SuppressRankingListFirstXNud.Value);
             settings.SuppressRankingListForLastXRounds = Convert.ToInt32(SuppressRankingListLastXNud.Value);
-            settings.UpdateDatabase();
+            database.SetDatabaseSettings();
             Close();
         }
 

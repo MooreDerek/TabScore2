@@ -25,7 +25,7 @@ namespace TabScore.Controllers
             }
 
             DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
-            if (database.GetHand(deviceStatus.SectionID, boardNumber) != null)
+            if (database.GetHand(deviceStatus.SectionID, boardNumber).NorthSpades != "###")
             {
                 // Hand record already exists, so no need to enter it
                 return RedirectToAction("Index", "ShowTraveller", new { deviceNumber, boardNumber });

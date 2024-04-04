@@ -136,7 +136,7 @@ namespace TabScore2.UtilityServices
             if (section.DevicesPerTable == 1)
             {
                 TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
-                if (database.IsIndividual)
+                if (settings.IsIndividual)
                 {
                     if (tableStatus.RoundData.NumberNorth != 0)
                     {
@@ -330,17 +330,17 @@ namespace TabScore2.UtilityServices
             if (!settings.ShowPercentage) showTravellerModel.PercentageNS = string.Empty;   // Don't show percentage
 
             // Determine if there is a hand record to view
-            if (settings.ShowHandRecord && database.HandsCount > 0)
+            if (settings.ShowHandRecord && database.GetHandsCount() > 0)
             {
-                Hand? hand = database.GetHand(tableStatus.SectionID, currentBoardNumber);
-                if (hand != null)
+                Hand hand = database.GetHand(tableStatus.SectionID, currentBoardNumber);
+                if (hand.NorthSpades != "###")
                 {
                     showTravellerModel.HandRecord = true;
                 }
                 else    // Can't find matching hand record, so try default SectionID = 1
                 {
                     hand = database.GetHand(1, currentBoardNumber);
-                    if (hand != null)
+                    if (hand.NorthSpades != "###")
                     {
                         showTravellerModel.HandRecord = true;
                     }
@@ -352,9 +352,12 @@ namespace TabScore2.UtilityServices
         public ShowHandRecordModel? CreateShowHandRecordModel(int deviceNumber, int boardNumber)
         {
             DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
-            Hand? hand = database.GetHand(deviceStatus.SectionID, boardNumber);
-            hand ??= database.GetHand(1, boardNumber);
-            if (hand == null) return null;
+            Hand hand = database.GetHand(deviceStatus.SectionID, boardNumber);
+            if (hand.NorthSpades == "###")
+            {
+                hand = database.GetHand(1, boardNumber);
+                if (hand.NorthSpades == "###") return null;
+            }
 
             string dealer = ((boardNumber - 1) % 4) switch
             {
@@ -491,7 +494,7 @@ namespace TabScore2.UtilityServices
         {
             Move move = new(pairNumber, direction);
             Round? round;
-            if (database.IsIndividual)
+            if (settings.IsIndividual)
             {
                 // Try Direction = North
                 round = roundsList.Find(x => x.NumberNorth == pairNumber);
@@ -634,7 +637,7 @@ namespace TabScore2.UtilityServices
             List<Ranking> rankings = database.GetRankingList(sectionID);
             if (rankings.Count == 0)  // Results table either doesn't exist or contains no entries, so try to calculate rankings
             {
-                if (database.IsIndividual)
+                if (settings.IsIndividual)
                 {
                     rankings.AddRange(CalculateIndividualRankingFromResults(sectionID));
                 }
@@ -670,7 +673,7 @@ namespace TabScore2.UtilityServices
                     // parameter1 = deviceNumber
                     deviceStatus = appData.GetDeviceStatus(parameter1);
                     TableStatus tableStatus = appData.GetTableStatus(parameter1);
-                    if (database.IsIndividual)
+                    if (settings.IsIndividual)
                     {
                         return $"{deviceStatus.Location}: {localizer["Rd"]} {tableStatus.RoundNumber}: {tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth} v {tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}";
                     }
@@ -682,7 +685,7 @@ namespace TabScore2.UtilityServices
                     // parameter1 = deviceNumber, parameter2 = boardNumber
                     deviceStatus = appData.GetDeviceStatus(parameter1);
                     tableStatus = appData.GetTableStatus(parameter1);
-                    if (database.IsIndividual)
+                    if (settings.IsIndividual)
                     {
                         return $"{deviceStatus.Location}: {localizer["Rd"]} {tableStatus.RoundNumber}: {ColourPairByVulnerability("NS", parameter2, $"{tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth}")} v {ColourPairByVulnerability("EW", parameter2, $"{tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}")}";
                     }
@@ -724,15 +727,15 @@ namespace TabScore2.UtilityServices
 
         public bool ValidateLead(TableStatus tableStatus, string card)
         {
-            if (database.HandsCount == 0) return true;    // No hand records to validate against
+            if (database.GetHandsCount() == 0) return true;    // No hand records to validate against
             if (tableStatus.ResultData == null) return true;  // No result (shouldn't be possible at this stage)
             if (card == "SKIP") return true;    // Lead card entry has been skipped, so no validation
 
-            Hand? hand = database.GetHand(tableStatus.SectionID, tableStatus.ResultData.BoardNumber);
-            if (hand == null)     // Can't find matching hand record, so try default SectionID = 1
+            Hand hand = database.GetHand(tableStatus.SectionID, tableStatus.ResultData.BoardNumber);
+            if (hand.NorthSpades == "###")     // Can't find matching hand record, so try default SectionID = 1
             {
                 hand = database.GetHand(1, tableStatus.ResultData.BoardNumber);
-                if (hand == null) return true;    // Still no match, so no validation possible
+                if (hand.NorthSpades == "###") return true;    // Still no match, so no validation possible
             }
 
             string cardSuit = card[..1];
@@ -1020,7 +1023,12 @@ namespace TabScore2.UtilityServices
                     Ranking? rankingListFind = rankingList.Find(x => x.PairNo == result.NumberNorth);
                     if (rankingListFind == null)
                     {
-                        Ranking ranking = new(result.NumberNorth, "0", result.MatchpointsNS, matchPointsMax);
+                        Ranking ranking = new() {
+                            PairNo = result.NumberNorth,
+                            Orientation = "0",
+                            MP = result.MatchpointsNS,
+                            MPMax = matchPointsMax 
+                        };
                         rankingList.Add(ranking);
                     }
                     else
@@ -1031,7 +1039,13 @@ namespace TabScore2.UtilityServices
                     rankingListFind = rankingList.Find(x => x.PairNo == result.NumberEast);
                     if (rankingListFind == null)
                     {
-                        Ranking ranking = new(result.NumberEast, "0", result.MatchpointsEW, matchPointsMax);
+                        Ranking ranking = new()
+                        {
+                            PairNo = result.NumberEast,
+                            Orientation = "0",
+                            MP = result.MatchpointsEW,
+                            MPMax = matchPointsMax
+                        };
                         rankingList.Add(ranking);
                     }
                     else
@@ -1075,7 +1089,13 @@ namespace TabScore2.UtilityServices
                     Ranking? rankingListFind = rankingList.Find(x => x.PairNo == result.NumberNorth && x.Orientation == "N");
                     if (rankingListFind == null)
                     {
-                        Ranking ranking = new(result.NumberNorth, "N", result.MatchpointsNS, matchPointsMax);
+                        Ranking ranking = new()
+                        {
+                            PairNo = result.NumberNorth,
+                            Orientation = "N",
+                            MP = result.MatchpointsNS,
+                            MPMax = matchPointsMax
+                        };
                         rankingList.Add(ranking);
                     }
                     else
@@ -1086,7 +1106,13 @@ namespace TabScore2.UtilityServices
                     rankingListFind = rankingList.Find(x => x.PairNo == result.NumberEast && x.Orientation == "E");
                     if (rankingListFind == null)
                     {
-                        Ranking ranking = new(result.NumberEast, "E", result.MatchpointsEW, matchPointsMax);
+                        Ranking ranking = new()
+                        {
+                            PairNo = result.NumberEast,
+                            Orientation = "E",
+                            MP = result.MatchpointsEW,
+                            MPMax = matchPointsMax
+                        };
                         rankingList.Add(ranking);
                     }
                     else
@@ -1201,7 +1227,13 @@ namespace TabScore2.UtilityServices
                 Ranking? rankingListFind = rankingList.Find(x => x.PairNo == result.NumberNorth);
                 if (rankingListFind == null)
                 {
-                    Ranking ranking = new(result.NumberNorth, "0", result.MatchpointsNS, matchPointsMax);
+                    Ranking ranking = new()
+                    {
+                        PairNo = result.NumberNorth,
+                        Orientation = "0",
+                        MP = result.MatchpointsNS,
+                        MPMax = matchPointsMax
+                    };
                     rankingList.Add(ranking);
                 }
                 else
@@ -1212,7 +1244,13 @@ namespace TabScore2.UtilityServices
                 rankingListFind = rankingList.Find(x => x.PairNo == result.NumberEast);
                 if (rankingListFind == null)
                 {
-                    Ranking ranking = new(result.NumberEast, "0", result.MatchpointsEW, matchPointsMax);
+                    Ranking ranking = new()
+                    {
+                        PairNo = result.NumberEast,
+                        Orientation = "0",
+                        MP = result.MatchpointsEW,
+                        MPMax = matchPointsMax
+                    };
                     rankingList.Add(ranking);
                 }
                 else
@@ -1223,7 +1261,13 @@ namespace TabScore2.UtilityServices
                 rankingListFind = rankingList.Find(x => x.PairNo == result.NumberSouth);
                 if (rankingListFind == null)
                 {
-                    Ranking ranking = new(result.NumberSouth, "0", result.MatchpointsNS, matchPointsMax);
+                    Ranking ranking = new()
+                    {
+                        PairNo = result.NumberSouth,
+                        Orientation = "0",
+                        MP = result.MatchpointsNS,
+                        MPMax = matchPointsMax
+                    };
                     rankingList.Add(ranking);
                 }
                 else
@@ -1234,7 +1278,13 @@ namespace TabScore2.UtilityServices
                 rankingListFind = rankingList.Find(x => x.PairNo == result.NumberWest);
                 if (rankingListFind == null)
                 {
-                    Ranking ranking = new(result.NumberWest, "0", result.MatchpointsEW, matchPointsMax);
+                    Ranking ranking = new()
+                    {
+                        PairNo = result.NumberWest,
+                        Orientation = "0",
+                        MP = result.MatchpointsEW,
+                        MPMax = matchPointsMax
+                    };
                     rankingList.Add(ranking);
                 }
                 else

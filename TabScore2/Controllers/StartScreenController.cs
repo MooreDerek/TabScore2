@@ -26,13 +26,13 @@ namespace TabScore2.Controllers
 
         public ActionResult OKButtonClick()
         {
-            if (!database.InitializationComplete)
+            if (!settings.DatabaseReady)
             {
                 TempData["WarningMessage"] = "ErrorNoDBSelected";
                 return RedirectToAction("Index", "StartScreen");
             }
-            settings.SetTabletDevicesPerTable();  // Only happens once at start of session
-            settings.GetFromDatabase();           // Only happens once per round
+            database.Prepare();             // Only happens once at start of session                 
+            database.GetDatabaseSettings();     // Only happens once per round
             return RedirectToAction("Index", "SelectSection");
         }
     }

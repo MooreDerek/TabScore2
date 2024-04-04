@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using Microsoft.Extensions.Localization;
+using System.Drawing;
 using System.Reflection;
 using TabScore2.Classes;
 using TabScore2.DataServices;
@@ -15,39 +16,55 @@ namespace TabScore2.Forms
         private readonly IStringLocalizer<Strings> localizer;
         private readonly IDatabase database;
         private readonly IAppData appData;
-
-        public MainForm(IServiceProvider iServiceProvider, IStringLocalizer<Strings> iLocalizer, IDatabase iDatabase, IAppData iAppData)
+        private readonly ISettings settings;
+        
+        public MainForm(IServiceProvider iServiceProvider, IStringLocalizer<Strings> iLocalizer, IDatabase iDatabase, IAppData iAppData, ISettings iSettings)
         {
             serviceProvider = iServiceProvider;
             localizer = iLocalizer;
             database = iDatabase;
             appData = iAppData;
+            settings = iSettings;
             InitializeComponent();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            // Set form title
             Text = $"TabScore2 - {localizer["Version"]} {Assembly.GetExecutingAssembly().GetName().Version}";
+
+            // Scoring database is not yet ready for use
+            settings.DatabaseReady = false;
+            settings.PathToDatabase = string.Empty;
+            
+            // Parse command line args correctly to get database path
+            string argsString = string.Empty;
+            string[] arguments = Environment.GetCommandLineArgs();
+            foreach (string s in arguments)
+            {
+                argsString = argsString + s + " ";
+            }
+            arguments = argsString.Split(['/']);
+            foreach (string s in arguments)
+            {
+                if (s.StartsWith("f:["))
+                {
+                    settings.PathToDatabase = s.Split(['[', ']'])[1];
+                    break;
+                }
+            }
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
-            if (database.PathToDatabase == string.Empty)
-            {
-                buttonAddDatabaseFile.Visible = true;
-            }
-            else
-            {
-                IntializeDatabase();
-            }
+            IntializeDatabase();
         }
 
         private void ButtonAddDatabaseFile_Click(object sender, EventArgs e)
         {
             if (databaseFileDialog.ShowDialog() == DialogResult.OK)
             {
-                database.InitializationComplete = false;
-                database.PathToDatabase = databaseFileDialog.FileName;
+                settings.PathToDatabase = databaseFileDialog.FileName;
                 IntializeDatabase();
             }
         }
@@ -57,8 +74,10 @@ namespace TabScore2.Forms
             if (handRecordFileDialog.ShowDialog() == DialogResult.OK)
             {
                 labelPathToHandRecordFile.Text = handRecordFileDialog.FileName;
-                database.GetHandsFromFile(new StreamReader(handRecordFileDialog.FileName));
-                if (database.HandsCount == 0)
+                List<Hand> handsList = GetHandsFromFile(new StreamReader(handRecordFileDialog.FileName));
+                database.AddHands(handsList);
+
+                if (database.GetHandsCount() == 0)
                 {
                     MessageBox.Show(localizer["FileNoHandRecords"], "TabScoreStarter", MessageBoxButtons.OK);
                 }
@@ -68,14 +87,14 @@ namespace TabScore2.Forms
                     buttonResultsViewer.Enabled = false;
                     labelSessionStatus.Text = localizer["SessionPaused"];
                     labelSessionStatus.ForeColor = Color.OrangeRed;
-                    database.InitializationComplete = false;
+                    settings.DatabaseReady = false;
                     Refresh();
                     AnalyseHands();
                     buttonSettings.Enabled = true;
                     buttonResultsViewer.Enabled = true;
                     labelSessionStatus.Text = localizer["SessionRunning"];
                     labelSessionStatus.ForeColor = Color.Green;
-                    database.InitializationComplete = true;
+                    settings.DatabaseReady = true;
                 }
             }
         }
@@ -107,16 +126,23 @@ namespace TabScore2.Forms
 
         private void IntializeDatabase()
         {
-            string? databaseError = database.Initialize();
-            if (databaseError != null)
+            settings.DatabaseReady = false;
+            if (settings.PathToDatabase == string.Empty) 
+            {
+                // No database file set
+                buttonAddDatabaseFile.Visible = true;
+                return;
+            }
+            string returnMessage = database.Initialize();
+            if (returnMessage != string.Empty)
             {
                 // Database is not valid for some reason and Initialize failed
-                MessageBox.Show(localizer[databaseError], "TabScore2", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(localizer[returnMessage], "TabScore2", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 buttonAddDatabaseFile.Visible = true;
             }
             else
             {
-                labelPathToDatabase.Text = database.PathToDatabase;
+                labelPathToDatabase.Text = settings.PathToDatabase;
                 buttonSettings.Enabled = false;
                 buttonResultsViewer.Enabled = false;
                 buttonSettings.Visible = true;
@@ -124,7 +150,7 @@ namespace TabScore2.Forms
                 buttonAddDatabaseFile.Visible = false;
 
                 // Analyse any hand records in the database
-                if (database.HandsCount > 0)
+                if (database.GetHandsCount() > 0)
                 {
                     labelPathToHandRecordFile.Text = localizer["IncludedInDatabase"];
                     AnalyseHands();
@@ -135,7 +161,7 @@ namespace TabScore2.Forms
                 buttonResultsViewer.Enabled = true;
                 labelSessionStatus.Text = localizer["SessionRunning"];
                 labelSessionStatus.ForeColor = Color.Green;
-                database.InitializationComplete = true;
+                settings.DatabaseReady = true;
             }
         }
 
@@ -148,17 +174,140 @@ namespace TabScore2.Forms
             Refresh();
             double counter = 0.0;
             appData.ClearHandEvaluations();
-            foreach (Hand hand in database.HandsList)
+            foreach (Hand hand in database.GetHandsList())
             {
                 appData.AddHandEvaluation(hand);
                 counter++;
-                progressBarAnalysing.Value = Convert.ToInt32(counter / database.HandsCount * 100.0);
+                progressBarAnalysing.Value = Convert.ToInt32(counter / database.GetHandsCount() * 100.0);
             }
             progressBarAnalysing.Value = 100;
             labelAnalysing.Text = localizer["AnalysisComplete"];
             buttonAddHandRecordFile.Text = localizer["ChangeHandRecordFile"];
             buttonAddHandRecordFile.Enabled = true;
         }
+
+        private static List<Hand> GetHandsFromFile(StreamReader file)
+        {
+            bool newBoard = false;
+            string? line = null;
+            char[] quoteDelimiter = ['"'];
+            char[] pbnDelimiter = [':', '.', ' '];
+
+            List<Hand> handsList = [];
+
+            if (!file.EndOfStream)
+            {
+                line = file.ReadLine();
+                newBoard = line != null && line.Length > 7 && line[..7] == "[Board ";
+            }
+            while (!file.EndOfStream)
+            {
+                if (newBoard)
+                {
+                    newBoard = false;
+                    Hand hand = new() { BoardNumber = Convert.ToInt32(line!.Split(quoteDelimiter)[1]) };
+                    while ((line = file.ReadLine()) != null)
+                    {
+                        if (line.Length > 6 && line[..6] == "[Deal ")
+                        {
+                            string pbn = line.Split(quoteDelimiter)[1];
+                            string[] pbnArray = pbn.Split(pbnDelimiter);
+                            switch (pbnArray[0])
+                            {
+                                case "N":
+                                    hand.NorthSpades = pbnArray[1];
+                                    hand.NorthHearts = pbnArray[2];
+                                    hand.NorthDiamonds = pbnArray[3];
+                                    hand.NorthClubs = pbnArray[4];
+                                    hand.EastSpades = pbnArray[5];
+                                    hand.EastHearts = pbnArray[6];
+                                    hand.EastDiamonds = pbnArray[7];
+                                    hand.EastClubs = pbnArray[8];
+                                    hand.SouthSpades = pbnArray[9];
+                                    hand.SouthHearts = pbnArray[10];
+                                    hand.SouthDiamonds = pbnArray[11];
+                                    hand.SouthClubs = pbnArray[12];
+                                    hand.WestSpades = pbnArray[13];
+                                    hand.WestHearts = pbnArray[14];
+                                    hand.WestDiamonds = pbnArray[15];
+                                    hand.WestClubs = pbnArray[16];
+                                    break;
+                                case "E":
+                                    hand.EastSpades = pbnArray[1];
+                                    hand.EastHearts = pbnArray[2];
+                                    hand.EastDiamonds = pbnArray[3];
+                                    hand.EastClubs = pbnArray[4];
+                                    hand.SouthSpades = pbnArray[5];
+                                    hand.SouthHearts = pbnArray[6];
+                                    hand.SouthDiamonds = pbnArray[7];
+                                    hand.SouthClubs = pbnArray[8];
+                                    hand.WestSpades = pbnArray[9];
+                                    hand.WestHearts = pbnArray[10];
+                                    hand.WestDiamonds = pbnArray[11];
+                                    hand.WestClubs = pbnArray[12];
+                                    hand.NorthSpades = pbnArray[13];
+                                    hand.NorthHearts = pbnArray[14];
+                                    hand.NorthDiamonds = pbnArray[15];
+                                    hand.NorthClubs = pbnArray[16];
+                                    break;
+                                case "S":
+                                    hand.SouthSpades = pbnArray[1];
+                                    hand.SouthHearts = pbnArray[2];
+                                    hand.SouthDiamonds = pbnArray[3];
+                                    hand.SouthClubs = pbnArray[4];
+                                    hand.WestSpades = pbnArray[5];
+                                    hand.WestHearts = pbnArray[6];
+                                    hand.WestDiamonds = pbnArray[7];
+                                    hand.WestClubs = pbnArray[8];
+                                    hand.NorthSpades = pbnArray[9];
+                                    hand.NorthHearts = pbnArray[10];
+                                    hand.NorthDiamonds = pbnArray[11];
+                                    hand.NorthClubs = pbnArray[12];
+                                    hand.EastSpades = pbnArray[13];
+                                    hand.EastHearts = pbnArray[14];
+                                    hand.EastDiamonds = pbnArray[15];
+                                    hand.EastClubs = pbnArray[16];
+                                    break;
+                                case "W":
+                                    hand.WestSpades = pbnArray[1];
+                                    hand.WestHearts = pbnArray[2];
+                                    hand.WestDiamonds = pbnArray[3];
+                                    hand.WestClubs = pbnArray[4];
+                                    hand.NorthSpades = pbnArray[5];
+                                    hand.NorthHearts = pbnArray[6];
+                                    hand.NorthDiamonds = pbnArray[7];
+                                    hand.NorthClubs = pbnArray[8];
+                                    hand.EastSpades = pbnArray[9];
+                                    hand.EastHearts = pbnArray[10];
+                                    hand.EastDiamonds = pbnArray[11];
+                                    hand.EastClubs = pbnArray[12];
+                                    hand.SouthSpades = pbnArray[13];
+                                    hand.SouthHearts = pbnArray[14];
+                                    hand.SouthDiamonds = pbnArray[15];
+                                    hand.SouthClubs = pbnArray[16];
+                                    break;
+                            }
+                        }
+                        else if (line.Length > 7 && line[..7] == "[Board ")
+                        {
+                            newBoard = true;
+                            if (hand.NorthSpades != "###") handsList.Add(hand);
+                            break;
+                        }
+                    }
+                    if (file.EndOfStream)
+                    {
+                        if (hand.NorthSpades != "###") handsList.Add(hand);
+                    }
+                }
+                else if (!file.EndOfStream)
+                {
+                    line = file.ReadLine();
+                    newBoard = line != null && line.Length > 7 && line[..7] == "[Board ";
+                }
+            }
+            file.Close();
+            return handsList;
+        }
     }
 }
-

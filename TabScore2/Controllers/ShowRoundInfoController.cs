@@ -10,11 +10,12 @@ using TabScore2.UtilityServices;
 
 namespace TabScore2.Controllers
 {
-    public class ShowRoundInfoController(IDatabase iDatabase, IAppData iAppData, IUtilities iUtilities) : Controller
+    public class ShowRoundInfoController(IDatabase iDatabase, IAppData iAppData, IUtilities iUtilities, ISettings iSettings) : Controller
     {
         private readonly IDatabase database = iDatabase;
         private readonly IAppData appData = iAppData;
         private readonly IUtilities utilities = iUtilities;
+        private readonly ISettings settings = iSettings;
 
         public ActionResult Index(int deviceNumber)
         {
@@ -33,7 +34,15 @@ namespace TabScore2.Controllers
 
             // Update player names if not just immediately done in ShowPlayerIDs
             TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
-            if (deviceStatus.NamesUpdateRequired) database.GetNamesForRound(tableStatus);
+            if (deviceStatus.NamesUpdateRequired)
+            {
+                Names names = database.GetNamesForRound(tableStatus.SectionID, tableStatus.RoundNumber, tableStatus.RoundData.NumberNorth, tableStatus.RoundData.NumberEast, tableStatus.RoundData.NumberSouth, tableStatus.RoundData.NumberWest);
+                tableStatus.RoundData.NameNorth = names.NameNorth;
+                tableStatus.RoundData.NameEast = names.NameEast;
+                tableStatus.RoundData.NameSouth = names.NameSouth;
+                tableStatus.RoundData.NameWest = names.NameWest;
+                tableStatus.RoundData.GotAllNames = names.GotAllNames;
+            }
             deviceStatus.NamesUpdateRequired = true;
 
             ShowRoundInfoModel showRoundInfoModel = utilities.CreateShowRoundInfoModel(deviceNumber);
@@ -71,7 +80,7 @@ namespace TabScore2.Controllers
                 // Back button needed if one tablet device per table, in case EW need to go back to check their move details 
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabledAndBack;
             }
-            if (database.IsIndividual)
+            if (settings.IsIndividual)
             {
                 return View("Individual", showRoundInfoModel);
             }
@@ -89,7 +98,7 @@ namespace TabScore2.Controllers
             int newRoundNumber = deviceStatus.RoundNumber;  // Going back, so new round is current round!
             deviceStatus.RoundNumber--;
             tableStatus.RoundNumber--;
-            database.GetRoundData(tableStatus);
+            tableStatus.RoundData = database.GetRoundData(tableStatus.SectionID, tableStatus.TableNumber, tableStatus.RoundNumber);
             return RedirectToAction("Index", "ShowMove", new { deviceNumber, newRoundNumber});
         }
     }

@@ -1,149 +1,35 @@
 ﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
+using SharedContracts;
 using System.Data.Odbc;
-using System.Net.NetworkInformation;
 using System.Text;
-using TabScore2.Classes;
-using TabScore2.Globals;
 
-namespace TabScore2.DataServices
+namespace GrpcServices
 {
-    // BwsDatabase implements the TabScore2 IDatabase interface for a Microsoft Access 98 scoring database
-    public class BwsDatabase : IDatabase
+    // BwsDatabaseService provides a gRPC implementation of methods to access the 32-bit scoring database (.bws file)
+    public class BwsDatabaseService : IBwsDatabaseService
     {
-        private static string? connectionString = null;
+        private static string connectionString = string.Empty;
+        private static bool isIndividual = false;
+        private static readonly List<GrpcSection> sectionsList = [];
 
-        private static string pathToDatabase = string.Empty;
-        public string PathToDatabase
+        public void SetConnectionString(GrpcPathToDatabaseRequest request)
         {
-            get
-            {
-                if (pathToDatabase == string.Empty)
-                {
-                    string argsString = string.Empty;
-                    string[] arguments = Environment.GetCommandLineArgs();
-
-                    // Parse command line args correctly to get database path
-                    foreach (string s in arguments)
-                    {
-                        argsString = argsString + s + " ";
-                    }
-                    arguments = argsString.Split(['/']);
-                    foreach (string s in arguments)
-                    {
-                        if (s.StartsWith("f:["))
-                        {
-                            pathToDatabase = s.Split(['[', ']'])[1];
-                            break;
-                        }
-                    }
-                }
-                return pathToDatabase;
-            }
-            set
-            {
-                pathToDatabase = value;
-            }
-        }
-
-        private static bool initializationComplete = false;
-        public bool InitializationComplete
-        {
-            get
-            {
-                return initializationComplete;
-            }
-            set
-            {
-                initializationComplete = value;
-            }
-        }
-        
-        public bool IsDatabaseConnectionOK()
-        {
-            // Test read and write to the scoring database
-            try
-            {
-                using OdbcConnection connection = new(connectionString);
-                connection.Open();
-                int logOnOff = 0;
-                string SQLString = $"SELECT LogOnOff FROM Tables WHERE Section=1 AND [Table]=1";
-                OdbcCommand cmd = new(SQLString, connection);
-                ODBCRetryHelper.ODBCRetry(() =>
-                {
-                    logOnOff = Convert.ToInt32(cmd.ExecuteScalar());
-                });
-                SQLString = $"UPDATE Tables SET LogOnOff={logOnOff} WHERE Section=1 AND [Table]=1";
-                cmd = new OdbcCommand(SQLString, connection);
-                ODBCRetryHelper.ODBCRetry(() =>
-                {
-                    cmd.ExecuteNonQuery();
-                });
-                cmd.Dispose();
-            }
-            catch
-            {
-                return false;
-            }
-            return true;
-        }
-
-        private static bool? isIndividual = null;
-        public bool IsIndividual
-        {
-            get
-            {
-                if (isIndividual == null)
-                {
-                    // Determine if event is an 'Individual', in which case RoundData will contain a filled 'South' field.
-                    isIndividual = true;
-                    using OdbcConnection connection = new(connectionString);
-                    connection.Open();
-                    String SQLString = $"SELECT TOP 1 South FROM RoundData";
-                    OdbcCommand cmd = new(SQLString, connection);
-                    try
-                    {
-                        ODBCRetryHelper.ODBCRetry(() =>
-                        {
-                            object? queryResult = cmd.ExecuteScalar();
-                            if (queryResult == null || queryResult == DBNull.Value || Convert.ToString(queryResult) == string.Empty) isIndividual = false;
-                        });
-                    }
-                    catch (OdbcException e)
-                    {
-                        if (e.Errors.Count > 1 || e.Errors[0].SQLState != "07002")   // Error other than field 'South' doesn't exist
-                        {
-                            throw;
-                        }
-                        else
-                        {
-                            isIndividual = false;
-                        }
-                    }
-                    finally
-                    {
-                        cmd.Dispose();
-                    }
-                }
-                return isIndividual.Value;
-            }
-        }
-
-        // ==========================================================
-        // Prepare the database for use by checking tables and fields
-        // ==========================================================
-        public string? Initialize()
-        {
-            // Set connection string for ODBC
-            if (pathToDatabase == string.Empty) return "NoDatabasePath";
-            if (!File.Exists(pathToDatabase)) return "DatabaseNotExist";
             OdbcConnectionStringBuilder cs = new() { Driver = "Microsoft Access Driver (*.mdb)" };
-            cs.Add("Dbq", pathToDatabase);
+            cs.Add("Dbq", request.PathToDatabase);
             cs.Add("Uid", "Admin");
             cs.Add("Pwd", string.Empty);
             connectionString = cs.ToString();
-
+        }
+                
+        // ===============================================================================
+        // Initialize the database by checking tables and fields and updating as necessary
+        // ===============================================================================
+        public GrpcReturnMessage Initialize(GrpcPathToDatabaseRequest request)
+        {
+            SetConnectionString(request);
+            
             // Check a number of features in the Access scoring database to ensure that TabScore2 will work correctly
             // This mainly concerns tables that TabScore2 will need to write to 
             using OdbcConnection connection = new(connectionString);
@@ -153,7 +39,7 @@ namespace TabScore2.DataServices
             }
             catch
             {
-                return "DatabaseNotAccessible";
+                return new GrpcReturnMessage() { ReturnMessage = "DatabaseNotAccessible" };
             }
 
             // Validate SECTION Table
@@ -188,27 +74,27 @@ namespace TabScore2.DataServices
                     object tempWinners = reader.GetValue(3);
                     if (tempWinners != null) winners = Convert.ToInt32(tempWinners);
                 }
-                sectionsList.Add(new Section() { ID = sectionID, Letter = sectionLetter, Tables = numTables, Winners = winners });
+                sectionsList.Add(new GrpcSection() { ID = sectionID, Letter = sectionLetter, Tables = numTables, Winners = winners });
             }
             reader.Close();
 
             // Check that a section exists
             if (sectionsList.Count == 0)
             {
-                return "DatabaseNoSections";
+                return new GrpcReturnMessage() { ReturnMessage = "DatabaseNoSections" };
             }
 
-            foreach (Section section in sectionsList)
+            foreach (GrpcSection section in sectionsList)
             {
                 // Check section letters, and number of tables per section.  These are TabScore constraints
                 section.Letter = section.Letter.Trim();  // Remove any spurious characters
                 if (section.ID < 1 || section.ID > 4 || (section.Letter != "A" && section.Letter != "B" && section.Letter != "C" && section.Letter != "D"))
                 {
-                    return "DatabaseIncorrectSections";
+                    return new GrpcReturnMessage() { ReturnMessage = "DatabaseIncorrectSections" };
                 }
                 if (section.Tables > 30)
                 {
-                    return "DatabaseTooManyTables";
+                    return new GrpcReturnMessage() { ReturnMessage = "DatabaseTooManyTables" };
                 }
 
                 if (section.Winners == 0)
@@ -246,9 +132,37 @@ namespace TabScore2.DataServices
                 }
             }
 
+            // Determine if event is an 'Individual', in which case ROUNDDATA table will contain a filled 'South' field.
+            isIndividual = true;
+            SQLString = $"SELECT TOP 1 South FROM RoundData";
+            cmd = new(SQLString, connection);
+            try
+            {
+                ODBCRetryHelper.ODBCRetry(() =>
+                {
+                    object? queryResult = cmd.ExecuteScalar();
+                    if (queryResult == null || queryResult == DBNull.Value || Convert.ToString(queryResult) == string.Empty) isIndividual = false;
+                });
+            }
+            catch (OdbcException e)
+            {
+                if (e.Errors.Count > 1 || e.Errors[0].SQLState != "07002")   // Error other than field 'South' doesn't exist
+                {
+                    throw;
+                }
+                else
+                {
+                    isIndividual = false;
+                }
+            }
+            finally
+            {
+                cmd.Dispose();
+            }
+
             // Validate RECEIVEDDATA Table
             // If this is an individual event, add extra fields South and West to ReceivedData if they don't exist
-            if (IsIndividual)
+            if (isIndividual)
             {
                 SQLString = "ALTER TABLE ReceivedData ADD South SHORT";
                 cmd = new OdbcCommand(SQLString, connection);
@@ -382,7 +296,7 @@ namespace TabScore2.DataServices
                     int section = reader.GetInt32(0);
                     int table = reader.GetInt32(1);
                     string direction = reader.GetString(2);
-                    if (IsIndividual)
+                    if (isIndividual)
                     {
                         switch (direction)
                         {
@@ -468,56 +382,6 @@ namespace TabScore2.DataServices
                 }
             }
 
-            // Read PlayerNames table
-            // Cater for possibility that one or both of ID and strID could be null/blank.  Prefer strID
-            internalPlayerRecordsList.Clear();
-            SQLString = $"SELECT ID, Name, strID FROM PlayerNames";
-            cmd = new OdbcCommand(SQLString, connection);
-            try
-            {
-                ODBCRetryHelper.ODBCRetry(() =>
-                {
-                    reader = cmd.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        object? readerID = null;
-                        if (!reader.IsDBNull(0))
-                        {
-                            readerID = reader.GetValue(0);
-                        }
-                        object? readerStrID = null;
-                        if (!reader.IsDBNull(2))
-                        {
-                            readerStrID = reader.GetValue(2);
-                        }
-                        string? tempID = null;
-                        if (readerStrID != null) tempID = Convert.ToString(readerStrID);
-                        if ((tempID == null || tempID == string.Empty) && readerID != null) tempID = Convert.ToString(Convert.ToInt32(readerID));
-
-                        if (tempID != null)
-                        {
-                            InternalPlayerRecord playerRecord = new()
-                            {
-                                ID = tempID,
-                                Name = reader.GetString(1),
-                            };
-                            internalPlayerRecordsList.Add(playerRecord);
-                        }
-                    };
-                });
-            }
-            catch (OdbcException e)
-            {
-                if (e.Errors.Count > 1 || e.Errors[0].SQLState != "42S02")  // Error other than PlayerNames table does not exist
-                {
-                    throw;
-                }
-            }
-            finally
-            {
-                reader.Close();
-            }
-
             // Validate and read HANDRECORD Table
             SQLString = "CREATE TABLE HandRecord (Section SHORT, Board SHORT, NorthSpades VARCHAR(13), NorthHearts VARCHAR(13), NorthDiamonds VARCHAR(13), NorthClubs VARCHAR(13), EastSpades VARCHAR(13), EastHearts VARCHAR(13), EastDiamonds VARCHAR(13), EastClubs VARCHAR(13), SouthSpades VARCHAR(13), SouthHearts VARCHAR(13), SouthDiamonds VARCHAR(13), SouthClubs VARCHAR(13), WestSpades VARCHAR(13), WestHearts VARCHAR(13), WestDiamonds VARCHAR(13), WestClubs VARCHAR(13))";
             cmd = new OdbcCommand(SQLString, connection);
@@ -542,7 +406,7 @@ namespace TabScore2.DataServices
                     reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
-                        Hand hand = new()
+                        GrpcHand hand = new()
                         {
                             SectionID = reader.GetInt16(0),
                             BoardNumber = reader.GetInt16(1),
@@ -750,35 +614,76 @@ namespace TabScore2.DataServices
             {
                 cmd.Dispose();
             }
-            return null;
+            return new GrpcReturnMessage() { ReturnMessage = string.Empty };
         }
 
         // ========================================
         // Implement methods to access the database
         // ========================================
 
-        // SECTION
-        private static readonly List<Section> sectionsList = [];
-
-        public Section GetSection(int sectionID)
+        public GrpcIsDatabaseConnectionOK IsDatabaseConnectionOK()
         {
-            Section? section = sectionsList.Find(x => x.ID == sectionID);
-            section ??= sectionsList[0];
-            return section;
+            try
+            {
+                using OdbcConnection connection = new(connectionString);
+                connection.Open();
+                int logOnOff = 0;
+                string SQLString = $"SELECT LogOnOff FROM Tables WHERE Section=1 AND [Table]=1";
+                OdbcCommand cmd = new(SQLString, connection);
+                ODBCRetryHelper.ODBCRetry(() =>
+                {
+                    logOnOff = Convert.ToInt32(cmd.ExecuteScalar());
+                });
+                SQLString = $"UPDATE Tables SET LogOnOff={logOnOff} WHERE Section=1 AND [Table]=1";
+                cmd = new OdbcCommand(SQLString, connection);
+                ODBCRetryHelper.ODBCRetry(() =>
+                {
+                    cmd.ExecuteNonQuery();
+                });
+                cmd.Dispose();
+            }
+            catch
+            {
+                return new GrpcIsDatabaseConnectionOK() { IsDatabaseConnectionOK = false };
+            }
+            return new GrpcIsDatabaseConnectionOK() { IsDatabaseConnectionOK = true };
         }
 
-        public List<Section> GetSectionsList()
+        public GrpcIsIndividual GetIsIndividual()
         {
+            return new GrpcIsIndividual() { IsIndividual = isIndividual };
+        }
+
+        // SECTION
+        public List<GrpcSection> GetDatabaseSectionsList()
+        {
+            if (sectionsList.Count == 0)  // Check to see if list is already populated
+            {
+                using OdbcConnection connection = new(connectionString);
+                connection.Open();
+                string SQLString = "SELECT ID, Letter, [Tables], Winners FROM Section";
+                OdbcCommand cmd = new(SQLString, connection);
+                OdbcDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    int sectionID = reader.GetInt32(0);
+                    string sectionLetter = reader.GetString(1);
+                    int numTables = reader.GetInt32(2);
+                    int winners = reader.GetInt32(3);
+                    sectionsList.Add(new GrpcSection() { ID = sectionID, Letter = sectionLetter, Tables = numTables, Winners = winners });
+                }
+                reader.Close();
+            }
             return sectionsList;
         }
 
         // TABLE
-        public void RegisterTable(int sectionID, int tableNumber)
+        public void RegisterTable(GrpcSectionTableRequest request)
         {
             // Set table status in "Tables" table.  Not needed in TabScore, but complies with BridgeMate spec
             using OdbcConnection connection = new(connectionString);
             connection.Open();
-            string SQLString = $"UPDATE Tables SET LogOnOff=1 WHERE Section={sectionID} AND [Table]={tableNumber}";
+            string SQLString = $"UPDATE Tables SET LogOnOff=1 WHERE Section={request.SectionID} AND [Table]={request.TableNumber}";
             OdbcCommand cmd = new(SQLString, connection);
             try
             {
@@ -793,17 +698,18 @@ namespace TabScore2.DataServices
 
         // ROUND
         private static int roundsInEventRoundNumber = 0;
-        private static int numberOfRoundsInEvent = 1;
-        public int GetNumberOfRoundsInEvent(int sectionID, int roundNumber = 999)
+        
+        public GrpcNumberOfRoundsInEvent GetNumberOfRoundsInEvent(GrpcSectionRoundRequest request)
         {
+            int numberOfRoundsInEvent = 1;
             // Need to re-query the database each round in case rounds are added/removed by scoring program
-            if (roundNumber >= roundsInEventRoundNumber) 
+            if (request.RoundNumber >= roundsInEventRoundNumber) 
             {
                 object? queryResult = null;
                 using (OdbcConnection connection = new(connectionString))
                 {
                     connection.Open();
-                    string SQLString = $"SELECT MAX(Round) FROM RoundData WHERE Section={sectionID}";
+                    string SQLString = $"SELECT MAX(Round) FROM RoundData WHERE Section={request.SectionID}";
                     OdbcCommand cmd = new(SQLString, connection);
                     try
                     {
@@ -818,16 +724,16 @@ namespace TabScore2.DataServices
                 roundsInEventRoundNumber++;
                 numberOfRoundsInEvent = Convert.ToInt32(queryResult);
             }
-            return numberOfRoundsInEvent;
+            return new GrpcNumberOfRoundsInEvent() { NumberOfRoundsInEvent = numberOfRoundsInEvent };
         }
 
-        public int GetNumberOfLastRoundWithResults(int sectionID, int tableNumber)
+        public GrpcNumberOfLastRoundWithResults GetNumberOfLastRoundWithResults(GrpcSectionTableRequest request)
         {
             object? queryResult = null;
             using (OdbcConnection connection = new(connectionString))
             {
                 connection.Open();
-                string SQLString = $"SELECT MAX(Round) FROM ReceivedData WHERE Section={sectionID} AND [Table]={tableNumber}";
+                string SQLString = $"SELECT MAX(Round) FROM ReceivedData WHERE Section={request.SectionID} AND [Table]={request.TableNumber}";
                 OdbcCommand cmd = new(SQLString, connection);
                 try
                 {
@@ -841,22 +747,22 @@ namespace TabScore2.DataServices
             }
             if (queryResult == null || queryResult == DBNull.Value)
             {
-                return 1;
+                return new GrpcNumberOfLastRoundWithResults() { NumberOfLastRoundWithResults = 1 };
             }
             else
             {
-                return Convert.ToInt32(queryResult);
+                return new GrpcNumberOfLastRoundWithResults() { NumberOfLastRoundWithResults = Convert.ToInt32(queryResult) };
             }
         }
 
-        public List<Round> GetRoundsList(int sectionID, int roundNumber) 
+        public List<GrpcRound> GetRoundsList(GrpcSectionRoundRequest request)
         {
-            List<Round> roundsList = [];
+            List<GrpcRound> roundsList = [];
             using OdbcConnection connection = new(connectionString);
             connection.Open();
-            if (IsIndividual)
+            if (isIndividual)
             {
-                string SQLString = $"SELECT [Table], NSPair, EWPair, LowBoard, HighBoard, South, West FROM RoundData WHERE Section={sectionID} AND Round={roundNumber}";
+                string SQLString = $"SELECT [Table], NSPair, EWPair, LowBoard, HighBoard, South, West FROM RoundData WHERE Section={request.SectionID} AND Round={request.RoundNumber}";
                 OdbcCommand cmd = new(SQLString, connection);
                 OdbcDataReader? reader = null;
                 try
@@ -866,7 +772,7 @@ namespace TabScore2.DataServices
                         reader = cmd.ExecuteReader();
                         while (reader.Read())
                         {
-                            Round round = new()
+                            GrpcRound round = new()
                             {
                                 TableNumber = reader.GetInt32(0),
                                 NumberNorth = reader.GetInt32(1),
@@ -888,7 +794,7 @@ namespace TabScore2.DataServices
             }
             else  // Not individual
             {
-                string SQLString = $"SELECT [Table], NSPair, EWPair, LowBoard, HighBoard FROM RoundData WHERE Section={sectionID} AND Round={roundNumber}";
+                string SQLString = $"SELECT [Table], NSPair, EWPair, LowBoard, HighBoard FROM RoundData WHERE Section={request.SectionID} AND Round={request.RoundNumber}";
                 OdbcCommand cmd = new(SQLString, connection);
                 OdbcDataReader? reader = null;
                 try
@@ -898,7 +804,7 @@ namespace TabScore2.DataServices
                         reader = cmd.ExecuteReader();
                         while (reader.Read())
                         {
-                            Round round = new()
+                            GrpcRound round = new()
                             {
                                 TableNumber = reader.GetInt32(0),
                                 NumberNorth = reader.GetInt32(1),
@@ -919,14 +825,17 @@ namespace TabScore2.DataServices
             return roundsList;
         }
 
-        public void GetRoundData(TableStatus tableStatus)
+        public GrpcRound GetRoundData(GrpcSectionTableRoundRequest request)
         {
+            GrpcRound round = new() 
+            { 
+                TableNumber = request.TableNumber
+            };
             using OdbcConnection connection = new(connectionString);
-            Round round = new();
             connection.Open();
-            if (IsIndividual)
+            if (isIndividual)
             {
-                string SQLString = $"SELECT NSPair, EWPair, South, West, LowBoard, HighBoard FROM RoundData WHERE Section={tableStatus.SectionID} AND Table={tableStatus.TableNumber} AND Round={tableStatus.RoundNumber}";
+                string SQLString = $"SELECT NSPair, EWPair, South, West, LowBoard, HighBoard FROM RoundData WHERE Section={request.SectionID} AND Table={request.TableNumber} AND Round={request.RoundNumber}";
                 OdbcCommand cmd = new(SQLString, connection);
                 OdbcDataReader? reader = null;
                 try
@@ -953,7 +862,7 @@ namespace TabScore2.DataServices
             }
             else  // Not individual
             {
-                string SQLString = $"SELECT NSPair, EWPair, LowBoard, HighBoard FROM RoundData WHERE Section={tableStatus.SectionID} AND Table={tableStatus.TableNumber} AND Round={tableStatus.RoundNumber}";
+                string SQLString = $"SELECT NSPair, EWPair, LowBoard, HighBoard FROM RoundData WHERE Section={request.SectionID} AND Table={request.TableNumber} AND Round={request.RoundNumber}";
                 OdbcCommand cmd = new(SQLString, connection);
                 OdbcDataReader? reader = null;
                 try
@@ -978,7 +887,7 @@ namespace TabScore2.DataServices
             }
             
             // Check for use of missing pair in Section table and set player numbers to 0 if necessary
-            Section? section = sectionsList.Find(x => x.ID == tableStatus.SectionID);
+            GrpcSection? section = sectionsList.Find(x => x.ID == request.SectionID);
             if (section != null)
             {
                 int missingPair = section.MissingPair;
@@ -986,24 +895,24 @@ namespace TabScore2.DataServices
                 if (round.NumberEast == missingPair) round.NumberEast = round.NumberWest = 0;
             }
 
-            tableStatus.RoundData = round;
+            return round;
         }
 
         // RECEIVEDDATA
-        public Result GetResult(int sectionID, int tableNumber, int roundNumber, int boardNumber)
+        public GrpcResult GetResult(GrpcSectionTableRoundBoardRequest request)
         {
-            Result result = new()
+            GrpcResult result = new()
             {
-                SectionID = sectionID,
-                TableNumber = tableNumber,
-                RoundNumber = roundNumber,
-                BoardNumber = boardNumber
+                SectionID = request.SectionID,
+                TableNumber = request.TableNumber,
+                RoundNumber = request.RoundNumber,
+                BoardNumber = request.BoardNumber
             };
-            if (boardNumber == 0) return result;
+            if (result.BoardNumber == 0) return result;
 
             using OdbcConnection connection = new(connectionString);
             connection.Open();
-            string SQLString = $"SELECT [NS/EW], Contract, Result, LeadCard, Remarks FROM ReceivedData WHERE Section={sectionID} AND [Table]={tableNumber} AND Round={roundNumber} AND Board={boardNumber}";
+            string SQLString = $"SELECT [NS/EW], Contract, Result, LeadCard, Remarks FROM ReceivedData WHERE Section={result.SectionID} AND [Table]={result.TableNumber} AND Round={result.RoundNumber} AND Board={result.BoardNumber}";
             OdbcCommand cmd = new(SQLString, connection);
             OdbcDataReader? reader = null;
             try
@@ -1057,7 +966,7 @@ namespace TabScore2.DataServices
             return result;
         }
 
-        public void SetResult(Result result)
+        public void SetResult(GrpcResult result)
         {
             using OdbcConnection connection = new(connectionString);
             // Delete any previous result
@@ -1081,7 +990,7 @@ namespace TabScore2.DataServices
             }
             else
             {
-                if (IsIndividual)
+                if (isIndividual)
                 {
                     declarer = result.DeclarerNSEW switch
                     {
@@ -1135,7 +1044,7 @@ namespace TabScore2.DataServices
                 }
             }
 
-            if (IsIndividual)
+            if (isIndividual)
             {
                 SQLString = $"INSERT INTO ReceivedData (Section, [Table], Round, Board, PairNS, PairEW, South, West, Declarer, [NS/EW], Contract, Result, LeadCard, Remarks, DateLog, TimeLog, Processed, Processed1, Processed2, Processed3, Processed4, Erased) VALUES ({result.SectionID}, {result.TableNumber}, {result.RoundNumber}, {result.BoardNumber}, {result.NumberNorth}, {result.NumberEast}, {result.NumberSouth}, {result.NumberWest}, {declarer}, '{result.DeclarerNSEW}', '{contract}', '{result.TricksTakenSymbol}', '{leadCard}', '{result.Remarks}', #{DateTime.Now:yyyy-MM-dd}#, #{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, False, False, False, False, False, False)";
             }
@@ -1155,47 +1064,47 @@ namespace TabScore2.DataServices
             cmd.Dispose();
         }
 
-        public List<Result> GetResultsList(int sectionID = 0, int lowBoard = 0, int highBoard = 0, int tableNumber = 0, int roundNumber = 0)
+        public List<GrpcResult> GetResultsList(GrpcResultsListRequest request)
         {
             string SQLString;
-            if (sectionID == 0)  // Need all results
+            if (request.SectionID == 0)  // Need all results
             {
                 SQLString = $"SELECT Section, [Table], Round, Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW FROM ReceivedData";
             }
-            else if (lowBoard == 0)  // Need all results for section
+            else if (request.LowBoard == 0)  // Need all results for section
             {
-                if (IsIndividual)
+                if (isIndividual)
                 {
-                    SQLString = $"SELECT Section, [Table], Round, Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW, South, West FROM ReceivedData WHERE Section={sectionID}";
+                    SQLString = $"SELECT Section, [Table], Round, Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW, South, West FROM ReceivedData WHERE Section={request.SectionID}";
                 }
                 else
                 {
-                    SQLString = $"SELECT Section, [Table], Round, Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW FROM ReceivedData WHERE Section={sectionID}";
+                    SQLString = $"SELECT Section, [Table], Round, Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW FROM ReceivedData WHERE Section={request.SectionID}";
                 }
             }
-            else if (highBoard == 0)  // Need all results for board = lowBoard
+            else if (request.HighBoard == 0)  // Need all results for board = lowBoard
             {
-                if (IsIndividual)
+                if (isIndividual)
                 {
-                    SQLString = $"SELECT Section, [Table], Round, Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW, South, West FROM ReceivedData WHERE Section={sectionID} AND Board={lowBoard}";
+                    SQLString = $"SELECT Section, [Table], Round, Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW, South, West FROM ReceivedData WHERE Section={request.SectionID} AND Board={request.LowBoard}";
                 }
                 else
                 {
-                    SQLString = $"SELECT Section, [Table], Round, Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW FROM ReceivedData WHERE Section={sectionID} AND Board={lowBoard}";
+                    SQLString = $"SELECT Section, [Table], Round, Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW FROM ReceivedData WHERE Section={request.SectionID} AND Board={request.LowBoard}";
                 }
             }
             else  // Need just the results for this table and round
             {
-                if (IsIndividual)
+                if (isIndividual)
                 {
-                    SQLString = $"SELECT Section, [Table], Round, Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW, South, West FROM ReceivedData WHERE Section={sectionID} AND [Table]={tableNumber} AND Round={roundNumber} AND Board>={lowBoard} AND Board<={highBoard}";
+                    SQLString = $"SELECT Section, [Table], Round, Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW, South, West FROM ReceivedData WHERE Section={request.SectionID} AND [Table]={request.TableNumber} AND Round={request.RoundNumber} AND Board>={request.LowBoard} AND Board<={request.HighBoard}";
                 }
                 else
                 {
-                    SQLString = $"SELECT Section, [Table], Round, Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW FROM ReceivedData WHERE Section={sectionID} AND [Table]={tableNumber} AND Round={roundNumber} AND Board>={lowBoard} AND Board<={highBoard}";
+                    SQLString = $"SELECT Section, [Table], Round, Board, [NS/EW], Contract, LeadCard, Result, Remarks, PairNS, PairEW FROM ReceivedData WHERE Section={request.SectionID} AND [Table]={request.TableNumber} AND Round={request.RoundNumber} AND Board>={request.LowBoard} AND Board<={request.HighBoard}";
                 }
             }
-            List<Result> resultsList = [];
+            List<GrpcResult> resultsList = [];
             using OdbcConnection connection = new(connectionString);
             connection.Open();
             OdbcCommand? cmd = null;
@@ -1208,7 +1117,7 @@ namespace TabScore2.DataServices
                     reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
-                        Result result = new()
+                        GrpcResult result = new()
                         {
                             SectionID = reader.GetInt32(0),
                             TableNumber = reader.GetInt32(1),
@@ -1218,12 +1127,12 @@ namespace TabScore2.DataServices
                             NumberNorth = reader.GetInt32(9),
                             NumberEast = reader.GetInt32(10)
                         };
-                        if (IsIndividual && sectionID != 0)
+                        if (isIndividual && request.SectionID != 0)
                         {
                             result.NumberSouth = reader.GetInt32(11);
                             result.NumberWest = reader.GetInt32(12);
                         }
-                        result.SectionLetter = GetSection(result.SectionID).Letter;
+                        result.SectionLetter = sectionsList.First(x => x.ID == request.SectionID).Letter;
 
                         string tempContract = reader.GetString(5);
                         if ((result.Remarks == string.Empty || result.Remarks == "Wrong direction") && tempContract.Length > 2)
@@ -1270,52 +1179,77 @@ namespace TabScore2.DataServices
         }
 
         // PLAYERNAMES
-        private static readonly List<InternalPlayerRecord> internalPlayerRecordsList = [];
-
-        public string GetInternalPlayerName(string playerID)
+        public GrpcPlayerName GetInternalPlayerName(GrpcPlayerRequest request)
         {
-            if (internalPlayerRecordsList.Count == 0)
+            // Cater for the possibility that one or both of ID and strID could be null/blank.  Prefer strID
+            string name = "Unknown";
+            using OdbcConnection connection = new(connectionString);
+            connection.Open();
+            object? queryResult = null;
+            string SQLString = $"SELECT Name FROM PlayerNames WHERE strID={request.PlayerID}";
+            OdbcCommand cmd = new(SQLString, connection);
+            try
             {
-                return "#" + playerID;
+                ODBCRetryHelper.ODBCRetry(() =>
+                {
+                    queryResult = cmd.ExecuteScalar();
+                    if (queryResult != null)
+                    {
+                        string? tempName = queryResult.ToString();
+                        if (tempName != null && tempName != string.Empty) name = tempName;
+                    }
+                });
             }
-            InternalPlayerRecord? playerRecord = internalPlayerRecordsList.Find(x => (x.ID == playerID));
-            if (playerRecord == null)
+            catch { }
+            if (name == "Unknown" && int.TryParse(request.PlayerID, out int intID))
             {
-                return "Unknown #" + playerID;
+                SQLString = $"SELECT Name FROM PlayerNames WHERE ID={intID}";
+                cmd = new(SQLString, connection);
+                try
+                {
+                    ODBCRetryHelper.ODBCRetry(() =>
+                    {
+                        queryResult = cmd.ExecuteScalar();
+                        if (queryResult != null)
+                        {
+                            string? tempName = queryResult.ToString();
+                            if (tempName != null && tempName != string.Empty) name = tempName;
+                        }
+                    });
+                }
+                catch { }
             }
-            else
-            {
-                return playerRecord.Name;
-            }
+            cmd.Dispose();
+            return new GrpcPlayerName() { PlayerName = name };
         }
 
         // PLAYERNUMBERS
-        public void GetNamesForRound(TableStatus tableStatus)
+        public GrpcNames GetNamesForRound(GrpcNamesForRoundRequest request)
         {
-            Round round = tableStatus.RoundData;
+            GrpcNames names = new();
             using OdbcConnection connection = new(connectionString);
             connection.Open();
             CheckTabScorePairNos(connection);
-            if (IsIndividual)
+            if (isIndividual)
             {
-                round.NameNorth = GetNameFromPlayerNumbersTableIndividual(connection, tableStatus, round.NumberNorth);
-                round.NameSouth = GetNameFromPlayerNumbersTableIndividual(connection, tableStatus, round.NumberSouth);
-                round.NameEast = GetNameFromPlayerNumbersTableIndividual(connection, tableStatus, round.NumberEast);
-                round.NameWest = GetNameFromPlayerNumbersTableIndividual(connection, tableStatus, round.NumberWest);
+                names.NameNorth = GetNameFromPlayerNumbersTableIndividual(connection, request.SectionID, request.RoundNumber, request.NumberNorth);
+                names.NameSouth = GetNameFromPlayerNumbersTableIndividual(connection, request.SectionID, request.RoundNumber, request.NumberSouth);
+                names.NameEast = GetNameFromPlayerNumbersTableIndividual(connection, request.SectionID, request.RoundNumber, request.NumberEast);
+                names.NameWest = GetNameFromPlayerNumbersTableIndividual(connection, request.SectionID, request.RoundNumber, request.NumberWest);
             }
             else  // Not individual
             {
-                round.NameNorth = GetNameFromPlayerNumbersTable(connection, tableStatus, round.NumberNorth, "N");
-                round.NameSouth = GetNameFromPlayerNumbersTable(connection, tableStatus, round.NumberNorth, "S");
-                round.NameEast = GetNameFromPlayerNumbersTable(connection, tableStatus, round.NumberEast, "E");
-                round.NameWest = GetNameFromPlayerNumbersTable(connection, tableStatus, round.NumberEast, "W");
+                names.NameNorth = GetNameFromPlayerNumbersTable(connection, request.SectionID, request.RoundNumber, request.NumberNorth, "N");
+                names.NameSouth = GetNameFromPlayerNumbersTable(connection, request.SectionID, request.RoundNumber, request.NumberNorth, "S");
+                names.NameEast = GetNameFromPlayerNumbersTable(connection, request.SectionID, request.RoundNumber, request.NumberEast, "E");
+                names.NameWest = GetNameFromPlayerNumbersTable(connection, request.SectionID, request.RoundNumber, request.NumberEast, "W");
             }
 
-            round.GotAllNames = (round.NumberNorth == 0 || (round.NameNorth != string.Empty && round.NameSouth != string.Empty)) && (round.NumberEast == 0 || (round.NameEast != string.Empty && round.NameWest != string.Empty));
-            return;
+            names.GotAllNames = (request.NumberNorth == 0 || (names.NameNorth != string.Empty && names.NameSouth != string.Empty)) && (request.NumberEast == 0 || (names.NameEast != string.Empty && names.NameWest != string.Empty));
+            return names;
         }
 
-        private void CheckTabScorePairNos(OdbcConnection conn)
+        private static void CheckTabScorePairNos(OdbcConnection conn)
         {
             object? queryResult = null;
 
@@ -1353,7 +1287,7 @@ namespace TabScore2.DataServices
                             int tempRoundNumber = reader2.GetInt32(3);
                             int queryRoundNumber = tempRoundNumber;
                             if (queryRoundNumber == 0) queryRoundNumber = 1;
-                            if (IsIndividual)
+                            if (isIndividual)
                             {
                                 switch (tempDirection)
                                 {
@@ -1422,7 +1356,7 @@ namespace TabScore2.DataServices
             }
         }
 
-        private static string GetNameFromPlayerNumbersTable(OdbcConnection conn, TableStatus tableStatus, int pairNo, string direction)
+        private static string GetNameFromPlayerNumbersTable(OdbcConnection conn, int sectionID, int roundNumber, int pairNo, string direction)
         {
             if (pairNo == 0) return string.Empty;
             string number = string.Empty;
@@ -1430,7 +1364,7 @@ namespace TabScore2.DataServices
             DateTime latestTimeLog = new(2010, 1, 1);
 
             // First look for entries in the same direction
-            string SQLString = $"SELECT Number, Name, Round, TimeLog FROM PlayerNumbers WHERE Section={tableStatus.SectionID} AND TabScorePairNo={pairNo} AND Direction='{direction}'";
+            string SQLString = $"SELECT Number, Name, Round, TimeLog FROM PlayerNumbers WHERE Section={sectionID} AND TabScorePairNo={pairNo} AND Direction='{direction}'";
             OdbcCommand cmd = new(SQLString, conn);
             OdbcDataReader? reader = null;
             try
@@ -1452,7 +1386,7 @@ namespace TabScore2.DataServices
                             {
                                 timeLog = reader.GetDateTime(3);
                             }
-                            if (readerRoundNumber <= tableStatus.RoundNumber && timeLog >= latestTimeLog)
+                            if (readerRoundNumber <= roundNumber && timeLog >= latestTimeLog)
                             {
                                 number = reader.GetString(0);
                                 name = reader.GetString(1);
@@ -1468,7 +1402,7 @@ namespace TabScore2.DataServices
                 reader!.Close();
             }
 
-            Section? section = sectionsList.Find(x => x.ID == tableStatus.SectionID);
+            GrpcSection? section = sectionsList.Find(x => x.ID == sectionID);
             if (section != null && section.Winners == 1)  // If a one-winner pairs movement, we also need to check the other direction 
             {
                 string otherDir = direction switch
@@ -1479,7 +1413,7 @@ namespace TabScore2.DataServices
                     "W" => "S",
                     _ => string.Empty,
                 };
-                SQLString = $"SELECT Number, Name, Round, TimeLog FROM PlayerNumbers WHERE Section={tableStatus.SectionID} AND TabScorePairNo={pairNo} AND Direction='{otherDir}'";
+                SQLString = $"SELECT Number, Name, Round, TimeLog FROM PlayerNumbers WHERE Section={sectionID} AND TabScorePairNo={pairNo} AND Direction='{otherDir}'";
                 cmd = new OdbcCommand(SQLString, conn);
                 try
                 {
@@ -1500,7 +1434,7 @@ namespace TabScore2.DataServices
                                 {
                                     timeLog = reader.GetDateTime(3);
                                 }
-                                if (readerRoundNumber <= tableStatus.RoundNumber && timeLog >= latestTimeLog)
+                                if (readerRoundNumber <= roundNumber && timeLog >= latestTimeLog)
                                 {
                                     number = reader.GetString(0);
                                     name = reader.GetString(1);
@@ -1527,14 +1461,14 @@ namespace TabScore2.DataServices
             }
         }
 
-        private static string GetNameFromPlayerNumbersTableIndividual(OdbcConnection conn, TableStatus tableStatus, int playerNo)
+        private static string GetNameFromPlayerNumbersTableIndividual(OdbcConnection conn, int sectionID, int roundNumber, int playerNo)
         {
             if (playerNo == 0) return string.Empty;
             string number = string.Empty;
             string name = string.Empty;
             DateTime latestTimeLog = new(2010, 1, 1);
 
-            string SQLString = $"SELECT Number, Name, Round, TimeLog FROM PlayerNumbers WHERE Section={tableStatus.SectionID} AND TabScorePairNo={playerNo}";
+            string SQLString = $"SELECT Number, Name, Round, TimeLog FROM PlayerNumbers WHERE Section={sectionID} AND TabScorePairNo={playerNo}";
             OdbcCommand cmd = new(SQLString, conn);
             OdbcDataReader? reader = null;
             try
@@ -1556,7 +1490,7 @@ namespace TabScore2.DataServices
                             {
                                 timeLog = reader.GetDateTime(3);
                             }
-                            if (readerRoundNumber <= tableStatus.RoundNumber && timeLog >= latestTimeLog)
+                            if (readerRoundNumber <= roundNumber && timeLog >= latestTimeLog)
                             {
                                 number = reader.GetString(0);
                                 name = reader.GetString(1);
@@ -1582,39 +1516,24 @@ namespace TabScore2.DataServices
             }
         }
 
-        public void UpdatePlayer(TableStatus tableStatus, Direction direction, string playerID, string playerName)
+        public void UpdatePlayer(GrpcUpdatePlayerNumberRequest request)
         {
             // Numbers entered at the start (when round = 1) need to be set as round 0 in the database
-            int roundNumber = tableStatus.RoundNumber;
+            int roundNumber = request.RoundNumber;
             if (roundNumber == 1) roundNumber = 0;
-            
-            if (playerName.Contains("Unknown") || playerName.Contains('#')) playerName = string.Empty;
-            playerName = playerName.Replace("'", "''");    // Deal with apostrophes in names, eg O'Connor
 
-            string directionLetter = direction.ToString()[..1];    // Need just N, S, E or W
-            int pairNumber = 0;
-            switch (direction)
-            {
-                case Direction.North:
-                    pairNumber = tableStatus.RoundData.NumberNorth;
-                    break;
-                case Direction.South:
-                    pairNumber = tableStatus.RoundData.NumberSouth;
-                    break;
-                case Direction.East:
-                    pairNumber = tableStatus.RoundData.NumberEast;
-                    break;
-                case Direction.West:
-                    pairNumber = tableStatus.RoundData.NumberWest;
-                    break;
-            }
+            string playerName = request.PlayerName;
+            if (playerName.Contains("Unknown") || playerName.Contains('#')) playerName = string.Empty;
+
+            // Deal with apostrophes in names, eg O'Connor
+            playerName = playerName.Replace("'", "''");
 
             using OdbcConnection connection = new(connectionString);
             connection.Open();
             object? queryResult = null;
 
             // Check if PlayerNumbers entry exists already; if it does update it, if not create it
-            string SQLString = $"SELECT Section FROM PlayerNumbers WHERE Section={tableStatus.SectionID} AND [Table]={tableStatus.TableNumber} AND Round={roundNumber} AND Direction='{directionLetter}'";
+            string SQLString = $"SELECT Section FROM PlayerNumbers WHERE Section={request.SectionID} AND [Table]={request.TableNumber} AND Round={roundNumber} AND Direction='{request.DirectionLetter}'";
             OdbcCommand cmd = new(SQLString, connection);
             try
             {
@@ -1626,11 +1545,11 @@ namespace TabScore2.DataServices
             catch { }
             if (queryResult == null)
             {
-                SQLString = $"INSERT INTO PlayerNumbers (Section, [Table], Direction, [Number], Name, Round, Processed, TimeLog, TabScorePairNo) VALUES ({tableStatus.SectionID}, {tableStatus.TableNumber}, '{directionLetter}', '{playerID}', '{playerName}', {roundNumber}, False, #{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, {pairNumber})";
+                SQLString = $"INSERT INTO PlayerNumbers (Section, [Table], Direction, [Number], Name, Round, Processed, TimeLog, TabScorePairNo) VALUES ({request.SectionID}, {request.TableNumber}, '{request.DirectionLetter}', '{request.PlayerID}', '{playerName}', {roundNumber}, False, #{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, {request.PairNumber})";
             }
             else
             {
-                SQLString = $"UPDATE PlayerNumbers SET [Number]='{playerID}', [Name]='{playerName}', Processed=False, TimeLog=#{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, TabScorePairNo={pairNumber} WHERE Section={tableStatus.SectionID} AND [Table]={tableStatus.TableNumber} AND Round={roundNumber} AND Direction='{directionLetter}'";
+                SQLString = $"UPDATE PlayerNumbers SET [Number]='{request.PlayerID}', [Name]='{playerName}', Processed=False, TimeLog=#{DateTime.Now:yyyy-MM-dd hh:mm:ss}#, TabScorePairNo={request.PairNumber} WHERE Section={request.SectionID} AND [Table]={request.TableNumber} AND Round={roundNumber} AND Direction='{request.DirectionLetter}'";
             }
             cmd = new OdbcCommand(SQLString, connection);
             try
@@ -1646,18 +1565,32 @@ namespace TabScore2.DataServices
         }
 
         // HANDRECORD
-        private static readonly List<Hand> handsList = [];
+        private static readonly List<GrpcHand> handsList = [];
 
-        public int HandsCount { get { return handsList.Count; } }
-
-        public List<Hand> HandsList { get { return handsList; } }
-
-        public Hand? GetHand(int sectionID, int boardNumber)
+        public GrpcHandsCount GetHandsCount()
         {
-            return handsList.Find(x => x.SectionID == sectionID && x.BoardNumber == boardNumber);
+            return new GrpcHandsCount() { HandsCount = handsList.Count }; 
         }
 
-        public void AddHand(Hand hand)
+        public List<GrpcHand> GetHandsList()
+        {
+            return handsList;
+        }
+
+        public GrpcHand GetHand(GrpcSectionBoardRequest request)
+        {
+            GrpcHand? hand = handsList.Find(x => x.SectionID == request.SectionID && x.BoardNumber == request.BoardNumber);
+            if (hand != null)
+            {
+                return hand;
+            }
+            else
+            {
+                return new GrpcHand();
+            }
+        }
+
+        public void AddHand(GrpcHand hand)
         {
             using OdbcConnection connection = new(connectionString);
             // Delete any previous hand record
@@ -1688,61 +1621,20 @@ namespace TabScore2.DataServices
             cmd.Dispose();
         }
 
-        public void GetHandsFromFile(StreamReader file)
+        public void AddHands(List<GrpcHand> newHandsList)
         {
-            bool newBoard = false;
-            string? line = null;
-            char[] quoteDelimiter = ['"'];
-
             handsList.Clear();
-
-            if (!file.EndOfStream)
-            {
-                line = file.ReadLine();
-                newBoard = line != null && line.Length > 7 && line[..7] == "[Board ";
-            }
-            while (!file.EndOfStream)
-            {
-                if (newBoard)
-                {
-                    newBoard = false;
-                    Hand hand = new() { BoardNumber = Convert.ToInt32(line!.Split(quoteDelimiter)[1]) };
-                    while ((line = file.ReadLine()) != null)
-                    {
-                        if (line.Length > 6 && line[..6] == "[Deal ")
-                        {
-                            hand.PBN = line.Split(quoteDelimiter)[1];
-                        }
-                        else if (line.Length > 7 && line[..7] == "[Board ")
-                        {
-                            newBoard = true;
-                            if (hand.NorthSpades != "###") handsList.Add(hand);
-                            break;
-                        }
-                    }
-                    if (file.EndOfStream)
-                    {
-                        if (hand.NorthSpades != "###") handsList.Add(hand);
-                    }
-                }
-                else if (!file.EndOfStream)
-                {
-                    line = file.ReadLine();
-                    newBoard = line != null && line.Length > 7 && line[..7] == "[Board ";
-                }
-            }
-            file.Close();
-
             using OdbcConnection connection = new(connectionString);
             connection.Open();
             string SQLString = "DELETE FROM HandRecord";
             OdbcCommand cmd = new(SQLString, connection);
             cmd.ExecuteNonQuery();
 
-            foreach (Hand hand in handsList)
+            foreach (GrpcHand hand in newHandsList)
             {
                 if (hand.NorthSpades != "###")
                 {
+                    handsList.Add(hand); 
                     SQLString = $"INSERT INTO HandRecord (Section, Board, NorthSpades, NorthHearts, NorthDiamonds, NorthClubs, EastSpades, EastHearts, EastDiamonds, EastClubs, SouthSpades, SouthHearts, SouthDiamonds, SouthClubs, WestSpades, WestHearts, WestDiamonds, WestClubs) VALUES ({hand.SectionID}, {hand.BoardNumber}, '{hand.NorthSpades}', '{hand.NorthHearts}', '{hand.NorthDiamonds}', '{hand.NorthClubs}', '{hand.EastSpades}', '{hand.EastHearts}', '{hand.EastDiamonds}', '{hand.EastClubs}', '{hand.SouthSpades}', '{hand.SouthHearts}', '{hand.SouthDiamonds}', '{hand.SouthClubs}', '{hand.WestSpades}', '{hand.WestHearts}', '{hand.WestDiamonds}', '{hand.WestClubs}')";
                     cmd = new OdbcCommand(SQLString, connection);
                     cmd.ExecuteNonQuery();
@@ -1752,9 +1644,9 @@ namespace TabScore2.DataServices
         }
 
         // SETTINGS
-        public DatabaseSettings GetDatabaseSettings()
+        public GrpcDatabaseSettings GetDatabaseSettings()
         {
-            DatabaseSettings databaseSettings = new();
+            GrpcDatabaseSettings databaseSettings = new();
             using OdbcConnection connection = new(connectionString);
             connection.Open();
             string SQLString = "SELECT ShowResults, ShowPercentage, LeadCard, BM2ValidateLeadCard, BM2Ranking, EnterResultsMethod, BM2ViewHandRecord, BM2NumberEntryEachRound, BM2NameSource, BM2EnterHandRecord FROM Settings";
@@ -1793,9 +1685,8 @@ namespace TabScore2.DataServices
             return databaseSettings;
         }
 
-        public void UpdateDatabaseSettings(DatabaseSettings databaseSettings)
+        public void SetDatabaseSettings(GrpcDatabaseSettings databaseSettings)
         {
-            using OdbcConnection connection = new(connectionString);
             StringBuilder SQLString = new();
             SQLString.Append($"UPDATE Settings SET");
             if (databaseSettings.ShowTraveller)
@@ -1850,6 +1741,7 @@ namespace TabScore2.DataServices
             SQLString.Append($" BM2NameSource={databaseSettings.NameSource},");
             SQLString.Append($" EnterResultsMethod={databaseSettings.EnterResultsMethod}");
 
+            using OdbcConnection connection = new(connectionString);
             connection.Open();
             OdbcCommand cmd = new(SQLString.ToString(), connection);
             cmd.ExecuteNonQuery();
@@ -1857,12 +1749,12 @@ namespace TabScore2.DataServices
         }
 
         // RANKINGLIST
-        public List<Ranking> GetRankingList(int sectionID)
+        public List<GrpcRanking> GetRankingList(GrpcSectionIDRequest request)
         {
-            List<Ranking> rankingList = [];
+            List<GrpcRanking> rankingList = [];
             using OdbcConnection connection = new(connectionString);
             connection.Open();
-            string SQLString = $"SELECT Orientation, Number, Score, Rank FROM Results WHERE Section={sectionID}";
+            string SQLString = $"SELECT Orientation, Number, Score, Rank FROM Results WHERE Section={request.SectionID}";
 
             OdbcCommand cmd = new(SQLString, connection);
             OdbcDataReader? reader1 = null;
@@ -1873,7 +1765,13 @@ namespace TabScore2.DataServices
                     reader1 = cmd.ExecuteReader();
                     while (reader1.Read())
                     {
-                        Ranking ranking = new(reader1.GetString(0), reader1.GetInt32(1), reader1.GetString(2), reader1.GetString(3));
+                        GrpcRanking ranking = new()
+                        {
+                            Orientation = reader1.GetString(0),
+                            PairNo = reader1.GetInt32(1),
+                            Score = reader1.GetString(2),
+                            Rank = reader1.GetString(3)
+                        };
                         ranking.ScoreDecimal = Convert.ToDouble(ranking.Score);
                         rankingList.Add(ranking);
                     }

@@ -58,22 +58,28 @@ namespace TabScore2.Controllers
             }
 
             TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
+            string directionLetter = direction.ToString()[..1];    // Need just N, S, E or W
+            int pairNumber = 0;
             switch (direction)
             {
                 case Direction.North:
                     tableStatus.RoundData.NameNorth = playerName;
+                    pairNumber = tableStatus.RoundData.NumberNorth;
                     break;
                 case Direction.South:
                     tableStatus.RoundData.NameSouth = playerName;
+                    pairNumber = tableStatus.RoundData.NumberSouth;
                     break;
                 case Direction.East:
                     tableStatus.RoundData.NameEast = playerName;
+                    pairNumber = tableStatus.RoundData.NumberEast;
                     break;
                 case Direction.West:
                     tableStatus.RoundData.NameWest = playerName;
+                    pairNumber = tableStatus.RoundData.NumberWest;
                     break;
             }
-            database.UpdatePlayer(tableStatus, direction, playerID, playerName);
+            database.UpdatePlayer(tableStatus.SectionID, tableStatus.TableNumber, tableStatus.RoundNumber, directionLetter, pairNumber, playerID, playerName);
 
             return RedirectToAction("Index", "ShowPlayerIDs", new { deviceNumber });
         }

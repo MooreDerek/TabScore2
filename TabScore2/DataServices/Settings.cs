@@ -1,77 +1,15 @@
 ﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
-using TabScore2.Classes;
-
 namespace TabScore2.DataServices
 {
     // Settings contains an internal copy of those values from the database Settings table needed by the application.
     // They are refreshed once at the start of every round in case of any changes
     // Settings that are specific to TabScore2 are instead stored as Properties, and persist from session to session
 
-    public class Settings(IDatabase iDatabase) : ISettings
+    public class Settings : ISettings
     {
-        private readonly IDatabase database = iDatabase;
-        private static int settingsRoundNumber = 0;
-        private static bool sessionStarted = false;
-
-        public void SetTabletDevicesPerTable()
-        {
-            if (sessionStarted) return;
-            foreach (Section section in database.GetSectionsList())
-            {
-                section.DevicesPerTable = 1;
-                if (TabletsMove)
-                {
-                    if (database.IsIndividual)
-                    {
-                        section.DevicesPerTable = 4;
-                    }
-                    else
-                    {
-                        if (section.Winners == 1) section.DevicesPerTable = 2;
-                    }
-                }
-            }
-            sessionStarted = true;
-        }
-        
-        public void GetFromDatabase(int roundNumber = 1)
-        {
-            if (roundNumber <= settingsRoundNumber) return;
-            DatabaseSettings databaseSettings = database.GetDatabaseSettings();
-            ShowTraveller = databaseSettings.ShowTraveller;
-            ShowPercentage = databaseSettings.ShowPercentage;
-            EnterLeadCard = databaseSettings.EnterLeadCard;
-            ValidateLeadCard = databaseSettings.EnterLeadCard;
-            ShowRanking = databaseSettings.ShowRanking;
-            ShowHandRecord = databaseSettings.ShowHandRecord;
-            NumberEntryEachRound = databaseSettings.NumberEntryEachRound;
-            NameSource = databaseSettings.NameSource;
-            EnterResultsMethod = databaseSettings.EnterResultsMethod;
-            ManualHandRecordEntry = databaseSettings.ManualHandRecordEntry;
-            if (roundNumber == settingsRoundNumber + 1) settingsRoundNumber = roundNumber;
-        }
-
-        public void UpdateDatabase()
-        {
-            DatabaseSettings databaseSettings = new()
-            {
-                ShowTraveller = ShowTraveller,
-                ShowPercentage = ShowPercentage,
-                EnterLeadCard = EnterLeadCard,
-                ValidateLeadCard = ValidateLeadCard,
-                ShowRanking = ShowRanking,
-                ShowHandRecord = ShowHandRecord,
-                NumberEntryEachRound = NumberEntryEachRound,
-                NameSource = NameSource,
-                EnterResultsMethod = EnterResultsMethod,
-                ManualHandRecordEntry = ManualHandRecordEntry
-            };
-            database.UpdateDatabaseSettings(databaseSettings);
-        }
-
-        // Database settings
+        // Application settings stored in the scoring database
         public bool ShowTraveller { get; set; }
         public bool ShowPercentage { get; set; }
         public bool EnterLeadCard { get; set; }
@@ -122,6 +60,23 @@ namespace TabScore2.DataServices
         {
             get { return Properties.Settings.Default.SuppressRankingListForLastXRounds; }
             set { Properties.Settings.Default.SuppressRankingListForLastXRounds = value; Properties.Settings.Default.Save(); }
+        }
+
+        // Settings related to the operation of the scoring database
+        public string PathToDatabase
+        {
+            get { return Properties.Settings.Default.PathToDatabase; }
+            set { Properties.Settings.Default.PathToDatabase = value; Properties.Settings.Default.Save(); }
+        }
+        public bool DatabaseReady
+        {
+            get { return Properties.Settings.Default.DatabaseReady; }
+            set { Properties.Settings.Default.DatabaseReady = value; Properties.Settings.Default.Save(); }
+        }
+        public bool IsIndividual
+        {
+            get { return Properties.Settings.Default.IsIndividual; }
+            set { Properties.Settings.Default.IsIndividual = value; Properties.Settings.Default.Save(); }
         }
     }
 }

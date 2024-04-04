@@ -15,36 +15,48 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TabScore2 Documents", "TabS
 		TabScore2 Documents\TabScore2 ReadMe 1.0.0.txt = TabScore2 Documents\TabScore2 ReadMe 1.0.0.txt
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrpcBwsDatabaseServer", "GrpcBwsDatabaseServer\GrpcBwsDatabaseServer.csproj", "{CF75C71D-ABF4-41F6-92D7-5C90344C60A1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrpcSharedContracts", "GrpcSharedContracts\GrpcSharedContracts.csproj", "{B7E5F634-2B6E-4597-A867-367A16E8B570}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|ARM64 = Debug|ARM64
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
-		Release|ARM64 = Release|ARM64
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{13247710-4BA2-45B8-80AB-D54AA321268D}.Debug|ARM64.ActiveCfg = Debug|Any CPU
-		{13247710-4BA2-45B8-80AB-D54AA321268D}.Debug|ARM64.Build.0 = Debug|Any CPU
-		{13247710-4BA2-45B8-80AB-D54AA321268D}.Debug|x64.ActiveCfg = Debug|x86
-		{13247710-4BA2-45B8-80AB-D54AA321268D}.Debug|x64.Build.0 = Debug|x86
+		{13247710-4BA2-45B8-80AB-D54AA321268D}.Debug|x64.ActiveCfg = Debug|x64
+		{13247710-4BA2-45B8-80AB-D54AA321268D}.Debug|x64.Build.0 = Debug|x64
 		{13247710-4BA2-45B8-80AB-D54AA321268D}.Debug|x86.ActiveCfg = Debug|x86
 		{13247710-4BA2-45B8-80AB-D54AA321268D}.Debug|x86.Build.0 = Debug|x86
-		{13247710-4BA2-45B8-80AB-D54AA321268D}.Release|ARM64.ActiveCfg = Release|Any CPU
-		{13247710-4BA2-45B8-80AB-D54AA321268D}.Release|ARM64.Build.0 = Release|Any CPU
-		{13247710-4BA2-45B8-80AB-D54AA321268D}.Release|x64.ActiveCfg = Release|Any CPU
-		{13247710-4BA2-45B8-80AB-D54AA321268D}.Release|x64.Build.0 = Release|Any CPU
+		{13247710-4BA2-45B8-80AB-D54AA321268D}.Release|x64.ActiveCfg = Release|x64
+		{13247710-4BA2-45B8-80AB-D54AA321268D}.Release|x64.Build.0 = Release|x64
 		{13247710-4BA2-45B8-80AB-D54AA321268D}.Release|x86.ActiveCfg = Release|x86
 		{13247710-4BA2-45B8-80AB-D54AA321268D}.Release|x86.Build.0 = Release|x86
+		{CF75C71D-ABF4-41F6-92D7-5C90344C60A1}.Debug|x64.ActiveCfg = Debug|x86
+		{CF75C71D-ABF4-41F6-92D7-5C90344C60A1}.Debug|x86.ActiveCfg = Debug|x86
+		{CF75C71D-ABF4-41F6-92D7-5C90344C60A1}.Debug|x86.Build.0 = Debug|x86
+		{CF75C71D-ABF4-41F6-92D7-5C90344C60A1}.Release|x64.ActiveCfg = Release|x86
+		{CF75C71D-ABF4-41F6-92D7-5C90344C60A1}.Release|x86.ActiveCfg = Release|x86
+		{CF75C71D-ABF4-41F6-92D7-5C90344C60A1}.Release|x86.Build.0 = Release|x86
+		{B7E5F634-2B6E-4597-A867-367A16E8B570}.Debug|x64.ActiveCfg = Debug|x64
+		{B7E5F634-2B6E-4597-A867-367A16E8B570}.Debug|x64.Build.0 = Debug|x64
+		{B7E5F634-2B6E-4597-A867-367A16E8B570}.Debug|x86.ActiveCfg = Debug|x86
+		{B7E5F634-2B6E-4597-A867-367A16E8B570}.Debug|x86.Build.0 = Debug|x86
+		{B7E5F634-2B6E-4597-A867-367A16E8B570}.Release|x64.ActiveCfg = Release|x64
+		{B7E5F634-2B6E-4597-A867-367A16E8B570}.Release|x64.Build.0 = Release|x64
+		{B7E5F634-2B6E-4597-A867-367A16E8B570}.Release|x86.ActiveCfg = Release|x86
+		{B7E5F634-2B6E-4597-A867-367A16E8B570}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {EA91F9F8-CC08-450B-AAA7-CFBEF8232623}
-		RESX_CultureCountyOverrides = 
-		RESX_EnableXlifSync = True
 		RESX_NeutralResourcesLanguage = en-US
+		RESX_EnableXlifSync = True
+		RESX_CultureCountyOverrides = 
+		SolutionGuid = {EA91F9F8-CC08-450B-AAA7-CFBEF8232623}
 	EndGlobalSection
 EndGlobal

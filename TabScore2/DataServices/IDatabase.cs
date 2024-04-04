@@ -2,7 +2,6 @@
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using TabScore2.Classes;
-using TabScore2.Globals;
 
 namespace TabScore2.DataServices
 {
@@ -10,10 +9,8 @@ namespace TabScore2.DataServices
     public interface IDatabase
     {
         // GENERAL
-        string PathToDatabase { get; set; }
-        bool InitializationComplete { get; set; }
-        bool IsIndividual { get; }
-        string? Initialize();
+        string Initialize();
+        void Prepare();
         public bool IsDatabaseConnectionOK();
 
         // SECTION
@@ -27,7 +24,7 @@ namespace TabScore2.DataServices
         int GetNumberOfRoundsInEvent(int sectionID, int roundNumber = 999);
         int GetNumberOfLastRoundWithResults(int sectionID, int tableNumber);
         public List<Round> GetRoundsList(int sectionID, int roundNumber);
-        void GetRoundData(TableStatus tableStatus);
+        public Round GetRoundData(int sectionID, int tableNumber, int roundNumber);
 
         // RESULT = RECEIVEDDATA
         Result GetResult(int sectionID, int tableNumber, int roundNumber, int boardNumber);
@@ -38,19 +35,19 @@ namespace TabScore2.DataServices
         string GetInternalPlayerName(string playerID);
 
         // PLAYERNUMBERS
-        void UpdatePlayer(TableStatus tableStatus, Direction direction, string playerID, string playerName);
-        public void GetNamesForRound(TableStatus tableStatus);
+        void UpdatePlayer(int sectionID, int tableNumber, int roundNumber, string directionLetter, int pairNumber, string playerID, string playerName);
+        public Names GetNamesForRound(int sectionID, int roundNumber, int numberNorth, int numberEast, int numberSouth, int numberWest);
 
         // HANDRECORD
-        int HandsCount { get; }
-        List<Hand> HandsList { get; }
-        Hand? GetHand(int sectionID, int boardNumber);
+        int GetHandsCount();
+        List<Hand> GetHandsList();
+        Hand GetHand(int sectionID, int boardNumber);
         public void AddHand(Hand hand);
-        void GetHandsFromFile(StreamReader file);
+        void AddHands(List<Hand> newHandsList);
 
         // SETTINGS
-        DatabaseSettings GetDatabaseSettings();
-        void UpdateDatabaseSettings(DatabaseSettings databaseSettings);
+        void GetDatabaseSettings(int roundNumber = 1);
+        void SetDatabaseSettings();
 
         // RANKINGLIST
         List<Ranking> GetRankingList(int sectionID);

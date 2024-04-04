@@ -47,7 +47,7 @@ namespace TabScore2.Controllers
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabledAndBack;
             }
 
-            if (database.IsIndividual)
+            if (settings.IsIndividual)
             {
                 return View("Individual", showTravellerModel);
             }

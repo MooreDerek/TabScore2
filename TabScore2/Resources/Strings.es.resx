@@ -481,4 +481,7 @@
   <data name="ClosingMessage" xml:space="preserve">
     <value>¿Estás seguro de que quieres cerrar TabScore2?</value>
   </data>
+  <data name="ToWelcome" xml:space="preserve">
+    <value>a</value>
+  </data>
 </root>

@@ -122,6 +122,7 @@
   </data>
   <data name="WaitTD" xml:space="preserve">
     <value>Please wait until the Tournament Director tells you to start, and then press OK</value>
+    <comment>@MutedRule(PunctuationTail)</comment>
   </data>
   <data name="Welcome" xml:space="preserve">
     <value>Welcome</value>
@@ -131,9 +132,11 @@
   </data>
   <data name="ErrorNoTabScoreDBtxt" xml:space="preserve">
     <value>File TabScoreDB.txt doesn't exist.  Please re-start TabScoreStarter.exe</value>
+    <comment>@MutedRule(PunctuationTail)</comment>
   </data>
   <data name="ErrorNoDBSelected" xml:space="preserve">
     <value>No scoring database selected.  Please wait until the Tournament Director tells you to start</value>
+    <comment>@MutedRule(PunctuationTail)</comment>
   </data>
   <data name="ErrorPermanentDB" xml:space="preserve">
     <value>Permanent database connection error.  Please check format and access permissions for Scoring Database file, and re-start TabScoreStarter.exe</value>
@@ -149,6 +152,7 @@
   </data>
   <data name="IfFinished" xml:space="preserve">
     <value>If the event is finished, you can turn off the tablet device</value>
+    <comment>@MutedRule(PunctuationTail)</comment>
   </data>
   <data name="ForSwiss" xml:space="preserve">
     <value>For Swiss events, wait until the TD tells you and then press OK to get the new movement</value>
@@ -189,6 +193,7 @@
   <data name="ErrorTableRegistered3" xml:space="preserve">
     <value>is already registered.  Do not press Register unless you intend to register a new 
 tablet device at your current location</value>
+    <comment>@MutedRule(PunctuationTail)</comment>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Warning</value>
@@ -219,6 +224,7 @@ tablet device at your current location</value>
   </data>
   <data name="SelectTableNumber" xml:space="preserve">
     <value>Select table number</value>
+    <comment>@MutedRule(PunctuationTail)</comment>
   </data>
   <data name="A" xml:space="preserve">
     <value>A</value>
@@ -271,12 +277,15 @@ tablet device at your current location</value>
   </data>
   <data name="ErrorWaitResults" xml:space="preserve">
     <value>Please wait until there are results entered for every board</value>
+    <comment>@MutedRule(PunctuationTail)</comment>
   </data>
   <data name="ErrorWaitResult" xml:space="preserve">
     <value>Please wait until there is a result entered for this board</value>
+    <comment>@MutedRule(PunctuationTail)</comment>
   </data>
   <data name="NotScoring" xml:space="preserve">
     <value>This tablet device is not being used for scoring during this round.  Once a board has been scored, you can view it using the buttons below</value>
+    <comment>@MutedRule(PunctuationTail)</comment>
   </data>
   <data name="Dealer" xml:space="preserve">
     <value>Dealer</value>
@@ -298,6 +307,7 @@ tablet device at your current location</value>
   </data>
   <data name="ErrorTableNotReady2" xml:space="preserve">
     <value>is not yet ready.  Please wait</value>
+    <comment>@MutedRule(PunctuationTail)</comment>
   </data>
   <data name="MoveForRound" xml:space="preserve">
     <value>Move for Round</value>
@@ -319,15 +329,19 @@ tablet device at your current location</value>
   </data>
   <data name="WaitThisTable" xml:space="preserve">
     <value>Please wait until the TD calls the move and this table is ready to start before pressing OK</value>
+    <comment>@MutedRule(PunctuationTail)</comment>
   </data>
   <data name="WaitNextTable" xml:space="preserve">
     <value>Please wait until the TD calls the move, and then move to the next table before pressing OK</value>
+    <comment>@MutedRule(PunctuationTail)</comment>
   </data>
   <data name="ErrorWaitAllIDs" xml:space="preserve">
     <value>Please wait until all the player IDs for this table have been entered</value>
+    <comment>@MutedRule(PunctuationTail)</comment>
   </data>
   <data name="ErrorNotAllIDs" xml:space="preserve">
     <value>Please select an ID or 'Unknown' for all players</value>
+    <comment>@MutedRule(PunctuationTail)</comment>
   </data>
   <data name="EnterEditPlayerIDs" xml:space="preserve">
     <value>Enter/edit player IDs</value>
@@ -451,6 +465,7 @@ tablet device at your current location</value>
   </data>
   <data name="WarningHandRecordBack" xml:space="preserve">
     <value>All hand record entries for this board will be lost.  Click on 'Back' to continue</value>
+    <comment>@MutedRule(PunctuationTail)</comment>
   </data>
   <data name="All" xml:space="preserve">
     <value>All</value>
@@ -483,6 +498,7 @@ tablet device at your current location</value>
   </data>
   <data name="FileNoHandRecords" xml:space="preserve">
     <value>File contains no hand records</value>
+    <comment>@MutedRule(PunctuationTail)</comment>
   </data>
   <data name="NoDatabasePath" xml:space="preserve">
     <value>No database path specified</value>
@@ -513,5 +529,8 @@ tablet device at your current location</value>
   </data>
   <data name="ClosingMessage" xml:space="preserve">
     <value>Are you sure you want to shut down TabScore2?</value>
+  </data>
+  <data name="ToWelcome" xml:space="preserve">
+    <value>to</value>
   </data>
 </root>

@@ -28,7 +28,7 @@ namespace TabScore.Controllers
         {
             // Check if new round has been added; can't apply to individuals
             DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
-            if (deviceStatus.RoundNumber == database.GetNumberOfRoundsInEvent(deviceStatus.SectionID))  
+            if (deviceStatus.RoundNumber == database.GetNumberOfRoundsInSection(deviceStatus.SectionID, true))   // Force database read
             {
                 // Final round, so no new rounds added
                 return RedirectToAction("Index", "EndScreen", new { deviceNumber });

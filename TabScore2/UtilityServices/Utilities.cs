@@ -8,6 +8,8 @@ using TabScore2.DataServices;
 using TabScore2.Globals;
 using TabScore2.Models;
 using TabScore2.Resources;
+using TabScore2.SharedClasses;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace TabScore2.UtilityServices
 {
@@ -288,7 +290,7 @@ namespace TabScore2.UtilityServices
                                     .Replace("T", localizer["TenShorthand"]);
                         }
                     }
-                    result.CalculateScore();
+                    CalculateScore(result);
                     if (result.Score > 0)
                     {
                         travellerResult.ScoreNS = result.Score.ToString();
@@ -815,6 +817,181 @@ namespace TabScore2.UtilityServices
             return false;
         }
 
+        public void CalculateScore(Result result)
+        {
+            if (result.DeclarerNSEW == null) return;
+            if (result.ContractLevel <= 0) return;
+            if (result.DeclarerNSEW == "N" || result.DeclarerNSEW == "S")
+            {
+                result.Vulnerable = Global.IsNSVulnerable(result.BoardNumber);
+            }
+            else
+            {
+                result.Vulnerable = Global.IsEWVulnerable(result.BoardNumber);
+            }
+
+            int score;
+            int diff = result.TricksTaken - result.ContractLevel - 6;
+            if (diff < 0)      // Contract not made
+            {
+                if (result.ContractX == string.Empty)
+                {
+                    if (result.Vulnerable)
+                    {
+                        score = 100 * diff;
+                    }
+                    else
+                    {
+                        score = 50 * diff;
+                    }
+                }
+                else if (result.ContractX == "x")
+                {
+                    if (result.Vulnerable)
+                    {
+                        score = 300 * diff + 100;
+                    }
+                    else
+                    {
+                        score = 300 * diff + 400;
+                        if (diff == -1) score -= 200;
+                        if (diff == -2) score -= 100;
+                    }
+                }
+                else  // ContractX = "xx"
+                {
+                    if (result.Vulnerable)
+                    {
+                        score = 600 * diff + 200;
+                    }
+                    else
+                    {
+                        score = 600 * diff + 800;
+                        if (diff == -1) score -= 400;
+                        if (diff == -2) score -= 200;
+                    }
+                }
+            }
+            else      // Contract made
+            {
+                // Basic score, game/part-score bonuses and making x/xx contract bonuses
+                if (result.ContractSuit == "C" || result.ContractSuit == "D")
+                {
+                    if (result.ContractX == string.Empty)
+                    {
+                        score = 20 * (result.TricksTaken - 6);
+                        if (result.ContractLevel <= 4)
+                        {
+                            score += 50;
+                        }
+                        else
+                        {
+                            if (result.Vulnerable) score += 500;
+                            else score += 300;
+                        }
+                    }
+                    else if (result.ContractX == "x")
+                    {
+                        score = 40 * result.ContractLevel + 50;
+                        if (result.Vulnerable) score += 200 * diff;
+                        else score += 100 * diff;
+                        if (result.ContractLevel <= 2)
+                        {
+                            score += 50;
+                        }
+                        else
+                        {
+                            if (result.Vulnerable) score += 500;
+                            else score += 300;
+                        }
+                    }
+                    else    // ContractX = "xx"
+                    {
+                        score = 80 * result.ContractLevel + 100;
+                        if (result.Vulnerable) score += 400 * diff;
+                        else score += 200 * diff;
+                        if (result.ContractLevel == 1)
+                        {
+                            score += 50;
+                        }
+                        else
+                        {
+                            if (result.Vulnerable) score += 500;
+                            else score += 300;
+                        }
+                    }
+                }
+                else   // Major suits and NT
+                {
+                    if (result.ContractX == string.Empty)
+                    {
+                        score = 30 * (result.TricksTaken - 6);
+                        if (result.ContractSuit == "NT")
+                        {
+                            score += 10;
+                            if (result.ContractLevel <= 2)
+                            {
+                                score += 50;
+                            }
+                            else
+                            {
+                                if (result.Vulnerable) score += 500;
+                                else score += 300;
+                            }
+                        }
+                        else    // Major suit
+                        {
+                            if (result.ContractLevel <= 3)
+                            {
+                                score += 50;
+                            }
+                            else
+                            {
+                                if (result.Vulnerable) score += 500;
+                                else score += 300;
+                            }
+                        }
+                    }
+                    else if (result.ContractX == "x")
+                    {
+                        score = 60 * result.ContractLevel + 50;
+                        if (result.ContractSuit == "NT") score += 20;
+                        if (result.Vulnerable) score += 200 * diff;
+                        else score += 100 * diff;
+                        if (result.ContractLevel <= 1)
+                        {
+                            score += 50;
+                        }
+                        else
+                        {
+                            if (result.Vulnerable) score += 500;
+                            else score += 300;
+                        }
+                    }
+                    else    // ContractX = "xx"
+                    {
+                        score = 120 * result.ContractLevel + 100;
+                        if (result.ContractSuit == "NT") score += 40;
+                        if (result.Vulnerable) score += 400 * diff + 500;
+                        else score += 200 * diff + 300;
+                    }
+                }
+                // Slam bonuses
+                if (result.ContractLevel == 6)
+                {
+                    if (result.Vulnerable) score += 750;
+                    else score += 500;
+                }
+                else if (result.ContractLevel == 7)
+                {
+                    if (result.Vulnerable) score += 1500;
+                    else score += 1000;
+                }
+            }
+            if (result.DeclarerNSEW == "E" || result.DeclarerNSEW == "W") score = -score;
+            result.Score = score;
+        }
+
 
         // PRIVATE CLASSES
         private PlayerEntry CreatePlayerEntry(Round round, Direction direction)
@@ -960,7 +1137,7 @@ namespace TabScore2.UtilityServices
             int maxResultsPerBoard = 1;
             foreach (Result result in resultsList)
             {
-                result.CalculateScore();
+                CalculateScore(result);
                 ResultsPerBoard? resultsPerBoard = resultsPerBoardList.Find(x => x.BoardNumber == result.BoardNumber);
                 if (resultsPerBoard == null)
                 {
@@ -1165,7 +1342,7 @@ namespace TabScore2.UtilityServices
             int maxResultsPerBoard = 1;
             foreach (Result result in resultsList)
             {
-                result.CalculateScore();
+                CalculateScore(result);
                 ResultsPerBoard? resultsPerBoard = resultsPerBoardList.Find(x => x.BoardNumber == result.BoardNumber);
                 if (resultsPerBoard == null)
                 {

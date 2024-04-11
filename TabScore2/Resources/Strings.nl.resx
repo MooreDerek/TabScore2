@@ -504,4 +504,13 @@
   <data name="West" xml:space="preserve">
     <value>West</value>
   </data>
+  <data name="EnterValidResult" xml:space="preserve">
+    <value>Voer een geldig resultaat in</value>
+  </data>
+  <data name="EnterValidContract" xml:space="preserve">
+    <value>Voer een geldig contract in</value>
+  </data>
+  <data name="DatabaseNoRoundData" xml:space="preserve">
+    <value>Database bevat onjuiste rondes</value>
+  </data>
 </root>

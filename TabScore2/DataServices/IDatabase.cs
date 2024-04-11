@@ -1,7 +1,7 @@
 ﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
-using TabScore2.Classes;
+using TabScore2.SharedClasses;
 
 namespace TabScore2.DataServices
 {
@@ -9,22 +9,22 @@ namespace TabScore2.DataServices
     public interface IDatabase
     {
         // GENERAL
-        string Initialize();
-        void Prepare();
+        string Initialize(string pathToDatabase);
+        void WebappInitialize();
         public bool IsDatabaseConnectionOK();
 
         // SECTION
-        Section GetSection(int sectionID);
         List<Section> GetSectionsList();
+        Section GetSection(int sectionID);
 
         // TABLE
         void RegisterTable(int sectionID, int tableNumber);
 
         // ROUND
-        int GetNumberOfRoundsInEvent(int sectionID, int roundNumber = 999);
+        int GetNumberOfRoundsInSection(int sectionID, bool forceDatabaseRead = false);
         int GetNumberOfLastRoundWithResults(int sectionID, int tableNumber);
         public List<Round> GetRoundsList(int sectionID, int roundNumber);
-        public Round GetRoundData(int sectionID, int tableNumber, int roundNumber);
+        public Round GetRound(int sectionID, int tableNumber, int roundNumber);
 
         // RESULT = RECEIVEDDATA
         Result GetResult(int sectionID, int tableNumber, int roundNumber, int boardNumber);
@@ -46,7 +46,7 @@ namespace TabScore2.DataServices
         void AddHands(List<Hand> newHandsList);
 
         // SETTINGS
-        void GetDatabaseSettings(int roundNumber = 1);
+        void GetDatabaseSettings(int sectionID = 1, int roundNumber = 0);
         void SetDatabaseSettings();
 
         // RANKINGLIST

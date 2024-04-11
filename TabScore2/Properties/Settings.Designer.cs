@@ -121,18 +121,6 @@ namespace TabScore2.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string PathToDatabase {
-            get {
-                return ((string)(this["PathToDatabase"]));
-            }
-            set {
-                this["PathToDatabase"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool DatabaseReady {
             get {
@@ -152,6 +140,18 @@ namespace TabScore2.Properties {
             }
             set {
                 this["IsIndividual"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SessionStarted {
+            get {
+                return ((bool)(this["SessionStarted"]));
+            }
+            set {
+                this["SessionStarted"] = value;
             }
         }
     }

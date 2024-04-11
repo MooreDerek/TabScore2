@@ -29,12 +29,10 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{13247710-4BA2-45B8-80AB-D54AA321268D}.Debug|x64.ActiveCfg = Debug|x64
 		{13247710-4BA2-45B8-80AB-D54AA321268D}.Debug|x64.Build.0 = Debug|x64
-		{13247710-4BA2-45B8-80AB-D54AA321268D}.Debug|x86.ActiveCfg = Debug|x86
-		{13247710-4BA2-45B8-80AB-D54AA321268D}.Debug|x86.Build.0 = Debug|x86
+		{13247710-4BA2-45B8-80AB-D54AA321268D}.Debug|x86.ActiveCfg = Debug|x64
 		{13247710-4BA2-45B8-80AB-D54AA321268D}.Release|x64.ActiveCfg = Release|x64
 		{13247710-4BA2-45B8-80AB-D54AA321268D}.Release|x64.Build.0 = Release|x64
-		{13247710-4BA2-45B8-80AB-D54AA321268D}.Release|x86.ActiveCfg = Release|x86
-		{13247710-4BA2-45B8-80AB-D54AA321268D}.Release|x86.Build.0 = Release|x86
+		{13247710-4BA2-45B8-80AB-D54AA321268D}.Release|x86.ActiveCfg = Release|x64
 		{CF75C71D-ABF4-41F6-92D7-5C90344C60A1}.Debug|x64.ActiveCfg = Debug|x86
 		{CF75C71D-ABF4-41F6-92D7-5C90344C60A1}.Debug|x86.ActiveCfg = Debug|x86
 		{CF75C71D-ABF4-41F6-92D7-5C90344C60A1}.Debug|x86.Build.0 = Debug|x86
@@ -54,9 +52,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_NeutralResourcesLanguage = en-US
-		RESX_EnableXlifSync = True
-		RESX_CultureCountyOverrides = 
 		SolutionGuid = {EA91F9F8-CC08-450B-AAA7-CFBEF8232623}
+		RESX_CultureCountyOverrides = 
+		RESX_EnableXlifSync = True
+		RESX_NeutralResourcesLanguage = en-US
 	EndGlobalSection
 EndGlobal

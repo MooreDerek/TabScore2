@@ -2,9 +2,9 @@
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using Microsoft.Extensions.Localization;
-using TabScore2.Classes;
 using TabScore2.DataServices;
 using TabScore2.Resources;
+using TabScore2.SharedClasses;
 
 namespace TabScore2.Forms
 {
@@ -90,6 +90,7 @@ namespace TabScore2.Forms
                 {
                     comboBoxTricksTaken.Items.Add("+" + i.ToString());
                 }
+                comboBoxTricksTaken.SelectedIndex = result.TricksTaken;
                 comboBoxSuit.Enabled = true;
                 comboBoxDouble.Enabled = true;
                 comboBoxDeclarer.Enabled = true;

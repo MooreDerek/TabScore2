@@ -4,6 +4,7 @@
 using TabScore2.Classes;
 using TabScore2.Globals;
 using TabScore2.Models;
+using TabScore2.SharedClasses;
 
 namespace TabScore2.UtilityServices
 {
@@ -26,5 +27,6 @@ namespace TabScore2.UtilityServices
         string Header(HeaderType headerType, int parameter1 = 0, int parameter2 = 0);
         string Title(string titleString, TitleType titleType = TitleType.Plain, int parameter1 = 0, int parameter2 = 0);
         bool ValidateLead(TableStatus tableStatus, string card);
+        public void CalculateScore(Result result);
     }
 }

@@ -21,7 +21,10 @@ namespace TabScore2.Forms
 
         private void SettingsForm_Load(object sender, EventArgs e)
         {
-            database.GetDatabaseSettings(9999);  // Force settings refresh without updating settings round number
+            database.GetDatabaseSettings();   // Force settings refresh
+
+            TabletMovesGroupBox.Enabled = !settings.SessionStarted;
+
             ShowTravellerCheckbox.Checked = settings.ShowTraveller;
             ShowPercentageCheckbox.Checked = settings.ShowPercentage;
             ShowHandRecordCheckbox.Checked = settings.ShowHandRecord;

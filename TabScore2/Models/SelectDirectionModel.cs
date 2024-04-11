@@ -3,6 +3,7 @@
 
 using TabScore2.Classes;
 using TabScore2.Globals;
+using TabScore2.SharedClasses;
 
 namespace TabScore2.Models
 {

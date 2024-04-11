@@ -6,6 +6,7 @@ using TabScore2.Classes;
 using TabScore2.DataServices;
 using TabScore2.Globals;
 using TabScore2.Models;
+using TabScore2.SharedClasses;
 using TabScore2.UtilityServices;
 
 namespace TabScore2.Controllers

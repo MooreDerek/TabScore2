@@ -2,10 +2,13 @@
   "profiles": {
     "TabScore2": {
       "commandName": "Project",
-      "environmentVariables": { "ASPNETCORE_ENVIRONMENT": "Development" },
       "launchBrowser": true,
       "launchUrl": "http://localhost:5213",
-      "applicationUrl": "http://localhost:5213"
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:5213",
+      "hotReloadEnabled": false
     }
   }
 }

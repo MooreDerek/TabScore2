@@ -6,6 +6,7 @@ using TabScore2.Classes;
 using TabScore2.DataServices;
 using TabScore2.Globals;
 using TabScore2.Models;
+using TabScore2.SharedClasses;
 using TabScore2.UtilityServices;
 
 namespace TabScore2.Controllers
@@ -98,7 +99,7 @@ namespace TabScore2.Controllers
             int newRoundNumber = deviceStatus.RoundNumber;  // Going back, so new round is current round!
             deviceStatus.RoundNumber--;
             tableStatus.RoundNumber--;
-            tableStatus.RoundData = database.GetRoundData(tableStatus.SectionID, tableStatus.TableNumber, tableStatus.RoundNumber);
+            tableStatus.RoundData = database.GetRound(tableStatus.SectionID, tableStatus.TableNumber, tableStatus.RoundNumber);
             return RedirectToAction("Index", "ShowMove", new { deviceNumber, newRoundNumber});
         }
     }

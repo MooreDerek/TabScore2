@@ -21,8 +21,8 @@
         int SuppressRankingListForFirstXRounds { get; set; }
         int SuppressRankingListForLastXRounds { get; set; }
         
-        string PathToDatabase { get; set; }
         bool DatabaseReady { get; set; }
         bool IsIndividual { get; set; }
+        bool SessionStarted { get; set; }
     }
 }

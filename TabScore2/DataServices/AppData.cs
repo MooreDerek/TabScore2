@@ -8,6 +8,7 @@ using System.Text;
 using TabScore2.Classes;
 using TabScore2.Globals;
 using TabScore2.Resources;
+using TabScore2.SharedClasses;
 
 namespace TabScore2.DataServices
 {
@@ -53,7 +54,7 @@ namespace TabScore2.DataServices
         {
             TableStatus tableStatus = GetTableStatus(sectionID, tableNumber)!;
             tableStatus.RoundNumber = roundNumber;
-            tableStatus.RoundData = database.GetRoundData(sectionID, tableNumber, roundNumber);
+            tableStatus.RoundData = database.GetRound(sectionID, tableNumber, roundNumber);
             tableStatus.ReadyForNextRoundNorth = false;
             tableStatus.ReadyForNextRoundSouth = false;
             tableStatus.ReadyForNextRoundEast = false;

@@ -7,6 +7,7 @@ using TabScore2.Classes;
 using TabScore2.DataServices;
 using TabScore2.Globals;
 using TabScore2.UtilityServices;
+using TabScore2.SharedClasses;
 
 namespace TabScore2.Controllers
 {
@@ -60,7 +61,7 @@ namespace TabScore2.Controllers
                     result.TricksTakenSymbol = tricksTakenLevel.ToString("+#;-#;0");
                 }
             }
-            result.CalculateScore();
+            utilities.CalculateScore(result);
             return RedirectToAction("Index", "ConfirmResult", new { deviceNumber });
         }
 

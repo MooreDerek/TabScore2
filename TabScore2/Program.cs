@@ -1,12 +1,13 @@
 // TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
+using GrpcServices;
 using ProtoBuf.Grpc.ClientFactory;
-using SharedContracts;
 using System.Diagnostics;
 using System.Net;
 using TabScore2.DataServices;
 using TabScore2.Forms;
+using TabScore2.SharedClasses;
 using TabScore2.UtilityServices;
 
 namespace TabScore2
@@ -45,7 +46,7 @@ namespace TabScore2
             if(isDevelopment)
             {
                 string solutionDirectory = Directory.GetParent(Environment.CurrentDirectory)!.FullName;
-                workingDirectory = Path.Combine(solutionDirectory, @"GrpcBwsDatabaseServer\bin\x86\Debug\net8.0");
+                workingDirectory = Path.Combine(solutionDirectory, @"GrpcBwsDatabaseServer\bin\x86\Debug\net8.0-windows10.0.17763.0");
                 grpcServer.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
             }
             else
@@ -114,7 +115,7 @@ namespace TabScore2
                     {
                         return new ViewResultsForm(container, location);
                     });
-            desktopBuilder.Services.AddTransient<Func<Classes.Result, Point, EditResultForm>>(
+            desktopBuilder.Services.AddTransient<Func<Result, Point, EditResultForm>>(
                 container =>
                     (result, location) =>
                     {

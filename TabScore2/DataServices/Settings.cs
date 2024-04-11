@@ -63,11 +63,6 @@ namespace TabScore2.DataServices
         }
 
         // Settings related to the operation of the scoring database
-        public string PathToDatabase
-        {
-            get { return Properties.Settings.Default.PathToDatabase; }
-            set { Properties.Settings.Default.PathToDatabase = value; Properties.Settings.Default.Save(); }
-        }
         public bool DatabaseReady
         {
             get { return Properties.Settings.Default.DatabaseReady; }
@@ -77,6 +72,11 @@ namespace TabScore2.DataServices
         {
             get { return Properties.Settings.Default.IsIndividual; }
             set { Properties.Settings.Default.IsIndividual = value; Properties.Settings.Default.Save(); }
+        }
+        public bool SessionStarted
+        {
+            get { return Properties.Settings.Default.SessionStarted; }
+            set { Properties.Settings.Default.SessionStarted = value; Properties.Settings.Default.Save(); }
         }
     }
 }

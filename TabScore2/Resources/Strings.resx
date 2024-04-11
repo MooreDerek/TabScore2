@@ -156,6 +156,7 @@
   </data>
   <data name="ForSwiss" xml:space="preserve">
     <value>For Swiss events, wait until the TD tells you and then press OK to get the new movement</value>
+    <comment>@MutedRule(PunctuationTail)</comment>
   </data>
   <data name="EnterContract" xml:space="preserve">
     <value>Enter contract</value>
@@ -532,5 +533,14 @@ tablet device at your current location</value>
   </data>
   <data name="ToWelcome" xml:space="preserve">
     <value>to</value>
+  </data>
+  <data name="EnterValidResult" xml:space="preserve">
+    <value>Please enter a valid result</value>
+  </data>
+  <data name="EnterValidContract" xml:space="preserve">
+    <value>Please enter a valid contract</value>
+  </data>
+  <data name="DatabaseNoRoundData" xml:space="preserve">
+    <value>Database contains incorrect Rounds</value>
   </data>
 </root>

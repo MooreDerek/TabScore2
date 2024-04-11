@@ -2,11 +2,10 @@
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using Microsoft.Extensions.Localization;
-using System.Drawing;
 using System.Reflection;
-using TabScore2.Classes;
 using TabScore2.DataServices;
 using TabScore2.Resources;
+using TabScore2.SharedClasses;
 
 namespace TabScore2.Forms
 {
@@ -17,6 +16,7 @@ namespace TabScore2.Forms
         private readonly IDatabase database;
         private readonly IAppData appData;
         private readonly ISettings settings;
+        private string pathToDatabase = string.Empty;
         
         public MainForm(IServiceProvider iServiceProvider, IStringLocalizer<Strings> iLocalizer, IDatabase iDatabase, IAppData iAppData, ISettings iSettings)
         {
@@ -35,7 +35,7 @@ namespace TabScore2.Forms
 
             // Scoring database is not yet ready for use
             settings.DatabaseReady = false;
-            settings.PathToDatabase = string.Empty;
+            settings.SessionStarted = false;
             
             // Parse command line args correctly to get database path
             string argsString = string.Empty;
@@ -49,7 +49,7 @@ namespace TabScore2.Forms
             {
                 if (s.StartsWith("f:["))
                 {
-                    settings.PathToDatabase = s.Split(['[', ']'])[1];
+                    pathToDatabase = s.Split(['[', ']'])[1];
                     break;
                 }
             }
@@ -64,7 +64,7 @@ namespace TabScore2.Forms
         {
             if (databaseFileDialog.ShowDialog() == DialogResult.OK)
             {
-                settings.PathToDatabase = databaseFileDialog.FileName;
+                pathToDatabase = databaseFileDialog.FileName;
                 IntializeDatabase();
             }
         }
@@ -127,13 +127,13 @@ namespace TabScore2.Forms
         private void IntializeDatabase()
         {
             settings.DatabaseReady = false;
-            if (settings.PathToDatabase == string.Empty) 
+            if (pathToDatabase == string.Empty) 
             {
                 // No database file set
                 buttonAddDatabaseFile.Visible = true;
                 return;
             }
-            string returnMessage = database.Initialize();
+            string returnMessage = database.Initialize(pathToDatabase);
             if (returnMessage != string.Empty)
             {
                 // Database is not valid for some reason and Initialize failed
@@ -142,7 +142,7 @@ namespace TabScore2.Forms
             }
             else
             {
-                labelPathToDatabase.Text = settings.PathToDatabase;
+                labelPathToDatabase.Text = pathToDatabase;
                 buttonSettings.Enabled = false;
                 buttonResultsViewer.Enabled = false;
                 buttonSettings.Visible = true;

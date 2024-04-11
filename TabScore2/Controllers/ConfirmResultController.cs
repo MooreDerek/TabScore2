@@ -7,6 +7,7 @@ using TabScore2.Classes;
 using TabScore2.DataServices;
 using TabScore2.Globals;
 using TabScore2.UtilityServices;
+using TabScore2.SharedClasses;
 
 namespace TabScore2.Controllers
 {

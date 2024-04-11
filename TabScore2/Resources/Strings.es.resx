@@ -484,4 +484,13 @@
   <data name="ToWelcome" xml:space="preserve">
     <value>a</value>
   </data>
+  <data name="EnterValidResult" xml:space="preserve">
+    <value>Por favor ingresa un resultado válido</value>
+  </data>
+  <data name="EnterValidContract" xml:space="preserve">
+    <value>Por favor ingresa un contrato válido</value>
+  </data>
+  <data name="DatabaseNoRoundData" xml:space="preserve">
+    <value>La base de datos contiene rondas incorrectas</value>
+  </data>
 </root>

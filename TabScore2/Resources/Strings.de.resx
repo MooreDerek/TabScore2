@@ -504,4 +504,13 @@
   <data name="ToWelcome" xml:space="preserve">
     <value>zu</value>
   </data>
+  <data name="EnterValidResult" xml:space="preserve">
+    <value>Bitte geben Sie ein gültiges Ergebnis ein</value>
+  </data>
+  <data name="EnterValidContract" xml:space="preserve">
+    <value>Bitte geben Sie einen gültigen Kontrakt ein</value>
+  </data>
+  <data name="DatabaseNoRoundData" xml:space="preserve">
+    <value>Die Datenbank enthält falsche Runden</value>
+  </data>
 </root>

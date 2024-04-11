@@ -1,14 +1,14 @@
 ﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
-using SharedContracts;
+using GrpcMessageClasses;
 using System.Data.Odbc;
 
 namespace GrpcServices
 {
     public class ExternalNamesDatabaseService : IExternalNamesDatabaseService
     {
-        public GrpcPlayerName GetExternalPlayerName(GrpcPlayerRequest request)
+        public PlayerNameMessage GetExternalPlayerName(PlayerMessage request)
         {
             string name = "Unknown";
             OdbcConnectionStringBuilder externalDB = new() { Driver = "Microsoft Access Driver (*.mdb)" };
@@ -40,7 +40,7 @@ namespace GrpcServices
                     cmd.Dispose();
                 }
             }
-            return new GrpcPlayerName() { PlayerName = name };
+            return new PlayerNameMessage() { PlayerName = name };
         }
     }
 }

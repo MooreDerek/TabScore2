@@ -6,6 +6,7 @@ using TabScore2.Classes;
 using TabScore2.DataServices;
 using TabScore2.Globals;
 using TabScore2.Models;
+using TabScore2.SharedClasses;
 using TabScore2.UtilityServices;
 
 namespace TabScore2.Controllers
@@ -34,7 +35,7 @@ namespace TabScore2.Controllers
             database.RegisterTable(sectionID, tableNumber);
 
             TableStatus tableStatus = appData.GetTableStatus(sectionID, tableNumber);  // Return value cannot be null as we've just set it
-            tableStatus.RoundData = database.GetRoundData(sectionID, tableNumber, tableStatus.RoundNumber);
+            tableStatus.RoundData = database.GetRound(sectionID, tableNumber, tableStatus.RoundNumber);
 
             if (database.GetSection(sectionID).DevicesPerTable == 1)
             {

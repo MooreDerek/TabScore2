@@ -9,7 +9,7 @@ namespace TabScore2.SharedClasses
     public class Section
     {
         [DataMember(Order = 1)] public int ID { get; set; }
-        [DataMember(Order = 2)] public string Letter { get; set; } = "A";
+        [DataMember(Order = 2)] public string Letter { get; set; } = string.Empty;
         [DataMember(Order = 3)] public int Tables { get; set; }
         [DataMember(Order = 4)] public int MissingPair { get; set; }
         [DataMember(Order = 5)] public int Winners { get; set; }

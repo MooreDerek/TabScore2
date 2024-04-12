@@ -5,11 +5,12 @@ using TabScore2.Globals;
 
 namespace TabScore2.Classes
 {
-    public class Move(int pairNumber, Direction direction)
+    public class Move(int pairNumber)
     {
         public int NewTableNumber { get; set; }
-        public Direction Direction { get; set; } = direction;
+        public string DirectionString { get; set; } = string.Empty;
         public Direction NewDirection { get; set; }
+        public string NewDirectionString { get; set; } = string.Empty;
         public bool Stay { get; set; }
         public bool NewTableIsSitout { get; set; } = false;
         public int PairNumber { get; set; } = pairNumber;

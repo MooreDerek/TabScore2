@@ -339,7 +339,7 @@ namespace TabScore2.UtilityServices
                 {
                     showTravellerModel.HandRecord = true;
                 }
-                else    // Can't find matching hand record, so try default SectionID = 1
+                else if (tableStatus.SectionID > 1)   // Can't find matching hand record, so try default SectionID = 1
                 {
                     hand = database.GetHand(1, currentBoardNumber);
                     if (hand.NorthSpades != "###")
@@ -494,16 +494,18 @@ namespace TabScore2.UtilityServices
         // OTHER PUBLIC UTLITY CLASSES
         public Move GetMove(List<Round> roundsList, int tableNumber, int pairNumber, Direction direction)
         {
-            Move move = new(pairNumber, direction);
+            Move move = new(pairNumber);
             Round? round;
             if (settings.IsIndividual)
             {
+                move.DirectionString = direction.ToString();
                 // Try Direction = North
                 round = roundsList.Find(x => x.NumberNorth == pairNumber);
                 if (round != null)
                 {
                     move.NewTableNumber = round.TableNumber;
                     move.NewDirection = Direction.North;
+                    move.NewDirectionString = "North";
                     move.Stay = (move.NewTableNumber == tableNumber && direction == Direction.North);
                     if (round.NumberEast == 0) move.NewTableIsSitout = true;
                     return move;
@@ -515,6 +517,7 @@ namespace TabScore2.UtilityServices
                 {
                     move.NewTableNumber = round.TableNumber;
                     move.NewDirection = Direction.South;
+                    move.NewDirectionString = "South";
                     move.Stay = (move.NewTableNumber == tableNumber && direction == Direction.South);
                     if (round.NumberEast == 0) move.NewTableIsSitout = true;
                     return move;
@@ -526,6 +529,7 @@ namespace TabScore2.UtilityServices
                 {
                     move.NewTableNumber = round.TableNumber;
                     move.NewDirection = Direction.East;
+                    move.NewDirectionString = "East";
                     move.Stay = (move.NewTableNumber == tableNumber && direction == Direction.East);
                     if (round.NumberNorth == 0) move.NewTableIsSitout = true;
                     return move;
@@ -537,6 +541,7 @@ namespace TabScore2.UtilityServices
                 {
                     move.NewTableNumber = round.TableNumber;
                     move.NewDirection = Direction.West;
+                    move.NewDirectionString = "West";
                     move.Stay = (move.NewTableNumber == tableNumber && direction == Direction.West);
                     if (round.NumberNorth == 0) move.NewTableIsSitout = true;
                     return move;
@@ -546,6 +551,7 @@ namespace TabScore2.UtilityServices
                 {
                     move.NewTableNumber = 0;
                     move.NewDirection = Direction.Sitout;
+                    move.NewDirectionString = "Sitout";
                     move.Stay = false;
                     return move;
                 }
@@ -554,10 +560,12 @@ namespace TabScore2.UtilityServices
             {
                 if (direction == Direction.North)
                 {
+                    move.DirectionString = move.NewDirectionString = "NorthSouth";
                     round = roundsList.Find(x => x.NumberNorth == pairNumber);
                 }
                 else
                 {
+                    move.DirectionString = move.NewDirectionString = "EastWest";
                     round = roundsList.Find(x => x.NumberEast == pairNumber);
                 }
 
@@ -586,11 +594,13 @@ namespace TabScore2.UtilityServices
                         if (direction == Direction.North)
                         {
                             move.NewDirection = Direction.East;
+                            move.NewDirectionString = "EastWest";
                             if (round.NumberNorth == 0) move.NewTableIsSitout = true;
                         }
                         else
                         {
                             move.NewDirection = Direction.North;
+                            move.NewDirectionString = "NorthSouth";
                             if (round.NumberEast == 0) move.NewTableIsSitout = true;
                         }
                     }
@@ -598,6 +608,7 @@ namespace TabScore2.UtilityServices
                     {
                         move.NewTableNumber = 0;
                         move.NewDirection = Direction.Sitout;
+                        move.NewDirectionString = "Sitout";
                     }
                 }
                 move.Stay = (move.NewTableNumber == tableNumber && move.NewDirection == direction);

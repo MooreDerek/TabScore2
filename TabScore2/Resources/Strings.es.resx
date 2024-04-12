@@ -113,7 +113,7 @@
     <value>El archivo TabScoreDB.txt no existe. Reinicie TabScoreStarter.exe</value>
   </data>
   <data name="ErrorNoDBSelected" xml:space="preserve">
-    <value>No se seleccionó ninguna base de datos de puntajes.  Por favor espere hasta que el Director del Torneo le indique que comience</value>
+    <value>Por favor espere hasta que el Director del Torneo le indique que comience</value>
   </data>
   <data name="ErrorPermanentDB" xml:space="preserve">
     <value>Error permanente de conexión de base de datos. Verifique el formato y los permisos de acceso para el archivo de la base de datos de puntajes y reinicie TabScoreStarter.exe</value>
@@ -492,5 +492,11 @@
   </data>
   <data name="DatabaseNoRoundData" xml:space="preserve">
     <value>La base de datos contiene rondas incorrectas</value>
+  </data>
+  <data name="NorthSouth" xml:space="preserve">
+    <value>Norte/Sur</value>
+  </data>
+  <data name="EastWest" xml:space="preserve">
+    <value>Este/Oeste</value>
   </data>
 </root>

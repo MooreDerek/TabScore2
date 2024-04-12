@@ -205,7 +205,7 @@ namespace TabScore2.Forms
                 if (newBoard)
                 {
                     newBoard = false;
-                    Hand hand = new() { BoardNumber = Convert.ToInt32(line!.Split(quoteDelimiter)[1]) };
+                    Hand hand = new() { SectionID = 1, BoardNumber = Convert.ToInt32(line!.Split(quoteDelimiter)[1]), NorthSpades = "###" };
                     while ((line = file.ReadLine()) != null)
                     {
                         if (line.Length > 6 && line[..6] == "[Deal ")

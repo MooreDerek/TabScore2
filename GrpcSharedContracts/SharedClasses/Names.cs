@@ -12,6 +12,6 @@ namespace TabScore2.SharedClasses
         [DataMember(Order = 2)] public string NameSouth { get; set; } = string.Empty;
         [DataMember(Order = 3)] public string NameEast { get; set; } = string.Empty;
         [DataMember(Order = 4)] public string NameWest { get; set; } = string.Empty;
-        [DataMember(Order = 5)] public bool GotAllNames { get; set; } = false;
+        [DataMember(Order = 5)] public bool GotAllNames { get; set; }
     }
 }

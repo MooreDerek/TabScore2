@@ -143,6 +143,7 @@ namespace TabScore2.DataServices
 
         public void AddHand(Hand hand)
         {
+            if (hand.NorthSpades == "###") return;
             client.AddHand(hand);
         }
 

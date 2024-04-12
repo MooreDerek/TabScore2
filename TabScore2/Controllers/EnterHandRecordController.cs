@@ -47,7 +47,7 @@ namespace TabScore.Controllers
             {
                 SectionID = appData.GetDeviceStatus(deviceNumber).SectionID,
                 BoardNumber = boardNumber,
-                NorthSpades = NS ?? string.Empty,
+                NorthSpades = NS ?? "###",
                 NorthHearts = NH ?? string.Empty,
                 NorthDiamonds = ND ?? string.Empty,
                 NorthClubs = NC ?? string.Empty,

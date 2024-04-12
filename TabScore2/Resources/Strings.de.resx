@@ -145,7 +145,7 @@
     <value>Auslassen</value>
   </data>
   <data name="ErrorNoDBSelected" xml:space="preserve">
-    <value>Keine Scoring-Datenbank ausgewählt.  Bitte warten Sie, bis der Turnierleiter Sie zum Starten auffordert</value>
+    <value>Bitte warten Sie, bis der Turnierleiter Sie zum Starten auffordert</value>
   </data>
   <data name="Unknown" xml:space="preserve">
     <value>Unbekannt</value>
@@ -512,5 +512,11 @@
   </data>
   <data name="DatabaseNoRoundData" xml:space="preserve">
     <value>Die Datenbank enthält falsche Runden</value>
+  </data>
+  <data name="NorthSouth" xml:space="preserve">
+    <value>Nord/Süd</value>
+  </data>
+  <data name="EastWest" xml:space="preserve">
+    <value>Ost/West</value>
   </data>
 </root>

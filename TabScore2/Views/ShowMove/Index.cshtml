@@ -16,7 +16,7 @@
     <div class="row mt-2">
         <div class="col-12 text-center">
             <h3 style="color:blue">
-                @localizer[move.Direction.ToString()]: @move.PairNumber
+                @localizer[move.DirectionString]: @move.PairNumber
             </h3>
         </div>
     </div>
@@ -34,13 +34,13 @@
                 if (move.Stay)
                 {
                     <h4>
-                        @localizer["StayAtTable"] @move.NewTableNumber @localizer[move.NewDirection.ToString()]
+                        @localizer["StayAtTable"] @move.NewTableNumber @localizer[move.NewDirectionString]
                     </h4>
                 }
                 else
                 {
                     <h4>
-                        @localizer["MoveToTable"] @move.NewTableNumber @localizer[move.NewDirection.ToString()]
+                        @localizer["MoveToTable"] @move.NewTableNumber @localizer[move.NewDirectionString]
                     </h4>
                 }
                 if (move.NewTableIsSitout)

@@ -14,6 +14,7 @@ namespace GrpcServices
         private static string connectionString = string.Empty;
         private static bool isIndividual = false;
         private static readonly List<Section> sectionsList = [];
+        private static readonly List<Hand> handsList = [];
 
         // ===============================================================================
         // Initialize the database by checking tables and fields and updating as necessary
@@ -66,7 +67,7 @@ namespace GrpcServices
             {
                 cmd.Dispose();
             }
-            
+
             // Validate SECTION Table
             // Add field 'Winners' to table 'Section' if it doesn't already exist
             SQLString = "ALTER TABLE Section ADD Winners SHORT";
@@ -83,9 +84,24 @@ namespace GrpcServices
                 }
             }
 
+            // Add field 'MissingPair' to table 'Section' if it doesn't already exist
+            SQLString = "ALTER TABLE Section ADD MissingPair SHORT";
+            cmd = new(SQLString, connection);
+            try
+            {
+                cmd.ExecuteNonQuery();
+            }
+            catch (OdbcException e)
+            {
+                if (e.Errors.Count != 1 || e.Errors[0].SQLState != "HYS21")
+                {
+                    throw;
+                }
+            }
+
             // Read sections
             sectionsList.Clear();
-            SQLString = "SELECT ID, Letter, [Tables], Winners FROM Section";
+            SQLString = "SELECT ID, Letter, [Tables], Winners, MissingPair FROM Section";
             cmd = new OdbcCommand(SQLString, connection);
             OdbcDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
@@ -99,7 +115,13 @@ namespace GrpcServices
                     object tempWinners = reader.GetValue(3);
                     if (tempWinners != null) winners = Convert.ToInt32(tempWinners);
                 }
-                sectionsList.Add(new Section() { ID = sectionID, Letter = sectionLetter, Tables = numTables, Winners = winners });
+                int missingPair = 0;
+                if (!reader.IsDBNull(4))
+                {
+                    object tempMissingPair = reader.GetValue(4);
+                    if (tempMissingPair != null) winners = Convert.ToInt32(tempMissingPair);
+                }
+                sectionsList.Add(new Section() { ID = sectionID, Letter = sectionLetter, Tables = numTables, Winners = winners, MissingPair = missingPair });
             }
             reader.Close();
 
@@ -925,7 +947,9 @@ namespace GrpcServices
                 SectionID = message.SectionID,
                 TableNumber = message.TableNumber,
                 RoundNumber = message.RoundNumber,
-                BoardNumber = message.BoardNumber
+                BoardNumber = message.BoardNumber,
+                ContractLevel = -999,
+                TricksTaken = -1
             };
             if (result.BoardNumber == 0) return result;
 
@@ -1184,6 +1208,7 @@ namespace GrpcServices
                         else
                         {
                             result.ContractLevel = -1;  // Board not played
+                            result.TricksTaken = -1;
                         }
                         resultsList.Add(result);
                     }
@@ -1584,8 +1609,6 @@ namespace GrpcServices
         }
 
         // HANDRECORD
-        private static readonly List<Hand> handsList = [];
-
         public HandsCountMessage GetHandsCount()
         {
             return new HandsCountMessage() { HandsCount = handsList.Count }; 
@@ -1605,7 +1628,7 @@ namespace GrpcServices
             }
             else
             {
-                return new Hand();
+                return new Hand() { SectionID = message.SectionID, BoardNumber = message.BoardNumber, NorthSpades = "###" };
             }
         }
 
@@ -1670,6 +1693,7 @@ namespace GrpcServices
             Section section = GetSection(new SectionIDMessage() { SectionID = message.SectionID });
             if (message.RoundNumber != 0 && message.RoundNumber <= section.CurrentRoundNumber)
             {
+                databaseSettings.UpdateRequired = false;
                 return databaseSettings;   // No update required as already done for this round.  No update required is the default
             }
 
@@ -1703,6 +1727,16 @@ namespace GrpcServices
             catch
             {
                 // In case of error, use defaults
+                databaseSettings.ShowTraveller = true;
+                databaseSettings.ShowPercentage = true;
+                databaseSettings.EnterLeadCard = true;
+                databaseSettings.ValidateLeadCard = true;
+                databaseSettings.ShowRanking = 1;
+                databaseSettings.EnterResultsMethod = 1;
+                databaseSettings.ShowHandRecord = true;
+                databaseSettings.NumberEntryEachRound = false;
+                databaseSettings.NameSource = 0;
+                databaseSettings.ManualHandRecordEntry = false;
             }
             finally
             {

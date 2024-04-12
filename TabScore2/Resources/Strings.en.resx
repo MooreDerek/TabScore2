@@ -196,7 +196,7 @@
     <value>Please enter a result (or Skip = Not played) for every board</value>
   </data>
   <data name="ErrorNoDBSelected" xml:space="preserve">
-    <value>No scoring database selected.  Please wait until the Tournament Director tells you to start</value>
+    <value>Please wait until the Tournament Director tells you to start</value>
   </data>
   <data name="ErrorNoTabScoreDBtxt" xml:space="preserve">
     <value>File TabScoreDB.txt doesn't exist.  Please re-start TabScoreStarter.exe</value>
@@ -512,5 +512,11 @@
   </data>
   <data name="DatabaseNoRoundData" xml:space="preserve">
     <value>Database contains incorrect Rounds</value>
+  </data>
+  <data name="NorthSouth" xml:space="preserve">
+    <value>North/South</value>
+  </data>
+  <data name="EastWest" xml:space="preserve">
+    <value>East/West</value>
   </data>
 </root>

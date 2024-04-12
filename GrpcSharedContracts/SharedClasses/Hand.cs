@@ -8,9 +8,9 @@ namespace TabScore2.SharedClasses
     [DataContract]
     public class Hand
     {
-        [DataMember(Order = 1)] public int SectionID { get; set; } = 1;  // Default SectionID=1 if hands apply to more than one section
-        [DataMember(Order = 2)] public int BoardNumber { get; set; } = 0;
-        [DataMember(Order = 3)] public string NorthSpades { get; set; } = "###";  // Indicates no hand record available
+        [DataMember(Order = 1)] public int SectionID { get; set; }
+        [DataMember(Order = 2)] public int BoardNumber { get; set; }
+        [DataMember(Order = 3)] public string NorthSpades { get; set; } = string.Empty;
         [DataMember(Order = 4)] public string NorthHearts { get; set; } = string.Empty;
         [DataMember(Order = 5)] public string NorthDiamonds { get; set; } = string.Empty;
         [DataMember(Order = 6)] public string NorthClubs { get; set; } = string.Empty;

@@ -9,10 +9,10 @@ namespace TabScore2.SharedClasses
     public class Round
     {
         [DataMember(Order = 1)] public int TableNumber { get; set; }
-        [DataMember(Order = 2)] public int NumberNorth { get; set; } = 0;  // Applies to NS pair in pairs and teams
-        [DataMember(Order = 3)] public int NumberEast { get; set; } = 0;  // Applies to EW pair in pairs and teams
-        [DataMember(Order = 4)] public int NumberSouth { get; set; } = 0;
-        [DataMember(Order = 5)] public int NumberWest { get; set; } = 0;
+        [DataMember(Order = 2)] public int NumberNorth { get; set; }   // Applies to NS pair in pairs and teams
+        [DataMember(Order = 3)] public int NumberEast { get; set; }    // Applies to EW pair in pairs and teams
+        [DataMember(Order = 4)] public int NumberSouth { get; set; }
+        [DataMember(Order = 5)] public int NumberWest { get; set; }
         [DataMember(Order = 6)] public string NameNorth { get; set; } = string.Empty;
         [DataMember(Order = 7)] public string NameSouth { get; set; } = string.Empty;
         [DataMember(Order = 8)] public string NameEast { get; set; } = string.Empty;

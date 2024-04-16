@@ -11,12 +11,17 @@ the scoring program, so is a direct replacement for BridgeTab (or Bridgemate,
 BridgePad, etc).  Although TabScore2 has been built with EBUScore in mind, it 
 should work with any bridge scoring program that can create a .bws database.
 
-TabScore2 is designed for use on a PC with Windows 10+ and .NET 8.  Any 
-Windows 10 PC, with latest updates from Microsoft, should have .NET 8 installed
-automatically.  If not, this can be downloaded from Microsoft.
+TabScore2 is designed for use on a PC with Windows 10+ and .NET 8.  It is now a 
+64-bit applciation, although is still requires a 32-bit process to reqad and write 
+to the .bws database.
 
-To upgrade TabScore2 from a previous installation, please read the section in
-the User Guide on Upgrading TabScore2.
+There are 3 .NET 8 runtime libraries (ASP.NET Core Runtime 8, .NET Desktop Runtime 8 
+and .NET Runtime 8), and TabScore 2 requires both the 32-bit (x86) and 64-bit (x64)
+versions.  To check if these are installed, look in the appropriate folders in 
+"C:\Program Files(x86)\dotnet\shared\" and "C:\Program Files\dotnet\shared\".
+If not installed, they can be downloaded from Microsoft.
+
+To install TabScore2, simply copy the entire TabScore2 folder to "C:\Program Files".
 
 TabScore2 is currently limited to 4 sections (A, B, C and D in that order) and 
 30 tables per section.  It can be used for pairs, teams, Swiss events, and  
@@ -31,11 +36,11 @@ TabScore2 implements a range of display options which can be set by the
 scoring program, or from its Settings window.  See the User Guide for more
 details.
 
-TabScore2 is available in English, Spanish and German.  It will default to 
-English if the Windows language is not supported.
+TabScore2 is available in English, Spanish, German and Dutch.  It will default 
+to English if the Windows language is not supported.
 
 TabScore2 uses Bo Haglund's Double Dummy Solver (DDS) to analyse 
-hand records.  DDS requires the Microsoft Visual C++ Redistributable (x86) 
+hand records.  DDS requires the Microsoft Visual C++ Redistributable (x64) 
 2015 (or later) to be installed on the PC.
 
 See the NOTICE and LICENSE files.

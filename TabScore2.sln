@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TabScore2 Documents", "TabS
 		TabScore2 Documents\NOTICE = TabScore2 Documents\NOTICE
 		TabScore2 Documents\TabScore2 493x312.bmp = TabScore2 Documents\TabScore2 493x312.bmp
 		TabScore2 Documents\TabScore2 493x58.bmp = TabScore2 Documents\TabScore2 493x58.bmp
-		TabScore2 Documents\TabScore2 ReadMe 1.0.0.txt = TabScore2 Documents\TabScore2 ReadMe 1.0.0.txt
+		TabScore2 Documents\TabScore2 ReadMe 1.0.1.txt = TabScore2 Documents\TabScore2 ReadMe 1.0.1.txt
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrpcBwsDatabaseServer", "GrpcBwsDatabaseServer\GrpcBwsDatabaseServer.csproj", "{CF75C71D-ABF4-41F6-92D7-5C90344C60A1}"
@@ -52,9 +52,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {EA91F9F8-CC08-450B-AAA7-CFBEF8232623}
-		RESX_CultureCountyOverrides = 
-		RESX_EnableXlifSync = True
 		RESX_NeutralResourcesLanguage = en-US
+		RESX_EnableXlifSync = True
+		RESX_CultureCountyOverrides = 
+		SolutionGuid = {EA91F9F8-CC08-450B-AAA7-CFBEF8232623}
 	EndGlobalSection
 EndGlobal

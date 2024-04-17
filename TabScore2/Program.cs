@@ -12,12 +12,29 @@ using TabScore2.UtilityServices;
 
 namespace TabScore2
 {
-    internal static class Program
+    internal class Program
     {
         [STAThread]
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             bool isDevelopment = string.Equals(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"), "Development", StringComparison.CurrentCultureIgnoreCase);
+            string workingDirectory;
+
+            // ------------------
+            // Load splash screen
+            // ------------------
+            Process splashScreen = new();
+            if (isDevelopment)
+            {
+                string solutionDirectory = Directory.GetParent(Environment.CurrentDirectory)!.FullName;
+                workingDirectory = Path.Combine(solutionDirectory, @"SplashScreen\bin\x64\Debug\net8.0-windows");
+            }
+            else
+            {
+                workingDirectory = Application.StartupPath;
+            }
+            splashScreen.StartInfo.FileName = Path.Combine(workingDirectory, "SplashScreen.exe");
+            splashScreen.Start();
 
             // -----------------------------------------------------------------------------------
             // Get local IP address (there must be one for TabScore2 to work) and set gRCP address
@@ -42,11 +59,10 @@ namespace TabScore2
             // Start gRPC server process
             // -------------------------
             Process grpcServer = new();
-            string workingDirectory;
             if(isDevelopment)
             {
                 string solutionDirectory = Directory.GetParent(Environment.CurrentDirectory)!.FullName;
-                workingDirectory = Path.Combine(solutionDirectory, @"GrpcBwsDatabaseServer\bin\x86\Debug\net8.0-windows10.0.17763.0");
+                workingDirectory = Path.Combine(solutionDirectory, @"GrpcBwsDatabaseServer\bin\x86\Debug\net8.0");
                 grpcServer.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
             }
             else
@@ -123,10 +139,13 @@ namespace TabScore2
                     });
             IHost host = desktopBuilder.Build();
             IServiceProvider services = host.Services;
+            
+            // Close the splash screen and start the Windows app
+            splashScreen.Kill();
             Application.Run(services.GetRequiredService<MainForm>());
 
             // Close gRPC server
-            grpcServer.Close();
+            grpcServer.Kill();
         }
     }
 }

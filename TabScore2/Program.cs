@@ -26,8 +26,7 @@ namespace TabScore2
             Process splashScreen = new();
             if (isDevelopment)
             {
-                string solutionDirectory = Directory.GetParent(Environment.CurrentDirectory)!.FullName;
-                workingDirectory = Path.Combine(solutionDirectory, @"SplashScreen\bin\x64\Debug\net8.0-windows");
+                workingDirectory = Path.Combine(Directory.GetParent(Environment.CurrentDirectory)!.FullName, @"SplashScreen\bin\x64\Debug\net8.0-windows");
             }
             else
             {
@@ -61,18 +60,21 @@ namespace TabScore2
             Process grpcServer = new();
             if(isDevelopment)
             {
-                string solutionDirectory = Directory.GetParent(Environment.CurrentDirectory)!.FullName;
-                workingDirectory = Path.Combine(solutionDirectory, @"GrpcBwsDatabaseServer\bin\x86\Debug\net8.0");
+                workingDirectory = Path.Combine(Directory.GetParent(Environment.CurrentDirectory)!.FullName, @"GrpcBwsDatabaseServer\bin\x86\Debug\net8.0");
                 grpcServer.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
             }
             else
             {
-                string startupFolder = Application.StartupPath;
-                workingDirectory = Path.Combine(startupFolder, @"GrpcBwsDatabaseServer");
+                workingDirectory = Path.Combine(Application.StartupPath, @"GrpcBwsDatabaseServer");
                 grpcServer.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             }
+            string grpcFileName = Path.Combine(workingDirectory, "GrpcBwsDatabaseServer.exe");
+            if (!File.Exists(grpcFileName))
+            {
+                throw new Exception($"Cannot find file 'GrpcBwsDatabaseServer.exe' in location '{workingDirectory}'");
+            }
             grpcServer.StartInfo.WorkingDirectory = workingDirectory;
-            grpcServer.StartInfo.FileName = Path.Combine(workingDirectory, "GrpcBwsDatabaseServer.exe");
+            grpcServer.StartInfo.FileName = grpcFileName;
             grpcServer.Start();
 
             // ----------------------------------------

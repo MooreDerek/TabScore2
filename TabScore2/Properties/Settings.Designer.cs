@@ -154,5 +154,17 @@ namespace TabScore2.Properties {
                 this["SessionStarted"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowSplashScreen {
+            get {
+                return ((bool)(this["ShowSplashScreen"]));
+            }
+            set {
+                this["ShowSplashScreen"] = value;
+            }
+        }
     }
 }

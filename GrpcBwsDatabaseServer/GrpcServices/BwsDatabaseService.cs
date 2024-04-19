@@ -1810,6 +1810,14 @@ namespace GrpcServices
                 SQLString.Append(" BM2NumberEntryEachRound=NO,");
             }
             SQLString.Append($" BM2NameSource={databaseSettings.NameSource},");
+            if (databaseSettings.ManualHandRecordEntry)
+            {
+                SQLString.Append(" BM2EnterHandRecord=YES,");
+            }
+            else
+            {
+                SQLString.Append(" BM2EnterHandRecord=NO,");
+            }
             SQLString.Append($" EnterResultsMethod={databaseSettings.EnterResultsMethod}");
 
             using OdbcConnection connection = new(connectionString);

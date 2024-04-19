@@ -44,6 +44,7 @@ namespace TabScore2.Forms
             AdditionalMinutesPerRoundNud.Value = Convert.ToDecimal(settings.AdditionalSecondsPerRound) / 60;
             SuppressRankingListFirstXNud.Value = settings.SuppressRankingListForFirstXRounds;
             SuppressRankingListLastXNud.Value = settings.SuppressRankingListForLastXRounds;
+            SplashScreenCheckbox.Checked = settings.ShowSplashScreen;
 
             ShowPercentageCheckbox.Enabled = ShowTravellerCheckbox.Checked;
             ShowHandRecordCheckbox.Enabled = ShowTravellerCheckbox.Checked;
@@ -80,6 +81,7 @@ namespace TabScore2.Forms
             settings.AdditionalSecondsPerRound = Convert.ToInt32(AdditionalMinutesPerRoundNud.Value * 60);
             settings.SuppressRankingListForFirstXRounds = Convert.ToInt32(SuppressRankingListFirstXNud.Value);
             settings.SuppressRankingListForLastXRounds = Convert.ToInt32(SuppressRankingListLastXNud.Value);
+            settings.ShowSplashScreen = SplashScreenCheckbox.Checked;
             database.SetDatabaseSettings();
             Close();
         }

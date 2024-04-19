@@ -237,4 +237,10 @@
   <data name="FromPerspectiveOfLabel.Text" xml:space="preserve">
     <value>Desde la perspectiva de</value>
   </data>
+  <data name="SplashScreenGroupBox.Text" xml:space="preserve">
+    <value>Pantalla de presentación</value>
+  </data>
+  <data name="SplashScreenCheckbox.Text" xml:space="preserve">
+    <value>Mostrar pantalla de presentación al inicio</value>
+  </data>
 </root>

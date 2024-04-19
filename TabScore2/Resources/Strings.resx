@@ -549,4 +549,12 @@ tablet device at your current location</value>
   <data name="EastWest" xml:space="preserve">
     <value>East/West</value>
   </data>
+  <data name="NoNetwork" xml:space="preserve">
+    <value>This computer is not connected to a network</value>
+    <comment>@MutedRule(PunctuationTail)</comment>
+  </data>
+  <data name="NoGrpcServer" xml:space="preserve">
+    <value>The GrpcBwsDatabaseServer did not start.  Please check that the correct runtime libraries are installed</value>
+    <comment>@MutedRule(PunctuationTail)</comment>
+  </data>
 </root>

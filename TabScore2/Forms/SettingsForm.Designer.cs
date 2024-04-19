@@ -66,6 +66,8 @@ namespace TabScore2.Forms
             DoubleDummyCheckbox = new CheckBox();
             ShowHandRecordCheckbox = new CheckBox();
             ManualHandEntryCheckbox = new CheckBox();
+            SplashScreenGroupBox = new GroupBox();
+            SplashScreenCheckbox = new CheckBox();
             TravellerGroup.SuspendLayout();
             PlayersGroup.SuspendLayout();
             RankingListGroup.SuspendLayout();
@@ -78,6 +80,7 @@ namespace TabScore2.Forms
             ((System.ComponentModel.ISupportInitialize)AdditionalMinutesPerRoundNud).BeginInit();
             ((System.ComponentModel.ISupportInitialize)MinutesPerBoardNud).BeginInit();
             HandRecordGroup.SuspendLayout();
+            SplashScreenGroupBox.SuspendLayout();
             SuspendLayout();
             // 
             // TravellerGroup
@@ -326,10 +329,24 @@ namespace TabScore2.Forms
             ManualHandEntryCheckbox.UseVisualStyleBackColor = true;
             ManualHandEntryCheckbox.CheckedChanged += ManualHandRecordEntryCheckbox_CheckedChanged;
             // 
+            // SplashScreenGroupBox
+            // 
+            SplashScreenGroupBox.Controls.Add(SplashScreenCheckbox);
+            resources.ApplyResources(SplashScreenGroupBox, "SplashScreenGroupBox");
+            SplashScreenGroupBox.Name = "SplashScreenGroupBox";
+            SplashScreenGroupBox.TabStop = false;
+            // 
+            // SplashScreenCheckbox
+            // 
+            resources.ApplyResources(SplashScreenCheckbox, "SplashScreenCheckbox");
+            SplashScreenCheckbox.Name = "SplashScreenCheckbox";
+            SplashScreenCheckbox.UseVisualStyleBackColor = true;
+            // 
             // SettingsForm
             // 
             resources.ApplyResources(this, "$this");
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(SplashScreenGroupBox);
             Controls.Add(HandRecordGroup);
             Controls.Add(RoundTimerGroupBox);
             Controls.Add(TabletMovesGroupBox);
@@ -357,6 +374,7 @@ namespace TabScore2.Forms
             ((System.ComponentModel.ISupportInitialize)AdditionalMinutesPerRoundNud).EndInit();
             ((System.ComponentModel.ISupportInitialize)MinutesPerBoardNud).EndInit();
             HandRecordGroup.ResumeLayout(false);
+            SplashScreenGroupBox.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -395,5 +413,7 @@ namespace TabScore2.Forms
         private NumericUpDown SuppressRankingListLastXNud;
         private Label FromPerspectiveOfLabel;
         private ComboBox FromPerspectiveOfCombobox;
+        private GroupBox SplashScreenGroupBox;
+        private CheckBox SplashScreenCheckbox;
     }
 }

@@ -7,7 +7,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Platforms>x86;x64</Platforms>
+    <Platforms>x64</Platforms>
     <ApplicationIcon>Resources\TabScore2Icon.ico</ApplicationIcon>
   </PropertyGroup>
 
@@ -25,7 +25,7 @@
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="Views\" />
-    <Folder Include="wwwroot\css\" />
+    <Folder Include="wwwroot\css\fonts\" />
   </ItemGroup>
 
   <ItemGroup>

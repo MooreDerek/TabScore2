@@ -519,4 +519,10 @@
   <data name="EastWest" xml:space="preserve">
     <value>Ost/West</value>
   </data>
+  <data name="NoNetwork" xml:space="preserve">
+    <value>Dieser Computer ist nicht mit einem Netzwerk verbunden</value>
+  </data>
+  <data name="NoGrpcServer" xml:space="preserve">
+    <value>Der GrpcBwsDatabaseServer wurde nicht gestartet. Bitte prüfen Sie, ob die richtigen Laufzeitbibliotheken installiert sind</value>
+  </data>
 </root>

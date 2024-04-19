@@ -20,7 +20,8 @@
         bool DoubleDummy { get; set; }
         int SuppressRankingListForFirstXRounds { get; set; }
         int SuppressRankingListForLastXRounds { get; set; }
-        
+        bool ShowSplashScreen { get; set; }
+
         bool DatabaseReady { get; set; }
         bool IsIndividual { get; set; }
         bool SessionStarted { get; set; }

@@ -61,6 +61,11 @@ namespace TabScore2.DataServices
             get { return Properties.Settings.Default.SuppressRankingListForLastXRounds; }
             set { Properties.Settings.Default.SuppressRankingListForLastXRounds = value; Properties.Settings.Default.Save(); }
         }
+        public bool ShowSplashScreen
+        {
+            get { return Properties.Settings.Default.ShowSplashScreen; }
+            set { Properties.Settings.Default.ShowSplashScreen = value; Properties.Settings.Default.Save(); }
+        }
 
         // Settings related to the operation of the scoring database
         public bool DatabaseReady

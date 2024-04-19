@@ -2,6 +2,8 @@
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using Microsoft.Extensions.Localization;
+using System.Diagnostics;
+using System.Net;
 using System.Reflection;
 using TabScore2.DataServices;
 using TabScore2.Resources;
@@ -57,7 +59,34 @@ namespace TabScore2.Forms
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
-            IntializeDatabase();
+            string ipAddress = "";
+            IPHostEntry entry = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (IPAddress ip in entry.AddressList)
+            {
+                if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                {
+                    ipAddress = ip.ToString();
+                    break;
+                }
+            }
+            if (ipAddress == "")
+            {
+                // No network connection, so neither gRPC nor TabScore2 will work
+                MessageBox.Show(localizer["NoNetwork"], "TabScore2", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else  // Network exists
+            {
+                Process[] GrpcBwsDatabaseServerProcessArray = Process.GetProcessesByName("GrpcBwsDatabaseServer");
+                if (GrpcBwsDatabaseServerProcessArray.Length == 0)
+                {
+                    // GrpcBwsDatabaseServer process is not running, so cannot access database
+                    MessageBox.Show(localizer["NoGrpcServer"], "TabScore2", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else // Can go ahead!
+                {
+                    IntializeDatabase();
+                }
+            }
         }
 
         private void ButtonAddDatabaseFile_Click(object sender, EventArgs e)

@@ -28,10 +28,10 @@
             </div>
             <div class="modal-footer" style="justify-content:space-between">
                 <button class="btn btn-danger" onclick="modalBack()">
-                    <span class="fa fa-play-circle"></span> @localizer["Back"]
+                    <span class="icon-check-circle"></span> @localizer["Back"]
                 </button>
                 <button class="btn btn-success" data-bs-dismiss="modal">
-                    @localizer["Cancel"] <span class="fa fa-times-circle"></span>
+                    @localizer["Cancel"] <span class="icon-times-circle"></span>
                 </button>
             </div>
         </div>
@@ -126,11 +126,11 @@
         </button>
     </div>
     <div class="col-6 text-center p-0">
-        <span class="fa fa-arrow-circle-down fa-2x px-2"></span><span id="count" style="font-size:1.6rem">0</span><span class="fa fa-arrow-circle-up fa-2x px-2"></span>
+        <span class="icon-arrow-circle-down icon-2x px-2"></span><span id="count" style="font-size:1.6rem">0</span><span class="icon-arrow-circle-up icon-2x px-2"></span>
     </div>
     <div class="col-3 px-0">
         <button id="remainderButton" class="btn d-none" ontouchstart="touchAvailable = true; remainder()" onclick="if (!touchAvailable) remainder()">
-            @localizer["All"] <span class="fa fa-arrow-down"></span>
+            @localizer["All"] <span class="icon-arrow-circle-down"></span>
         </button>
     </div>
 </div>

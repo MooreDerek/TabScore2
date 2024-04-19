@@ -237,4 +237,10 @@
   <data name="ValidateLeadCardCheckbox.Text" xml:space="preserve">
     <value>Verifieer uitkomstkaart</value>
   </data>
+  <data name="SplashScreenGroupBox.Text" xml:space="preserve">
+    <value>Opstartscherm</value>
+  </data>
+  <data name="SplashScreenCheckbox.Text" xml:space="preserve">
+    <value>Opstartscherm weergeven bij opstarten</value>
+  </data>
 </root>

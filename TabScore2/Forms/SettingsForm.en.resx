@@ -237,4 +237,10 @@
   <data name="SuppressRankingListFirstXLabel.Text" xml:space="preserve">
     <value>Don't show ranking list for first x rounds</value>
   </data>
+  <data name="SplashScreenCheckbox.Text" xml:space="preserve">
+    <value>Show splash screen on startup</value>
+  </data>
+  <data name="SplashScreenGroupBox.Text" xml:space="preserve">
+    <value>Splash screen</value>
+  </data>
 </root>

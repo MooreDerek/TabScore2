@@ -10,19 +10,19 @@ window.addEventListener('load', function () {
             document.getElementById("header").className = "col-11 my-auto px-2";
             var batteryLevel = battery.level * 100;
             if (batteryLevel > 87.5) {
-                document.getElementById("bl").className = "fa fa-battery-full float-end";
+                document.getElementById("bl").className = "icon-battery-full float-end";
             }
             else if (batteryLevel > 62.5) {
-                document.getElementById("bl").className = "fa fa-battery-three-quarters float-end";
+                document.getElementById("bl").className = "icon-battery-three-quarters float-end";
             }
             else if (batteryLevel > 37.5) {
-                document.getElementById("bl").className = "fa fa-battery-half float-end";
+                document.getElementById("bl").className = "icon-battery-half float-end";
             }
             else if (batteryLevel > 12.5) {
-                document.getElementById("bl").className = "fa fa-battery-quarter float-end";
+                document.getElementById("bl").className = "icon-battery-quarter float-end";
             }
             else {
-                document.getElementById("bl").className = "fa fa-battery-empty float-end";
+                document.getElementById("bl").className = "icon-battery-empty float-end";
             }
         });
     }

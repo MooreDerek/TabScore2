@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabScore2", "TabScore2\TabScore2.csproj", "{13247710-4BA2-45B8-80AB-D54AA321268D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6A6DBFAD-B7E0-48E7-ADD2-DF7F9A6B92F3} = {6A6DBFAD-B7E0-48E7-ADD2-DF7F9A6B92F3}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TabScore2 Documents", "TabScore2 Documents", "{6ADC25B3-EDB9-4D8A-8ABA-01AFBE5BA570}"
 	ProjectSection(SolutionItems) = preProject
@@ -19,7 +22,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrpcBwsDatabaseServer", "Gr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrpcSharedContracts", "GrpcSharedContracts\GrpcSharedContracts.csproj", "{B7E5F634-2B6E-4597-A867-367A16E8B570}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SplashScreen", "SplashScreen\SplashScreen.csproj", "{6A6DBFAD-B7E0-48E7-ADD2-DF7F9A6B92F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SplashScreen", "SplashScreen\SplashScreen.csproj", "{6A6DBFAD-B7E0-48E7-ADD2-DF7F9A6B92F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,9 +63,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {EA91F9F8-CC08-450B-AAA7-CFBEF8232623}
-		RESX_CultureCountyOverrides = 
-		RESX_EnableXlifSync = True
 		RESX_NeutralResourcesLanguage = en-US
+		RESX_EnableXlifSync = True
+		RESX_CultureCountyOverrides = 
+		SolutionGuid = {EA91F9F8-CC08-450B-AAA7-CFBEF8232623}
 	EndGlobalSection
 EndGlobal

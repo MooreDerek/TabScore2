@@ -499,4 +499,10 @@
   <data name="EastWest" xml:space="preserve">
     <value>Este/Oeste</value>
   </data>
+  <data name="NoNetwork" xml:space="preserve">
+    <value>Esta computadora no está conectada a una red</value>
+  </data>
+  <data name="NoGrpcServer" xml:space="preserve">
+    <value>El GrpcBwsDatabaseServer no se inició. Compruebe si están instaladas las bibliotecas de tiempo de ejecución correctas</value>
+  </data>
 </root>

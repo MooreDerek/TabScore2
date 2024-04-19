@@ -23,17 +23,20 @@ namespace TabScore2
             // ------------------
             // Load splash screen
             // ------------------
-            Process splashScreen = new();
-            if (isDevelopment)
+            if (Properties.Settings.Default.ShowSplashScreen)
             {
-                workingDirectory = Path.Combine(Directory.GetParent(Environment.CurrentDirectory)!.FullName, @"SplashScreen\bin\x64\Debug\net8.0-windows");
+                Process splashScreen = new(); 
+                if (isDevelopment)
+                {
+                    workingDirectory = Path.Combine(Directory.GetParent(Environment.CurrentDirectory)!.FullName, @"SplashScreen\bin\x64\Debug\net8.0-windows");
+                }
+                else
+                {
+                    workingDirectory = Application.StartupPath;
+                }
+                splashScreen.StartInfo.FileName = Path.Combine(workingDirectory, "SplashScreen.exe");
+                splashScreen.Start();
             }
-            else
-            {
-                workingDirectory = Application.StartupPath;
-            }
-            splashScreen.StartInfo.FileName = Path.Combine(workingDirectory, "SplashScreen.exe");
-            splashScreen.Start();
 
             // -----------------------------------------------------------------------------------
             // Get local IP address (there must be one for TabScore2 to work) and set gRCP address
@@ -48,10 +51,6 @@ namespace TabScore2
                     break;
                 }
             }
-            if (ipAddress == "")
-            {
-                throw new Exception("No network connection");
-            }
             Uri grpcAddress = new($"http://{ipAddress}:5119");
 
             // -------------------------
@@ -60,7 +59,7 @@ namespace TabScore2
             Process grpcServer = new();
             if(isDevelopment)
             {
-                workingDirectory = Path.Combine(Directory.GetParent(Environment.CurrentDirectory)!.FullName, @"GrpcBwsDatabaseServer\bin\x86\Debug\net8.0");
+                workingDirectory = Path.Combine(Directory.GetParent(Environment.CurrentDirectory)!.FullName, @"GrpcBwsDatabaseServer\bin\x86\Debug\net8.0-windows");
                 grpcServer.StartInfo.WindowStyle = ProcessWindowStyle.Normal;
             }
             else
@@ -68,13 +67,8 @@ namespace TabScore2
                 workingDirectory = Path.Combine(Application.StartupPath, @"GrpcBwsDatabaseServer");
                 grpcServer.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             }
-            string grpcFileName = Path.Combine(workingDirectory, "GrpcBwsDatabaseServer.exe");
-            if (!File.Exists(grpcFileName))
-            {
-                throw new Exception($"Cannot find file 'GrpcBwsDatabaseServer.exe' in location '{workingDirectory}'");
-            }
             grpcServer.StartInfo.WorkingDirectory = workingDirectory;
-            grpcServer.StartInfo.FileName = grpcFileName;
+            grpcServer.StartInfo.FileName = Path.Combine(workingDirectory, "GrpcBwsDatabaseServer.exe");
             grpcServer.Start();
 
             // ----------------------------------------
@@ -141,13 +135,15 @@ namespace TabScore2
                     });
             IHost host = desktopBuilder.Build();
             IServiceProvider services = host.Services;
-            
-            // Close the splash screen and start the Windows app
-            splashScreen.Kill();
+
+            // Close the splash screen (if it's open) and start the Windows Forms app
+            Process[] processArray = Process.GetProcessesByName("SplashScreen");
+            if (processArray.Length > 0) processArray[0].Kill();
             Application.Run(services.GetRequiredService<MainForm>());
 
             // Close gRPC server
-            grpcServer.Kill();
+            processArray = Process.GetProcessesByName("GrpcBwsDatabaseService");
+            if (processArray.Length > 0) processArray[0].Kill();
         }
     }
 }

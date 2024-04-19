@@ -32,7 +32,7 @@ namespace TabScore2
                 }
                 else
                 {
-                    workingDirectory = Application.StartupPath;
+                    workingDirectory = Path.Combine(Application.StartupPath, "SplashScreen");
                 }
                 splashScreen.StartInfo.FileName = Path.Combine(workingDirectory, "SplashScreen.exe");
                 splashScreen.Start();
@@ -64,7 +64,7 @@ namespace TabScore2
             }
             else
             {
-                workingDirectory = Path.Combine(Application.StartupPath, @"GrpcBwsDatabaseServer");
+                workingDirectory = Path.Combine(Application.StartupPath, "GrpcBwsDatabaseServer");
                 grpcServer.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             }
             grpcServer.StartInfo.WorkingDirectory = workingDirectory;

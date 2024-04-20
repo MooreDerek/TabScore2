@@ -124,7 +124,7 @@
     <value>Add hand record file...</value>
   </data>
   <data name="buttonResultsViewer.Text" xml:space="preserve">
-    <value>View Results</value>
+    <value>View results</value>
   </data>
   <data name="databaseFileDialog.Filter" xml:space="preserve">
     <value>BWS Files (*.bws)|*.bws</value>

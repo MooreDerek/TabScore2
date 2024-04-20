@@ -166,7 +166,7 @@
     <value>Handmatig invoeren kaartverdeling toestaan</value>
   </data>
   <data name="MinutesPerBoardLabel.Text" xml:space="preserve">
-    <value>Minuten per spel</value>
+    <value>Aantal minuten per spel</value>
   </data>
   <data name="NameSourceCombobox.Items" xml:space="preserve">
     <value>Interne database</value>
@@ -190,7 +190,7 @@
     <value>Ranglijst</value>
   </data>
   <data name="RoundTimerGroupBox.Text" xml:space="preserve">
-    <value>Ronde timer</value>
+    <value>Speelklok</value>
   </data>
   <data name="SaveButton.Text" xml:space="preserve">
     <value>Bewaar en Sluit</value>
@@ -211,7 +211,7 @@
     <value>Toon aan het einde van de zitting</value>
   </data>
   <data name="ShowTimerCheckbox.Text" xml:space="preserve">
-    <value>Toon ronde timer</value>
+    <value>Toon speelklok</value>
   </data>
   <data name="ShowTravellerCheckbox.Text" xml:space="preserve">
     <value>Toon scorekaart</value>
@@ -223,13 +223,13 @@
     <value>Toon geen ranglijst voor de laatste x rondes</value>
   </data>
   <data name="TabletModePersonalRadioButton.Text" xml:space="preserve">
-    <value>Persoonlijke-modus - apparaat blijft bij spelers</value>
+    <value>Persoonlijke modus - apparaat blijft bij spelers </value>
   </data>
   <data name="TabletModeTraditionalRadioButton.Text" xml:space="preserve">
     <value>Tafelmodus - 1 apparaat per tafel</value>
   </data>
   <data name="TabletMovesGroupBox.Text" xml:space="preserve">
-    <value>Tafel-modus - apparaat blijft bij de tafel</value>
+    <value>Apparaatmodus</value>
   </data>
   <data name="TravellerGroup.Text" xml:space="preserve">
     <value>Scorekaart</value>

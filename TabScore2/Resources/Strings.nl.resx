@@ -211,7 +211,7 @@
     <value>Is a leading white space the contense of this string?  Used after the board number in some languages, eg in German “Board 12 eingeben”</value>
   </data>
   <data name="EnterID" xml:space="preserve">
-    <value>Voer ID in voor</value>
+    <value>Voer speler-ID in voor</value>
   </data>
   <data name="EnterLead" xml:space="preserve">
     <value>Uitkomst invoeren</value>
@@ -304,7 +304,7 @@
     <value>Uitkomst komt niet overeen met de kaartverdeling</value>
   </data>
   <data name="MoveForRound" xml:space="preserve">
-    <value>Ga naar de volgende tafel voor Ronde</value>
+    <value>Verplaatsing voor Ronde</value>
   </data>
   <data name="MoveToSitOut" xml:space="preserve">
     <value>Ga naar Wachttafel</value>
@@ -400,13 +400,13 @@
     <value>Kies lijn</value>
   </data>
   <data name="SelectTableNumber" xml:space="preserve">
-    <value>Kies tafelnummer en bevestig met OK.</value>
+    <value>Kies tafelnummer</value>
   </data>
   <data name="SessionPaused" xml:space="preserve">
     <value>Zitting onderbroken</value>
   </data>
   <data name="SessionRunning" xml:space="preserve">
-    <value>Zitting loopt</value>
+    <value>Zitting actief</value>
   </data>
   <data name="ShowBoards" xml:space="preserve">
     <value>Toon spellen</value>

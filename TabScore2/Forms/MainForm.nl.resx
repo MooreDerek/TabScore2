@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="buttonAddDatabaseFile.Text" xml:space="preserve">
-    <value>Scoring database-bestand toevoegen...</value>
+    <value>Locatie scoring database instellen...</value>
   </data>
   <data name="buttonAddHandRecordFile.Text" xml:space="preserve">
-    <value>Voeg kaartverdeling-bestand toe...</value>
+    <value>Locatie kaartverdeling-bestand instellen...</value>
   </data>
   <data name="buttonResultsViewer.Text" xml:space="preserve">
-    <value>Bekijk resultaat</value>
+    <value>Toon resultaat</value>
   </data>
   <data name="buttonSettings.Text" xml:space="preserve">
     <value>Opties</value>

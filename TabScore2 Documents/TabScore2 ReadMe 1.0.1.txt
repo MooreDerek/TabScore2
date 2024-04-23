@@ -4,7 +4,7 @@ TabScore2 is free and open source software that provides wireless scoring for
 the card game bridge.  It is a Windows desktop application that serves active
 web pages across a local wireless network.  It requires a server PC, a local 
 wireless network, and some sort of table-top device with a web browser on each 
-table (tablet, phone, Kindle, etc). 
+table (tablet, phone, Kindle, etc).
 
 TabScore 2 uses the Bridgemate .bws standard Access database that is created by
 the scoring program, so is a direct replacement for BridgeTab (or Bridgemate, 
@@ -12,14 +12,18 @@ BridgePad, etc).  Although TabScore2 has been built with EBUScore in mind, it
 should work with any bridge scoring program that can create a .bws database.
 
 TabScore2 is designed for use on a PC with Windows 10+ and .NET 8.  It is now a 
-64-bit applciation, although is still requires a 32-bit process to reqad and write 
-to the .bws database.
+64-bit applciation, although is still requires a 32-bit process, GrpcBwsDatabaseServer, 
+to read and write to the .bws database.
 
 There are 3 .NET 8 runtime libraries (ASP.NET Core Runtime 8, .NET Desktop Runtime 8 
 and .NET Runtime 8), and TabScore 2 requires both the 32-bit (x86) and 64-bit (x64)
-versions.  To check if these are installed, look in the appropriate folders in 
-"C:\Program Files(x86)\dotnet\shared\" and "C:\Program Files\dotnet\shared\".
+versions (6 in total).  To check if these are installed, look in the appropriate 
+folders in "C:\Program Files(x86)\dotnet\shared\" and "C:\Program Files\dotnet\shared\".
 If not installed, they can be downloaded from Microsoft.
+
+Because TabScore2 uses Bootstrap 5, the browser and tablet operating systems must 
+meet certain minimum standards.  For Android, this means version 6.0+.  Please check 
+here for more details: getbootstrap.com/docs/5.0/getting-started/browsers-devices.
 
 To install TabScore2, simply copy the entire TabScore2 folder to "C:\Program Files".
 

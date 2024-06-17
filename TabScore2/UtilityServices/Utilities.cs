@@ -214,6 +214,10 @@ namespace TabScore2.UtilityServices
             int currentBoardNumber = tableStatus.ResultData!.BoardNumber; 
             ShowTravellerModel showTravellerModel = new(deviceNumber, currentBoardNumber);
             List<Result> resultsList = database.GetResultsList(tableStatus.SectionID, currentBoardNumber);
+            foreach (Result result in resultsList)
+            {
+                CalculateScore(result);
+            }
 
             // Set maximum match points based on total number of results (including Not Played) for Neuberg formula
             int resultsForThisBoard = resultsList.Count;
@@ -290,7 +294,6 @@ namespace TabScore2.UtilityServices
                                     .Replace("T", localizer["TenShorthand"]);
                         }
                     }
-                    CalculateScore(result);
                     if (result.Score > 0)
                     {
                         travellerResult.ScoreNS = result.Score.ToString();
@@ -328,7 +331,12 @@ namespace TabScore2.UtilityServices
                 showTravellerModel.Add(travellerResult);
             }
 
-            showTravellerModel.Sort((x, y) => y.SortPercentage.CompareTo(x.SortPercentage));  // Sort traveller into descending percentage order
+            showTravellerModel.Sort((x, y) =>
+            {
+                int sortResult = y.SortPercentage.CompareTo(x.SortPercentage);                  // Sort traveller into descending percentage order
+                return sortResult != 0 ? sortResult : x.NumberNorth.CompareTo(y.NumberNorth);   // In case of ties, sort into ascending North pair number order
+            });
+
             if (!settings.ShowPercentage) showTravellerModel.PercentageNS = string.Empty;   // Don't show percentage
 
             // Determine if there is a hand record to view

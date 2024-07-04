@@ -80,6 +80,7 @@ namespace TabScore2.Forms
             {
                 // Set up possible values for tricks taken combo box
                 comboBoxTricksTaken.Items.Clear();
+                comboBoxTricksTaken.ResetText();
                 int contractLevel = Convert.ToInt32(comboBoxContractLevel.Text);  // Will be in the range 1-7
                 for (int i = contractLevel + 6; i > 0; i--)
                 {

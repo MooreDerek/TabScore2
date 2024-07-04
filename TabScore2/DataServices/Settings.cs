@@ -20,6 +20,58 @@ namespace TabScore2.DataServices
         public bool NumberEntryEachRound { get; set; }
         public int NameSource { get; set; }
         public bool ManualHandRecordEntry { get; set; }
+        
+        // Default settings saved as application property settings
+        public bool DefaultShowTraveller
+        {
+            get { return Properties.Settings.Default.DefaultShowTraveller; }
+            set { Properties.Settings.Default.DefaultShowTraveller = value; Properties.Settings.Default.Save(); }
+        }
+        public bool DefaultShowPercentage
+        {
+            get { return Properties.Settings.Default.DefaultShowPercentage; }
+            set { Properties.Settings.Default.DefaultShowPercentage = value; Properties.Settings.Default.Save(); }
+        }
+        public bool DefaultEnterLeadCard
+        {
+            get { return Properties.Settings.Default.DefaultEnterLeadCard; }
+            set { Properties.Settings.Default.DefaultEnterLeadCard = value; Properties.Settings.Default.Save(); }
+        }
+        public bool DefaultValidateLeadCard
+        {
+            get { return Properties.Settings.Default.DefaultValidateLeadCard; }
+            set { Properties.Settings.Default.DefaultValidateLeadCard = value; Properties.Settings.Default.Save(); }
+        }
+        public int DefaultShowRanking
+        {
+            get { return Properties.Settings.Default.DefaultShowRanking; }
+            set { Properties.Settings.Default.DefaultShowRanking = value; Properties.Settings.Default.Save(); }
+        }
+        public int DefaultEnterResultsMethod
+        {
+            get { return Properties.Settings.Default.DefaultEnterResultsMethod; }
+            set { Properties.Settings.Default.DefaultEnterResultsMethod = value; Properties.Settings.Default.Save(); }
+        }
+        public bool DefaultShowHandRecord
+        {
+            get { return Properties.Settings.Default.DefaultShowHandRecord; }
+            set { Properties.Settings.Default.DefaultShowHandRecord = value; Properties.Settings.Default.Save(); }
+        }
+        public bool DefaultNumberEntryEachRound
+        {
+            get { return Properties.Settings.Default.DefaultNumberEntryEachRound; }
+            set { Properties.Settings.Default.DefaultNumberEntryEachRound = value; Properties.Settings.Default.Save(); }
+        }
+        public int DefaultNameSource
+        {
+            get { return Properties.Settings.Default.DefaultNameSource; }
+            set { Properties.Settings.Default.DefaultNameSource = value; Properties.Settings.Default.Save(); }
+        }
+        public bool DefaultManualHandRecordEntry
+        {
+            get { return Properties.Settings.Default.DefaultManualHandRecordEntry; }
+            set { Properties.Settings.Default.DefaultManualHandRecordEntry = value; Properties.Settings.Default.Save(); }
+        }
 
         // Application property settings
         public bool TabletsMove {

@@ -119,7 +119,7 @@ namespace GrpcServices
                 if (!reader.IsDBNull(4))
                 {
                     object tempMissingPair = reader.GetValue(4);
-                    if (tempMissingPair != null) winners = Convert.ToInt32(tempMissingPair);
+                    if (tempMissingPair != null) missingPair = Convert.ToInt32(tempMissingPair);
                 }
                 sectionsList.Add(new Section() { ID = sectionID, Letter = sectionLetter, Tables = numTables, Winners = winners, MissingPair = missingPair });
             }
@@ -461,11 +461,18 @@ namespace GrpcServices
 
             // Validate SETTINGS Table
             SQLString = "ALTER TABLE Settings ADD ShowResults YESNO";
-            cmd = new(SQLString, connection);
+            cmd = new OdbcCommand(SQLString, connection);
             try
             {
                 cmd.ExecuteNonQuery();
-                SQLString = "UPDATE Settings SET ShowResults=YES";
+                if (message.DefaultShowTraveller)
+                {
+                    SQLString = "UPDATE Settings SET ShowResults=YES";
+                }
+                else
+                {
+                    SQLString = "UPDATE Settings SET ShowResults=NO";
+                }
                 cmd = new OdbcCommand(SQLString, connection);
                 cmd.ExecuteNonQuery();
             }
@@ -482,7 +489,14 @@ namespace GrpcServices
             try
             {
                 cmd.ExecuteNonQuery();
-                SQLString = "UPDATE Settings SET ShowPercentage=YES";
+                if (message.DefaultShowPercentage)
+                {
+                    SQLString = "UPDATE Settings SET ShowPercentage=YES";
+                }
+                else
+                {
+                    SQLString = "UPDATE Settings SET ShowPercentage=NO";
+                }
                 cmd = new OdbcCommand(SQLString, connection);
                 cmd.ExecuteNonQuery();
             }
@@ -499,7 +513,14 @@ namespace GrpcServices
             try
             {
                 cmd.ExecuteNonQuery();
-                SQLString = "UPDATE Settings SET LeadCard=YES";
+                if (message.DefaultEnterLeadCard)
+                {
+                    SQLString = "UPDATE Settings SET LeadCard=YES";
+                }
+                else
+                {
+                    SQLString = "UPDATE Settings SET LeadCard=NO";
+                }
                 cmd = new OdbcCommand(SQLString, connection);
                 cmd.ExecuteNonQuery();
             }
@@ -516,7 +537,14 @@ namespace GrpcServices
             try
             {
                 cmd.ExecuteNonQuery();
-                SQLString = "UPDATE Settings SET BM2ValidateLeadCard=YES";
+                if (message.DefaultValidateLeadCard)
+                {
+                    SQLString = "UPDATE Settings SET BM2ValidateLeadCard=YES";
+                }
+                else
+                {
+                    SQLString = "UPDATE Settings SET BM2ValidateLeadCard=NO";
+                }
                 cmd = new OdbcCommand(SQLString, connection);
                 cmd.ExecuteNonQuery();
             }
@@ -533,7 +561,14 @@ namespace GrpcServices
             try
             {
                 cmd.ExecuteNonQuery();
-                SQLString = "UPDATE Settings SET BM2NumberEntryEachRound=NO";
+                if (message.DefaultNumberEntryEachRound)
+                {
+                    SQLString = "UPDATE Settings SET BM2NumberEntryEachRound=YES";
+                }
+                else
+                {
+                    SQLString = "UPDATE Settings SET BM2NumberEntryEachRound=NO";
+                }
                 cmd = new OdbcCommand(SQLString, connection);
                 cmd.ExecuteNonQuery();
             }
@@ -550,7 +585,14 @@ namespace GrpcServices
             try
             {
                 cmd.ExecuteNonQuery();
-                SQLString = "UPDATE Settings SET BM2ViewHandRecord=YES";
+                if (message.DefaultShowHandRecord)
+                {
+                    SQLString = "UPDATE Settings SET BM2ViewHandRecord=YES";
+                }
+                else
+                {
+                    SQLString = "UPDATE Settings SET BM2ViewHandRecord=NO";
+                }
                 cmd = new OdbcCommand(SQLString, connection);
                 cmd.ExecuteNonQuery();
             }
@@ -567,7 +609,7 @@ namespace GrpcServices
             try
             {
                 cmd.ExecuteNonQuery();
-                SQLString = "UPDATE Settings SET BM2Ranking=1";
+                SQLString = $"UPDATE Settings SET BM2Ranking={message.DefaultShowRanking}";
                 cmd = new OdbcCommand(SQLString, connection);
                 cmd.ExecuteNonQuery();
             }
@@ -584,7 +626,7 @@ namespace GrpcServices
             try
             {
                 cmd.ExecuteNonQuery();
-                SQLString = "UPDATE Settings SET BM2NameSource=0";
+                SQLString = $"UPDATE Settings SET BM2NameSource={message.DefaultNameSource}";
                 cmd = new OdbcCommand(SQLString, connection);
                 cmd.ExecuteNonQuery();
             }
@@ -601,7 +643,7 @@ namespace GrpcServices
             try
             {
                 cmd.ExecuteNonQuery();
-                SQLString = "UPDATE Settings SET EnterResultsMethod=1";
+                SQLString = $"UPDATE Settings SET EnterResultsMethod={message.DefaultEnterResultsMethod}";
                 cmd = new OdbcCommand(SQLString, connection);
                 cmd.ExecuteNonQuery();
             }
@@ -618,7 +660,14 @@ namespace GrpcServices
             try
             {
                 cmd.ExecuteNonQuery();
-                SQLString = "UPDATE Settings SET BM2EnterHandRecord=NO";
+                if (message.DefaultManualHandRecordEntry)
+                {
+                    SQLString = "UPDATE Settings SET BM2EnterHandRecord=YES";
+                }
+                else
+                {
+                    SQLString = "UPDATE Settings SET BM2EnterHandRecord=NO";
+                }
                 cmd = new OdbcCommand(SQLString, connection);
                 cmd.ExecuteNonQuery();
             }
@@ -629,6 +678,7 @@ namespace GrpcServices
                     throw;
                 }
             }
+
             finally
             {
                 cmd.Dispose();

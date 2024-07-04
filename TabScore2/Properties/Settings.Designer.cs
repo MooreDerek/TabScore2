@@ -12,7 +12,7 @@ namespace TabScore2.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.9.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.10.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -164,6 +164,126 @@ namespace TabScore2.Properties {
             }
             set {
                 this["ShowSplashScreen"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DefaultShowTraveller {
+            get {
+                return ((bool)(this["DefaultShowTraveller"]));
+            }
+            set {
+                this["DefaultShowTraveller"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DefaultShowPercentage {
+            get {
+                return ((bool)(this["DefaultShowPercentage"]));
+            }
+            set {
+                this["DefaultShowPercentage"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DefaultEnterLeadCard {
+            get {
+                return ((bool)(this["DefaultEnterLeadCard"]));
+            }
+            set {
+                this["DefaultEnterLeadCard"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DefaultValidateLeadCard {
+            get {
+                return ((bool)(this["DefaultValidateLeadCard"]));
+            }
+            set {
+                this["DefaultValidateLeadCard"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int DefaultShowRanking {
+            get {
+                return ((int)(this["DefaultShowRanking"]));
+            }
+            set {
+                this["DefaultShowRanking"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int DefaultEnterResultsMethod {
+            get {
+                return ((int)(this["DefaultEnterResultsMethod"]));
+            }
+            set {
+                this["DefaultEnterResultsMethod"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DefaultShowHandRecord {
+            get {
+                return ((bool)(this["DefaultShowHandRecord"]));
+            }
+            set {
+                this["DefaultShowHandRecord"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DefaultNumberEntryEachRound {
+            get {
+                return ((bool)(this["DefaultNumberEntryEachRound"]));
+            }
+            set {
+                this["DefaultNumberEntryEachRound"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int DefaultNameSource {
+            get {
+                return ((int)(this["DefaultNameSource"]));
+            }
+            set {
+                this["DefaultNameSource"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DefaultManualHandRecordEntry {
+            get {
+                return ((bool)(this["DefaultManualHandRecordEntry"]));
+            }
+            set {
+                this["DefaultManualHandRecordEntry"] = value;
             }
         }
     }

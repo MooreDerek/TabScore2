@@ -9,6 +9,16 @@ namespace GrpcMessageClasses
     public class InitializeMessage
     {
         [DataMember(Order = 1)] public string PathToDatabase { get; set; } = string.Empty;
+        [DataMember(Order = 2)] public bool DefaultShowTraveller { get; set; }
+        [DataMember(Order = 3)] public bool DefaultShowPercentage { get; set; }
+        [DataMember(Order = 4)] public bool DefaultEnterLeadCard { get; set; }
+        [DataMember(Order = 5)] public bool DefaultValidateLeadCard { get; set; }
+        [DataMember(Order = 6)] public int DefaultShowRanking { get; set; }
+        [DataMember(Order = 7)] public int DefaultEnterResultsMethod { get; set; }
+        [DataMember(Order = 8)] public bool DefaultShowHandRecord { get; set; }
+        [DataMember(Order = 9)] public bool DefaultNumberEntryEachRound { get; set; }
+        [DataMember(Order = 10)] public int DefaultNameSource { get; set; }
+        [DataMember(Order = 11)] public bool DefaultManualHandRecordEntry { get; set; }
     }
 
     [DataContract]

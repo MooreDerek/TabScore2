@@ -11,12 +11,26 @@
         bool NumberEntryEachRound { get; set; }
         int NameSource { get; set; }
         int EnterResultsMethod { get; set; }
+        bool ManualHandRecordEntry { get; set; }
+
+
+        bool DefaultShowTraveller { get; set; }
+        bool DefaultShowPercentage { get; set; }
+        bool DefaultEnterLeadCard { get; set; }
+        bool DefaultValidateLeadCard { get; set; }
+        int DefaultShowRanking { get; set; }
+        bool DefaultShowHandRecord { get; set; }
+        bool DefaultNumberEntryEachRound { get; set; }
+        int DefaultNameSource { get; set; }
+        int DefaultEnterResultsMethod { get; set; }
+        bool DefaultManualHandRecordEntry { get; set; }
+
+
         bool TabletsMove { get; set; }
         string ShowHandRecordFromDirection { get; set; }
         bool ShowTimer { get; set; }
         int SecondsPerBoard { get; set; }
         int AdditionalSecondsPerRound { get; set; }
-        bool ManualHandRecordEntry { get; set; }
         bool DoubleDummy { get; set; }
         int SuppressRankingListForFirstXRounds { get; set; }
         int SuppressRankingListForLastXRounds { get; set; }

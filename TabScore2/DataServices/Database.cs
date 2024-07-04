@@ -17,7 +17,19 @@ namespace TabScore2.DataServices
         // ============================
         public string Initialize(string pathToDatabase)  // Called from main form when path to database is set
         {
-            InitializeReturnMessage initializeReturnMessage = client.Initialize(new InitializeMessage() { PathToDatabase = pathToDatabase });
+            InitializeReturnMessage initializeReturnMessage = client.Initialize(new InitializeMessage() { 
+                PathToDatabase = pathToDatabase,
+                DefaultShowTraveller = settings.DefaultShowTraveller,
+                DefaultShowPercentage = settings.DefaultShowPercentage,
+                DefaultEnterLeadCard = settings.DefaultEnterLeadCard,
+                DefaultValidateLeadCard = settings.DefaultValidateLeadCard,
+                DefaultShowRanking = settings.DefaultShowRanking,
+                DefaultEnterResultsMethod = settings.DefaultEnterResultsMethod,
+                DefaultShowHandRecord = settings.DefaultShowHandRecord,
+                DefaultNumberEntryEachRound = settings.DefaultNumberEntryEachRound,
+                DefaultNameSource = settings.DefaultNameSource,
+                DefaultManualHandRecordEntry = settings.DefaultManualHandRecordEntry
+            });
             if (initializeReturnMessage.ReturnMessage == string.Empty)
             {
                 settings.IsIndividual = initializeReturnMessage.IsIndividual;

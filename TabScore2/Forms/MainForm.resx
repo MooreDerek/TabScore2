@@ -160,7 +160,7 @@
     <value>14, 44</value>
   </data>
   <data name="labelPathToDatabase.Size" type="System.Drawing.Size, System.Drawing">
-    <value>635, 24</value>
+    <value>735, 24</value>
   </data>
   <data name="labelPathToDatabase.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -190,7 +190,7 @@
     <value>Segoe UI, 9pt</value>
   </data>
   <data name="buttonAddDatabaseFile.Location" type="System.Drawing.Point, System.Drawing">
-    <value>431, 14</value>
+    <value>531, 14</value>
   </data>
   <data name="buttonAddDatabaseFile.Size" type="System.Drawing.Size, System.Drawing">
     <value>218, 28</value>
@@ -256,7 +256,7 @@
     <value>14, 129</value>
   </data>
   <data name="labelPathToHandRecordFile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>635, 24</value>
+    <value>735, 24</value>
   </data>
   <data name="labelPathToHandRecordFile.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -286,7 +286,7 @@
     <value>Segoe UI, 9pt</value>
   </data>
   <data name="buttonAddHandRecordFile.Location" type="System.Drawing.Point, System.Drawing">
-    <value>431, 97</value>
+    <value>531, 97</value>
   </data>
   <data name="buttonAddHandRecordFile.Size" type="System.Drawing.Size, System.Drawing">
     <value>218, 28</value>
@@ -316,10 +316,10 @@
     <value>Top, Right</value>
   </data>
   <data name="progressBarAnalysing.Location" type="System.Drawing.Point, System.Drawing">
-    <value>198, 167</value>
+    <value>132, 167</value>
   </data>
   <data name="progressBarAnalysing.Size" type="System.Drawing.Size, System.Drawing">
-    <value>451, 26</value>
+    <value>617, 26</value>
   </data>
   <data name="progressBarAnalysing.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -409,7 +409,7 @@
     <value>Top, Right</value>
   </data>
   <data name="buttonResultsViewer.Location" type="System.Drawing.Point, System.Drawing">
-    <value>543, 219</value>
+    <value>643, 219</value>
   </data>
   <data name="buttonResultsViewer.Size" type="System.Drawing.Size, System.Drawing">
     <value>106, 34</value>
@@ -445,7 +445,7 @@
     <value>Segoe UI, 12pt</value>
   </data>
   <data name="labelSessionStatus.Location" type="System.Drawing.Point, System.Drawing">
-    <value>250, 225</value>
+    <value>300, 225</value>
   </data>
   <data name="labelSessionStatus.Size" type="System.Drawing.Size, System.Drawing">
     <value>142, 21</value>
@@ -499,7 +499,7 @@
     <value>True</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>663, 265</value>
+    <value>763, 265</value>
   </data>
   <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9.75pt, style=Bold</value>
@@ -1190,7 +1190,7 @@
 </value>
   </data>
   <data name="$this.MaximumSize" type="System.Drawing.Size, System.Drawing">
-    <value>683, 308</value>
+    <value>783, 308</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>TabScore2</value>

@@ -28,20 +28,22 @@ namespace TabScore2.Forms
             ShowTravellerCheckbox.Checked = settings.ShowTraveller;
             ShowPercentageCheckbox.Checked = settings.ShowPercentage;
             ShowHandRecordCheckbox.Checked = settings.ShowHandRecord;
-            FromPerspectiveOfCombobox.SelectedIndex = fromDirection.FindIndex(x => x == settings.ShowHandRecordFromDirection);
-            ShowRankingCombobox.SelectedIndex = settings.ShowRanking;
             EnterLeadCardCheckbox.Checked = settings.EnterLeadCard;
             ValidateLeadCardCheckbox.Checked = settings.ValidateLeadCard;
-            ManualHandEntryCheckbox.Checked = settings.ManualHandRecordEntry;
-            DoubleDummyCheckbox.Checked = settings.DoubleDummy;
-            NameSourceCombobox.SelectedIndex = settings.NameSource;
+            ShowRankingCombobox.SelectedIndex = settings.ShowRanking;
+            ShowHandRecordCheckbox.Checked = settings.ShowHandRecord;
             NumberEntryEachRoundCheckbox.Checked = settings.NumberEntryEachRound;
+            NameSourceCombobox.SelectedIndex = settings.NameSource;
             EnterResultsMethodCombobox.SelectedIndex = settings.EnterResultsMethod;
+            ManualHandEntryCheckbox.Checked = settings.ManualHandRecordEntry;
+
             TabletModePersonalRadioButton.Checked = settings.TabletsMove;
             TabletModeTraditionalRadioButton.Checked = !settings.TabletsMove;
+            FromPerspectiveOfCombobox.SelectedIndex = fromDirection.FindIndex(x => x == settings.ShowHandRecordFromDirection);
             ShowTimerCheckbox.Checked = settings.ShowTimer;
             MinutesPerBoardNud.Value = Convert.ToDecimal(settings.SecondsPerBoard) / 60;
             AdditionalMinutesPerRoundNud.Value = Convert.ToDecimal(settings.AdditionalSecondsPerRound) / 60;
+            DoubleDummyCheckbox.Checked = settings.DoubleDummy;
             SuppressRankingListFirstXNud.Value = settings.SuppressRankingListForFirstXRounds;
             SuppressRankingListLastXNud.Value = settings.SuppressRankingListForLastXRounds;
             SplashScreenCheckbox.Checked = settings.ShowSplashScreen;
@@ -64,24 +66,27 @@ namespace TabScore2.Forms
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            settings.ShowTraveller = ShowTravellerCheckbox.Checked;
-            settings.ShowPercentage = settings.ShowHandRecord = ShowHandRecordCheckbox.Checked;
-            settings.ShowHandRecordFromDirection = fromDirection[FromPerspectiveOfCombobox.SelectedIndex];
-            settings.ShowRanking = ShowRankingCombobox.SelectedIndex;
-            settings.EnterLeadCard = EnterLeadCardCheckbox.Checked;
-            settings.ValidateLeadCard = ValidateLeadCardCheckbox.Checked;
-            settings.ManualHandRecordEntry = ManualHandEntryCheckbox.Checked;
-            settings.DoubleDummy = DoubleDummyCheckbox.Checked;
-            settings.NameSource = NameSourceCombobox.SelectedIndex;
-            settings.NumberEntryEachRound = NumberEntryEachRoundCheckbox.Checked;
-            settings.EnterResultsMethod = EnterResultsMethodCombobox.SelectedIndex;
+            settings.ShowTraveller = settings.DefaultShowTraveller = ShowTravellerCheckbox.Checked;
+            settings.ShowPercentage = settings.DefaultShowPercentage = ShowPercentageCheckbox.Checked;
+            settings.EnterLeadCard = settings.DefaultEnterLeadCard = EnterLeadCardCheckbox.Checked;
+            settings.ValidateLeadCard = settings.DefaultValidateLeadCard = ValidateLeadCardCheckbox.Checked;
+            settings.ShowRanking = settings.DefaultShowRanking = ShowRankingCombobox.SelectedIndex;
+            settings.ShowHandRecord = settings.DefaultShowHandRecord = ShowHandRecordCheckbox.Checked;
+            settings.NumberEntryEachRound = settings.DefaultNumberEntryEachRound = NumberEntryEachRoundCheckbox.Checked;
+            settings.NameSource = settings.DefaultNameSource = NameSourceCombobox.SelectedIndex;
+            settings.EnterResultsMethod = settings.DefaultEnterResultsMethod = EnterResultsMethodCombobox.SelectedIndex;
+            settings.ManualHandRecordEntry = settings.DefaultManualHandRecordEntry = ManualHandEntryCheckbox.Checked;
+
             settings.TabletsMove = TabletModePersonalRadioButton.Checked;
+            settings.ShowHandRecordFromDirection = fromDirection[FromPerspectiveOfCombobox.SelectedIndex];
             settings.ShowTimer = ShowTimerCheckbox.Checked;
             settings.SecondsPerBoard = Convert.ToInt32(MinutesPerBoardNud.Value * 60);
             settings.AdditionalSecondsPerRound = Convert.ToInt32(AdditionalMinutesPerRoundNud.Value * 60);
+            settings.DoubleDummy = DoubleDummyCheckbox.Checked;
             settings.SuppressRankingListForFirstXRounds = Convert.ToInt32(SuppressRankingListFirstXNud.Value);
             settings.SuppressRankingListForLastXRounds = Convert.ToInt32(SuppressRankingListLastXNud.Value);
             settings.ShowSplashScreen = SplashScreenCheckbox.Checked;
+
             database.SetDatabaseSettings();
             Close();
         }

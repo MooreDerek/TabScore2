@@ -142,7 +142,7 @@ namespace TabScore2
             Application.Run(services.GetRequiredService<MainForm>());
 
             // Close gRPC server
-            processArray = Process.GetProcessesByName("GrpcBwsDatabaseService");
+            processArray = Process.GetProcessesByName("GrpcBwsDatabaseServer");
             if (processArray.Length > 0) processArray[0].Kill();
         }
     }

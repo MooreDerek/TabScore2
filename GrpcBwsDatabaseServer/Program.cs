@@ -1,7 +1,9 @@
 // TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using ProtoBuf.Grpc.Server;
+using System.Net;
 
 namespace GrpcServices
 {
@@ -11,7 +13,13 @@ namespace GrpcServices
         {
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
             builder.Services.AddCodeFirstGrpc();
-            builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+            builder.WebHost.ConfigureKestrel((context, serverOptions) =>
+            {
+                serverOptions.Listen(IPAddress.Loopback, 5119, listenOptions =>
+                {
+                    listenOptions.Protocols = HttpProtocols.Http2;
+                });
+            });
 
             WebApplication app = builder.Build();
             app.MapGrpcService<BwsDatabaseService>();

@@ -203,11 +203,12 @@ namespace TabScore2.Forms
             Refresh();
             double counter = 0.0;
             appData.ClearHandEvaluations();
+            int handsCount = database.GetHandsCount();
             foreach (Hand hand in database.GetHandsList())
             {
                 appData.AddHandEvaluation(hand);
                 counter++;
-                progressBarAnalysing.Value = Convert.ToInt32(counter / database.GetHandsCount() * 100.0);
+                progressBarAnalysing.Value = Convert.ToInt32(counter / handsCount * 100.0);
             }
             progressBarAnalysing.Value = 100;
             labelAnalysing.Text = localizer["AnalysisComplete"];

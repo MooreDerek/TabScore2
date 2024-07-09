@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using GrpcServices;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using ProtoBuf.Grpc.ClientFactory;
 using System.Diagnostics;
 using System.Net;
@@ -38,21 +39,6 @@ namespace TabScore2
                 splashScreen.Start();
             }
 
-            // -----------------------------------------------------------------------------------
-            // Get local IP address (there must be one for TabScore2 to work) and set gRCP address
-            // -----------------------------------------------------------------------------------
-            string ipAddress = "";
-            IPHostEntry entry = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (IPAddress ip in entry.AddressList)
-            {
-                if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                {
-                    ipAddress = ip.ToString();
-                    break;
-                }
-            }
-            Uri grpcAddress = new($"http://{ipAddress}:5119");
-
             // -------------------------
             // Start gRPC server process
             // -------------------------
@@ -71,6 +57,8 @@ namespace TabScore2
             grpcServer.StartInfo.FileName = Path.Combine(workingDirectory, "GrpcBwsDatabaseServer.exe");
             grpcServer.Start();
 
+            Uri grpcAddress = new UriBuilder("http", IPAddress.Loopback.ToString(), 5119).Uri;
+
             // ----------------------------------------
             // Configure, build and run web application
             // ----------------------------------------
@@ -83,8 +71,8 @@ namespace TabScore2
             WebApplicationBuilder webAppBuilder = WebApplication.CreateBuilder(webApplicationOptions);
             webAppBuilder.Services.AddLocalization();
             webAppBuilder.Services.AddControllersWithViews();
-            webAppBuilder.Services.AddCodeFirstGrpcClient<IBwsDatabaseService>(option => { option.Address = new Uri($"http://{ipAddress}:5119"); });
-            webAppBuilder.Services.AddCodeFirstGrpcClient<IExternalNamesDatabaseService>(option => { option.Address = new Uri($"http://{ipAddress}:5119"); });
+            webAppBuilder.Services.AddCodeFirstGrpcClient<IBwsDatabaseService>(option => { option.Address = grpcAddress; });
+            webAppBuilder.Services.AddCodeFirstGrpcClient<IExternalNamesDatabaseService>(option => { option.Address = grpcAddress; });
             webAppBuilder.Services.AddWebOptimizer(option => { option.EnableDiskCache = false; });
             webAppBuilder.Services.AddSingleton<IUtilities, Utilities>();
             webAppBuilder.Services.AddSingleton<IDatabase, Database>();
@@ -92,6 +80,8 @@ namespace TabScore2
             webAppBuilder.Services.AddSingleton<ISettings, Settings>();
             webAppBuilder.Services.AddSingleton<IAppData, AppData>();
             webAppBuilder.Services.AddHttpContextAccessor();
+            webAppBuilder.WebHost.ConfigureKestrel((context, serverOptions) => { serverOptions.Listen(IPAddress.Any, 5213); });
+
             WebApplication webApp = webAppBuilder.Build();
             webApp.UseExceptionHandler("/ErrorScreen/Index");
             webApp.UseWebOptimizer();
@@ -105,8 +95,8 @@ namespace TabScore2
             // --------------------------------------------
             HostApplicationBuilder desktopBuilder = Host.CreateApplicationBuilder(args);
             desktopBuilder.Services.AddLocalization();
-            desktopBuilder.Services.AddCodeFirstGrpcClient<IBwsDatabaseService>(option => { option.Address = new Uri($"http://{ipAddress}:5119"); });
-            desktopBuilder.Services.AddCodeFirstGrpcClient<IExternalNamesDatabaseService>(option => { option.Address = new Uri($"http://{ipAddress}:5119"); });
+            desktopBuilder.Services.AddCodeFirstGrpcClient<IBwsDatabaseService>(option => { option.Address = grpcAddress; });
+            desktopBuilder.Services.AddCodeFirstGrpcClient<IExternalNamesDatabaseService>(option => { option.Address = grpcAddress; });
             desktopBuilder.Services.AddSingleton<MainForm>();
             desktopBuilder.Services.AddSingleton<IDatabase, Database>();
             desktopBuilder.Services.AddSingleton<ISettings, Settings>();

@@ -9,7 +9,7 @@ using TabScore2.Models;
 using TabScore2.SharedClasses;
 using TabScore2.UtilityServices;
 
-namespace TabScore.Controllers
+namespace TabScore2.Controllers
 {
     public class EnterHandRecordController(IDatabase iDatabase, IAppData iAppData, IUtilities iUtilities, ISettings iSettings) : Controller
     {

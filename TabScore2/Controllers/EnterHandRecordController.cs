@@ -1,4 +1,4 @@
-﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using Microsoft.AspNetCore.Mvc;
@@ -18,20 +18,23 @@ namespace TabScore2.Controllers
         private readonly IUtilities utilities = iUtilities;
         private readonly ISettings settings = iSettings;
 
-        public ActionResult Index(int deviceNumber, int boardNumber)
+        public ActionResult Index(int boardNumber)
         {
+            int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
+            if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
+
             if (!settings.ManualHandRecordEntry)
             {
-                return RedirectToAction("Index", "ShowTraveller", new { deviceNumber, boardNumber });
+                return RedirectToAction("Index", "ShowTraveller", new { boardNumber });
             }
 
             DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
             if (database.GetHand(deviceStatus.SectionID, boardNumber).NorthSpades != "###")
             {
                 // Hand record already exists, so no need to enter it
-                return RedirectToAction("Index", "ShowTraveller", new { deviceNumber, boardNumber });
+                return RedirectToAction("Index", "ShowTraveller", new { boardNumber });
             }
-            EnterHandRecordModel enterHandRecordModel = new(deviceNumber, deviceStatus.SectionID, boardNumber);
+            EnterHandRecordModel enterHandRecordModel = new(boardNumber);
             
             ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
             ViewData["Title"] = utilities.Title("EnterHandRecord", TitleType.Location, deviceNumber);
@@ -40,8 +43,11 @@ namespace TabScore2.Controllers
             return View(enterHandRecordModel);
         }
 
-        public ActionResult OKButtonClick(int deviceNumber, string NS, string NH, string ND, string NC, string SS, string SH, string SD, string SC, string ES, string EH, string ED, string EC, string WS, string WH, string WD, string WC)
+        public ActionResult OKButtonClick(string NS, string NH, string ND, string NC, string SS, string SH, string SD, string SC, string ES, string EH, string ED, string EC, string WS, string WH, string WD, string WC)
         {
+            int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
+            if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
+
             int boardNumber = appData.GetTableStatus(deviceNumber).ResultData.BoardNumber;
             Hand hand = new()
             {
@@ -66,7 +72,7 @@ namespace TabScore2.Controllers
             };
             database.AddHand(hand);
             if (settings.DoubleDummy) appData.AddHandEvaluation(hand);
-            return RedirectToAction("Index", "ShowTraveller", new { deviceNumber, boardNumber });
+            return RedirectToAction("Index", "ShowTraveller", new { boardNumber });
         }
     }
 }

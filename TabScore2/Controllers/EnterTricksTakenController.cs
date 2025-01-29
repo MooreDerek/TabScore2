@@ -1,4 +1,4 @@
-﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using Microsoft.AspNetCore.Mvc;
@@ -17,15 +17,18 @@ namespace TabScore2.Controllers
         private readonly IUtilities utilities = iUtilities;
         private readonly ISettings settings = iSettings;
 
-        public ActionResult Index(int deviceNumber)
+        public ActionResult Index()
         {
+            int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
+            if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
+            
             TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
             if (tableStatus.ResultData.BoardNumber == 0)  // Probably from browser 'Back' button.  Don't know boardNumber so go to ShowBoards
             {
-                return RedirectToAction("Index", "ShowBoards", new { deviceNumber });
+                return RedirectToAction("Index", "ShowBoards");
             }
 
-            EnterContractModel enterContractModel = utilities.CreateEnterContractModel(deviceNumber, tableStatus.ResultData);
+            EnterContractModel enterContractModel = utilities.CreateEnterContractModel(tableStatus.ResultData);
 
             ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
             ViewData["Title"] = utilities.Title("EnterTricksTaken", TitleType.Location, deviceNumber);
@@ -41,8 +44,11 @@ namespace TabScore2.Controllers
             }
         }
 
-        public ActionResult OKButtonClick(int deviceNumber, int tricksTaken)
+        public ActionResult OKButtonClick(int tricksTaken)
         {
+            int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
+            if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
+            
             Result result = appData.GetTableStatus(deviceNumber).ResultData;
             result.TricksTaken = tricksTaken;
             if (tricksTaken == -1)
@@ -62,11 +68,14 @@ namespace TabScore2.Controllers
                 }
             }
             utilities.CalculateScore(result);
-            return RedirectToAction("Index", "ConfirmResult", new { deviceNumber });
+            return RedirectToAction("Index", "ConfirmResult");
         }
 
-        public ActionResult BackButtonClick(int deviceNumber)
+        public ActionResult BackButtonClick()
         {
+            int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
+            if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
+            
             if (settings.EnterLeadCard)
             {
                 return RedirectToAction("Index", "EnterLead", new { deviceNumber, leadValidation = LeadValidationOptions.NoWarning });
@@ -75,7 +84,7 @@ namespace TabScore2.Controllers
             {
                 TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
                 Result result = tableStatus.ResultData!;
-                return RedirectToAction("Index", "EnterContract", new { deviceNumber, boardNumber = result.BoardNumber });
+                return RedirectToAction("Index", "EnterContract", new { boardNumber = result.BoardNumber });
             }
         }
     }

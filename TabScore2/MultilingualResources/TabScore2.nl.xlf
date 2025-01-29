@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en-US" target-language="nl" original="TABSCORE2/FORMS/SETTINGSFORM.RESX">
+    <body>
+      <group id="TABSCORE2/FORMS/SETTINGSFORM.RESX" datatype="resx">
+        <trans-unit id="$this.Text" translate="yes" xml:space="preserve">
+          <source>TabScore2 - Settings</source>
+          <target state="new">TabScore Opties</target>
+        </trans-unit>
+        <trans-unit id="AdditionalMinutesPerRoundLabel.Text" translate="yes" xml:space="preserve">
+          <source>Additional minutes per round</source>
+          <target state="new">Extra minuten per ronde</target>
+        </trans-unit>
+        <trans-unit id="CanxButton.Text" translate="yes" xml:space="preserve">
+          <source>Cancel</source>
+          <target state="new">Annuleer</target>
+        </trans-unit>
+        <trans-unit id="DoubleDummyCheckbox.Text" translate="yes" xml:space="preserve">
+          <source>Double dummy analysis for entered hands</source>
+          <target state="new">Double Dummy analyse</target>
+        </trans-unit>
+        <trans-unit id="EnterLeadCardCheckbox.Text" translate="yes" xml:space="preserve">
+          <source>Enter lead card</source>
+          <target state="new">Uitkomstkaart invoeren</target>
+        </trans-unit>
+        <trans-unit id="EnterResultsMethodCombobox.Items" translate="yes" xml:space="preserve">
+          <source>Tricks plus or minus</source>
+          <target state="new">Slagen plus of min</target>
+        </trans-unit>
+        <trans-unit id="EnterResultsMethodCombobox.Items1" translate="yes" xml:space="preserve">
+          <source>Total tricks won</source>
+          <target state="new">Totaal aantal slagen</target>
+        </trans-unit>
+        <trans-unit id="EnterResultsMethodGroup.Text" translate="yes" xml:space="preserve">
+          <source>Results entry method</source>
+          <target state="new">Kies wijze van slagen invoeren</target>
+        </trans-unit>
+        <trans-unit id="FromPerspectiveOfCombobox.Items" translate="yes" xml:space="preserve">
+          <source>North</source>
+          <target state="new">Noord</target>
+        </trans-unit>
+        <trans-unit id="FromPerspectiveOfCombobox.Items1" translate="yes" xml:space="preserve">
+          <source>South</source>
+          <target state="new">Zuid</target>
+        </trans-unit>
+        <trans-unit id="FromPerspectiveOfCombobox.Items2" translate="yes" xml:space="preserve">
+          <source>East</source>
+          <target state="new">Oost</target>
+        </trans-unit>
+        <trans-unit id="FromPerspectiveOfCombobox.Items3" translate="yes" xml:space="preserve">
+          <source>West</source>
+          <target state="new">West</target>
+        </trans-unit>
+        <trans-unit id="FromPerspectiveOfLabel.Text" translate="yes" xml:space="preserve">
+          <source>From the perspective of</source>
+          <target state="new">Vanuit het perspectief van</target>
+        </trans-unit>
+        <trans-unit id="HandRecordGroup.Text" translate="yes" xml:space="preserve">
+          <source>Hand record</source>
+          <target state="new">Kaartverdeling</target>
+        </trans-unit>
+        <trans-unit id="LeadCardGroup.Text" translate="yes" xml:space="preserve">
+          <source>Lead card</source>
+          <target state="new">Uitkomstkaart</target>
+        </trans-unit>
+        <trans-unit id="ManualHandEntryCheckbox.Text" translate="yes" xml:space="preserve">
+          <source>Allow manual hand record entry</source>
+          <target state="new">Handmatig invoeren kaartverdeling toestaan</target>
+        </trans-unit>
+        <trans-unit id="MinutesPerBoardLabel.Text" translate="yes" xml:space="preserve">
+          <source>Minutes per board</source>
+          <target state="new">Aantal minuten per spel</target>
+        </trans-unit>
+        <trans-unit id="NameSourceCombobox.Items" translate="yes" xml:space="preserve">
+          <source>Internal database</source>
+          <target state="new">Interne database</target>
+        </trans-unit>
+        <trans-unit id="NameSourceCombobox.Items1" translate="yes" xml:space="preserve">
+          <source>External database</source>
+          <target state="new">Externe database</target>
+        </trans-unit>
+        <trans-unit id="NameSourceCombobox.Items2" translate="yes" xml:space="preserve">
+          <source>No name source</source>
+          <target state="new">Geen naambron</target>
+        </trans-unit>
+        <trans-unit id="NameSourceCombobox.Items3" translate="yes" xml:space="preserve">
+          <source>Internal database first, then external</source>
+          <target state="new">Eerst interne database, daarna externe</target>
+        </trans-unit>
+        <trans-unit id="NumberEntryEachRoundCheckbox.Text" translate="yes" xml:space="preserve">
+          <source>Player ID entry each round</source>
+          <target state="new">Speler-ID invoer per ronde</target>
+        </trans-unit>
+        <trans-unit id="PlayersGroup.Text" translate="yes" xml:space="preserve">
+          <source>Player names/IDs</source>
+          <target state="new">Spelersnamen/ID's</target>
+        </trans-unit>
+        <trans-unit id="RankingListGroup.Text" translate="yes" xml:space="preserve">
+          <source>Ranking list</source>
+          <target state="new">Ranglijst</target>
+        </trans-unit>
+        <trans-unit id="RoundTimerGroupBox.Text" translate="yes" xml:space="preserve">
+          <source>Round timer</source>
+          <target state="new">Speelklok</target>
+        </trans-unit>
+        <trans-unit id="SaveButton.Text" translate="yes" xml:space="preserve">
+          <source>Save and close</source>
+          <target state="new">Bewaar en Sluit</target>
+        </trans-unit>
+        <trans-unit id="ShowHandRecordCheckbox.Text" translate="yes" xml:space="preserve">
+          <source>Show hand record</source>
+          <target state="new">Toon kaartverdeling</target>
+        </trans-unit>
+        <trans-unit id="ShowPercentageCheckbox.Text" translate="yes" xml:space="preserve">
+          <source>Show percentage on traveller</source>
+          <target state="new">Toon percentage op scorekaart</target>
+        </trans-unit>
+        <trans-unit id="ShowRankingCombobox.Items" translate="yes" xml:space="preserve">
+          <source>Don't show</source>
+          <target state="new">Niet tonen</target>
+        </trans-unit>
+        <trans-unit id="ShowRankingCombobox.Items1" translate="yes" xml:space="preserve">
+          <source>Show after each round</source>
+          <target state="new">Toon na elke ronde</target>
+        </trans-unit>
+        <trans-unit id="ShowRankingCombobox.Items2" translate="yes" xml:space="preserve">
+          <source>Show at end of session</source>
+          <target state="new">Toon aan het einde van de zitting</target>
+        </trans-unit>
+        <trans-unit id="ShowTimerCheckbox.Text" translate="yes" xml:space="preserve">
+          <source>Show round timer</source>
+          <target state="new">Toon speelklok</target>
+        </trans-unit>
+        <trans-unit id="ShowTravellerCheckbox.Text" translate="yes" xml:space="preserve">
+          <source>Show traveller</source>
+          <target state="new">Toon scorekaart</target>
+        </trans-unit>
+        <trans-unit id="SplashScreenCheckbox.Text" translate="yes" xml:space="preserve">
+          <source>Show splash screen on startup</source>
+          <target state="new">Opstartscherm weergeven bij opstarten</target>
+        </trans-unit>
+        <trans-unit id="SplashScreenGroupBox.Text" translate="yes" xml:space="preserve">
+          <source>Splash screen</source>
+          <target state="new">Opstartscherm</target>
+        </trans-unit>
+        <trans-unit id="SuppressRankingListFirstXLabel.Text" translate="yes" xml:space="preserve">
+          <source>Don't show ranking list for first x rounds</source>
+          <target state="new">Toon geen ranglijst voor de eerste x rondes</target>
+        </trans-unit>
+        <trans-unit id="SuppressRankingListLastXLabel.Text" translate="yes" xml:space="preserve">
+          <source>Don't show ranking list for last x rounds</source>
+          <target state="new">Toon geen ranglijst voor de laatste x rondes</target>
+        </trans-unit>
+        <trans-unit id="TabletModePersonalRadioButton.Text" translate="yes" xml:space="preserve">
+          <source>Personal - tablets move with players</source>
+          <target state="new">Persoonlijke modus - apparaat blijft bij spelers</target>
+        </trans-unit>
+        <trans-unit id="TabletModeTraditionalRadioButton.Text" translate="yes" xml:space="preserve">
+          <source>Traditional - 1 tablet per table</source>
+          <target state="new">Tafelmodus - 1 apparaat per tafel</target>
+        </trans-unit>
+        <trans-unit id="TabletMovesGroupBox.Text" translate="yes" xml:space="preserve">
+          <source>Table-top device mode</source>
+          <target state="new">Apparaatmodus</target>
+        </trans-unit>
+        <trans-unit id="TravellerGroup.Text" translate="yes" xml:space="preserve">
+          <source>Traveller</source>
+          <target state="new">Scorekaart</target>
+        </trans-unit>
+        <trans-unit id="ValidateLeadCardCheckbox.Text" translate="yes" xml:space="preserve">
+          <source>Validate lead card</source>
+          <target state="new">Verifieer uitkomstkaart</target>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+</xliff>

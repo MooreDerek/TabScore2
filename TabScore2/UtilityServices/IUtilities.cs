@@ -1,4 +1,4 @@
-﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using TabScore2.Classes;
@@ -11,11 +11,11 @@ namespace TabScore2.UtilityServices
     public interface IUtilities
     {
         ShowPlayerIDsModel CreateShowPlayerIDsModel(int deviceNumber, bool showWarning);
-        EnterPlayerIDModel CreateEnterPlayerIDModel(int deviceNumber, Direction direction);
+        EnterPlayerIDModel CreateEnterPlayerIDModel(Direction direction);
         ShowRoundInfoModel CreateShowRoundInfoModel(int deviceNumber);
         ShowBoardsModel CreateShowBoardsModel(int deviceNumber);
         ShowMoveModel CreateShowMoveModel(int deviceNumber, int newRoundNumber, int tableNotReadyNumber);
-        EnterContractModel CreateEnterContractModel(int deviceNumber, Result result, bool showTricks = false, LeadValidationOptions leadValidation = LeadValidationOptions.NoWarning);
+        EnterContractModel CreateEnterContractModel(Result result, bool showTricks = false, LeadValidationOptions leadValidation = LeadValidationOptions.NoWarning);
         ShowTravellerModel CreateShowTravellerModel(int deviceNumber);
         ShowHandRecordModel? CreateShowHandRecordModel(int deviceNumber, int boardNumber);
         ShowRankingListModel CreateRankingListModel(int deviceNumber);

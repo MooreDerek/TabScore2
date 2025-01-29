@@ -1,4 +1,4 @@
-﻿<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+﻿<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @model TabScore2.Models.EnterContractModel
@@ -154,9 +154,9 @@
     var suit = '@Model.ContractSuit';
     var double = '@Model.ContractX';
     var NSEW = '@Model.DeclarerNSEW';
-    var urlOKButtonPass = '@Url.Action("OKButtonPass", "EnterContract")?deviceNumber=@Model.TabletDeviceNumber';
-    var urlOKButtonSkip = '@Url.Action("OKButtonSkip", "EnterContract")?deviceNumber=@Model.TabletDeviceNumber';
-    var urlOKButtonContract = '@Url.Action("OKButtonContract", "EnterContract")?deviceNumber=@Model.TabletDeviceNumber';
-    var urlShowBoards = '@Url.Action("Index", "ShowBoards")?deviceNumber=@Model.TabletDeviceNumber';
+    var urlOKButtonPass = '@Url.Action("OKButtonPass", "EnterContract")';
+    var urlOKButtonSkip = '@Url.Action("OKButtonSkip", "EnterContract")';
+    var urlOKButtonContract = '@Url.Action("OKButtonContract", "EnterContract")';
+    var urlShowBoards = '@Url.Action("Index", "ShowBoards")';
 </script>
 <script src="~/js/EnterContract.js"></script>

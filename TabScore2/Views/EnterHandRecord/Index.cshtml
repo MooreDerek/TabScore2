@@ -1,4 +1,4 @@
-﻿<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+﻿<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @model TabScore2.Models.EnterHandRecordModel
@@ -349,9 +349,9 @@
 </div>
 
 <script>
-    var urlOKButtonClick = '@Url.Action("OKButtonClick", "EnterHandRecord")?deviceNumber=@Model.TabletDeviceNumber';
-    var urlBackButtonClick = '@Url.Action("Index", "ConfirmResult")?deviceNumber=@Model.TabletDeviceNumber';
-    var urlSkipButtonClick = '@Url.Action("Index", "ShowTraveller")?deviceNumber=@Model.TabletDeviceNumber&boardNumber=@Model.BoardNumber';
+    var urlOKButtonClick = '@Url.Action("OKButtonClick", "EnterHandRecord")';
+    var urlBackButtonClick = '@Url.Action("Index", "ConfirmResult")';
+    var urlSkipButtonClick = '@Url.Action("Index", "ShowTraveller")?boardNumber=@Model.BoardNumber';
     const cardString = ['@localizer["A"]', '@localizer["K"]', '@localizer["Q"]', '@localizer["J"]', '@localizer["TenShorthand"]', '9', '8', '7', '6', '5', '4', '3', '2'];
 </script>
 <script src="~/js/EnterHandRecord.js"></script>

@@ -1,13 +1,12 @@
-﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using TabScore2.Globals;
 
 namespace TabScore2.Models
 {
-    public class EnterContractModel(int deviceNumber)
+    public class EnterContractModel()
     {
-        public int TabletDeviceNumber { get; private set; } = deviceNumber;
         public int BoardNumber { get; set; } = 0;
         public string DeclarerNSEW { get; set; } = string.Empty;
         public string DeclarerNSEWDisplay { get; set; } = string.Empty;

@@ -1,4 +1,4 @@
-﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using Microsoft.Extensions.Localization;
@@ -23,7 +23,7 @@ namespace TabScore2.UtilityServices
         // PUBLIC CLASSES TO CREATE VIEW MODELS
         public ShowPlayerIDsModel CreateShowPlayerIDsModel(int deviceNumber, bool showWarning)
         {
-            ShowPlayerIDsModel showPlayerIDsModel = new(deviceNumber, showWarning);
+            ShowPlayerIDsModel showPlayerIDsModel = new(showWarning);
             DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
             TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
             Round round = tableStatus.RoundData;
@@ -65,10 +65,11 @@ namespace TabScore2.UtilityServices
             return showPlayerIDsModel;
         }
 
-        public EnterPlayerIDModel CreateEnterPlayerIDModel(int deviceNumber, Direction direction)
+        public EnterPlayerIDModel CreateEnterPlayerIDModel(Direction direction)
         {
-            EnterPlayerIDModel enterPlayerIDModel = new(deviceNumber, direction)
+            EnterPlayerIDModel enterPlayerIDModel = new()
             {
+                Direction = direction,
                 DisplayDirection = localizer[direction.ToString()]
             };
             return enterPlayerIDModel;
@@ -79,7 +80,7 @@ namespace TabScore2.UtilityServices
             TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
             Round round = tableStatus.RoundData;
             string unknown = localizer["Unknown"];
-            return new(deviceNumber)
+            return new()
             {
                 RoundNumber = tableStatus.RoundNumber,
                 NumberNorth = round.NumberNorth,
@@ -100,7 +101,7 @@ namespace TabScore2.UtilityServices
             TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
             List<Result> resultsList = database.GetResultsList(tableStatus.SectionID, tableStatus.RoundData.LowBoard, tableStatus.RoundData.HighBoard, tableStatus.TableNumber, tableStatus.RoundNumber);
 
-            ShowBoardsModel showBoardsModel = new(deviceNumber, settings.ShowTraveller);
+            ShowBoardsModel showBoardsModel = new(settings.ShowTraveller);
             foreach (Result result in resultsList) 
             {
                 showBoardsModel.Add(new ShowBoardsResult(result.BoardNumber, result.ContractLevel, GetContractDisplay(result, true), result.Remarks));
@@ -126,7 +127,6 @@ namespace TabScore2.UtilityServices
             Section section = database.GetSection(deviceStatus.SectionID);
 
             ShowMoveModel showMoveModel = [];
-            showMoveModel.TabletDeviceNumber = deviceNumber;
             showMoveModel.Direction = deviceStatus.Direction;
             showMoveModel.NewRoundNumber = newRoundNumber;
             showMoveModel.TableNotReadyNumber = tableNotReadyNumber;
@@ -188,9 +188,9 @@ namespace TabScore2.UtilityServices
             return showMoveModel;
         }
 
-        public EnterContractModel CreateEnterContractModel(int deviceNumber, Result result, bool showTricks = false, LeadValidationOptions leadValidation = LeadValidationOptions.NoWarning)
+        public EnterContractModel CreateEnterContractModel(Result result, bool showTricks = false, LeadValidationOptions leadValidation = LeadValidationOptions.NoWarning)
         {
-            EnterContractModel enterContractModel = new(deviceNumber)
+            EnterContractModel enterContractModel = new()
             {
                 BoardNumber = result.BoardNumber,
                 ContractLevel = result.ContractLevel,
@@ -211,7 +211,7 @@ namespace TabScore2.UtilityServices
         {
             TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
             int currentBoardNumber = tableStatus.ResultData!.BoardNumber; 
-            ShowTravellerModel showTravellerModel = new(deviceNumber, currentBoardNumber);
+            ShowTravellerModel showTravellerModel = new(currentBoardNumber);
             List<Result> resultsList = database.GetResultsList(tableStatus.SectionID, currentBoardNumber);
             foreach (Result result in resultsList)
             {
@@ -376,7 +376,7 @@ namespace TabScore2.UtilityServices
                 3 => (string)localizer["W"],
                 _ => "#",
             };
-            ShowHandRecordModel showHandRecordModel = new(deviceNumber, boardNumber, dealer);
+            ShowHandRecordModel showHandRecordModel = new(boardNumber, dealer);
             // Set dealer based on board number
             string A = localizer["A"];
             string K = localizer["K"];
@@ -475,7 +475,6 @@ namespace TabScore2.UtilityServices
         {
             DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
             ShowRankingListModel showRankingListModel = [];
-            showRankingListModel.TabletDeviceNumber = deviceNumber;
             showRankingListModel.RoundNumber = deviceStatus.RoundNumber;
 
             // Set player numbers to highlight appropriate rows of ranking list
@@ -625,8 +624,8 @@ namespace TabScore2.UtilityServices
 
         public int GetBoardsFromTableNumber(TableStatus tableStatus)
         {
-            // Get a list of all possible tables from which boards could have moved
-            List<Round> tableList = database.GetRoundsList(tableStatus.SectionID, tableStatus.RoundNumber).FindAll(x => x.LowBoard == tableStatus.RoundData.LowBoard);
+            // Get a list of all possible tables from which boards could have moved (ie where the boards were in the previous round)
+            List<Round> tableList = database.GetRoundsList(tableStatus.SectionID, tableStatus.RoundNumber - 1).FindAll(x => x.LowBoard == tableStatus.RoundData.LowBoard);
             if (tableList.Count == 0)
             {
                 // No table, so boards must have come from relay table

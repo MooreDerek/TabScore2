@@ -1,4 +1,4 @@
-﻿<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+﻿<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
      @model TabScore2.Models.ShowTravellerModel
@@ -115,7 +115,7 @@
         if (document.getElementById("OKButton").disabled) return;
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("Index", "ShowBoards")?deviceNumber=@Model.TabletDeviceNumber';
+            location.href = '@Url.Action("Index", "ShowBoards")';
         }
     }
 
@@ -123,14 +123,14 @@
         if (document.getElementById("BackButton").disabled) return;
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("Index", "ConfirmResult")?deviceNumber=@Model.TabletDeviceNumber';
+            location.href = '@Url.Action("Index", "ConfirmResult")';
         }
     }
 
     function handRecordClick() {
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("Index", "ShowHandRecord")?deviceNumber=@Model.TabletDeviceNumber&boardNumber=@Model.BoardNumber&fromView=@Model.FromView.ToString().ToLower()';
+            location.href = '@Url.Action("Index", "ShowHandRecord")?boardNumber=@Model.BoardNumber&fromView=@Model.FromView.ToString().ToLower()';
         }
     }
 </script>

@@ -1,4 +1,4 @@
-﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using Microsoft.AspNetCore.Mvc;
@@ -14,10 +14,13 @@ namespace TabScore2.Controllers
         private readonly IAppData appData = iAppData;
         private readonly IUtilities utilities = iUtilities;
 
-        public ActionResult Index(int deviceNumber, int boardNumber, bool fromView)
+        public ActionResult Index(int boardNumber, bool fromView)
         {
+            int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
+            if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
+            
             ShowHandRecordModel? showHandRecordModel = utilities.CreateShowHandRecordModel(deviceNumber, boardNumber);
-            if (showHandRecordModel == null) return RedirectToAction("Index", "ShowTraveller", new { deviceNumber, boardNumber });
+            if (showHandRecordModel == null) return RedirectToAction("Index", "ShowTraveller", new { boardNumber });
 
             showHandRecordModel.FromView = fromView;
             ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);

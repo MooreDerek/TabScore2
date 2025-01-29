@@ -1,4 +1,4 @@
-﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using Microsoft.AspNetCore.Mvc;
@@ -18,8 +18,11 @@ namespace TabScore2.Controllers
         private readonly IUtilities utilities = iUtilities;
         private readonly ISettings settings = iSettings;
 
-        public ActionResult Index(int deviceNumber)
+        public ActionResult Index()
         {
+            int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
+            if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
+
             DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
             
             // Only show ranking list when settings criteria are met
@@ -27,14 +30,14 @@ namespace TabScore2.Controllers
                || deviceStatus.RoundNumber <= settings.SuppressRankingListForFirstXRounds
                || deviceStatus.RoundNumber > database.GetNumberOfRoundsInSection(deviceStatus.SectionID) - settings.SuppressRankingListForLastXRounds)
             {
-                return RedirectToAction("Index", "ShowMove", new { deviceNumber, newRoundNumber = deviceStatus.RoundNumber + 1 });
+                return RedirectToAction("Index", "ShowMove", new { newRoundNumber = deviceStatus.RoundNumber + 1 });
             }
 
             ShowRankingListModel showRankingListModel = utilities.CreateRankingListModel(deviceNumber);
             // Only show the ranking list if it contains something meaningful
             if (showRankingListModel.Count <= 1 || showRankingListModel[0].ScoreDecimal == 0.0)
             {
-                return RedirectToAction("Index", "ShowMove", new { deviceNumber, newRoundNumber = deviceStatus.RoundNumber + 1 });
+                return RedirectToAction("Index", "ShowMove", new { newRoundNumber = deviceStatus.RoundNumber + 1 });
             }
 
             ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
@@ -64,8 +67,11 @@ namespace TabScore2.Controllers
             }
     }
 
-        public ActionResult Final(int deviceNumber)
+        public ActionResult Final()
         {
+            int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
+            if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
+
             DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
             ShowRankingListModel showRankingListModel = utilities.CreateRankingListModel(deviceNumber);
             if (showRankingListModel.Count <= 1 && showRankingListModel[0].ScoreDecimal == 0.0)
@@ -92,8 +98,10 @@ namespace TabScore2.Controllers
             }
         }
 
-        public JsonResult PollRanking(int deviceNumber)
+        public JsonResult PollRanking()
         {
+            int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? 0;
+
             int sectionID = appData.GetDeviceStatus(deviceNumber).SectionID;
             List<Ranking> rankingList = utilities.GetRankings(sectionID);
             return Json(rankingList);

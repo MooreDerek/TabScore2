@@ -1,4 +1,4 @@
-﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using Microsoft.AspNetCore.Mvc;
@@ -18,8 +18,11 @@ namespace TabScore2.Controllers
         private readonly ISettings settings = iSettings;
         private readonly IUtilities utilities = iUtilities;
 
-        public ActionResult Index(int deviceNumber, bool showWarning = false)
+        public ActionResult Index(bool showWarning = false)
         {
+            int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
+            if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
+
             DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
             TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
 
@@ -71,11 +74,11 @@ namespace TabScore2.Controllers
             // Check if all required names have been entered, and if not go back and wait
             if (tableStatus.RoundData.GotAllNames)
             {
-                return RedirectToAction("Index", "ShowRoundInfo", new { deviceNumber });
+                return RedirectToAction("Index", "ShowRoundInfo");
             }
             else
             {
-                return RedirectToAction("Index", "ShowPlayerIDs", new { deviceNumber, showWarning = true });
+                return RedirectToAction("Index", "ShowPlayerIDs", new { showWarning = true });
             }
         }
     }

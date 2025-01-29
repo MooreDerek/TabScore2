@@ -1,4 +1,4 @@
-﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using Microsoft.AspNetCore.Mvc;
@@ -11,26 +11,28 @@ using TabScore2.UtilityServices;
 
 namespace TabScore2.Controllers
 {
-    public class ShowMoveController(IDatabase iDatabase, IUtilities iUtilities, IAppData iAppData, ISettings iSettings, IHttpContextAccessor iHttpContextAccessor) : Controller
+    public class ShowMoveController(IDatabase iDatabase, IUtilities iUtilities, IAppData iAppData, ISettings iSettings) : Controller
     {
         private readonly IDatabase database = iDatabase;
         private readonly IUtilities utilities = iUtilities;
         private readonly IAppData appData = iAppData;
         private readonly ISettings settings = iSettings;
-        private readonly IHttpContextAccessor httpContextAccessor = iHttpContextAccessor;
 
-        public ActionResult Index(int deviceNumber, int newRoundNumber, int tableNotReadyNumber = -1)
+        public ActionResult Index(int newRoundNumber, int tableNotReadyNumber = -1)
         {
+            int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
+            if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
+            
             DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
             if (newRoundNumber > database.GetNumberOfRoundsInSection(deviceStatus.SectionID))  // Session complete
             {
                 if (settings.ShowRanking == 2)
                 {
-                    return RedirectToAction("Final", "ShowRankingList", new { deviceNumber });
+                    return RedirectToAction("Final", "ShowRankingList");
                 }
                 else
                 {
-                    return RedirectToAction("Index", "EndScreen", new { deviceNumber });
+                    return RedirectToAction("Index", "EndScreen");
                 }
             }
 
@@ -68,8 +70,11 @@ namespace TabScore2.Controllers
             return View(showMoveModel);
         }
 
-        public ActionResult OKButtonClick(int deviceNumber, int newRoundNumber)
+        public ActionResult OKButtonClick(int newRoundNumber)
         {
+            int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
+            if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
+            
             DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
             Section section = database.GetSection(deviceStatus.SectionID);
             if (section.DevicesPerTable > 1)  // Tablet devices are moving, so need to check if new table is ready
@@ -78,10 +83,12 @@ namespace TabScore2.Controllers
                 List<Round> roundsList = database.GetRoundsList(deviceStatus.SectionID, newRoundNumber);
                 Move move = utilities.GetMove(roundsList, deviceStatus.TableNumber, deviceStatus.PairNumber, deviceStatus.Direction);
 
-                if (move.NewTableNumber == 0)  // Move is to phantom table, so go straight to RoundInfo
+                if (move.NewTableNumber == 0)  // Move is to phantom table, so update and go straight to RoundInfo
                 {
                     appData.UpdateDeviceStatus(deviceNumber, 0, newRoundNumber, Direction.Sitout);
-                    return RedirectToAction("Index", "ShowRoundInfo", new { deviceNumber });
+                    HttpContext.Session.SetInt32("TableNumber", 0);
+                    HttpContext.Session.SetString("Direction", Direction.Sitout.ToString());
+                    return RedirectToAction("Index", "ShowRoundInfo");
                 }
 
                 // Check if the new table (the one we're trying to move to) is ready.  Expanded code here to make it easier to understand
@@ -113,15 +120,16 @@ namespace TabScore2.Controllers
                     }
                 }
 
-                if (newTableReady)  // Reset tablet device and table statuses for new round, and update cookie
+                if (newTableReady)  // Reset tablet device and table statuses for new round, and update session state
                 {
                     appData.UpdateDeviceStatus(deviceNumber, move.NewTableNumber, newRoundNumber, move.NewDirection);
                     appData.UpdateTableStatus(section.ID, move.NewTableNumber, newRoundNumber);
-                    SetCookie(section.ID, move.NewTableNumber, move.NewDirection);
+                    HttpContext.Session.SetInt32("TableNumber", move.NewTableNumber);
+                    HttpContext.Session.SetString("Direction", move.NewDirection.ToString());
                 }
                 else  // Go back and wait
                 {
-                    return RedirectToAction("Index", "ShowMove", new { deviceNumber, newRoundNumber, tableNotReadyNumber = move.NewTableNumber });
+                    return RedirectToAction("Index", "ShowMove", new { newRoundNumber, tableNotReadyNumber = move.NewTableNumber });
                 }
             }
             else  // Tablet device not moving and is the only tablet device at this table
@@ -132,19 +140,7 @@ namespace TabScore2.Controllers
 
             // Refresh settings for the start of the round.  Only done once per round.
             database.GetDatabaseSettings(section.ID, newRoundNumber);
-            return RedirectToAction("Index", "ShowPlayerIDs", new { deviceNumber });
-        }
-
-        // Set a cookie for this device
-        private void SetCookie(int sectionID, int tableNumber, Direction direction)
-        {
-            HttpContext? httpContext = httpContextAccessor.HttpContext;
-            if (httpContext != null)
-            {
-                httpContext.Response.Cookies.Append("sectionID", sectionID.ToString());
-                httpContext.Response.Cookies.Append("tableNumber", tableNumber.ToString());
-                httpContext.Response.Cookies.Append("direction", direction.ToString());
-            }
+            return RedirectToAction("Index", "ShowPlayerIDs");
         }
     }
 }

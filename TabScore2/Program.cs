@@ -1,4 +1,4 @@
-// TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+// TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using GrpcServices;
@@ -41,6 +41,14 @@ namespace TabScore2
             // -------------------------
             // Start gRPC server process
             // -------------------------
+
+            // Close any orphan versions of the gRPC server
+            Process[] processArray = Process.GetProcessesByName("GrpcBwsDatabaseServer");
+            foreach (Process process in processArray) 
+            {
+                process.Kill();
+            }
+            
             Process grpcServer = new();
             if(isDevelopment)
             {
@@ -78,7 +86,12 @@ namespace TabScore2
             webAppBuilder.Services.AddSingleton<IExternalNamesDatabase, ExternalNamesDatabase>();
             webAppBuilder.Services.AddSingleton<ISettings, Settings>();
             webAppBuilder.Services.AddSingleton<IAppData, AppData>();
-            webAppBuilder.Services.AddHttpContextAccessor();
+            webAppBuilder.Services.AddSession(options =>
+            {
+                options.Cookie.Name = ".EBUScoreWeb.Session";
+                options.IdleTimeout = TimeSpan.FromHours(6);
+                options.Cookie.IsEssential = true;
+            });
             webAppBuilder.WebHost.ConfigureKestrel((context, serverOptions) => { serverOptions.Listen(IPAddress.Any, 5213); });
 
             WebApplication webApp = webAppBuilder.Build();
@@ -126,7 +139,7 @@ namespace TabScore2
             IServiceProvider services = host.Services;
 
             // Close the splash screen (if it's open) and start the Windows Forms app
-            Process[] processArray = Process.GetProcessesByName("SplashScreen");
+            processArray = Process.GetProcessesByName("SplashScreen");
             if (processArray.Length > 0) processArray[0].Kill();
             Application.Run(services.GetRequiredService<MainForm>());
 

@@ -1,4 +1,4 @@
-﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using Microsoft.AspNetCore.Mvc;
@@ -14,8 +14,11 @@ namespace TabScore2.Controllers
         private readonly IAppData appData = iAppData;
         private readonly IUtilities utilities = iUtilities;
 
-        public ActionResult Index(int deviceNumber)
-       {
+        public ActionResult Index()
+        {
+            int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
+            if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
+
             // Clear result data as we'll be selecting a new board
             appData.GetTableStatus(deviceNumber).ResultData = new();
 
@@ -35,10 +38,13 @@ namespace TabScore2.Controllers
                 showBoardsModel.Message = "NOMESSAGE";
                 return View("ViewOnly", showBoardsModel);
             }
-       }
+        }
 
-        public ActionResult ViewResult(int deviceNumber, int boardNumber)
+        public ActionResult ViewResult(int boardNumber)
         {
+            int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
+            if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
+            
             // Only used by ViewOnly view, for tablet device that is not being used for scoring, to check if result has been entered for this board
             ShowBoardsModel showBoardsModel = utilities.CreateShowBoardsModel(deviceNumber);
                         
@@ -53,13 +59,17 @@ namespace TabScore2.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "ShowTraveller", new { deviceNumber, boardNumber, fromView = true });
+                return RedirectToAction("Index", "ShowTraveller", new { boardNumber, fromView = true });
             }
         }
 
-        public ActionResult OKButtonClick(int deviceNumber)
+        public ActionResult OKButtonClick()
         {
             // Only used by ViewOnly view, for tablet device that is not being used for scoring, to check if all results have been entered
+            
+            int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
+            if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
+            
             ShowBoardsModel showBoardsModel = utilities.CreateShowBoardsModel(deviceNumber);
 
             if (!showBoardsModel.GotAllResults)
@@ -73,7 +83,7 @@ namespace TabScore2.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "ShowRankingList", new { deviceNumber });
+                return RedirectToAction("Index", "ShowRankingList");
             }
         }
     }

@@ -1,8 +1,9 @@
-﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using GrpcMessageClasses;
 using System.Data.Odbc;
+using System.Data.SqlTypes;
 using System.Text;
 using TabScore2.SharedClasses;
 
@@ -143,41 +144,11 @@ namespace GrpcServices
                 {
                     return new InitializeReturnMessage() { ReturnMessage = "DatabaseTooManyTables" };
                 }
-
-                if (section.Winners == 0)
-                {
-                    // Set Winners field based on data from RoundData table.  If the maximum pair number > number of tables + 1, we can assume a one-winner movement.
-                    // The +1 is to take account of a rover in a two-winner movement. 
-
-                    SQLString = $"SELECT NSpair, EWpair FROM RoundData WHERE Section={section.ID}";
-                    int maxPairNumber = 0;
-                    cmd = new OdbcCommand(SQLString, connection);
-                    reader = cmd.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        int newNSpair = reader.GetInt32(0);
-                        int newEWpair = reader.GetInt32(1);
-                        if (newNSpair > maxPairNumber) maxPairNumber = newNSpair;
-                        if (newEWpair > maxPairNumber) maxPairNumber = newEWpair;
-                    }
-                    reader.Close();
-                    if (maxPairNumber == 0)  // No round data for this section! 
-                    {
-                        section.Winners = 0;
-                    }
-                    else if (maxPairNumber > section.Tables + 1)
-                    {
-                        section.Winners = 1;
-                    }
-                    else
-                    {
-                        section.Winners = 2;
-                    }
-                    SQLString = $"UPDATE Section SET Winners={section.Winners} WHERE ID={section.ID}";
-                    cmd = new OdbcCommand(SQLString, connection);
-                    cmd.ExecuteNonQuery();
-                }
             }
+
+            // Clear the list here, so that it can be read again later when the first device logs on.  This is in case the number of sections changes after
+            // TabScore2 is started
+            sectionsList.Clear();
 
             // Validate RECEIVEDDATA Table
             // If this is an individual event, add extra fields South and West to ReceivedData if they don't exist
@@ -742,6 +713,73 @@ namespace GrpcServices
         // SECTION
         public List<Section> GetSectionsList()
         {
+            // Check if list of sections has been populated, and if so then just return it
+            if (sectionsList.Count >= 0) return sectionsList;
+
+            // No list of sections yet, so populate it
+            using OdbcConnection connection = new(connectionString);
+            connection.Open();
+            string SQLString = "SELECT ID, Letter, [Tables], Winners, MissingPair FROM Section";
+            OdbcCommand cmd = new(SQLString, connection);
+            OdbcDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                int sectionID = reader.GetInt32(0);
+                string sectionLetter = reader.GetString(1);
+                int numTables = reader.GetInt32(2);
+                int winners = 0;
+                if (!reader.IsDBNull(3))
+                {
+                    object tempWinners = reader.GetValue(3);
+                    if (tempWinners != null) winners = Convert.ToInt32(tempWinners);
+                }
+                int missingPair = 0;
+                if (!reader.IsDBNull(4))
+                {
+                    object tempMissingPair = reader.GetValue(4);
+                    if (tempMissingPair != null) missingPair = Convert.ToInt32(tempMissingPair);
+                }
+                sectionsList.Add(new Section() { ID = sectionID, Letter = sectionLetter, Tables = numTables, Winners = winners, MissingPair = missingPair });
+            }
+            reader.Close();
+
+            foreach (Section section in sectionsList)
+            {
+                if (section.Winners == 0)
+                {
+                    // Set Winners field based on data from RoundData table.  If the maximum pair number > number of tables + 1, we can assume a one-winner movement.
+                    // The +1 is to take account of a rover in a two-winner movement. 
+
+                    SQLString = $"SELECT NSpair, EWpair FROM RoundData WHERE Section={section.ID}";
+                    int maxPairNumber = 0;
+                    cmd = new OdbcCommand(SQLString, connection);
+                    reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        int newNSpair = reader.GetInt32(0);
+                        int newEWpair = reader.GetInt32(1);
+                        if (newNSpair > maxPairNumber) maxPairNumber = newNSpair;
+                        if (newEWpair > maxPairNumber) maxPairNumber = newEWpair;
+                    }
+                    reader.Close();
+                    if (maxPairNumber == 0)  // No round data for this section! 
+                    {
+                        section.Winners = 0;
+                    }
+                    else if (maxPairNumber > section.Tables + 1)
+                    {
+                        section.Winners = 1;
+                    }
+                    else
+                    {
+                        section.Winners = 2;
+                    }
+                    SQLString = $"UPDATE Section SET Winners={section.Winners} WHERE ID={section.ID}";
+                    cmd = new OdbcCommand(SQLString, connection);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
             return sectionsList;
         }
 
@@ -1756,21 +1794,20 @@ namespace GrpcServices
             {
                 ODBCRetryHelper.ODBCRetry(() =>
                 {
+                    // If there are more than one Settings records, just use the first
                     reader = cmd.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        databaseSettings.ShowTraveller = reader.GetBoolean(0);
-                        databaseSettings.ShowPercentage = reader.GetBoolean(1);
-                        databaseSettings.EnterLeadCard = reader.GetBoolean(2);
-                        databaseSettings.ValidateLeadCard = reader.GetBoolean(3);
-                        databaseSettings.ShowRanking = reader.GetInt32(4);
-                        databaseSettings.EnterResultsMethod = reader.GetInt32(5);
-                        if (databaseSettings.EnterResultsMethod != 1) databaseSettings.EnterResultsMethod = 0;
-                        databaseSettings.ShowHandRecord = reader.GetBoolean(6);
-                        databaseSettings.NumberEntryEachRound = reader.GetBoolean(7);
-                        databaseSettings.NameSource = reader.GetInt32(8);
-                        databaseSettings.ManualHandRecordEntry = reader.GetBoolean(9);
-                    }
+                    reader.Read();  
+                    databaseSettings.ShowTraveller = reader.GetBoolean(0);
+                    databaseSettings.ShowPercentage = reader.GetBoolean(1);
+                    databaseSettings.EnterLeadCard = reader.GetBoolean(2);
+                    databaseSettings.ValidateLeadCard = reader.GetBoolean(3);
+                    databaseSettings.ShowRanking = reader.GetInt32(4);
+                    databaseSettings.EnterResultsMethod = reader.GetInt32(5);
+                    if (databaseSettings.EnterResultsMethod != 1) databaseSettings.EnterResultsMethod = 0;
+                    databaseSettings.ShowHandRecord = reader.GetBoolean(6);
+                    databaseSettings.NumberEntryEachRound = reader.GetBoolean(7);
+                    databaseSettings.NameSource = reader.GetInt32(8);
+                    databaseSettings.ManualHandRecordEntry = reader.GetBoolean(9);
                     reader.Close();
                 });
             }

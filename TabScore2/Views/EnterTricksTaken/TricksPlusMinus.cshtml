@@ -1,4 +1,4 @@
-﻿<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+﻿<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @model TabScore2.Models.EnterContractModel
@@ -103,7 +103,7 @@
 <script>
     var tricksTaken = @Model.TricksTaken;
     var contractLevel = @Model.ContractLevel;
-    var urlOKButtonClick = '@Url.Action("OKButtonClick", "EnterTricksTaken")?deviceNumber=@Model.TabletDeviceNumber';
-    var urlBackButtonClick = '@Url.Action("BackButtonClick", "EnterTricksTaken")?deviceNumber=@Model.TabletDeviceNumber';
+    var urlOKButtonClick = '@Url.Action("OKButtonClick", "EnterTricksTaken")';
+    var urlBackButtonClick = '@Url.Action("BackButtonClick", "EnterTricksTaken")';
 </script>
 <script src="~/js/TricksPlusMinus.js"></script>

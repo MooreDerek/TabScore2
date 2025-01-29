@@ -1,4 +1,4 @@
-﻿<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+﻿<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
 @model TabScore2.Models.ShowRankingListModel
@@ -55,10 +55,10 @@
 </div>
 
 <script>
-    var urlPollRanking = '@Url.Action("PollRanking", "ShowRankingList")?deviceNumber=@Model.TabletDeviceNumber';
-    var urlEndScreen = '@Url.Action("Index", "EndScreen")?deviceNumber=@Model.TabletDeviceNumber';
-    var urlShowMove = '@Url.Action("Index", "ShowMove")?deviceNumber=@Model.TabletDeviceNumber&newRoundNumber=' + (@Model.RoundNumber + 1).toString();
-    var urlShowBoards = '@Url.Action("Index", "ShowBoards")?deviceNumber=@Model.TabletDeviceNumber';
+    var urlPollRanking = '@Url.Action("PollRanking", "ShowRankingList")';
+    var urlEndScreen = '@Url.Action("Index", "EndScreen")';
+    var urlShowMove = '@Url.Action("Index", "ShowMove")?newRoundNumber=' + (@Model.RoundNumber + 1).toString();
+    var urlShowBoards = '@Url.Action("Index", "ShowBoards")';
     var finalRankingList = @Model.FinalRankingList.ToString().ToLower();
     var pairNS = @Model.NumberNorth;
     var pairEW = @Model.NumberEast;

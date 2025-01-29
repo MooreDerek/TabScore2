@@ -1,4 +1,4 @@
-﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using Microsoft.AspNetCore.Mvc;
@@ -16,17 +16,20 @@ namespace TabScore2.Controllers
         private readonly IUtilities utilities = iUtilities;
         private readonly ISettings settings = iSettings;
 
-        public ActionResult Index(int deviceNumber, LeadValidationOptions leadValidation)
+        public ActionResult Index(LeadValidationOptions leadValidation)
         {
+            int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
+            if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
+            
             if (!settings.EnterLeadCard)
             {
-                return RedirectToAction("Index", "EnterTricksTaken", new { deviceNumber });
+                return RedirectToAction("Index", "EnterTricksTaken");
             }
 
             TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
             if (tableStatus.ResultData.BoardNumber == 0)  // Probably from browser 'Back' button.  Don't know boardNumber so go to ShowBoards
             {
-                return RedirectToAction("Index", "ShowBoards", new { deviceNumber });
+                return RedirectToAction("Index", "ShowBoards");
             }
 
             if (tableStatus.ResultData.LeadCard == string.Empty)  // Lead not set, so use leadValidation value as passed to controller
@@ -37,7 +40,7 @@ namespace TabScore2.Controllers
             {
                 tableStatus.LeadValidation = LeadValidationOptions.NoWarning;
             }
-            EnterContractModel enterContractModel = utilities.CreateEnterContractModel(deviceNumber, tableStatus.ResultData, false, tableStatus.LeadValidation);
+            EnterContractModel enterContractModel = utilities.CreateEnterContractModel(tableStatus.ResultData, false, tableStatus.LeadValidation);
 
             ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
             ViewData["Title"] = utilities.Title("EnterLead", TitleType.Location, deviceNumber);
@@ -46,17 +49,20 @@ namespace TabScore2.Controllers
             return View(enterContractModel);
         }
 
-        public ActionResult OKButtonClick(int deviceNumber, string card)
+        public ActionResult OKButtonClick(string card)
         {
+            int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
+            if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
+
             TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
             if (tableStatus.LeadValidation != LeadValidationOptions.Validate || !settings.ValidateLeadCard || utilities.ValidateLead(tableStatus, card))
             {
                 tableStatus.ResultData.LeadCard = card;
-                return RedirectToAction("Index", "EnterTricksTaken", new { deviceNumber });
+                return RedirectToAction("Index", "EnterTricksTaken");
             }
             else
             {
-                return RedirectToAction("Index", "EnterLead", new { deviceNumber, leadValidation = LeadValidationOptions.Warning });
+                return RedirectToAction("Index", "EnterLead", new { leadValidation = LeadValidationOptions.Warning });
             }
         }
     }

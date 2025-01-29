@@ -223,7 +223,7 @@
     <value>Toon geen ranglijst voor de laatste x rondes</value>
   </data>
   <data name="TabletModePersonalRadioButton.Text" xml:space="preserve">
-    <value>Persoonlijke modus - apparaat blijft bij spelers </value>
+    <value>Persoonlijke modus - apparaat blijft bij spelers</value>
   </data>
   <data name="TabletModeTraditionalRadioButton.Text" xml:space="preserve">
     <value>Tafelmodus - 1 apparaat per tafel</value>

@@ -1,4 +1,4 @@
-﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using Microsoft.AspNetCore.Mvc;
@@ -18,17 +18,23 @@ namespace TabScore2.Controllers
         private readonly IUtilities utilities = iUtilities;
         private readonly ISettings settings = iSettings;
 
-        public ActionResult Index(int deviceNumber, Direction direction)
+        public ActionResult Index(Direction direction)
         {
+            int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
+            if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
+            
             ViewData["Title"] = utilities.Title("EnterPlayerIDs", TitleType.Location, deviceNumber);
             ViewData["Header"] = utilities.Header(HeaderType.Location, deviceNumber);
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
-            EnterPlayerIDModel enterPlayerIDModel = utilities.CreateEnterPlayerIDModel(deviceNumber, direction);
+            EnterPlayerIDModel enterPlayerIDModel = utilities.CreateEnterPlayerIDModel(direction);
             return View(enterPlayerIDModel);
         }
 
-        public ActionResult OKButtonClick(int deviceNumber, Direction direction, string playerID)
+        public ActionResult OKButtonClick(Direction direction, string playerID)
         {
+            int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
+            if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
+            
             string playerName = string.Empty;
             if (playerID == "0")
             {
@@ -81,7 +87,7 @@ namespace TabScore2.Controllers
             }
             database.UpdatePlayer(tableStatus.SectionID, tableStatus.TableNumber, tableStatus.RoundNumber, directionLetter, pairNumber, playerID, playerName);
 
-            return RedirectToAction("Index", "ShowPlayerIDs", new { deviceNumber });
+            return RedirectToAction("Index", "ShowPlayerIDs");
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2024 by Peter Flippant
+﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using Microsoft.AspNetCore.Mvc;
@@ -17,8 +17,11 @@ namespace TabScore2.Controllers
         private readonly IAppData appData = iAppData;
         private readonly IUtilities utilities = iUtilities;
 
-        public ActionResult Index(int deviceNumber, int boardNumber)
+        public ActionResult Index(int boardNumber)
         {
+            int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
+            if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
+            
             TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
             Result result = tableStatus.ResultData;
             if (tableStatus.ResultData.BoardNumber != boardNumber)
@@ -32,7 +35,7 @@ namespace TabScore2.Controllers
                 tableStatus.ResultData = result;
             }
 
-            EnterContractModel enterContractModel = utilities.CreateEnterContractModel(deviceNumber, result);
+            EnterContractModel enterContractModel = utilities.CreateEnterContractModel(result);
 
             ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
             ViewData["Title"] = utilities.Title("EnterContract", TitleType.Location, deviceNumber);
@@ -41,8 +44,11 @@ namespace TabScore2.Controllers
             return View(enterContractModel);
         }
 
-        public ActionResult OKButtonContract(int deviceNumber, int contractLevel, string contractSuit, string contractX, string declarerNSEW)
+        public ActionResult OKButtonContract(int contractLevel, string contractSuit, string contractX, string declarerNSEW)
         {
+            int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
+            if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
+            
             contractX ??= string.Empty;
             Result result = appData.GetTableStatus(deviceNumber).ResultData;
             result.ContractLevel = contractLevel;
@@ -50,11 +56,14 @@ namespace TabScore2.Controllers
             result.ContractX = contractX;
             result.DeclarerNSEW = declarerNSEW;
             result.Remarks = string.Empty;
-            return RedirectToAction("Index", "EnterLead", new { deviceNumber, leadValidation = LeadValidationOptions.Validate });
+            return RedirectToAction("Index", "EnterLead", new { leadValidation = LeadValidationOptions.Validate });
         }
 
-        public ActionResult OKButtonPass(int deviceNumber)
+        public ActionResult OKButtonPass()
         {
+            int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
+            if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
+            
             Result result = appData.GetTableStatus(deviceNumber).ResultData;
             result.ContractLevel = 0;
             result.ContractSuit = string.Empty;
@@ -63,11 +72,14 @@ namespace TabScore2.Controllers
             result.LeadCard = string.Empty;
             result.TricksTaken = -1;
             result.Remarks = string.Empty;
-            return RedirectToAction("Index", "ConfirmResult", new { deviceNumber });
+            return RedirectToAction("Index", "ConfirmResult");
         }
         
-        public ActionResult OKButtonSkip(int deviceNumber)
+        public ActionResult OKButtonSkip()
         {
+            int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
+            if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
+            
             Result result = appData.GetTableStatus(deviceNumber).ResultData;
             result.ContractLevel = -1;
             result.ContractSuit = string.Empty;
@@ -77,7 +89,7 @@ namespace TabScore2.Controllers
             result.TricksTaken = -1;
             result.Remarks = "Not played";
             database.SetResult(result);
-            return RedirectToAction("Index", "ShowBoards", new { deviceNumber });
+            return RedirectToAction("Index", "ShowBoards");
         }
     }
 }

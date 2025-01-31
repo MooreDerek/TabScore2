@@ -17,6 +17,13 @@ namespace TabScore2
         [STAThread]
         public static void Main(string[] args)
         {
+            // Check if TabScore2 is already running
+            if (Process.GetProcessesByName("TabScore2").Length > 1)
+            {
+                MessageBox.Show("TabScore2 is already running", "TabScore2", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             bool isDevelopment = string.Equals(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"), "Development", StringComparison.CurrentCultureIgnoreCase);
             string workingDirectory;
 
@@ -42,13 +49,11 @@ namespace TabScore2
             // Start gRPC server process
             // -------------------------
 
-            // Close any orphan versions of the gRPC server
-            Process[] processArray = Process.GetProcessesByName("GrpcBwsDatabaseServer");
-            foreach (Process process in processArray) 
-            {
-                process.Kill();
-            }
+            // Close any orphaned instance of gRPC server
+            Process[] grpcProcessArray = Process.GetProcessesByName("GrpcBwsDatabaseServer");
+            foreach (Process process in grpcProcessArray) process.Kill();
             
+            // Create new gRPC server
             Process grpcServer = new();
             if(isDevelopment)
             {
@@ -82,13 +87,13 @@ namespace TabScore2
             webAppBuilder.Services.AddCodeFirstGrpcClient<IExternalNamesDatabaseService>(option => { option.Address = grpcAddress; });
             webAppBuilder.Services.AddWebOptimizer(option => { option.EnableDiskCache = false; });
             webAppBuilder.Services.AddSingleton<IUtilities, Utilities>();
-            webAppBuilder.Services.AddSingleton<IDatabase, Database>();
+            webAppBuilder.Services.AddSingleton<IDatabase, BwsDatabase>();
             webAppBuilder.Services.AddSingleton<IExternalNamesDatabase, ExternalNamesDatabase>();
             webAppBuilder.Services.AddSingleton<ISettings, Settings>();
             webAppBuilder.Services.AddSingleton<IAppData, AppData>();
             webAppBuilder.Services.AddSession(options =>
             {
-                options.Cookie.Name = ".EBUScoreWeb.Session";
+                options.Cookie.Name = ".TabScore2.Session";
                 options.IdleTimeout = TimeSpan.FromHours(6);
                 options.Cookie.IsEssential = true;
             });
@@ -98,6 +103,8 @@ namespace TabScore2
             webApp.UseExceptionHandler("/ErrorScreen/Index");
             webApp.UseWebOptimizer();
             webApp.UseStaticFiles();
+            webApp.UseAuthorization();
+            webApp.UseSession();
             webApp.UseRouting();
             webApp.MapControllerRoute(name: "default", pattern: "{controller=StartScreen}/{action=Index}");
             webApp.RunAsync();
@@ -110,7 +117,7 @@ namespace TabScore2
             desktopBuilder.Services.AddCodeFirstGrpcClient<IBwsDatabaseService>(option => { option.Address = grpcAddress; });
             desktopBuilder.Services.AddCodeFirstGrpcClient<IExternalNamesDatabaseService>(option => { option.Address = grpcAddress; });
             desktopBuilder.Services.AddSingleton<MainForm>();
-            desktopBuilder.Services.AddSingleton<IDatabase, Database>();
+            desktopBuilder.Services.AddSingleton<IDatabase, BwsDatabase>();
             desktopBuilder.Services.AddSingleton<ISettings, Settings>();
             desktopBuilder.Services.AddSingleton<IAppData, AppData>();
 
@@ -139,13 +146,13 @@ namespace TabScore2
             IServiceProvider services = host.Services;
 
             // Close the splash screen (if it's open) and start the Windows Forms app
-            processArray = Process.GetProcessesByName("SplashScreen");
-            if (processArray.Length > 0) processArray[0].Kill();
+            grpcProcessArray = Process.GetProcessesByName("SplashScreen");
+            if (grpcProcessArray.Length > 0) grpcProcessArray[0].Kill();
             Application.Run(services.GetRequiredService<MainForm>());
 
             // Close gRPC server
-            processArray = Process.GetProcessesByName("GrpcBwsDatabaseServer");
-            if (processArray.Length > 0) processArray[0].Kill();
+            grpcProcessArray = Process.GetProcessesByName("GrpcBwsDatabaseServer");
+            foreach (Process process in grpcProcessArray) process.Kill();
         }
     }
 }

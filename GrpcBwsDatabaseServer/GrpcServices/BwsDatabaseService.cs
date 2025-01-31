@@ -3,7 +3,6 @@
 
 using GrpcMessageClasses;
 using System.Data.Odbc;
-using System.Data.SqlTypes;
 using System.Text;
 using TabScore2.SharedClasses;
 
@@ -145,10 +144,6 @@ namespace GrpcServices
                     return new InitializeReturnMessage() { ReturnMessage = "DatabaseTooManyTables" };
                 }
             }
-
-            // Clear the list here, so that it can be read again later when the first device logs on.  This is in case the number of sections changes after
-            // TabScore2 is started
-            sectionsList.Clear();
 
             // Validate RECEIVEDDATA Table
             // If this is an individual event, add extra fields South and West to ReceivedData if they don't exist
@@ -659,64 +654,8 @@ namespace GrpcServices
 
         public void WebappInitialize(WebappInitializeMessage message)
         {
-            foreach (Section section in sectionsList)
-            {
-                section.DevicesPerTable = 1;
-                if (message.TabletsMove)
-                {
-                    if (isIndividual)
-                    {
-                        section.DevicesPerTable = 4;
-                    }
-                    else
-                    {
-                        if (section.Winners == 1) section.DevicesPerTable = 2;
-                    }
-                }
-                section.CurrentRoundNumber = 1;
-                UpdateNumberOfRoundsInSection(new SectionIDMessage() { SectionID = section.ID });
-            }
-        }
-
-        // ======================================== 
-        // Implement methods to access the database
-        // ========================================
-
-        public IsDatabaseConnectionOKMessage IsDatabaseConnectionOK()
-        {
-            try
-            {
-                using OdbcConnection connection = new(connectionString);
-                connection.Open();
-                int logOnOff = 0;
-                string SQLString = $"SELECT LogOnOff FROM Tables WHERE Section=1 AND [Table]=1";
-                OdbcCommand cmd = new(SQLString, connection);
-                ODBCRetryHelper.ODBCRetry(() =>
-                {
-                    logOnOff = Convert.ToInt32(cmd.ExecuteScalar());
-                });
-                SQLString = $"UPDATE Tables SET LogOnOff={logOnOff} WHERE Section=1 AND [Table]=1";
-                cmd = new OdbcCommand(SQLString, connection);
-                ODBCRetryHelper.ODBCRetry(() =>
-                {
-                    cmd.ExecuteNonQuery();
-                });
-                cmd.Dispose();
-            }
-            catch
-            {
-                return new IsDatabaseConnectionOKMessage() { IsDatabaseConnectionOK = false };
-            }
-            return new IsDatabaseConnectionOKMessage() { IsDatabaseConnectionOK = true };
-        }
-
-        // SECTION
-        public List<Section> GetSectionsList()
-        {
-            // Check if list of sections has been populated, and if so then just return it
-            if (sectionsList.Count >= 0) return sectionsList;
-
-            // No list of sections yet, so populate it
+            // Called only once when the webapp is first started.  It populates the static list of sections
+            sectionsList.Clear();
             using OdbcConnection connection = new(connectionString);
             connection.Open();
             string SQLString = "SELECT ID, Letter, [Tables], Winners, MissingPair FROM Section";
@@ -778,8 +717,77 @@ namespace GrpcServices
                     cmd = new OdbcCommand(SQLString, connection);
                     cmd.ExecuteNonQuery();
                 }
-            }
 
+                // Set number of rounds in the section from the movement 
+                object? queryResult = null;
+                SQLString = $"SELECT MAX(Round) FROM RoundData WHERE Section={section.ID}";
+                cmd = new(SQLString, connection);
+                try
+                {
+                    ODBCRetryHelper.ODBCRetry(() =>
+                    {
+                        queryResult = cmd.ExecuteScalar();
+                    });
+                    section.NumberOfRounds = Convert.ToInt32(queryResult);
+                }
+                catch 
+                {
+                    section.NumberOfRounds = 1;
+                }
+                
+                // Set number of devices per table
+                section.DevicesPerTable = 1;
+                if (message.TabletsMove)
+                {
+                    if (isIndividual)
+                    {
+                        section.DevicesPerTable = 4;
+                    }
+                    else
+                    {
+                        if (section.Winners == 1) section.DevicesPerTable = 2;
+                    }
+                }
+                section.CurrentRoundNumber = 1;
+            }
+            cmd.Dispose();
+        }
+
+        // ======================================== 
+        // Implement methods to access the database
+        // ========================================
+
+        public IsDatabaseConnectionOKMessage IsDatabaseConnectionOK()
+        {
+            try
+            {
+                using OdbcConnection connection = new(connectionString);
+                connection.Open();
+                int logOnOff = 0;
+                string SQLString = $"SELECT LogOnOff FROM Tables WHERE Section=1 AND [Table]=1";
+                OdbcCommand cmd = new(SQLString, connection);
+                ODBCRetryHelper.ODBCRetry(() =>
+                {
+                    logOnOff = Convert.ToInt32(cmd.ExecuteScalar());
+                });
+                SQLString = $"UPDATE Tables SET LogOnOff={logOnOff} WHERE Section=1 AND [Table]=1";
+                cmd = new OdbcCommand(SQLString, connection);
+                ODBCRetryHelper.ODBCRetry(() =>
+                {
+                    cmd.ExecuteNonQuery();
+                });
+                cmd.Dispose();
+            }
+            catch
+            {
+                return new IsDatabaseConnectionOKMessage() { IsDatabaseConnectionOK = false };
+            }
+            return new IsDatabaseConnectionOKMessage() { IsDatabaseConnectionOK = true };
+        }
+
+        // SECTION
+        public List<Section> GetSectionsList()
+        {
             return sectionsList;
         }
 
@@ -1778,8 +1786,8 @@ namespace GrpcServices
         {
             DatabaseSettings databaseSettings = new();
 
-            Section section = GetSection(new SectionIDMessage() { SectionID = message.SectionID });
-            if (message.RoundNumber != 0 && message.RoundNumber <= section.CurrentRoundNumber)
+            Section? section = sectionsList.Find(x => x.ID == message.SectionID);
+            if (message.RoundNumber != 0 && section != null && message.RoundNumber <= section.CurrentRoundNumber)
             {
                 databaseSettings.UpdateRequired = false;
                 return databaseSettings;   // No update required as already done for this round.  No update required is the default
@@ -1836,7 +1844,7 @@ namespace GrpcServices
                 GetNumberOfRoundsInSectionFromDatabase(message.SectionID);
 
                 // Update current round number for this section to prevent multiple refreshes 
-                if (message.RoundNumber > section.CurrentRoundNumber) section.CurrentRoundNumber = message.RoundNumber;
+                if (message.RoundNumber > section!.CurrentRoundNumber) section.CurrentRoundNumber = message.RoundNumber;
             }
 
             databaseSettings.UpdateRequired = true;

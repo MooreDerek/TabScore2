@@ -7,7 +7,7 @@ using TabScore2.SharedClasses;
 
 namespace TabScore2.DataServices
 {
-    public class Database(IBwsDatabaseService iClient, ISettings iSettings) : IDatabase
+    public class BwsDatabase(IBwsDatabaseService iClient, ISettings iSettings) : IDatabase
     {
         private readonly IBwsDatabaseService client = iClient;
         private readonly ISettings settings = iSettings;

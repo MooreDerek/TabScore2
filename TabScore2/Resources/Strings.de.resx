@@ -228,7 +228,7 @@
   <data name="ShowRankingList" xml:space="preserve">
     <value>Rangliste anzeigen</value>
   </data>
-  <data name="ShowPlayerIDs" xml:space="preserve">
+  <data name="ShowPlayerIds" xml:space="preserve">
     <value>Spieler-IDs anzeigen</value>
   </data>
   <data name="ShowMove" xml:space="preserve">
@@ -363,7 +363,7 @@
   <data name="Dealer" xml:space="preserve">
     <value>Teiler</value>
   </data>
-  <data name="EnterEditPlayerIDs" xml:space="preserve">
+  <data name="EnterEditPlayerIds" xml:space="preserve">
     <value>Spieler-IDs eingeben/bearbeiten</value>
   </data>
   <data name="EnterID" xml:space="preserve">
@@ -372,7 +372,7 @@
   <data name="EnterLead" xml:space="preserve">
     <value>Ausspiel eingeben</value>
   </data>
-  <data name="EnterPlayerIDs" xml:space="preserve">
+  <data name="EnterPlayerIds" xml:space="preserve">
     <value>Spieler-IDs eingeben</value>
   </data>
   <data name="EnterTricksTaken" xml:space="preserve">

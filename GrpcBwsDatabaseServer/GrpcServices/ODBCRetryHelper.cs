@@ -3,7 +3,7 @@
 
 using System.Data.Odbc;
 
-namespace GrpcServices
+namespace GrpcBwsDatabaseServer.GrpcServices
 {
     public static class ODBCRetryHelper
     {

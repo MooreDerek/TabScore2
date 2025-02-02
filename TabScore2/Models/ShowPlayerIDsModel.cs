@@ -5,7 +5,7 @@ using TabScore2.Classes;
 
 namespace TabScore2.Models
 {
-    public class ShowPlayerIDsModel(bool showWarning) : List<PlayerEntry>
+    public class ShowPlayerIdsModel(bool showWarning) : List<PlayerEntry>
     {
         public int NumberOfBlankEntries { get; set; } = 0;
         public bool ShowWarning { get; set; } = showWarning;

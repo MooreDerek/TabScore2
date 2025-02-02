@@ -1,12 +1,12 @@
 ﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
+using GrpcSharedContracts.SharedClasses;
 using Microsoft.AspNetCore.Mvc;
 using TabScore2.Classes;
 using TabScore2.DataServices;
 using TabScore2.Globals;
 using TabScore2.Models;
-using TabScore2.SharedClasses;
 using TabScore2.UtilityServices;
 
 namespace TabScore2.Controllers
@@ -28,21 +28,21 @@ namespace TabScore2.Controllers
             // Only show ranking list when settings criteria are met
             if (settings.ShowRanking != 1  
                || deviceStatus.RoundNumber <= settings.SuppressRankingListForFirstXRounds
-               || deviceStatus.RoundNumber > database.GetNumberOfRoundsInSection(deviceStatus.SectionID) - settings.SuppressRankingListForLastXRounds)
+               || deviceStatus.RoundNumber > database.GetNumberOfRoundsInSection(deviceStatus.SectionId) - settings.SuppressRankingListForLastXRounds)
             {
                 return RedirectToAction("Index", "ShowMove", new { newRoundNumber = deviceStatus.RoundNumber + 1 });
             }
 
-            ShowRankingListModel showRankingListModel = utilities.CreateRankingListModel(deviceNumber);
+            ShowRankingListModel showRankingListModel = utilities.CreateRankingListModel(deviceStatus);
             // Only show the ranking list if it contains something meaningful
             if (showRankingListModel.Count <= 1 || showRankingListModel[0].ScoreDecimal == 0.0)
             {
                 return RedirectToAction("Index", "ShowMove", new { newRoundNumber = deviceStatus.RoundNumber + 1 });
             }
 
-            ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
-            ViewData["Title"] = utilities.Title("ShowRankingList", TitleType.Location, deviceNumber);
-            ViewData["Header"] = utilities.Header(HeaderType.Round, deviceNumber);
+            ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceStatus);
+            ViewData["Title"] = utilities.Title("ShowRankingList", deviceStatus);
+            ViewData["Header"] = utilities.Header(HeaderType.Round, deviceStatus);
             if (deviceStatus.AtSitoutTable)
             {
                 // Can't go back to ShowBoards if it's a sitout and there are no boards to play, so no 'Back' button
@@ -71,9 +71,9 @@ namespace TabScore2.Controllers
         {
             int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
             if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
-
             DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
-            ShowRankingListModel showRankingListModel = utilities.CreateRankingListModel(deviceNumber);
+
+            ShowRankingListModel showRankingListModel = utilities.CreateRankingListModel(appData.GetDeviceStatus(deviceNumber));
             if (showRankingListModel.Count <= 1 && showRankingListModel[0].ScoreDecimal == 0.0)
             {
                 return RedirectToAction("Index", "EndScreen", new { deviceNumber });
@@ -81,8 +81,8 @@ namespace TabScore2.Controllers
             }
 
             showRankingListModel.FinalRankingList = true;
-            ViewData["Title"] = utilities.Title("ShowFinalRankingList", TitleType.Location, deviceNumber);
-            ViewData["Header"] = utilities.Header(HeaderType.Round, deviceNumber);
+            ViewData["Title"] = utilities.Title("ShowFinalRankingList", deviceStatus);
+            ViewData["Header"] = utilities.Header(HeaderType.Round, deviceStatus);
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
             if (settings.IsIndividual)
             {
@@ -102,8 +102,8 @@ namespace TabScore2.Controllers
         {
             int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? 0;
 
-            int sectionID = appData.GetDeviceStatus(deviceNumber).SectionID;
-            List<Ranking> rankingList = utilities.GetRankings(sectionID);
+            int sectionId = appData.GetDeviceStatus(deviceNumber).SectionId;
+            List<Ranking> rankingList = utilities.GetRankings(sectionId);
             return Json(rankingList);
         }
     }

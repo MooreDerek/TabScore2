@@ -1,12 +1,12 @@
 ﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
+using GrpcSharedContracts.SharedClasses;
 using Microsoft.AspNetCore.Mvc;
 using TabScore2.Classes;
 using TabScore2.DataServices;
 using TabScore2.Globals;
 using TabScore2.Models;
-using TabScore2.SharedClasses;
 using TabScore2.UtilityServices;
 
 namespace TabScore2.Controllers
@@ -29,16 +29,16 @@ namespace TabScore2.Controllers
             }
 
             DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
-            if (database.GetHand(deviceStatus.SectionID, boardNumber).NorthSpades != "###")
+            if (database.GetHand(deviceStatus.SectionId, boardNumber).NorthSpades != "###")
             {
                 // Hand record already exists, so no need to enter it
                 return RedirectToAction("Index", "ShowTraveller", new { boardNumber });
             }
             EnterHandRecordModel enterHandRecordModel = new(boardNumber);
             
-            ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
-            ViewData["Title"] = utilities.Title("EnterHandRecord", TitleType.Location, deviceNumber);
-            ViewData["Header"] = utilities.Header(HeaderType.FullColoured, deviceNumber, boardNumber);
+            ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceStatus);
+            ViewData["Title"] = utilities.Title("EnterHandRecord", deviceStatus);
+            ViewData["Header"] = utilities.Header(HeaderType.FullColoured, deviceStatus);
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabledAndBack;
             return View(enterHandRecordModel);
         }
@@ -47,11 +47,12 @@ namespace TabScore2.Controllers
         {
             int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
             if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
 
-            int boardNumber = appData.GetTableStatus(deviceNumber).ResultData.BoardNumber;
+            int boardNumber = appData.GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber).ResultData.BoardNumber;
             Hand hand = new()
             {
-                SectionID = appData.GetDeviceStatus(deviceNumber).SectionID,
+                SectionId = deviceStatus.SectionId,
                 BoardNumber = boardNumber,
                 NorthSpades = NS ?? "###",
                 NorthHearts = NH ?? string.Empty,

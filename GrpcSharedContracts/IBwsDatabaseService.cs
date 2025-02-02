@@ -1,11 +1,10 @@
 ﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
-using GrpcMessageClasses;
+using GrpcSharedContracts.SharedClasses;
 using System.ServiceModel;
-using TabScore2.SharedClasses;
 
-namespace GrpcServices
+namespace GrpcSharedContracts
 {
     [ServiceContract]
     public interface IBwsDatabaseService
@@ -17,14 +16,14 @@ namespace GrpcServices
 
         // SECTION
         [OperationContract] List<Section> GetSectionsList();
-        [OperationContract] Section GetSection(SectionIDMessage message);
+        [OperationContract] Section GetSection(SectionIdMessage message);
 
 
         // TABLE
         [OperationContract] void RegisterTable(SectionTableMessage message);
 
         // ROUND
-        [OperationContract] void UpdateNumberOfRoundsInSection(SectionIDMessage message);
+        [OperationContract] void UpdateNumberOfRoundsInSection(SectionIdMessage message);
         [OperationContract] NumberOfLastRoundWithResultsMessage GetNumberOfLastRoundWithResults(SectionTableMessage message);
         [OperationContract] List<Round> GetRoundsList(SectionRoundMessage message);
         [OperationContract] Round GetRound(SectionTableRoundMessage message);
@@ -54,6 +53,6 @@ namespace GrpcServices
         [OperationContract] void SetDatabaseSettings(DatabaseSettings databaseSettings);
 
         // RANKINGLIST
-        [OperationContract] List<Ranking> GetRankingList(SectionIDMessage message);
+        [OperationContract] List<Ranking> GetRankingList(SectionIdMessage message);
     }
 }

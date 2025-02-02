@@ -7,7 +7,7 @@ using TabScore2.Classes;
 using TabScore2.DataServices;
 using TabScore2.Globals;
 using TabScore2.UtilityServices;
-using TabScore2.SharedClasses;
+using GrpcSharedContracts.SharedClasses;
 
 namespace TabScore2.Controllers
 {
@@ -21,8 +21,9 @@ namespace TabScore2.Controllers
         {
             int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
             if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
-            
-            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
+
+            TableStatus tableStatus = appData.GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber);
             if (tableStatus.ResultData.BoardNumber == 0)  // Probably from browser 'Back' button.  Don't know boardNumber so go to ShowBoards
             {
                 return RedirectToAction("Index", "ShowBoards", new { deviceNumber });
@@ -30,9 +31,9 @@ namespace TabScore2.Controllers
 
             EnterContractModel enterContractModel = utilities.CreateEnterContractModel(tableStatus.ResultData, true);
 
-            ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
-            ViewData["Title"] = utilities.Title("ConfirmResult", TitleType.Location, deviceNumber);
-            ViewData["Header"] = utilities.Header(HeaderType.FullColoured, deviceNumber, tableStatus.ResultData.BoardNumber);
+            ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceStatus);
+            ViewData["Title"] = utilities.Title("ConfirmResult", deviceStatus);
+            ViewData["Header"] = utilities.Header(HeaderType.FullColoured, deviceStatus);
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabledAndBack;
             return View(enterContractModel);
         }
@@ -41,8 +42,9 @@ namespace TabScore2.Controllers
         {
             int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
             if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
-            
-            Result result = appData.GetTableStatus(deviceNumber).ResultData;
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
+
+            Result result = appData.GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber).ResultData;
             database.SetResult(result);
             return RedirectToAction("Index", "EnterHandRecord", new { boardNumber = result.BoardNumber });
         }
@@ -51,8 +53,9 @@ namespace TabScore2.Controllers
         {
             int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
             if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
-            
-            Result result = appData.GetTableStatus(deviceNumber).ResultData;
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
+
+            Result result = appData.GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber).ResultData;
             if (result.ContractLevel == 0)  // This was passed out, so Back goes all the way to Enter Contract screen
             {
                 return RedirectToAction("Index", "EnterContract", new { boardNumber = result.BoardNumber });

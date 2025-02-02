@@ -10,7 +10,7 @@ using TabScore2.UtilityServices;
 
 namespace TabScore2.Controllers
 {
-    public class EnterPlayerIDController(IDatabase iDatabase, IExternalNamesDatabase iExternalNamesDatabase, IAppData iAppData, IUtilities iUtilities, ISettings iSettings) : Controller
+    public class EnterPlayerIdController(IDatabase iDatabase, IExternalNamesDatabase iExternalNamesDatabase, IAppData iAppData, IUtilities iUtilities, ISettings iSettings) : Controller
     {
         private readonly IDatabase database = iDatabase;
         private readonly IExternalNamesDatabase externalNamesDatabase = iExternalNamesDatabase;
@@ -22,21 +22,23 @@ namespace TabScore2.Controllers
         {
             int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
             if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
-            
-            ViewData["Title"] = utilities.Title("EnterPlayerIDs", TitleType.Location, deviceNumber);
-            ViewData["Header"] = utilities.Header(HeaderType.Location, deviceNumber);
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
+
+            ViewData["Title"] = utilities.Title("EnterPlayerIds", deviceStatus);
+            ViewData["Header"] = utilities.Header(HeaderType.Location, deviceStatus);
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabled;
-            EnterPlayerIDModel enterPlayerIDModel = utilities.CreateEnterPlayerIDModel(direction);
-            return View(enterPlayerIDModel);
+            EnterPlayerIdModel enterPlayerIdModel = utilities.CreateEnterPlayerIdModel(direction);
+            return View(enterPlayerIdModel);
         }
 
-        public ActionResult OKButtonClick(Direction direction, string playerID)
+        public ActionResult OKButtonClick(Direction direction, string playerId)
         {
             int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
             if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
-            
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
+
             string playerName = string.Empty;
-            if (playerID == "0")
+            if (playerId == "0")
             {
                 playerName = "Unknown";
             }
@@ -45,25 +47,25 @@ namespace TabScore2.Controllers
                 switch (settings.NameSource)
                 {
                     case 0:
-                        playerName = database.GetInternalPlayerName(playerID);
+                        playerName = database.GetInternalPlayerName(playerId);
                         break;
                     case 1:
-                        playerName = externalNamesDatabase.GetExternalPlayerName(playerID);
+                        playerName = externalNamesDatabase.GetExternalPlayerName(playerId);
                         break;
                     case 2:
                         playerName = string.Empty;
                         break;
                     case 3:
-                        playerName = database.GetInternalPlayerName(playerID);
+                        playerName = database.GetInternalPlayerName(playerId);
                         if (playerName == string.Empty || playerName.Contains('#') || playerName.Contains("Unknown"))
                         {
-                            playerName = externalNamesDatabase.GetExternalPlayerName(playerID);
+                            playerName = externalNamesDatabase.GetExternalPlayerName(playerId);
                         }
                         break;
                 }
             }
 
-            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
+            TableStatus tableStatus = appData.GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber);
             string directionLetter = direction.ToString()[..1];    // Need just N, S, E or W
             int pairNumber = 0;
             switch (direction)
@@ -85,9 +87,9 @@ namespace TabScore2.Controllers
                     pairNumber = tableStatus.RoundData.NumberWest;
                     break;
             }
-            database.UpdatePlayer(tableStatus.SectionID, tableStatus.TableNumber, tableStatus.RoundNumber, directionLetter, pairNumber, playerID, playerName);
+            database.UpdatePlayer(tableStatus.SectionId, tableStatus.TableNumber, tableStatus.RoundNumber, directionLetter, pairNumber, playerId, playerName);
 
-            return RedirectToAction("Index", "ShowPlayerIDs");
+            return RedirectToAction("Index", "ShowPlayerIds");
         }
     }
 }

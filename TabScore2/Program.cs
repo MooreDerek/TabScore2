@@ -1,13 +1,13 @@
 // TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
-using GrpcServices;
+using GrpcSharedContracts;
+using GrpcSharedContracts.SharedClasses;
 using ProtoBuf.Grpc.ClientFactory;
 using System.Diagnostics;
 using System.Net;
 using TabScore2.DataServices;
 using TabScore2.Forms;
-using TabScore2.SharedClasses;
 using TabScore2.UtilityServices;
 
 namespace TabScore2

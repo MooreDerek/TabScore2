@@ -26,7 +26,7 @@
         bool DefaultManualHandRecordEntry { get; set; }
 
 
-        bool TabletsMove { get; set; }
+        bool DevicesMove { get; set; }
         string ShowHandRecordFromDirection { get; set; }
         bool ShowTimer { get; set; }
         int SecondsPerBoard { get; set; }

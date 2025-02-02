@@ -1,7 +1,7 @@
 ﻿<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore2.Models.EnterPlayerIDModel
+@model TabScore2.Models.EnterPlayerIdModel
 
 <style>
     .btn-numeric {
@@ -89,7 +89,7 @@
 </div>
 
 <script>
-    var urlOKButtonClick = '@Url.Action("OKButtonClick", "EnterPlayerID")?direction=@Model.Direction';
+    var urlOKButtonClick = '@Url.Action("OKButtonClick", "EnterPlayerId")?direction=@Model.Direction';
     var stringUnknown = '@localizer["Unknown"]';
 </script>
 <script src="~/js/EnterPlayerId.js"></script>

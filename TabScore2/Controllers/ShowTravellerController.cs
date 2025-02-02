@@ -21,26 +21,27 @@ namespace TabScore2.Controllers
         {
             int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
             if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
 
             if (!settings.ShowTraveller)
             {
                 return RedirectToAction("Index", "ShowBoards");
             }
 
-            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
+            TableStatus tableStatus = appData.GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber);
 
             // If ResultData doesn't exist, either from ShowBoards/View or browser 'Back' button, retrieve result
             if (tableStatus.ResultData.BoardNumber == 0)
             {
-                tableStatus.ResultData = database.GetResult(tableStatus.SectionID, tableStatus.TableNumber, tableStatus.RoundNumber, boardNumber);
+                tableStatus.ResultData = database.GetResult(tableStatus.SectionId, tableStatus.TableNumber, tableStatus.RoundNumber, boardNumber);
             }
            
-            ShowTravellerModel showTravellerModel = utilities.CreateShowTravellerModel(deviceNumber);
+            ShowTravellerModel showTravellerModel = utilities.CreateShowTravellerModel(deviceStatus);
             showTravellerModel.FromView = fromView;
 
-            ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
-            ViewData["Title"] = utilities.Title("ShowTraveller", TitleType.Location, deviceNumber);
-            ViewData["Header"] = utilities.Header(HeaderType.FullColoured, deviceNumber, tableStatus.ResultData.BoardNumber);
+            ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceStatus);
+            ViewData["Title"] = utilities.Title("ShowTraveller", deviceStatus);
+            ViewData["Header"] = utilities.Header(HeaderType.FullColoured, deviceStatus);
             if (fromView)
             {
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;

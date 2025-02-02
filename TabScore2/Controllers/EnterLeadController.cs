@@ -20,13 +20,14 @@ namespace TabScore2.Controllers
         {
             int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
             if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
-            
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
+
             if (!settings.EnterLeadCard)
             {
                 return RedirectToAction("Index", "EnterTricksTaken");
             }
 
-            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
+            TableStatus tableStatus = appData.GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber);
             if (tableStatus.ResultData.BoardNumber == 0)  // Probably from browser 'Back' button.  Don't know boardNumber so go to ShowBoards
             {
                 return RedirectToAction("Index", "ShowBoards");
@@ -42,9 +43,9 @@ namespace TabScore2.Controllers
             }
             EnterContractModel enterContractModel = utilities.CreateEnterContractModel(tableStatus.ResultData, false, tableStatus.LeadValidation);
 
-            ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
-            ViewData["Title"] = utilities.Title("EnterLead", TitleType.Location, deviceNumber);
-            ViewData["Header"] = utilities.Header(HeaderType.FullColoured, deviceNumber, tableStatus.ResultData.BoardNumber);
+            ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceStatus);
+            ViewData["Title"] = utilities.Title("EnterLead", deviceStatus);
+            ViewData["Header"] = utilities.Header(HeaderType.FullColoured, deviceStatus);
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabledAndBack;
             return View(enterContractModel);
         }
@@ -53,8 +54,9 @@ namespace TabScore2.Controllers
         {
             int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
             if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
 
-            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
+            TableStatus tableStatus = appData.GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber);
             if (tableStatus.LeadValidation != LeadValidationOptions.Validate || !settings.ValidateLeadCard || utilities.ValidateLead(tableStatus, card))
             {
                 tableStatus.ResultData.LeadCard = card;

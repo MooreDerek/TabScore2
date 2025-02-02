@@ -5,14 +5,16 @@ using TabScore2.Globals;
 
 namespace TabScore2.Classes
 {
-    public class DeviceStatus(int sectionID, int tableNumber, int pairNumber, int roundNumber, Direction direction)
+    public class DeviceStatus(int sectionId, string sectionLetter, int tableNumber, int pairNumber, int roundNumber, Direction direction)
     {
-        public int SectionID { get; private set; } = sectionID;
+        public int SectionId { get; private set; } = sectionId;
+        public string SectionLetter { get; set; } = sectionLetter;
         public int TableNumber { get; set; } = tableNumber;
         public int PairNumber { get; set; } = pairNumber;
         public Direction Direction { get; set; } = direction;
         public string? Location { get; set; }
         public int RoundNumber { get; set; } = roundNumber;
+        public int DevicesPerTable { get; set; } = 1;
         public bool NamesUpdateRequired { get; set; } = true;
         public bool AtSitoutTable { get; set; }
     }

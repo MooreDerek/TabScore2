@@ -5,7 +5,7 @@ namespace TabScore2.Classes
 {
     public class RoundTimer
     {
-        public int SectionID { get; set; }
+        public int SectionId { get; set; }
         public int RoundNumber { get; set; }
         public DateTime StartTime { get; set; }
         public int SecondsPerRound { get; set; }

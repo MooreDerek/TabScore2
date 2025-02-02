@@ -3,12 +3,12 @@
 
 using System.Runtime.Serialization;
 
-namespace TabScore2.SharedClasses
+namespace GrpcSharedContracts.SharedClasses
 {
     [DataContract]
     public class Hand
     {
-        [DataMember(Order = 1)] public int SectionID { get; set; }
+        [DataMember(Order = 1)] public int SectionId { get; set; }
         [DataMember(Order = 2)] public int BoardNumber { get; set; }
         [DataMember(Order = 3)] public string NorthSpades { get; set; } = string.Empty;
         [DataMember(Order = 4)] public string NorthHearts { get; set; } = string.Empty;

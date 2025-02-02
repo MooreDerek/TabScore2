@@ -304,7 +304,7 @@
   <data name="ErrorNotAllIDs" xml:space="preserve">
     <value>Seleccione un ID o ´Desconocido´para cada jugador</value>
   </data>
-  <data name="EnterEditPlayerIDs" xml:space="preserve">
+  <data name="EnterEditPlayerIds" xml:space="preserve">
     <value>Introducir/editar ID de jugador</value>
   </data>
   <data name="NeedAllIDs" xml:space="preserve">
@@ -373,7 +373,7 @@
   <data name="Table" xml:space="preserve">
     <value>Mesa</value>
   </data>
-  <data name="EnterPlayerIDs" xml:space="preserve">
+  <data name="EnterPlayerIds" xml:space="preserve">
     <value>Ingresar ID de jugadores</value>
   </data>
   <data name="ErrorScreen" xml:space="preserve">
@@ -385,7 +385,7 @@
   <data name="ShowHandRecord" xml:space="preserve">
     <value>Mostrar registro de la mano</value>
   </data>
-  <data name="ShowPlayerIDs" xml:space="preserve">
+  <data name="ShowPlayerIds" xml:space="preserve">
     <value>Mostrar ID de jugador</value>
   </data>
   <data name="ShowRankingList" xml:space="preserve">

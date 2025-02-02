@@ -171,7 +171,7 @@
   <data name="EnterContract" xml:space="preserve">
     <value>Enter contract</value>
   </data>
-  <data name="EnterEditPlayerIDs" xml:space="preserve">
+  <data name="EnterEditPlayerIds" xml:space="preserve">
     <value>Enter/edit player IDs</value>
   </data>
   <data name="EnterID" xml:space="preserve">
@@ -180,7 +180,7 @@
   <data name="EnterLead" xml:space="preserve">
     <value>Enter lead</value>
   </data>
-  <data name="EnterPlayerIDs" xml:space="preserve">
+  <data name="EnterPlayerIds" xml:space="preserve">
     <value>Enter player IDs</value>
   </data>
   <data name="EnterTricksTaken" xml:space="preserve">
@@ -360,7 +360,7 @@
   <data name="ShowMove" xml:space="preserve">
     <value>Show move</value>
   </data>
-  <data name="ShowPlayerIDs" xml:space="preserve">
+  <data name="ShowPlayerIds" xml:space="preserve">
     <value>Show player IDs</value>
   </data>
   <data name="ShowRankingList" xml:space="preserve">

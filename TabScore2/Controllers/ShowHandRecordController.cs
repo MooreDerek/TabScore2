@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using Microsoft.AspNetCore.Mvc;
+using TabScore2.Classes;
 using TabScore2.DataServices;
 using TabScore2.Globals;
 using TabScore2.Models;
@@ -18,14 +19,15 @@ namespace TabScore2.Controllers
         {
             int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
             if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
-            
-            ShowHandRecordModel? showHandRecordModel = utilities.CreateShowHandRecordModel(deviceNumber, boardNumber);
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
+
+            ShowHandRecordModel? showHandRecordModel = utilities.CreateShowHandRecordModel(deviceStatus, boardNumber);
             if (showHandRecordModel == null) return RedirectToAction("Index", "ShowTraveller", new { boardNumber });
 
             showHandRecordModel.FromView = fromView;
-            ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceNumber);
-            ViewData["Title"] = utilities.Title("ShowHandRecord", TitleType.Location, deviceNumber);
-            ViewData["Header"] = utilities.Header(HeaderType.FullColoured, deviceNumber, boardNumber);
+            ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceStatus);
+            ViewData["Title"] = utilities.Title("ShowHandRecord", deviceStatus);
+            ViewData["Header"] = utilities.Header(HeaderType.FullColoured, deviceStatus);
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
             return View(showHandRecordModel);
         }

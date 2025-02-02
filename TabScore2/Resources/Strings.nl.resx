@@ -201,7 +201,7 @@
   <data name="EnterContract" xml:space="preserve">
     <value>Contract invoeren</value>
   </data>
-  <data name="EnterEditPlayerIDs" xml:space="preserve">
+  <data name="EnterEditPlayerIds" xml:space="preserve">
     <value>Speler-ID invoeren/wijzigen</value>
   </data>
   <data name="EnterHandRecord" xml:space="preserve">
@@ -216,7 +216,7 @@
   <data name="EnterLead" xml:space="preserve">
     <value>Uitkomst invoeren</value>
   </data>
-  <data name="EnterPlayerIDs" xml:space="preserve">
+  <data name="EnterPlayerIds" xml:space="preserve">
     <value>Speler-ID's invoeren</value>
   </data>
   <data name="EnterTricksTaken" xml:space="preserve">
@@ -420,7 +420,7 @@
   <data name="ShowMove" xml:space="preserve">
     <value>Toon volgende verplaatsing</value>
   </data>
-  <data name="ShowPlayerIDs" xml:space="preserve">
+  <data name="ShowPlayerIds" xml:space="preserve">
     <value>Toon speler-ID's</value>
   </data>
   <data name="ShowRankingList" xml:space="preserve">

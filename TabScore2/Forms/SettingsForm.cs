@@ -37,8 +37,8 @@ namespace TabScore2.Forms
             EnterResultsMethodCombobox.SelectedIndex = settings.EnterResultsMethod;
             ManualHandEntryCheckbox.Checked = settings.ManualHandRecordEntry;
 
-            TabletModePersonalRadioButton.Checked = settings.TabletsMove;
-            TabletModeTraditionalRadioButton.Checked = !settings.TabletsMove;
+            TabletModePersonalRadioButton.Checked = settings.DevicesMove;
+            TabletModeTraditionalRadioButton.Checked = !settings.DevicesMove;
             FromPerspectiveOfCombobox.SelectedIndex = fromDirection.FindIndex(x => x == settings.ShowHandRecordFromDirection);
             ShowTimerCheckbox.Checked = settings.ShowTimer;
             MinutesPerBoardNud.Value = Convert.ToDecimal(settings.SecondsPerBoard) / 60;
@@ -77,7 +77,7 @@ namespace TabScore2.Forms
             settings.EnterResultsMethod = settings.DefaultEnterResultsMethod = EnterResultsMethodCombobox.SelectedIndex;
             settings.ManualHandRecordEntry = settings.DefaultManualHandRecordEntry = ManualHandEntryCheckbox.Checked;
 
-            settings.TabletsMove = TabletModePersonalRadioButton.Checked;
+            settings.DevicesMove = TabletModePersonalRadioButton.Checked;
             settings.ShowHandRecordFromDirection = fromDirection[FromPerspectiveOfCombobox.SelectedIndex];
             settings.ShowTimer = ShowTimerCheckbox.Checked;
             settings.SecondsPerBoard = Convert.ToInt32(MinutesPerBoardNud.Value * 60);

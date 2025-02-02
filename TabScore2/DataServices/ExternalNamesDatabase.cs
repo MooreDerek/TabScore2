@@ -1,8 +1,7 @@
 ﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
-using GrpcMessageClasses;
-using GrpcServices;
+using GrpcSharedContracts;
 
 namespace TabScore2.DataServices
 {
@@ -10,9 +9,9 @@ namespace TabScore2.DataServices
     {
         private readonly IExternalNamesDatabaseService client = iClient;
 
-        public string GetExternalPlayerName(string playerID)
+        public string GetExternalPlayerName(string playerId)
         {
-            return client!.GetExternalPlayerName(new PlayerMessage() { PlayerID = playerID }).PlayerName;
+            return client!.GetExternalPlayerName(new PlayerMessage() { PlayerId = playerId }).PlayerName;
         }
     }
 }

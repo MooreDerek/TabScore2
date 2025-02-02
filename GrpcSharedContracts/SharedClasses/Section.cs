@@ -3,18 +3,17 @@
 
 using System.Runtime.Serialization;
 
-namespace TabScore2.SharedClasses
+namespace GrpcSharedContracts.SharedClasses
 {
-    [DataContract] 
+    [DataContract]
     public class Section
     {
-        [DataMember(Order = 1)] public int ID { get; set; }
-        [DataMember(Order = 2)] public string Letter { get; set; } = string.Empty;
-        [DataMember(Order = 3)] public int Tables { get; set; }
+        [DataMember(Order = 1)] public int SectionId { get; set; }
+        [DataMember(Order = 2)] public string SectionLetter { get; set; } = string.Empty;
+        [DataMember(Order = 3)] public int NumberOfTables { get; set; }
         [DataMember(Order = 4)] public int MissingPair { get; set; }
         [DataMember(Order = 5)] public int Winners { get; set; }
-        [DataMember(Order = 6)] public int DevicesPerTable { get; set; }
-        [DataMember(Order = 7)] public int CurrentRoundNumber { get; set; }
-        [DataMember(Order = 8)] public int NumberOfRounds { get; set; }
+        [DataMember(Order = 6)] public int CurrentRoundNumber { get; set; }
+        [DataMember(Order = 7)] public int NumberOfRounds { get; set; }
     }
 }

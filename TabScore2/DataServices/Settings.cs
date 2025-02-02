@@ -74,9 +74,9 @@ namespace TabScore2.DataServices
         }
 
         // Application property settings
-        public bool TabletsMove {
-            get { return Properties.Settings.Default.TabletsMove; }
-            set { Properties.Settings.Default.TabletsMove = value; Properties.Settings.Default.Save(); }
+        public bool DevicesMove {
+            get { return Properties.Settings.Default.DevicesMove; }
+            set { Properties.Settings.Default.DevicesMove = value; Properties.Settings.Default.Save(); }
         }
         public string ShowHandRecordFromDirection
         {

@@ -1,17 +1,17 @@
 ﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
+using GrpcSharedContracts.SharedClasses;
 using Microsoft.AspNetCore.Mvc;
 using TabScore2.Classes;
 using TabScore2.DataServices;
 using TabScore2.Globals;
 using TabScore2.Models;
-using TabScore2.SharedClasses;
 using TabScore2.UtilityServices;
 
 namespace TabScore2.Controllers
 {
-    public class ShowPlayerIDsController(IDatabase iDatabase, IAppData iAppData, ISettings iSettings, IUtilities iUtilities) : Controller
+    public class ShowPlayerIdsController(IDatabase iDatabase, IAppData iAppData, ISettings iSettings, IUtilities iUtilities) : Controller
     {
         private readonly IDatabase database = iDatabase;
         private readonly IAppData appData = iAppData;
@@ -22,13 +22,12 @@ namespace TabScore2.Controllers
         {
             int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
             if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
-
             DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
-            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
+            TableStatus tableStatus = appData.GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber);
 
             if (deviceStatus.NamesUpdateRequired) {
                 // Update names from database if not done very recently
-                Names names = database.GetNamesForRound(tableStatus.SectionID, tableStatus.RoundNumber, tableStatus.RoundData.NumberNorth, tableStatus.RoundData.NumberEast, tableStatus.RoundData.NumberSouth, tableStatus.RoundData.NumberWest);
+                Names names = database.GetNamesForRound(tableStatus.SectionId, tableStatus.RoundNumber, tableStatus.RoundData.NumberNorth, tableStatus.RoundData.NumberEast, tableStatus.RoundData.NumberSouth, tableStatus.RoundData.NumberWest);
                 tableStatus.RoundData.NameNorth = names.NameNorth;
                 tableStatus.RoundData.NameEast = names.NameEast;
                 tableStatus.RoundData.NameSouth = names.NameSouth;
@@ -44,25 +43,29 @@ namespace TabScore2.Controllers
             }
             deviceStatus.NamesUpdateRequired = true;  // We'll now need to update when we get to RoundInfo in case names change in the mean time
 
-            ShowPlayerIDsModel showplayerIDsModel = utilities.CreateShowPlayerIDsModel(deviceNumber, showWarning);
-            ViewData["Title"] = utilities.Title("ShowPlayerIDs", TitleType.Location, deviceNumber);
-            ViewData["Header"] = utilities.Header(HeaderType.Round, deviceNumber);
+            ShowPlayerIdsModel showplayerIdsModel = utilities.CreateShowPlayerIdsModel(deviceStatus, showWarning);
+            ViewData["Title"] = utilities.Title("ShowPlayerIds", deviceStatus);
+            ViewData["Header"] = utilities.Header(HeaderType.Round, deviceStatus);
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
 
             if (settings.IsIndividual)
             {
-                return View("Individual", showplayerIDsModel);
+                return View("Individual", showplayerIdsModel);
             }
             else
             {
-                return View("Pair", showplayerIDsModel);
+                return View("Pair", showplayerIdsModel);
             }
         }
 
-        public ActionResult OKButtonClick(int deviceNumber)
+        public ActionResult OKButtonClick()
         {
-            TableStatus tableStatus = appData.GetTableStatus(deviceNumber);
-            Names names = database.GetNamesForRound(tableStatus.SectionID, tableStatus.RoundNumber, tableStatus.RoundData.NumberNorth, tableStatus.RoundData.NumberEast, tableStatus.RoundData.NumberSouth, tableStatus.RoundData.NumberWest);
+            int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
+            if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
+            TableStatus tableStatus = appData.GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber);
+
+            Names names = database.GetNamesForRound(tableStatus.SectionId, tableStatus.RoundNumber, tableStatus.RoundData.NumberNorth, tableStatus.RoundData.NumberEast, tableStatus.RoundData.NumberSouth, tableStatus.RoundData.NumberWest);
             tableStatus.RoundData.NameNorth = names.NameNorth;
             tableStatus.RoundData.NameEast = names.NameEast;
             tableStatus.RoundData.NameSouth = names.NameSouth;
@@ -78,7 +81,7 @@ namespace TabScore2.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "ShowPlayerIDs", new { showWarning = true });
+                return RedirectToAction("Index", "ShowPlayerIds", new { showWarning = true });
             }
         }
     }

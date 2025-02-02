@@ -344,7 +344,7 @@ tablet device at your current location</value>
     <value>Please select an ID or 'Unknown' for all players</value>
     <comment>@MutedRule(PunctuationTail)</comment>
   </data>
-  <data name="EnterEditPlayerIDs" xml:space="preserve">
+  <data name="EnterEditPlayerIds" xml:space="preserve">
     <value>Enter/edit player IDs</value>
   </data>
   <data name="NeedAllIDs" xml:space="preserve">
@@ -419,7 +419,7 @@ tablet device at your current location</value>
   <data name="Table" xml:space="preserve">
     <value>Table</value>
   </data>
-  <data name="EnterPlayerIDs" xml:space="preserve">
+  <data name="EnterPlayerIds" xml:space="preserve">
     <value>Enter player IDs</value>
   </data>
   <data name="ErrorScreen" xml:space="preserve">
@@ -431,7 +431,7 @@ tablet device at your current location</value>
   <data name="ShowHandRecord" xml:space="preserve">
     <value>Show hand record</value>
   </data>
-  <data name="ShowPlayerIDs" xml:space="preserve">
+  <data name="ShowPlayerIds" xml:space="preserve">
     <value>Show player IDs</value>
   </data>
   <data name="ShowRankingList" xml:space="preserve">

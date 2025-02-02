@@ -1,13 +1,13 @@
 ﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
+using GrpcSharedContracts.SharedClasses;
 using Microsoft.Extensions.Localization;
 using System.Diagnostics;
 using System.Net;
 using System.Reflection;
 using TabScore2.DataServices;
 using TabScore2.Resources;
-using TabScore2.SharedClasses;
 
 namespace TabScore2.Forms
 {
@@ -235,7 +235,7 @@ namespace TabScore2.Forms
                 if (newBoard)
                 {
                     newBoard = false;
-                    Hand hand = new() { SectionID = 1, BoardNumber = Convert.ToInt32(line!.Split(quoteDelimiter)[1]), NorthSpades = "###" };
+                    Hand hand = new() { SectionId = 1, BoardNumber = Convert.ToInt32(line!.Split(quoteDelimiter)[1]), NorthSpades = "###" };
                     while ((line = file.ReadLine()) != null)
                     {
                         if (line.Length > 6 && line[..6] == "[Deal ")

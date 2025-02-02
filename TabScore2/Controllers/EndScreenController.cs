@@ -7,7 +7,7 @@ using TabScore2.DataServices;
 using TabScore2.Globals;
 using TabScore2.UtilityServices;
 
-namespace TabScore.Controllers
+namespace TabScore2.Controllers
 {
     public class EndScreenController(IDatabase iDatabase, IAppData iAppData, IUtilities iUtilities) : Controller
     {
@@ -19,9 +19,10 @@ namespace TabScore.Controllers
         {
             int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
             if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
-            
-            ViewData["Header"] = utilities.Header(HeaderType.Location, deviceNumber);
-            ViewData["Title"] = utilities.Title("EndScreen", TitleType.Location, deviceNumber);
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
+
+            ViewData["Header"] = utilities.Header(HeaderType.Location, deviceStatus);
+            ViewData["Title"] = utilities.Title("EndScreen", deviceStatus);
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
             return View();
         }
@@ -33,7 +34,7 @@ namespace TabScore.Controllers
 
             // Check if new round has been added; can't apply to individuals
             DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
-            if (deviceStatus.RoundNumber == database.GetNumberOfRoundsInSection(deviceStatus.SectionID, true))   // Force database read
+            if (deviceStatus.RoundNumber == database.GetNumberOfRoundsInSection(deviceStatus.SectionId, true))   // Force database read
             {
                 // Final round, so no new rounds added
                 return RedirectToAction("Index", "EndScreen");

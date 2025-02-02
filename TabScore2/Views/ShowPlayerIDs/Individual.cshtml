@@ -1,7 +1,7 @@
 ﻿<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore2.Models.ShowPlayerIDsModel
+@model TabScore2.Models.ShowPlayerIdsModel
 
 <div id="notAllNamesModal" class="modal fade">
     <div class="modal-dialog">
@@ -26,7 +26,7 @@
 <div class="row mt-4">
     <div class="col-12 text-center p-0">
         <h2>
-            @localizer["EnterEditPlayerIDs"]
+            @localizer["EnterEditPlayerIds"]
         </h2>
     </div>
 </div>
@@ -47,13 +47,13 @@
         <div class="col-4">
             @if (playerEntry.DisplayName == string.Empty)
             {
-                <button class="btn btn-primary btn-lg m-1 px-1" style="min-width: 4.8rem" ontouchstart="touchAvailable = true; EnterPlayerID('@playerEntry.Direction')" onclick="if (!touchAvailable) EnterPlayerID('@playerEntry.Direction')">
+                <button class="btn btn-primary btn-lg m-1 px-1" style="min-width: 4.8rem" ontouchstart="touchAvailable = true; EnterPlayerId('@playerEntry.Direction')" onclick="if (!touchAvailable) EnterPlayerId('@playerEntry.Direction')">
                     @localizer["Enter"]
                 </button>
             }
             else
             {
-                <button class="btn btn-info btn-lg m-1 px-1" style="min-width: 4.8rem" ontouchstart="touchAvailable = true; EnterPlayerID('@playerEntry.Direction')" onclick="if (!touchAvailable) EnterPlayerID('@playerEntry.Direction')">
+                <button class="btn btn-info btn-lg m-1 px-1" style="min-width: 4.8rem" ontouchstart="touchAvailable = true; EnterPlayerId('@playerEntry.Direction')" onclick="if (!touchAvailable) EnterPlayerId('@playerEntry.Direction')">
                     @localizer["Edit"]
                 </button>
             }
@@ -121,15 +121,15 @@
         else {
             if (!isSubmitted) {
                 isSubmitted = true;
-                location.href = '@Url.Action("OKButtonClick", "ShowPlayerIDs")';
+                location.href = '@Url.Action("OKButtonClick", "ShowPlayerIds")';
             }
         }
     }
 
-    function EnterPlayerID(direction) {
+    function EnterPlayerId(direction) {
             if (!isSubmitted) {
                 isSubmitted = true;
-                location.href = '@Url.Action("Index", "EnterPlayerID")?direction=' + direction;
+                location.href = '@Url.Action("Index", "EnterPlayerId")?direction=' + direction;
             }
     }
 </script>

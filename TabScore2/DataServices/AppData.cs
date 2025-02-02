@@ -1,14 +1,13 @@
 ﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
+using GrpcSharedContracts.SharedClasses;
 using Microsoft.Extensions.Localization;
-using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 using TabScore2.Classes;
 using TabScore2.Globals;
 using TabScore2.Resources;
-using TabScore2.SharedClasses;
 
 namespace TabScore2.DataServices
 {
@@ -29,32 +28,27 @@ namespace TabScore2.DataServices
         // TABLESTATUS
         private static readonly List<TableStatus> tableStatusList = [];
 
-        public bool TableStatusExists(int sectionID, int tableNumber)
+        public bool TableStatusExists(int sectionId, int tableNumber)
         {
-            return tableStatusList.Any(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
+            return tableStatusList.Any(x => x.SectionId == sectionId && x.TableNumber == tableNumber);
         }
 
-        public TableStatus GetTableStatus(int deviceNumber)
+        public TableStatus GetTableStatus(int sectionId, int tableNumber)
         {
-            return tableStatusList.First(x => x.SectionID == deviceStatusList[deviceNumber].SectionID && x.TableNumber == deviceStatusList[deviceNumber].TableNumber);
-        }
-
-        public TableStatus GetTableStatus(int sectionID, int tableNumber)
-        {
-            TableStatus? tableStatus = tableStatusList.Find(x => x.SectionID == sectionID && x.TableNumber == tableNumber);
+            TableStatus? tableStatus = tableStatusList.Find(x => x.SectionId == sectionId && x.TableNumber == tableNumber);
             if (tableStatus == null)
             {
-                tableStatus = new TableStatus(sectionID, tableNumber, database.GetNumberOfLastRoundWithResults(sectionID, tableNumber));
+                tableStatus = new TableStatus(sectionId, tableNumber, database.GetNumberOfLastRoundWithResults(sectionId, tableNumber));
                 tableStatusList.Add(tableStatus);
             }
             return tableStatus;
         }
 
-        public void UpdateTableStatus(int sectionID, int tableNumber, int roundNumber)
+        public void UpdateTableStatus(int sectionId, int tableNumber, int roundNumber)
         {
-            TableStatus tableStatus = GetTableStatus(sectionID, tableNumber)!;
+            TableStatus tableStatus = GetTableStatus(sectionId, tableNumber)!;
             tableStatus.RoundNumber = roundNumber;
-            tableStatus.RoundData = database.GetRound(sectionID, tableNumber, roundNumber);
+            tableStatus.RoundData = database.GetRound(sectionId, tableNumber, roundNumber);
             tableStatus.ReadyForNextRoundNorth = false;
             tableStatus.ReadyForNextRoundSouth = false;
             tableStatus.ReadyForNextRoundEast = false;
@@ -64,9 +58,9 @@ namespace TabScore2.DataServices
         // DEVICESTATUS
         private static readonly List<DeviceStatus> deviceStatusList = [];
 
-        public bool DeviceStatusExists(int sectionID, int tableNumber, Direction direction = Direction.North)
+        public bool DeviceStatusExists(int sectionId, int tableNumber, Direction direction = Direction.North)
         {
-            return deviceStatusList.Any(x => x.SectionID == sectionID && x.TableNumber == tableNumber && x.Direction == direction);
+            return deviceStatusList.Any(x => x.SectionId == sectionId && x.TableNumber == tableNumber && x.Direction == direction);
         }
 
         public DeviceStatus GetDeviceStatus(int deviceNumber)
@@ -74,14 +68,14 @@ namespace TabScore2.DataServices
             return deviceStatusList[deviceNumber];
         }
 
-        public DeviceStatus GetDeviceStatus(int sectionID, int tableNumber, Direction direction = Direction.North)
+        public DeviceStatus GetDeviceStatus(int sectionId, int tableNumber, Direction direction = Direction.North)
         {
-            return deviceStatusList.First(x => x.SectionID == sectionID && x.TableNumber == tableNumber && x.Direction == direction);
+            return deviceStatusList.First(x => x.SectionId == sectionId && x.TableNumber == tableNumber && x.Direction == direction);
         }
 
-        public void AddDeviceStatus(int sectionID, int tableNumber, int pairNumber, int roundNumber, Direction direction = Direction.North)
+        public void AddDeviceStatus(int sectionId, int tableNumber, int pairNumber, int roundNumber, Direction direction = Direction.North)
         {
-            DeviceStatus deviceStatus = new(sectionID, tableNumber, pairNumber, roundNumber, direction);
+            DeviceStatus deviceStatus = new(sectionId, database.GetSection(sectionId).SectionLetter, tableNumber, pairNumber, roundNumber, direction);
             SetDeviceStatusLocation(deviceStatus);
             deviceStatusList.Add(deviceStatus);
         }
@@ -102,9 +96,8 @@ namespace TabScore2.DataServices
 
         private void SetDeviceStatusLocation(DeviceStatus deviceStatus)
         {
-            Section section = database.GetSection(deviceStatus.SectionID);
-            deviceStatus.Location = section.Letter + deviceStatus.TableNumber.ToString();
-            if (section.DevicesPerTable == 4)
+            deviceStatus.Location = deviceStatus.SectionLetter + deviceStatus.TableNumber.ToString();
+            if (deviceStatus.DevicesPerTable == 4)
             {
                 deviceStatus.Location += " ";
                 switch (deviceStatus.Direction)
@@ -126,7 +119,7 @@ namespace TabScore2.DataServices
                         break;
                 }
             }
-            else if (section.DevicesPerTable == 2)
+            else if (deviceStatus.DevicesPerTable == 2)
             {
                 if (deviceStatus.Direction == Direction.North)
                 {
@@ -142,20 +135,19 @@ namespace TabScore2.DataServices
 
         // ROUNDTIMER
         private static readonly List<RoundTimer> roundTimerList = [];
-        public int GetTimerSeconds(int deviceNumber)
+        public int GetTimerSeconds(DeviceStatus deviceStatus)
         {
             if (!settings.ShowTimer) return -1;  // Don't show timer
-            DeviceStatus deviceStatus = deviceStatusList[deviceNumber];
-            RoundTimer? roundTimer = roundTimerList.Find(x => x.SectionID == deviceStatus.SectionID && x.RoundNumber == deviceStatus.RoundNumber);
+            RoundTimer? roundTimer = roundTimerList.Find(x => x.SectionId == deviceStatus.SectionId && x.RoundNumber == deviceStatus.RoundNumber);
             if (roundTimer == null)  // Round not yet started, so create initial timer data for this section and round 
             {
                 if (deviceStatus.TableNumber == 0) return -1;  // At a phantom table, so can't create timer data
                 DateTime startTime = DateTime.Now;
-                TableStatus tableStatus = GetTableStatus(deviceNumber);
+                TableStatus tableStatus = GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber);
                 int secondsPerRound = (tableStatus.RoundData.HighBoard - tableStatus.RoundData.LowBoard + 1) * settings.SecondsPerBoard + settings.AdditionalSecondsPerRound;
                 roundTimerList.Add(new RoundTimer
                 {
-                    SectionID = deviceStatus.SectionID,
+                    SectionId = deviceStatus.SectionId,
                     RoundNumber = deviceStatus.RoundNumber,
                     StartTime = startTime,
                     SecondsPerRound = secondsPerRound
@@ -180,9 +172,9 @@ namespace TabScore2.DataServices
             handEvaluationsList.Clear();
         }
 
-        public HandEvaluation? GetHandEvaluation(int sectionID, int boardNumber)
+        public HandEvaluation? GetHandEvaluation(int sectionId, int boardNumber)
         {
-            return handEvaluationsList.Find(x => x.SectionID == sectionID && x.BoardNumber == boardNumber);
+            return handEvaluationsList.Find(x => x.SectionId == sectionId && x.BoardNumber == boardNumber);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>")]
@@ -206,7 +198,7 @@ namespace TabScore2.DataServices
         public void AddHandEvaluation(Hand hand)
         {
             if (hand.BoardNumber == 0 || hand.NorthSpades == "###") return;  // No valid hand
-            HandEvaluation handEvaluation = new(hand.SectionID, hand.BoardNumber);
+            HandEvaluation handEvaluation = new(hand.SectionId, hand.BoardNumber);
 
             StringBuilder pbnString = new();
             switch ((hand.BoardNumber - 1) % 4)
@@ -454,7 +446,7 @@ namespace TabScore2.DataServices
             handEvaluation.SouthHcp = southHcp;
             handEvaluation.WestHcp = westHcp;
 
-            handEvaluationsList.RemoveAll(x => x.SectionID == hand.SectionID && x.BoardNumber == hand.BoardNumber);
+            handEvaluationsList.RemoveAll(x => x.SectionId == hand.SectionId && x.BoardNumber == hand.BoardNumber);
             handEvaluationsList.Add(handEvaluation);
         }
     }

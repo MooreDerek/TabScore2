@@ -3,17 +3,18 @@
 
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using TabScore2.DataServices;
 using TabScore2.Globals;
-using TabScore2.UtilityServices;
+using TabScore2.Resources;
 
-namespace TabScore.Controllers
+namespace TabScore2.Controllers
 {
-    public class ErrorScreenController(IDatabase iDatabase, IUtilities iUtilities) : Controller
+    public class ErrorScreenController(IStringLocalizer<Strings> iLocalizer, IDatabase iDatabase) : Controller
     {
+        private readonly IStringLocalizer<Strings> localizer = iLocalizer;
         private readonly IDatabase database = iDatabase;
-        private readonly IUtilities utilities = iUtilities;
-        
+
         public ActionResult Index()
         {
             IExceptionHandlerFeature? exceptionFeature = HttpContext.Features.Get<IExceptionHandlerFeature>();
@@ -31,7 +32,7 @@ namespace TabScore.Controllers
                 outputFile.Close();
             }
 
-            ViewData["Title"] = utilities.Title("ErrorScreen");
+            ViewData["Title"] = localizer["ErrorScreen"];
             ViewData["Header"] = string.Empty;
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;
             return View();
@@ -39,7 +40,7 @@ namespace TabScore.Controllers
 
         public ActionResult OKButtonClick()
         {
-           if (database.IsDatabaseConnectionOK())  // Successful database read/write, so must have been a temporary glitch
+            if (database.IsDatabaseConnectionOK())  // Successful database read/write, so must have been a temporary glitch
             {
                 return RedirectToAction("Index", "SelectSection");  // Need to re-establish Section/TableNumber/Direction for this tablet device
             }

@@ -3,7 +3,7 @@
 
 using System.Runtime.Serialization;
 
-namespace GrpcMessageClasses
+namespace GrpcSharedContracts
 {
     [DataContract]
     public class InitializeMessage
@@ -47,9 +47,9 @@ namespace GrpcMessageClasses
     }
 
     [DataContract]
-    public class SectionIDMessage
+    public class SectionIdMessage
     {
-        [DataMember(Order = 1)] public int SectionID { get; set; }
+        [DataMember(Order = 1)] public int SectionId { get; set; }
     }
 
     [DataContract]
@@ -67,7 +67,7 @@ namespace GrpcMessageClasses
     [DataContract]
     public class PlayerMessage
     {
-        [DataMember(Order = 1)] public string PlayerID { get; set; } = string.Empty;
+        [DataMember(Order = 1)] public string PlayerId { get; set; } = string.Empty;
     }
 
     [DataContract]
@@ -85,34 +85,34 @@ namespace GrpcMessageClasses
     [DataContract]
     public class SectionTableMessage
     {
-        [DataMember(Order = 1)] public int SectionID { get; set; }
+        [DataMember(Order = 1)] public int SectionId { get; set; }
         [DataMember(Order = 2)] public int TableNumber { get; set; }
     }
 
     [DataContract]
     public class SectionRoundMessage
     {
-        [DataMember(Order = 1)] public int SectionID { get; set; }
+        [DataMember(Order = 1)] public int SectionId { get; set; }
         [DataMember(Order = 2)] public int RoundNumber { get; set; }
     }
     [DataContract]
     public class SectionBoardMessage
     {
-        [DataMember(Order = 1)] public int SectionID { get; set; }
+        [DataMember(Order = 1)] public int SectionId { get; set; }
         [DataMember(Order = 2)] public int BoardNumber { get; set; }
     }
 
     [DataContract]
     public class SectionTableRoundMessage
     {
-        [DataMember(Order = 1)] public int SectionID { get; set; }
+        [DataMember(Order = 1)] public int SectionId { get; set; }
         [DataMember(Order = 2)] public int TableNumber { get; set; }
         [DataMember(Order = 3)] public int RoundNumber { get; set; }
     }
     [DataContract]
     public class SectionTableRoundBoardMessage
     {
-        [DataMember(Order = 1)] public int SectionID { get; set; }
+        [DataMember(Order = 1)] public int SectionId { get; set; }
         [DataMember(Order = 2)] public int TableNumber { get; set; }
         [DataMember(Order = 3)] public int RoundNumber { get; set; }
         [DataMember(Order = 4)] public int BoardNumber { get; set; }
@@ -121,7 +121,7 @@ namespace GrpcMessageClasses
     [DataContract]
     public class ResultsListMessage
     {
-        [DataMember(Order = 1)] public int SectionID { get; set; }
+        [DataMember(Order = 1)] public int SectionId { get; set; }
         [DataMember(Order = 2)] public int LowBoard { get; set; }
         [DataMember(Order = 3)] public int HighBoard { get; set; }
         [DataMember(Order = 4)] public int TableNumber { get; set; }
@@ -131,19 +131,19 @@ namespace GrpcMessageClasses
     [DataContract]
     public class UpdatePlayerNumberMessage
     {
-        [DataMember(Order = 1)] public int SectionID { get; set; }
+        [DataMember(Order = 1)] public int SectionId { get; set; }
         [DataMember(Order = 2)] public int TableNumber { get; set; }
         [DataMember(Order = 3)] public int RoundNumber { get; set; }
         [DataMember(Order = 4)] public string DirectionLetter { get; set; } = string.Empty;
         [DataMember(Order = 5)] public int PairNumber { get; set; }
-        [DataMember(Order = 6)] public string PlayerID { get; set; } = string.Empty;
+        [DataMember(Order = 6)] public string PlayerId { get; set; } = string.Empty;
         [DataMember(Order = 7)] public string PlayerName { get; set; } = string.Empty;
     }
 
-    [DataContract] 
+    [DataContract]
     public class NamesForRoundMessage
     {
-        [DataMember(Order = 1)] public int SectionID { get; set; }
+        [DataMember(Order = 1)] public int SectionId { get; set; }
         [DataMember(Order = 2)] public int RoundNumber { get; set; }
         [DataMember(Order = 3)] public int NumberNorth { get; set; }
         [DataMember(Order = 4)] public int NumberEast { get; set; }

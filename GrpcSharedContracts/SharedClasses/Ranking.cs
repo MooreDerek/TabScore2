@@ -3,7 +3,7 @@
 
 using System.Runtime.Serialization;
 
-namespace TabScore2.SharedClasses
+namespace GrpcSharedContracts.SharedClasses
 {
     [DataContract]
     public class Ranking

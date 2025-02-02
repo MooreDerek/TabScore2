@@ -15,8 +15,8 @@
     <div class="col-12 text-center p-0">
         @foreach (var section in Model)
         {
-            <button id="s@(section.ID)" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; selectSection('@(section.ID)')" onclick="if (!touchAvailable) selectSection('@(section.ID)')">
-                @(section.Letter)
+            <button id="s@(section.SectionId)" class="btn btn-primary btn-lg m-1 px-0" style="width:2.5em" ontouchstart="touchAvailable = true; selectSection('@(section.SectionId)')" onclick="if (!touchAvailable) selectSection('@(section.SectionId)')">
+                @(section.SectionLetter)
             </button>
         }
     </div>
@@ -39,7 +39,7 @@
         if (document.getElementById("OKButton").disabled) return;
         if (!isSubmitted) {
             isSubmitted = true;
-            location.href = '@Url.Action("Index", "SelectTableNumber")?sectionID=' + section;
+            location.href = '@Url.Action("Index", "SelectTableNumber")?sectionId=' + section;
         }
     }
 </script>

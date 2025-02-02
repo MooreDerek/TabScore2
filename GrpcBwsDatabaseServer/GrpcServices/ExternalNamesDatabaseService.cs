@@ -1,10 +1,10 @@
 ﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
-using GrpcMessageClasses;
+using GrpcSharedContracts;
 using System.Data.Odbc;
 
-namespace GrpcServices
+namespace GrpcBwsDatabaseServer.GrpcServices
 {
     public class ExternalNamesDatabaseService : IExternalNamesDatabaseService
     {
@@ -17,7 +17,7 @@ namespace GrpcServices
             using (OdbcConnection connection = new(externalDB.ToString()))
             {
                 object? queryResult = null;
-                string SQLString = $"SELECT Name FROM PlayerNameDatabase WHERE ID={request.PlayerID}";
+                string SQLString = $"SELECT Name FROM PlayerNameDatabase WHERE ID={request.PlayerId}";
                 OdbcCommand cmd = new(SQLString, connection);
                 try
                 {

@@ -681,6 +681,7 @@ namespace GrpcBwsDatabaseServer.GrpcServices
                 sectionsList.Add(new Section() { SectionId = sectionId, SectionLetter = sectionLetter, NumberOfTables = numberOfTables, Winners = winners, MissingPair = missingPair });
             }
             reader.Close();
+            sectionsList.Sort((x, y) => x.SectionLetter.CompareTo(y.SectionLetter));
 
             foreach (Section section in sectionsList)
             {

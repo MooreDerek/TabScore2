@@ -50,8 +50,10 @@ namespace TabScore2.Controllers
             }
             else if (deviceStatusExists)
             {
-                // Check if section and table number matches session state - if so go back to confirm
-                if (sectionId == (HttpContext.Session.GetInt32("SectionId") ?? 0) && tableNumber == (HttpContext.Session.GetInt32("TableNumber") ?? 0))
+                // Check if section and table number matches session state - if not go back to confirm
+                int savedSectionId = HttpContext.Session.GetInt32("SectionId") ?? 0;
+                int savedTableNumber = HttpContext.Session.GetInt32("TableNumber") ?? 0;
+                if (sectionId != savedSectionId || tableNumber != savedTableNumber)
                 {
                     return RedirectToAction("Index", "SelectTableNumber", new { sectionId, tableNumber, confirm = true });
                 }

@@ -1309,35 +1309,20 @@ namespace GrpcBwsDatabaseServer.GrpcServices
         // PLAYERNAMES
         public PlayerNameMessage GetInternalPlayerName(PlayerMessage message)
         {
-            // Cater for the possibility that one or both of ID and strID could be null/blank.  Prefer strID
+            // Cater for the possibility that one or both of ID and strID could be null/blank.  Prefer ID (numeric version)
             string name = "Unknown";
             using OdbcConnection connection = new(connectionString);
             connection.Open();
-            object? queryResult = null;
-            string SQLString = $"SELECT Name FROM PlayerNames WHERE strID={message.PlayerId}";
-            OdbcCommand cmd = new(SQLString, connection);
-            try
+
+            if (int.TryParse(message.PlayerId, out int intID))
             {
-                ODBCRetryHelper.ODBCRetry(() =>
-                {
-                    queryResult = cmd.ExecuteScalar();
-                    if (queryResult != null)
-                    {
-                        string? tempName = queryResult.ToString();
-                        if (tempName != null && tempName != string.Empty) name = tempName;
-                    }
-                });
-            }
-            catch { }
-            if (name == "Unknown" && int.TryParse(message.PlayerId, out int intID))
-            {
-                SQLString = $"SELECT Name FROM PlayerNames WHERE ID={intID}";
-                cmd = new(SQLString, connection);
+                string SQLString = $"SELECT Name FROM PlayerNames WHERE ID={intID}";
+                OdbcCommand cmd = new(SQLString, connection);
                 try
                 {
                     ODBCRetryHelper.ODBCRetry(() =>
                     {
-                        queryResult = cmd.ExecuteScalar();
+                        object? queryResult = cmd.ExecuteScalar();
                         if (queryResult != null)
                         {
                             string? tempName = queryResult.ToString();
@@ -1345,9 +1330,32 @@ namespace GrpcBwsDatabaseServer.GrpcServices
                         }
                     });
                 }
-                catch { }
+                finally 
+                {
+                    cmd.Dispose();
+                }
             }
-            cmd.Dispose();
+            if (name == "Unknown")
+            {
+                string SQLString = $"SELECT Name FROM PlayerNames WHERE RIGHT(strID,{message.PlayerId.Length})='{message.PlayerId}'";
+                OdbcCommand cmd = new(SQLString, connection);
+                try
+                {
+                    ODBCRetryHelper.ODBCRetry(() =>
+                    {
+                        object? queryResult = cmd.ExecuteScalar();
+                        if (queryResult != null)
+                        {
+                            string? tempName = queryResult.ToString();
+                            if (tempName != null && tempName != string.Empty) name = tempName;
+                        }
+                    });
+                }
+                finally 
+                { 
+                    cmd.Dispose();
+                }
+            }
             return new PlayerNameMessage() { PlayerName = name };
         }
 

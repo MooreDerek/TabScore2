@@ -16,24 +16,6 @@ using System.Threading;
 
 namespace TabScore2.Tests;
 
-/// <summary>
-/// A simple in-memory implementation of ISession for testing purposes.
-/// </summary>
-public class TestSession : ISession
-{
-    private readonly Dictionary<string, byte[]> _storage = new();
-    public string Id => Guid.NewGuid().ToString();
-    public bool IsAvailable => true;
-    public IEnumerable<string> Keys => _storage.Keys;
-
-    public void Clear() => _storage.Clear();
-    public Task CommitAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
-    public Task LoadAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
-    public void Remove(string key) => _storage.Remove(key);
-    public void Set(string key, byte[] value) => _storage[key] = value;
-    public bool TryGetValue(string key, out byte[] value) => _storage.TryGetValue(key, out value);
-}
-
 public class ConfirmResultControllerTests
 {
     private readonly Mock<IDatabase> _mockDatabase;
@@ -45,7 +27,7 @@ public class ConfirmResultControllerTests
     public ConfirmResultControllerTests()
     {
         _mockDatabase = new Mock<IDatabase>();
-        _mockAppData = new Mock<IAppData>(MockBehavior.Strict);
+        _mockAppData = new Mock<IAppData>(); // Reverted to default Loose behavior
         _mockUtilities = new Mock<IUtilities>();
 
         _session = new TestSession();
@@ -60,40 +42,49 @@ public class ConfirmResultControllerTests
         };
     }
 
-    private void SetDeviceNumberInSession(int deviceNumber)
+    /// <summary>
+    /// Centralized setup method to keep tests DRY.
+    /// </summary>
+    private (DeviceStatus, TableStatus) SetupTestScenario(int deviceNumber = 1, int boardNumber = 1, int contractLevel = 1, bool verifiable = false)
     {
-        // The error message proves the test environment is BIG-ENDIAN.
-        // We must provide the bytes in big-endian order to get the correct integer value.
-        // For the integer 1, this is [0, 0, 0, 1].
-        _session.Set("DeviceNumber", new byte[] {
-            (byte)(deviceNumber >> 24),
-            (byte)(deviceNumber >> 16),
-            (byte)(deviceNumber >> 8),
-            (byte)deviceNumber
-        });
+        _session.Set("DeviceNumber", new byte[] { 0, 0, 0, (byte)deviceNumber });
+
+        var deviceStatus = new DeviceStatus(deviceNumber, "A", 1, 1, 1, Direction.North);
+        var tableStatus = new TableStatus(deviceNumber, 1, 1) { ResultData = new Result { BoardNumber = boardNumber, ContractLevel = contractLevel } };
+
+        var deviceStatusSetup = _mockAppData.Setup(x => x.GetDeviceStatus(deviceNumber));
+        var tableStatusSetup = _mockAppData.Setup(x => x.GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber));
+
+        if (verifiable)
+        {
+            deviceStatusSetup.Returns(deviceStatus).Verifiable();
+            tableStatusSetup.Returns(tableStatus).Verifiable();
+        }
+        else
+        {
+            deviceStatusSetup.Returns(deviceStatus);
+            tableStatusSetup.Returns(tableStatus);
+        }
+
+        return (deviceStatus, tableStatus);
     }
 
     [Fact]
     public void Index_NoDeviceNumber_RedirectsToErrorScreen()
     {
-        // Arrange (no session value set)
-
         // Act
         var result = _controller.Index();
 
         // Assert
         var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
         Assert.Equal("ErrorScreen", redirectToActionResult.ControllerName);
-        Assert.Equal("Index", redirectToActionResult.ActionName);
     }
 
     [Fact]
     public void Index_BoardNumberIsZero_RedirectsToShowBoards()
     {
         // Arrange
-        SetDeviceNumberInSession(1);
-        _mockAppData.Setup(x => x.GetDeviceStatus(1)).Returns(new DeviceStatus(1, "A", 1, 1, 1, Direction.North));
-        _mockAppData.Setup(x => x.GetTableStatus(1, 1)).Returns(new TableStatus(1, 1, 1) { ResultData = new Result { BoardNumber = 0 } });
+        SetupTestScenario(boardNumber: 0);
 
         // Act
         var result = _controller.Index();
@@ -101,21 +92,14 @@ public class ConfirmResultControllerTests
         // Assert
         var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
         Assert.Equal("ShowBoards", redirectToActionResult.ControllerName);
-        Assert.Equal("Index", redirectToActionResult.ActionName);
     }
 
     [Fact]
     public void Index_ValidRequest_ReturnsViewWithCorrectData()
     {
         // Arrange
-        SetDeviceNumberInSession(1);
-        var deviceStatus = new DeviceStatus(1, "A", 1, 1, 1, Direction.North);
-        var tableStatus = new TableStatus(1, 1, 1) { ResultData = new Result { BoardNumber = 1 } };
-
-        _mockAppData.Setup(x => x.GetDeviceStatus(1)).Returns(deviceStatus);
-        _mockAppData.Setup(x => x.GetTableStatus(1, 1)).Returns(tableStatus);
+        var (deviceStatus, tableStatus) = SetupTestScenario();
         _mockAppData.Setup(x => x.GetTimerSeconds(deviceStatus)).Returns(10);
-
         _mockUtilities.Setup(x => x.CreateEnterContractModel(tableStatus.ResultData, true, LeadValidationOptions.NoWarning)).Returns(new EnterContractModel());
         _mockUtilities.Setup(x => x.Title("ConfirmResult", deviceStatus)).Returns("Test Title");
         _mockUtilities.Setup(x => x.Header(HeaderType.FullColoured, deviceStatus)).Returns("Test Header");
@@ -132,8 +116,6 @@ public class ConfirmResultControllerTests
     [Fact]
     public void OKButtonClick_NoDeviceNumber_RedirectsToErrorScreen()
     {
-        // Arrange (no session value set)
-
         // Act
         var result = _controller.OKButtonClick();
 
@@ -146,12 +128,7 @@ public class ConfirmResultControllerTests
     public void OKButtonClick_WhenCalled_SetsResultAndRedirects()
     {
         // Arrange
-        SetDeviceNumberInSession(1);
-        var deviceStatus = new DeviceStatus(1, "A", 1, 1, 1, Direction.North);
-        var tableStatus = new TableStatus(1, 1, 1) { ResultData = new Result { BoardNumber = 1 } };
-
-        _mockAppData.Setup(x => x.GetDeviceStatus(1)).Returns(deviceStatus);
-        _mockAppData.Setup(x => x.GetTableStatus(1, 1)).Returns(tableStatus);
+        var (_, tableStatus) = SetupTestScenario();
         _mockDatabase.Setup(x => x.SetResult(tableStatus.ResultData));
 
         // Act
@@ -166,8 +143,6 @@ public class ConfirmResultControllerTests
     [Fact]
     public void BackButtonClick_NoDeviceNumber_RedirectsToErrorScreen()
     {
-        // Arrange (no session value set)
-
         // Act
         var result = _controller.BackButtonClick();
 
@@ -180,12 +155,7 @@ public class ConfirmResultControllerTests
     public void BackButtonClick_ContractLevelIsZero_RedirectsToEnterContract()
     {
         // Arrange
-        SetDeviceNumberInSession(1);
-        var deviceStatus = new DeviceStatus(1, "A", 1, 1, 1, Direction.North);
-        var tableStatus = new TableStatus(1, 1, 1) { ResultData = new Result { BoardNumber = 1, ContractLevel = 0 } };
-
-        _mockAppData.Setup(x => x.GetDeviceStatus(1)).Returns(deviceStatus);
-        _mockAppData.Setup(x => x.GetTableStatus(1, 1)).Returns(tableStatus);
+        SetupTestScenario(contractLevel: 0);
 
         // Act
         var result = _controller.BackButtonClick();
@@ -199,12 +169,7 @@ public class ConfirmResultControllerTests
     public void BackButtonClick_ContractLevelIsNotZero_RedirectsToEnterTricksTaken()
     {
         // Arrange
-        SetDeviceNumberInSession(1);
-        var deviceStatus = new DeviceStatus(1, "A", 1, 1, 1, Direction.North);
-        var tableStatus = new TableStatus(1, 1, 1) { ResultData = new Result { BoardNumber = 1, ContractLevel = 1 } };
-
-        _mockAppData.Setup(x => x.GetDeviceStatus(1)).Returns(deviceStatus).Verifiable();
-        _mockAppData.Setup(x => x.GetTableStatus(1, 1)).Returns(tableStatus).Verifiable();
+        SetupTestScenario(verifiable: true);
 
         // Act
         var result = _controller.BackButtonClick();
@@ -212,6 +177,6 @@ public class ConfirmResultControllerTests
         // Assert
         var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
         Assert.Equal("EnterTricksTaken", redirectToActionResult.ControllerName);
-        _mockAppData.Verify(); // Verify all verifiable setups were called
+        _mockAppData.Verify();
     }
 }

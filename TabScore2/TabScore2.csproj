@@ -23,8 +23,12 @@
   <ItemGroup>
     <Compile Remove="publish\**" />
     <Content Remove="publish\**" />
+	<Compile Remove="tests\**" />
+	<Content Remove="tests\**" />
     <EmbeddedResource Remove="publish\**" />
-    <None Remove="publish\**" />
+	<EmbeddedResource Remove="tests\**" />
+	<None Remove="publish\**" />
+	<None Remove="tests\**" />
   </ItemGroup>
 
   <ItemGroup>

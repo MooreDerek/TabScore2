@@ -35,6 +35,7 @@
         int SuppressRankingListForFirstXRounds { get; set; }
         int SuppressRankingListForLastXRounds { get; set; }
         bool ShowSplashScreen { get; set; }
+        int ConfirmResultDelay { get; set; }
 
         bool DatabaseReady { get; set; }
         bool IsIndividual { get; set; }

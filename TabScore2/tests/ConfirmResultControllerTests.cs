@@ -21,19 +21,21 @@ public class ConfirmResultControllerTests
     private readonly Mock<IDatabase> _mockDatabase;
     private readonly Mock<IAppData> _mockAppData;
     private readonly Mock<IUtilities> _mockUtilities;
+    private readonly Mock<ISettings> _mockSettings;
     private readonly ConfirmResultController _controller;
     private readonly ISession _session;
 
     public ConfirmResultControllerTests()
     {
         _mockDatabase = new Mock<IDatabase>();
-        _mockAppData = new Mock<IAppData>(); // Reverted to default Loose behavior
+        _mockAppData = new Mock<IAppData>();
         _mockUtilities = new Mock<IUtilities>();
+        _mockSettings = new Mock<ISettings>();
 
         _session = new TestSession();
         var httpContext = new DefaultHttpContext { Session = _session };
 
-        _controller = new ConfirmResultController(_mockDatabase.Object, _mockAppData.Object, _mockUtilities.Object)
+        _controller = new ConfirmResultController(_mockDatabase.Object, _mockAppData.Object, _mockUtilities.Object, _mockSettings.Object)
         {
             ControllerContext = new ControllerContext()
             {
@@ -111,6 +113,21 @@ public class ConfirmResultControllerTests
         var viewResult = Assert.IsType<ViewResult>(result);
         Assert.IsType<EnterContractModel>(viewResult.Model);
         Assert.Equal(10, viewResult.ViewData["TimerSeconds"]);
+    }
+
+    [Fact]
+    public void Index_PassesConfirmResultDelayToViewData()
+    {
+        // Arrange
+        SetupTestScenario();
+        _mockSettings.Setup(s => s.ConfirmResultDelay).Returns(5);
+
+        // Act
+        var result = _controller.Index();
+
+        // Assert
+        var viewResult = Assert.IsType<ViewResult>(result);
+        Assert.Equal(5, viewResult.ViewData["ConfirmResultDelay"]);
     }
 
     [Fact]

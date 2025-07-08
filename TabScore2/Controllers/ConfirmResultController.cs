@@ -11,11 +11,12 @@ using GrpcSharedContracts.SharedClasses;
 
 namespace TabScore2.Controllers
 {
-    public class ConfirmResultController(IDatabase iDatabase, IAppData iAppData, IUtilities iUtilities) : Controller
+    public class ConfirmResultController(IDatabase iDatabase, IAppData iAppData, IUtilities iUtilities, ISettings iSettings) : Controller
     {
         private readonly IDatabase database = iDatabase;
         private readonly IAppData appData = iAppData;
         private readonly IUtilities utilities = iUtilities;
+        private readonly ISettings settings = iSettings;
 
         public ActionResult Index()
         {
@@ -31,6 +32,7 @@ namespace TabScore2.Controllers
 
             EnterContractModel enterContractModel = utilities.CreateEnterContractModel(tableStatus.ResultData, true);
 
+            ViewData["ConfirmResultDelay"] = settings.ConfirmResultDelay;
             ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceStatus);
             ViewData["Title"] = utilities.Title("ConfirmResult", deviceStatus);
             ViewData["Header"] = utilities.Header(HeaderType.FullColoured, deviceStatus);

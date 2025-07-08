@@ -20,7 +20,7 @@ namespace TabScore2.DataServices
         public bool NumberEntryEachRound { get; set; }
         public int NameSource { get; set; }
         public bool ManualHandRecordEntry { get; set; }
-        
+
         // Default settings saved as application property settings
         public bool DefaultShowTraveller
         {
@@ -117,6 +117,11 @@ namespace TabScore2.DataServices
         {
             get { return Properties.Settings.Default.ShowSplashScreen; }
             set { Properties.Settings.Default.ShowSplashScreen = value; Properties.Settings.Default.Save(); }
+        }
+        public int ConfirmResultDelay
+        {
+            get { return Properties.Settings.Default.ConfirmResultDelay; }
+            set { Properties.Settings.Default.ConfirmResultDelay = value; Properties.Settings.Default.Save(); }
         }
 
         // Settings related to the operation of the scoring database

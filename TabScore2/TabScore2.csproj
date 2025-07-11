@@ -30,9 +30,13 @@
 
   <ItemGroup>
     <Compile Remove="publish\**" />
+	<Compile Remove="Tests\**" />
     <Content Remove="publish\**" />
+	<Content Remove="Tests\**" />
     <EmbeddedResource Remove="publish\**" />
+	<EmbeddedResource Remove="Tests\**" />
     <None Remove="publish\**" />
+	<None Remove="Tests\**" />
   </ItemGroup>
 
   <ItemGroup>

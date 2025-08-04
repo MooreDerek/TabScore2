@@ -35,8 +35,7 @@ public class ConfirmResultControllerTests
         _session = new TestSession();
         var httpContext = new DefaultHttpContext { Session = _session };
 
-        // _controller = new ConfirmResultController(_mockDatabase.Object, _mockAppData.Object, _mockUtilities.Object, _mockSettings.Object)
-        _controller = new ConfirmResultController(_mockDatabase.Object, _mockAppData.Object, _mockUtilities.Object)
+        _controller = new ConfirmResultController(_mockDatabase.Object, _mockAppData.Object, _mockUtilities.Object, _mockSettings.Object)
         {
             ControllerContext = new ControllerContext()
             {
@@ -116,21 +115,6 @@ public class ConfirmResultControllerTests
         Assert.Equal(10, viewResult.ViewData["TimerSeconds"]);
     }
 
-    //[Fact]
-    //public void Index_PassesConfirmResultDelayToViewData()
-    //{
-    //    // Arrange
-    //    SetupTestScenario();
-    //    _mockSettings.Setup(s => s.ConfirmResultDelay).Returns(5);
-
-    //    // Act
-    //    var result = _controller.Index();
-
-    //    // Assert
-    //    var viewResult = Assert.IsType<ViewResult>(result);
-    //    Assert.Equal(5, viewResult.ViewData["ConfirmResultDelay"]);
-    //}
-
     [Fact]
     public void OKButtonClick_NoDeviceNumber_RedirectsToErrorScreen()
     {
@@ -197,4 +181,20 @@ public class ConfirmResultControllerTests
         Assert.Equal("EnterTricksTaken", redirectToActionResult.ControllerName);
         _mockAppData.Verify();
     }
+
+     [Fact]
+    public void Index_PassesConfirmResultDelayToViewData()
+    {
+        // Arrange
+        SetupTestScenario();
+        _mockSettings.Setup(s => s.ConfirmResultDelay).Returns(5);
+
+        // Act
+        var result = _controller.Index();
+
+        // Assert
+        var viewResult = Assert.IsType<ViewResult>(result);
+        Assert.Equal(3, viewResult.ViewData["ConfirmResultDelay"]);
+    }
+
 }

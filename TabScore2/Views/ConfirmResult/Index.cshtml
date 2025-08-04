@@ -63,6 +63,17 @@ else
 
 <script>
     var isSubmitted = false;
+    var confirmResultDelay = @ViewData["ConfirmResultDelay"];
+    
+    window.onload = function () {
+        if (confirmResultDelay > 0) {
+            document.getElementById("OKButton").disabled = true;
+            setTimeout(function () {
+                document.getElementById("OKButton").disabled = false;
+            }, confirmResultDelay * 1000);
+        }
+    };
+
 
     function OKButtonClick() {
         if (document.getElementById("OKButton").disabled) return;

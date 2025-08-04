@@ -39,5 +39,6 @@
         bool DatabaseReady { get; set; }
         bool IsIndividual { get; set; }
         bool SessionStarted { get; set; }
+        int ConfirmResultDelay { get; set; }
     }
 }

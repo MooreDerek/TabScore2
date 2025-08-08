@@ -13,8 +13,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Threading;
+using TabScore2.Tests;
 
-namespace TabScore2.Tests;
+namespace Tests.Controllers;
 
 public class ConfirmResultControllerTests
 {
@@ -187,7 +188,7 @@ public class ConfirmResultControllerTests
     {
         // Arrange
         SetupTestScenario();
-        _mockSettings.Setup(s => s.ConfirmResultDelay).Returns(5);
+        _mockSettings.Setup(s => s.ConfirmResultDelay).Returns(3);
 
         // Act
         var result = _controller.Index();

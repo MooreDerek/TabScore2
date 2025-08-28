@@ -32,6 +32,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TabScore2Setup", "TabScore2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "TabScore2\Tests\Tests.csproj", "{2F221AA6-F38D-42B4-9E04-2F34DFDCFBA1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{BEC83F57-78CD-4488-9316-820CE99D7723}"
+	ProjectSection(SolutionItems) = preProject
+		build-installer.yml = build-installer.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -106,10 +113,13 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BEC83F57-78CD-4488-9316-820CE99D7723} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		RESX_CultureCountyOverrides = 
-		RESX_EnableXlifSync = True
-		RESX_NeutralResourcesLanguage = en-US
 		SolutionGuid = {EA91F9F8-CC08-450B-AAA7-CFBEF8232623}
+		RESX_NeutralResourcesLanguage = en-US
+		RESX_EnableXlifSync = True
+		RESX_CultureCountyOverrides = 
 	EndGlobalSection
 EndGlobal

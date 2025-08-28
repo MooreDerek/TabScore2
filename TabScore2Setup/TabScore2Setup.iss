@@ -31,7 +31,7 @@ ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 DisableProgramGroupPage=yes
 InfoBeforeFile=C:\Users\peter\source\repos\TabScore2\TabScore2 Documents\InstallerNotice TabScore2Setup.rtf
-OutputDir=C:\Users\peter\source\repos\TabScore2\TabScore2Setup
+OutputDir=.
 OutputBaseFilename=TabScore2Setup
 SetupIconFile=C:\Users\peter\source\repos\TabScore2\TabScore2\wwwroot\favicon.ico
 SolidCompression=yes
@@ -47,8 +47,8 @@ Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Users\peter\source\repos\TabScore2\Publish\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\peter\source\repos\TabScore2\Publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "../TabScore2/publish/{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "../TabScore2/publish/*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

@@ -27,7 +27,7 @@ jobs:
       run: dotnet publish TabScore2/TabScore2.csproj -c Release -o TabScore2/publish
 
     - name: Setup WiX Toolset
-      uses: wixtoolset/wix-actions/setup-wix@v1
+      uses: wixtoolset/wix-v4-action@v1
 
     - name: Harvest project output
       run: heat dir TabScore2/publish -dr INSTALLFOLDER -cg ProductComponents -gg -sfrag -srd -var var.publishDir -out TabScore2Setup/Components.wxs

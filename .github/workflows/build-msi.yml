@@ -34,10 +34,10 @@ jobs:
       run: echo "%USERPROFILE%\.dotnet\tools" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
     - name: Harvest project output
-      run: heat dir TabScore2/publish -dr INSTALLFOLDER -cg ProductComponents -gg -sfrag -srd -var var.publishDir -out TabScore2Setup/Components.wxs
+      run: heat dir TabScore2/publish -dr INSTALLFOLDER -cg ProductComponents -gg -sfrag -srd -scom -sreg -var var.publishDir -out TabScore2Setup/Components.wxs
 
     - name: Build MSI Installer
-      run: wix build -dpublishDir=TabScore2/publish -o TabScore2Setup/TabScore2.msi TabScore2Setup/TabScore2.wxs TabScore2Setup/Components.wxs -ext WixToolset.UI.wixext
+      run: wix build -dpublishDir=TabScore2/publish -o TabScore2Setup/TabScore2.msi TabScore2Setup/TabScore2.wxs TabScore2Setup/Components.wxs -ext WixToolset.UI
 
     - name: Upload Installer Artifact
       uses: actions/upload-artifact@v4

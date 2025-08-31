@@ -55,7 +55,7 @@
         <!-- This component now handles the advertised shortcut and the Start Menu folder -->
         <DirectoryRef Id="ApplicationProgramsFolder">
             <Component Id="ApplicationShortcut" Guid="E6B5A4F7-3A4A-4B9A-B06F-420551826A9A"
-                Bitness="always64">
+                Bitness="always64" KeyPath="yes">
                 <Shortcut Id="ApplicationStartMenuShortcut"
                     Name="TabScore2"
                     Description="TabScore2"
@@ -63,9 +63,9 @@
                     Icon="TabScore2.exe"
                     WorkingDirectory="INSTALLFOLDER" />
                 <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall" />
-                <!-- The CreateFolder element now serves as the valid KeyPath for this advertised
-                component -->
-                <CreateFolder KeyPath="yes" />
+                <!-- The CreateFolder element ensures the directory is created, but is not the
+                KeyPath -->
+                <CreateFolder />
             </Component>
 
             <!-- This NEW component ONLY handles the per-user registry key -->

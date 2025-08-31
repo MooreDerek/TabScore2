@@ -2,6 +2,7 @@
   <PropertyGroup>
     <OutputType>Package</OutputType>
     <OutputName>TabScore2</OutputName>
+    <DefineConstants>Version=$(Version)</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <HarvestDirectory Include="../TabScore2/publish">

@@ -1,7 +1,7 @@
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
     <Package Name="TabScore2"
         Language="1033"
-        Version="$(var.Version)"
+        Version="$(Version)"
         Manufacturer="TabScore2"
         UpgradeCode="D576912E-6999-4523-A8A9-57E8376F1D51"
         Compressed="yes">

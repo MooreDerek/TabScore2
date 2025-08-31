@@ -40,7 +40,7 @@
   
       <!-- Component definitions moved into the fragment to resolve linking errors -->
       <DirectoryRef Id="INSTALLFOLDER">
-        <Component Id="TabScore2Exe" Guid="F9B94A53-B386-435E-9694-8461521C26D1" Win64="yes">
+        <Component Id="TabScore2Exe" Guid="F9B94A53-B386-435E-9694-8461521C26D1" Bitness="always64">
           <File Id="TabScore2.exe"
                 Source="../TabScore2/publish/TabScore2.exe"
                 KeyPath="yes" />

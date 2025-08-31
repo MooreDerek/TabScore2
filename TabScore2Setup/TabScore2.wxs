@@ -23,12 +23,6 @@
             <ComponentRef Id="ApplicationShortcut" />
         </Feature>
 
-        <ComponentGroup Id="ProductComponents" />
-
-        <UI>
-            <UIRef Id="WixUI_Minimal" />
-        </UI>
-
         <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
 
         <!-- MANUALLY DEFINE THE COMPONENT FOR THE MAIN EXECUTABLE -->
@@ -54,4 +48,11 @@
             </Component>
         </DirectoryRef>
     </Package>
+    <Fragment>
+        <ComponentGroup Id="ProductComponents" />
+        <UI Id="WixUI_Minimal">
+            <UIRef Id="WixUI_Minimal" />
+        </UI>
+        <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+    </Fragment>
 </Wix>

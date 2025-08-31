@@ -4,7 +4,8 @@
              Version="$(Version)"
              Manufacturer="TabScore2"
              UpgradeCode="D576912E-6999-4523-A8A9-57E8376F1D51"
-             Compressed="yes">
+             Compressed="yes"
+             Platform="x64">
   
       <StandardDirectory Id="ProgramFiles64Folder">
         <Directory Id="INSTALLFOLDER" Name="TabScore2" />
@@ -40,7 +41,7 @@
   
       <!-- Component definitions moved into the fragment to resolve linking errors -->
       <DirectoryRef Id="INSTALLFOLDER">
-        <Component Id="TabScore2Exe" Guid="F9B94A53-B386-435E-9694-8461521C26D1">
+        <Component Id="TabScore2Exe" Guid="F9B94A53-B386-435E-9694-8461521C26D1" Win64="yes">
           <File Id="TabScore2.exe"
                 Source="../TabScore2/publish/TabScore2.exe"
                 KeyPath="yes" />
@@ -48,7 +49,7 @@
       </DirectoryRef>
   
       <DirectoryRef Id="ApplicationProgramsFolder">
-        <Component Id="ApplicationShortcut" Guid="E6B5A4F7-3A4A-4B9A-B06F-420551826A9A">
+        <Component Id="ApplicationShortcut" Guid="E6B5A4F7-3A4A-4B9A-B06F-420551826A9A" Win64="yes">
           <Shortcut Id="ApplicationStartMenuShortcut"
                     Name="TabScore2"
                     Description="TabScore2"

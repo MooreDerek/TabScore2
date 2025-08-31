@@ -23,33 +23,35 @@
             <ComponentRef Id="ApplicationShortcut" />
         </Feature>
 
+        <ComponentGroup Id="ProductComponents" />
+
         <UI>
             <UIRef Id="WixUI_Minimal" />
         </UI>
 
         <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
 
-    <!-- MANUALLY DEFINE THE COMPONENT FOR THE MAIN EXECUTABLE -->
-    <DirectoryRef Id="INSTALLFOLDER">
-        <Component Id="TabScore2Exe" Guid="E8E3D7B8-C5B5-4D18-8A9E-2D99C6A7A6C3">
-          <!-- The 'Id' of this File element is what the shortcut will target -->
-          <File Id="TabScore2.exe"
-                Source="../TabScore2/publish/TabScore2.exe"
-                KeyPath="yes" />
-        </Component>
-      </DirectoryRef>
-  
-      <DirectoryRef Id="ApplicationProgramsFolder">
-        <Component Id="ApplicationShortcut" Guid="E6B5A4F7-3A4A-4B9A-B06F-420551826A9A">
-          <Shortcut Id="ApplicationStartMenuShortcut"
+        <!-- MANUALLY DEFINE THE COMPONENT FOR THE MAIN EXECUTABLE -->
+        <DirectoryRef Id="INSTALLFOLDER">
+            <Component Id="TabScore2Exe" Guid="E8E3D7B8-C5B5-4D18-8A9E-2D99C6A7A6C3">
+                <!-- The 'Id' of this File element is what the shortcut will target -->
+                <File Id="TabScore2.exe"
+                    Source="../TabScore2/publish/TabScore2.exe"
+                    KeyPath="yes" />
+            </Component>
+        </DirectoryRef>
+
+        <DirectoryRef Id="ApplicationProgramsFolder">
+            <Component Id="ApplicationShortcut" Guid="E6B5A4F7-3A4A-4B9A-B06F-420551826A9A">
+                <Shortcut Id="ApplicationStartMenuShortcut"
                     Name="TabScore2"
                     Description="TabScore2"
                     Target="[#TabScore2.exe]"
                     WorkingDirectory="INSTALLFOLDER" />
-          <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall" />
-          <RegistryValue Root="HKCU" Key="Software\TabScore2" Name="installed" Type="integer"
-                         Value="1" KeyPath="yes" />
-        </Component>
-      </DirectoryRef>
+                <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall" />
+                <RegistryValue Root="HKCU" Key="Software\TabScore2" Name="installed" Type="integer"
+                    Value="1" KeyPath="yes" />
+            </Component>
+        </DirectoryRef>
     </Package>
 </Wix>

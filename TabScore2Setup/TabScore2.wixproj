@@ -16,4 +16,7 @@
       <SuppressRootDirectory>true</SuppressRootDirectory>
     </HarvestDirectory>
   </ItemGroup>
+  <ItemGroup>
+    <WixExtension Include="WixToolset.UI.wixext" />
+  </ItemGroup>
 </Project>

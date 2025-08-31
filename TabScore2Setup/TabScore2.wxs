@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
     <Package Name="TabScore2"
              Language="1033"
@@ -33,7 +32,7 @@
                 <Shortcut Id="ApplicationStartMenuShortcut"
                           Name="TabScore2"
                           Description="TabScore2"
-                          Target="[#TabScore2.exe]"
+                          Target="[INSTALLFOLDER]TabScore2.exe"
                           WorkingDirectory="INSTALLFOLDER"/>
                 <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
                 <RegistryValue Root="HKCU" Key="Software\TabScore2" Name="installed" Type="integer" Value="1" KeyPath="yes"/>

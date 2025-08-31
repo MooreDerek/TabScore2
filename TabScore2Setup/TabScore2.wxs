@@ -1,70 +1,70 @@
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
     <Package Name="TabScore2"
-             Language="1033"
-             Version="$(Version)"
-             Manufacturer="TabScore2"
-             UpgradeCode="D576912E-6999-4523-A8A9-57E8376F1D51"
-             Compressed="yes">
-  
-      <StandardDirectory Id="ProgramFiles64Folder">
-        <Directory Id="INSTALLFOLDER" Name="TabScore2" />
-      </StandardDirectory>
-  
-      <StandardDirectory Id="ProgramMenuFolder">
-        <Directory Id="ApplicationProgramsFolder" Name="TabScore2" />
-      </StandardDirectory>
-  
-      <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
-      <MediaTemplate EmbedCab="yes" />
-  
-      <Feature Id="ProductFeature" Title="TabScore2" Level="1">
-        <ComponentGroupRef Id="ProductComponents" />
-        <ComponentRef Id="ApplicationShortcut" />
-        <ComponentRef Id="TabScore2Exe" />
-      </Feature>
-  
-      <!-- The UI reference now points to the fragment below -->
-      <UIRef Id="WixUI_Minimal" />
-  
-    </Package>
-  
-    <Fragment>
-      <!-- This placeholder is for the harvested files -->
-      <ComponentGroup Id="ProductComponents" />
-  
-      <!-- This defines the UI and its required property in a self-contained unit -->
-      <UI Id="WixUI_Minimal">
+        Language="1033"
+        Version="$(Version)"
+        Manufacturer="TabScore2"
+        UpgradeCode="D576912E-6999-4523-A8A9-57E8376F1D51"
+        Compressed="yes">
+
+        <StandardDirectory Id="ProgramFiles64Folder">
+            <Directory Id="INSTALLFOLDER" Name="TabScore2" />
+        </StandardDirectory>
+
+        <StandardDirectory Id="ProgramMenuFolder">
+            <Directory Id="ApplicationProgramsFolder" Name="TabScore2" />
+        </StandardDirectory>
+
+        <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+        <MediaTemplate EmbedCab="yes" />
+
+        <Feature Id="ProductFeature" Title="TabScore2" Level="1">
+            <ComponentGroupRef Id="ProductComponents" />
+            <ComponentRef Id="ApplicationShortcut" />
+            <ComponentRef Id="TabScore2Exe" />
+        </Feature>
+
+        <!-- The UI reference now points to the fragment below -->
         <UIRef Id="WixUI_Minimal" />
-      </UI>
+
+    </Package>
+
+    <Fragment>
+        <!-- This placeholder is for the harvested files -->
+        <ComponentGroup Id="ProductComponents" />
+
+        <!-- This defines the UI and its required property in a self-contained unit -->
+        <UI Id="WixUI_Minimal">
+            <UIRef Id="WixUI_Minimal" />
+        </UI>
         <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
-    
-        <!-- Component definitions moved into the fragment to resolve linking errors -->
+
+        <!-- This component now ONLY contains the per-machine file -->
         <DirectoryRef Id="INSTALLFOLDER">
-          <Component Id="TabScore2Exe" Guid="F9B94A53-B386-435E-9694-8461521C26D1" Bitness="always64">
-            <File Id="TabScore2.exe"
-                  Source="../TabScore2/publish/TabScore2.exe"
-                  KeyPath="yes" />
-            
-            <!-- The Shortcut has been moved here to be in the same component as its target file -->
-            <Shortcut Id="ApplicationStartMenuShortcut"
-                      Name="TabScore2"
-                      Description="TabScore2"
-                      Target="[#TabScore2.exe]"
-                      WorkingDirectory="INSTALLFOLDER"
-                      Directory="ApplicationProgramsFolder" />
-          </Component>
+            <Component Id="TabScore2Exe" Guid="F9B94A53-B386-435E-9694-8461521C26D1"
+                Bitness="always64">
+                <File Id="TabScore2.exe"
+                    Source="../TabScore2/publish/TabScore2.exe"
+                    KeyPath="yes" />
+            </Component>
         </DirectoryRef>
-    
+
+        <!-- This component now contains ALL per-user data, with the HKCU registry key as its
+        KeyPath -->
         <DirectoryRef Id="ApplicationProgramsFolder">
-          <Component Id="ApplicationShortcut" Guid="E6B5A4F7-3A4A-4B9A-B06F-420551826A9A" Bitness="always64">
-            <!-- The shortcut has been moved. This component now only manages the folder and registry key. -->
-            <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall" />
-            <RegistryValue Root="HKCU" Key="Software\TabScore2" Name="installed" Type="integer"
-                           Value="1" KeyPath="yes" />
-          </Component>
+            <Component Id="ApplicationShortcut" Guid="E6B5A4F7-3A4A-4B9A-B06F-420551826A9A"
+                Bitness="always64">
+                <Shortcut Id="ApplicationStartMenuShortcut"
+                    Name="TabScore2"
+                    Description="TabScore2"
+                    Target="[#TabScore2.exe]"
+                    WorkingDirectory="INSTALLFOLDER" />
+                <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall" />
+                <RegistryValue Root="HKCU" Key="Software\TabScore2" Name="installed" Type="integer"
+                    Value="1" KeyPath="yes" />
+            </Component>
         </DirectoryRef>
-      </Fragment>
-  
-  </Wix>
+    </Fragment>
+
+</Wix>
   
   

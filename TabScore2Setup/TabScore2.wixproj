@@ -14,7 +14,7 @@
       <SuppressCom>true</SuppressCom>
       <SuppressRegistry>true</SuppressRegistry>
       <SuppressRootDirectory>true</SuppressRootDirectory>
-      <Exclude Include="../TabScore2/publish/TabScore2.exe" />
+      <Exclude Files="../TabScore2/publish/TabScore2.exe" />
     </HarvestDirectory>
   </ItemGroup>
 </Project>

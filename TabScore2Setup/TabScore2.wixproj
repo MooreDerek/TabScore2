@@ -5,6 +5,9 @@
     <DefineConstants>Version=$(Version)</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="WixToolset.UI" Version="6.0.0" />
+  </ItemGroup>
+  <ItemGroup>
     <HarvestDirectory Include="../TabScore2/publish">
       <ComponentGroupName>ProductComponents</ComponentGroupName>
       <DirectoryRefId>INSTALLFOLDER</DirectoryRefId>
@@ -12,8 +15,5 @@
       <SuppressRegistry>true</SuppressRegistry>
       <SuppressRootDirectory>true</SuppressRootDirectory>
     </HarvestDirectory>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="TabScore2.wxs" />
   </ItemGroup>
 </Project>

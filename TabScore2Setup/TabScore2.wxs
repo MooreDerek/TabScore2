@@ -36,30 +36,34 @@
       <UI Id="WixUI_Minimal">
         <UIRef Id="WixUI_Minimal" />
       </UI>
-      <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
-  
-      <!-- Component definitions moved into the fragment to resolve linking errors -->
-      <DirectoryRef Id="INSTALLFOLDER">
-        <Component Id="TabScore2Exe" Guid="F9B94A53-B386-435E-9694-8461521C26D1" Bitness="always64">
-          <File Id="TabScore2.exe"
-                Source="../TabScore2/publish/TabScore2.exe"
-                KeyPath="yes" />
-        </Component>
-      </DirectoryRef>
-  
-      <DirectoryRef Id="ApplicationProgramsFolder">
-        <Component Id="ApplicationShortcut" Guid="E6B5A4F7-3A4A-4B9A-B06F-420551826A9A" Bitness="always64">
-          <Shortcut Id="ApplicationStartMenuShortcut"
-                    Name="TabScore2"
-                    Description="TabScore2"
-                    Target="[#TabScore2.exe]"
-                    WorkingDirectory="INSTALLFOLDER" />
-          <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall" />
-          <RegistryValue Root="HKCU" Key="Software\TabScore2" Name="installed" Type="integer"
-                         Value="1" KeyPath="yes" />
-        </Component>
-      </DirectoryRef>
-    </Fragment>
+        <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+    
+        <!-- Component definitions moved into the fragment to resolve linking errors -->
+        <DirectoryRef Id="INSTALLFOLDER">
+          <Component Id="TabScore2Exe" Guid="F9B94A53-B386-435E-9694-8461521C26D1" Bitness="always64">
+            <File Id="TabScore2.exe"
+                  Source="../TabScore2/publish/TabScore2.exe"
+                  KeyPath="yes" />
+            
+            <!-- The Shortcut has been moved here to be in the same component as its target file -->
+            <Shortcut Id="ApplicationStartMenuShortcut"
+                      Name="TabScore2"
+                      Description="TabScore2"
+                      Target="[#TabScore2.exe]"
+                      WorkingDirectory="INSTALLFOLDER"
+                      Directory="ApplicationProgramsFolder" />
+          </Component>
+        </DirectoryRef>
+    
+        <DirectoryRef Id="ApplicationProgramsFolder">
+          <Component Id="ApplicationShortcut" Guid="E6B5A4F7-3A4A-4B9A-B06F-420551826A9A" Bitness="always64">
+            <!-- The shortcut has been moved. This component now only manages the folder and registry key. -->
+            <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall" />
+            <RegistryValue Root="HKCU" Key="Software\TabScore2" Name="installed" Type="integer"
+                           Value="1" KeyPath="yes" />
+          </Component>
+        </DirectoryRef>
+      </Fragment>
   
   </Wix>
   

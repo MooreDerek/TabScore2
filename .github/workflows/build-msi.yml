@@ -30,7 +30,7 @@ jobs:
       run: dotnet publish TabScore2/TabScore2.csproj -c Release -o TabScore2/publish
 
     - name: Restore Installer Project Dependencies
-      run: dotnet restore TabScore2Setup/TabScore2.wixproj --source https://api.nuget.org/v3/index.json
+      run: dotnet restore TabScore2Setup/TabScore2.wixproj
 
     - name: Set Build Version
       id: version

@@ -27,11 +27,20 @@ jobs:
     - name: Build and Publish Application
       run: dotnet publish TabScore2/TabScore2.csproj -c Release -o TabScore2/publish
 
-    - name: Restore Installer Project Dependencies
-      run: dotnet restore TabScore2Setup/TabScore2.wixproj
+    - name: Install WiX Toolset
+      run: dotnet tool install --global wix --version 4.0.4
+
+    - name: Add .dotnet/tools to PATH
+      run: echo "%USERPROFILE%\.dotnet\tools" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+    - name: Add WiX UI Extension
+      run: wix extension add -g WixToolset.UI.wixext/4.0.4
+
+    - name: Harvest Project Output
+      run: wix heat dir TabScore2/publish -dr INSTALLFOLDER -cg ProductComponents -gg -sfrag -srd -scom -sreg -var var.publishDir -out TabScore2Setup/Components.wxs
 
     - name: Build MSI Installer
-      run: dotnet build TabScore2Setup/TabScore2.wixproj --no-restore -c Release -o TabScore2Setup/
+      run: wix build -d publishDir=TabScore2/publish -o TabScore2Setup/TabScore2.msi TabScore2Setup/TabScore2.wxs TabScore2Setup/Components.wxs
 
     - name: Upload Installer Artifact
       uses: actions/upload-artifact@v4

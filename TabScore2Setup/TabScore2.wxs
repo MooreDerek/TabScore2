@@ -50,6 +50,12 @@
                     Source="../TabScore2/publish/TabScore2.exe"
                     KeyPath="yes" />
             </Component>
+            <!-- This NEW component ONLY handles the per-user registry key -->
+            <Component Id="ApplicationRegistry" Guid="3E45228E-8E7B-4A1C-8A7B-3E838F5F2C5A"
+                Bitness="always64">
+                <RegistryValue Root="HKCU" Key="Software\TabScore2" Name="installed" Type="integer"
+                    Value="1" KeyPath="yes" />
+            </Component>
         </DirectoryRef>
 
         <!-- This component now handles the advertised shortcut and the Start Menu folder -->
@@ -68,13 +74,6 @@
                 <CreateFolder />
             </Component>
         </DirectoryRef>
-
-        <!-- This NEW component ONLY handles the per-user registry key -->
-        <Component Id="ApplicationRegistry" Guid="3E45228E-8E7B-4A1C-8A7B-3E838F5F2C5A"
-            Bitness="always64">
-            <RegistryValue Root="HKCU" Key="Software\TabScore2" Name="installed" Type="integer"
-                Value="1" KeyPath="yes" />
-        </Component>
 
     </Fragment>
 

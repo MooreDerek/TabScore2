@@ -1,10 +1,19 @@
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
     <Package Name="TabScore2"
-             Language="1033"
-             Version="1.0.0.0"
-             Manufacturer="TabScore2"
-             UpgradeCode="D576912E-6999-4523-A8A9-57E8376F1D51"
-             Compressed="yes">
+        Language="1033"
+        Version="$(var.Version)"
+        Manufacturer="TabScore2"
+        UpgradeCode="D576912E-6999-4523-A8A9-57E8376F1D51"
+        Compressed="yes">
+
+        <StandardDirectory Id="ProgramFiles64Folder">
+            <Directory Id="INSTALLFOLDER" Name="TabScore2" />
+        </StandardDirectory>
+
+
+        <StandardDirectory Id="ProgramMenuFolder">
+            <Directory Id="ApplicationProgramsFolder" Name="TabScore2" />
+        </StandardDirectory>
 
         <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
         <MediaTemplate EmbedCab="yes" />
@@ -20,22 +29,16 @@
 
         <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
 
-        <StandardDirectory Id="ProgramFiles64Folder">
-            <Directory Id="INSTALLFOLDER" Name="TabScore2" />
-        </StandardDirectory>
-        <StandardDirectory Id="ProgramMenuFolder">
-            <Directory Id="ApplicationProgramsFolder" Name="TabScore2"/>
-        </StandardDirectory>
-
         <DirectoryRef Id="ApplicationProgramsFolder">
             <Component Id="ApplicationShortcut" Guid="E6B5A4F7-3A4A-4B9A-B06F-420551826A9A">
                 <Shortcut Id="ApplicationStartMenuShortcut"
-                          Name="TabScore2"
-                          Description="TabScore2"
-                          Target="[INSTALLFOLDER]TabScore2.exe"
-                          WorkingDirectory="INSTALLFOLDER"/>
-                <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
-                <RegistryValue Root="HKCU" Key="Software\TabScore2" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+                    Name="TabScore2"
+                    Description="TabScore2"
+                    Target="[INSTALLFOLDER]TabScore2.exe"
+                    WorkingDirectory="INSTALLFOLDER" />
+                <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall" />
+                <RegistryValue Root="HKCU" Key="Software\TabScore2" Name="installed" Type="integer"
+                    Value="1" KeyPath="yes" />
             </Component>
         </DirectoryRef>
 

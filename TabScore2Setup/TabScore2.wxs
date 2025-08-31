@@ -4,8 +4,7 @@
              Version="$(Version)"
              Manufacturer="TabScore2"
              UpgradeCode="D576912E-6999-4523-A8A9-57E8376F1D51"
-             Compressed="yes"
-             Platform="x64">
+             Compressed="yes">
   
       <StandardDirectory Id="ProgramFiles64Folder">
         <Directory Id="INSTALLFOLDER" Name="TabScore2" />
@@ -49,7 +48,7 @@
       </DirectoryRef>
   
       <DirectoryRef Id="ApplicationProgramsFolder">
-        <Component Id="ApplicationShortcut" Guid="E6B5A4F7-3A4A-4B9A-B06F-420551826A9A" Win64="yes">
+        <Component Id="ApplicationShortcut" Guid="E6B5A4F7-3A4A-4B9A-B06F-420551826A9A" Bitness="always64">
           <Shortcut Id="ApplicationStartMenuShortcut"
                     Name="TabScore2"
                     Description="TabScore2"

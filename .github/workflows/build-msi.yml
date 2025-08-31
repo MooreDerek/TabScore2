@@ -37,7 +37,7 @@ jobs:
       run: heat dir TabScore2/publish -dr INSTALLFOLDER -cg ProductComponents -gg -sfrag -srd -scom -sreg -var var.publishDir -out TabScore2Setup/Components.wxs
 
     - name: Build MSI Installer
-      run: wix build -dpublishDir=TabScore2/publish -o TabScore2Setup/TabScore2.msi TabScore2Setup/TabScore2.wxs TabScore2Setup/Components.wxs -ext WixToolset.UI
+      run: wix build TabScore2Setup/TabScore2.wixproj -p:WixDefineConstants="publishDir=TabScore2/publish" -o TabScore2Setup/
 
     - name: Upload Installer Artifact
       uses: actions/upload-artifact@v4

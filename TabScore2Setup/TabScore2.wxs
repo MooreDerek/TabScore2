@@ -26,6 +26,10 @@
         <!-- The UI reference now points to the fragment below -->
         <UIRef Id="WixUI_Minimal" />
 
+        <!-- An Icon must be defined for an advertised shortcut -->
+        <Icon Id="TabScore2.exe" SourceFile="../TabScore2/publish/TabScore2.exe" />
+
+
     </Package>
 
     <Fragment>
@@ -53,10 +57,12 @@
         <DirectoryRef Id="ApplicationProgramsFolder">
             <Component Id="ApplicationShortcut" Guid="E6B5A4F7-3A4A-4B9A-B06F-420551826A9A"
                 Bitness="always64">
+                <!-- This is now an advertised shortcut. It has no 'Target' attribute. -->
                 <Shortcut Id="ApplicationStartMenuShortcut"
                     Name="TabScore2"
                     Description="TabScore2"
-                    Target="[#TabScore2.exe]"
+                    Advertise="yes"
+                    Icon="TabScore2.exe"
                     WorkingDirectory="INSTALLFOLDER" />
                 <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall" />
                 <RegistryValue Root="HKCU" Key="Software\TabScore2" Name="installed" Type="integer"

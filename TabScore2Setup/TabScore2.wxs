@@ -52,12 +52,10 @@
             </Component>
         </DirectoryRef>
 
-        <!-- This component now contains ALL per-user data, with the HKCU registry key as its
-        KeyPath -->
+        <!-- This component now handles the advertised shortcut and the Start Menu folder -->
         <DirectoryRef Id="ApplicationProgramsFolder">
             <Component Id="ApplicationShortcut" Guid="E6B5A4F7-3A4A-4B9A-B06F-420551826A9A"
                 Bitness="always64">
-                <!-- This is now an advertised shortcut. It has no 'Target' attribute. -->
                 <Shortcut Id="ApplicationStartMenuShortcut"
                     Name="TabScore2"
                     Description="TabScore2"
@@ -65,6 +63,14 @@
                     Icon="TabScore2.exe"
                     WorkingDirectory="INSTALLFOLDER" />
                 <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall" />
+                <!-- The CreateFolder element now serves as the valid KeyPath for this advertised
+                component -->
+                <CreateFolder KeyPath="yes" />
+            </Component>
+
+            <!-- This NEW component ONLY handles the per-user registry key -->
+            <Component Id="ApplicationRegistry" Guid="3E45228E-8E7B-4A1C-8A7B-3E838F5F2C5A"
+                Bitness="always64">
                 <RegistryValue Root="HKCU" Key="Software\TabScore2" Name="installed" Type="integer"
                     Value="1" KeyPath="yes" />
             </Component>

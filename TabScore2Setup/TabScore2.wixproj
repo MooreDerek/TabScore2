@@ -1,4 +1,4 @@
-<Project Sdk="WixToolset.Sdk/6.0.0">
+<Project Sdk="Wix/6.0.0">
   <PropertyGroup>
     <OutputType>Package</OutputType>
     <OutputName>TabScore2</OutputName>

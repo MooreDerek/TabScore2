@@ -37,7 +37,7 @@ jobs:
       run: wix extension add -g WixToolset.UI.wixext
 
     - name: Harvest project output
-      run: heat dir TabScore2/publish -dr INSTALLFOLDER -cg ProductComponents -gg -sfrag -srd -scom -sreg -var var.publishDir -out TabScore2Setup/Components.wxs
+      run: wix heat dir TabScore2/publish -dr INSTALLFOLDER -cg ProductComponents -gg -sfrag -srd -scom -sreg -var var.publishDir -out TabScore2Setup/Components.wxs
 
     - name: Build MSI Installer
       run: wix build -d publishDir=TabScore2/publish -o TabScore2Setup/TabScore2.msi TabScore2Setup/TabScore2.wxs TabScore2Setup/Components.wxs

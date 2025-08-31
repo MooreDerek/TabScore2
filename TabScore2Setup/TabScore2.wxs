@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
-    <Product Id="C5B29255-2913-4A4B-B639-E3657C98F71E"
-             Name="TabScore2"
+    <Package Name="TabScore2"
              Language="1033"
              Version="1.0.0.0"
              Manufacturer="TabScore2"
-             UpgradeCode="D576912E-6999-4523-A8A9-57E8376F1D51">
-        <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+             UpgradeCode="D576912E-6999-4523-A8A9-57E8376F1D51"
+             Compressed="yes">
 
         <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
         <MediaTemplate EmbedCab="yes" />
@@ -16,18 +15,18 @@
             <ComponentRef Id="ApplicationShortcut" />
         </Feature>
 
-        <UIRef Id="WixUI_Minimal" />
+        <UI>
+            <UIRef Id="WixUI_Minimal" />
+        </UI>
 
         <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
 
-        <Directory Id="TARGETDIR" Name="SourceDir">
-            <Directory Id="ProgramFiles64Folder">
-                <Directory Id="INSTALLFOLDER" Name="TabScore2" />
-            </Directory>
-            <Directory Id="ProgramMenuFolder">
-                <Directory Id="ApplicationProgramsFolder" Name="TabScore2"/>
-            </Directory>
-        </Directory>
+        <StandardDirectory Id="ProgramFiles64Folder">
+            <Directory Id="INSTALLFOLDER" Name="TabScore2" />
+        </StandardDirectory>
+        <StandardDirectory Id="ProgramMenuFolder">
+            <Directory Id="ApplicationProgramsFolder" Name="TabScore2"/>
+        </StandardDirectory>
 
         <DirectoryRef Id="ApplicationProgramsFolder">
             <Component Id="ApplicationShortcut" Guid="E6B5A4F7-3A4A-4B9A-B06F-420551826A9A">
@@ -41,5 +40,5 @@
             </Component>
         </DirectoryRef>
 
-    </Product>
+    </Package>
 </Wix>

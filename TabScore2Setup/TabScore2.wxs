@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
     <Product Id="C5B29255-2913-4A4B-B639-E3657C98F71E"
              Name="TabScore2"
              Language="1033"

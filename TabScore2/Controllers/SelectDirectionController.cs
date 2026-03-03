@@ -58,7 +58,7 @@ namespace TabScore2.Controllers
                 string savedDirection = HttpContext.Session.GetString("Direction") ?? string.Empty;
                 if (sectionId != savedSectionId || tableNumber != savedTableNumber || direction.ToString() != savedDirection)
                 {
-                    return RedirectToAction("Index", "SelectTableNumber", new { sectionId, tableNumber, confirm = true });
+                    return RedirectToAction("Index", "SelectDirection", new { sectionId, tableNumber, direction, confirm = true });
                 }
                 // else = session state matches, so this is a re-registration and nothing more to do
             }

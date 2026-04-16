@@ -1,0 +1,36 @@
+name: Build GrpcBwsDatabaseServer (PoC)
+
+on:
+  workflow_dispatch:  # Manual trigger only — this is a PoC build
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore GrpcBwsDatabaseServer/GrpcBwsDatabaseServer.csproj /p:Platform=x86
+
+      - name: Publish self-contained executable
+        run: >
+          dotnet publish GrpcBwsDatabaseServer/GrpcBwsDatabaseServer.csproj
+          -c Release
+          -r win-x86
+          --self-contained true
+          /p:Platform=x86
+          -o PoC/publish
+
+      - name: Upload publish output as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: GrpcBwsDatabaseServer-win-x86
+          path: PoC/publish/
+          retention-days: 7

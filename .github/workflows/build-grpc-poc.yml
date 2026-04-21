@@ -4,12 +4,12 @@ on:
   workflow_dispatch:  # Manual trigger only — this is a PoC build
 
 jobs:
-  build:
+  build: 
     runs-on: windows-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Setup .NET 8
         uses: actions/setup-dotnet@v4
@@ -17,20 +17,20 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore GrpcBwsDatabaseServer/GrpcBwsDatabaseServer.csproj /p:Platform=x86
+        run: dotnet restore GrpcBwsDatabaseServer/GrpcBwsDatabaseServer.csproj /p:Platform=AnyCPU
 
       - name: Publish self-contained executable
         run: >
           dotnet publish GrpcBwsDatabaseServer/GrpcBwsDatabaseServer.csproj
           -c Release
-          -r win-x86
+          -r win-x64
           --self-contained true
-          /p:Platform=x86
+          /p:Platform=AnyCPU
           -o PoC/publish
 
       - name: Upload publish output as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: GrpcBwsDatabaseServer-win-x86
+          name: GrpcBwsDatabaseServer-win-x64
           path: PoC/publish/
           retention-days: 7

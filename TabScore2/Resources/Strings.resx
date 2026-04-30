@@ -557,4 +557,7 @@ tablet device at your current location</value>
     <value>The GrpcBwsDatabaseServer did not start.  Please check that the correct runtime libraries are installed</value>
     <comment>@MutedRule(PunctuationTail)</comment>
   </data>
+  <data name="BoardsStay" xml:space="preserve">
+    <value>Leave at this table</value>
+  </data>
 </root>

@@ -1,4 +1,4 @@
-﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
+﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2026 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using TabScore2.DataServices;
@@ -43,6 +43,7 @@ namespace TabScore2.Forms
             ShowTimerCheckbox.Checked = settings.ShowTimer;
             MinutesPerBoardNud.Value = Convert.ToDecimal(settings.SecondsPerBoard) / 60;
             AdditionalMinutesPerRoundNud.Value = Convert.ToDecimal(settings.AdditionalSecondsPerRound) / 60;
+            MasterTableForTimerCheckbox.Checked = settings.MasterTableForTimer;
             DoubleDummyCheckbox.Checked = settings.DoubleDummy;
             SuppressRankingListFirstXNud.Value = settings.SuppressRankingListForFirstXRounds;
             SuppressRankingListLastXNud.Value = settings.SuppressRankingListForLastXRounds;
@@ -54,7 +55,8 @@ namespace TabScore2.Forms
             ValidateLeadCardCheckbox.Enabled = EnterLeadCardCheckbox.Checked;
             DoubleDummyCheckbox.Enabled = ManualHandEntryCheckbox.Checked;
             NumberEntryEachRoundCheckbox.Enabled = !(NameSourceCombobox.SelectedIndex == 2);
-            MinutesPerBoardNud.Enabled = AdditionalMinutesPerRoundNud.Enabled = MinutesPerBoardLabel.Enabled = AdditionalMinutesPerRoundLabel.Enabled = ShowTimerCheckbox.Checked;
+            MasterTableForTimerCheckbox.Enabled = MinutesPerBoardNud.Enabled = AdditionalMinutesPerRoundNud.Enabled = MinutesPerBoardLabel.Enabled 
+              = AdditionalMinutesPerRoundLabel.Enabled = ShowTimerCheckbox.Checked;
             SuppressRankingListFirstXLabel.Enabled = SuppressRankingListFirstXNud.Enabled = (ShowRankingCombobox.SelectedIndex == 1);
             SuppressRankingListLastXLabel.Enabled = SuppressRankingListLastXNud.Enabled = (ShowRankingCombobox.SelectedIndex == 1);
         }
@@ -82,6 +84,7 @@ namespace TabScore2.Forms
             settings.ShowTimer = ShowTimerCheckbox.Checked;
             settings.SecondsPerBoard = Convert.ToInt32(MinutesPerBoardNud.Value * 60);
             settings.AdditionalSecondsPerRound = Convert.ToInt32(AdditionalMinutesPerRoundNud.Value * 60);
+            settings.MasterTableForTimer = MasterTableForTimerCheckbox.Checked;
             settings.DoubleDummy = DoubleDummyCheckbox.Checked;
             settings.SuppressRankingListForFirstXRounds = Convert.ToInt32(SuppressRankingListFirstXNud.Value);
             settings.SuppressRankingListForLastXRounds = Convert.ToInt32(SuppressRankingListLastXNud.Value);
@@ -114,7 +117,8 @@ namespace TabScore2.Forms
 
         private void ShowTimerCheckbox_CheckedChanged(object sender, EventArgs e)
         {
-            MinutesPerBoardNud.Enabled = AdditionalMinutesPerRoundNud.Enabled = MinutesPerBoardLabel.Enabled = AdditionalMinutesPerRoundLabel.Enabled = ShowTimerCheckbox.Checked;
+            MasterTableForTimerCheckbox.Enabled = MinutesPerBoardNud.Enabled = AdditionalMinutesPerRoundNud.Enabled = MinutesPerBoardLabel.Enabled
+              = AdditionalMinutesPerRoundLabel.Enabled = ShowTimerCheckbox.Checked;
         }
 
         private void ShowRankingCombobox_SelectedIndexChanged(object sender, EventArgs e)

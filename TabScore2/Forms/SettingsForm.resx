@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!--
-    Microsoft ResX Schema 
+    Microsoft ResX Schema
 
     Version 2.0
 
@@ -48,7 +48,7 @@
     value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-    
+
     mimetype: application/x-microsoft.net.object.soap.base64
     value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
@@ -118,22 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="TravellerGroup.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI, 9.75pt, style=Bold</value>
-  </data>
-  <data name="TravellerGroup.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 76</value>
-  </data>
-  <data name="TravellerGroup.Size" type="System.Drawing.Size, System.Drawing">
-    <value>367, 79</value>
-  </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="TravellerGroup.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="TravellerGroup.Text" xml:space="preserve">
-    <value>Traveller</value>
-  </data>
   <data name="ShowPercentageCheckbox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
   </data>
@@ -143,11 +127,24 @@
   <data name="ShowPercentageCheckbox.Size" type="System.Drawing.Size, System.Drawing">
     <value>355, 24</value>
   </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="ShowPercentageCheckbox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
   <data name="ShowPercentageCheckbox.Text" xml:space="preserve">
     <value>Show percentage on traveller</value>
+  </data>
+  <data name="&gt;&gt;ShowPercentageCheckbox.Name" xml:space="preserve">
+    <value>ShowPercentageCheckbox</value>
+  </data>
+  <data name="&gt;&gt;ShowPercentageCheckbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ShowPercentageCheckbox.Parent" xml:space="preserve">
+    <value>TravellerGroup</value>
+  </data>
+  <data name="&gt;&gt;ShowPercentageCheckbox.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
   <data name="ShowTravellerCheckbox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
@@ -164,20 +161,44 @@
   <data name="ShowTravellerCheckbox.Text" xml:space="preserve">
     <value>Show traveller</value>
   </data>
-  <data name="PlayersGroup.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="&gt;&gt;ShowTravellerCheckbox.Name" xml:space="preserve">
+    <value>ShowTravellerCheckbox</value>
+  </data>
+  <data name="&gt;&gt;ShowTravellerCheckbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ShowTravellerCheckbox.Parent" xml:space="preserve">
+    <value>TravellerGroup</value>
+  </data>
+  <data name="&gt;&gt;ShowTravellerCheckbox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="TravellerGroup.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9.75pt, style=Bold</value>
   </data>
-  <data name="PlayersGroup.Location" type="System.Drawing.Point, System.Drawing">
-    <value>396, 135</value>
+  <data name="TravellerGroup.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 76</value>
   </data>
-  <data name="PlayersGroup.Size" type="System.Drawing.Size, System.Drawing">
-    <value>444, 81</value>
+  <data name="TravellerGroup.Size" type="System.Drawing.Size, System.Drawing">
+    <value>367, 79</value>
   </data>
-  <data name="PlayersGroup.TabIndex" type="System.Int32, mscorlib">
-    <value>8</value>
+  <data name="TravellerGroup.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
   </data>
-  <data name="PlayersGroup.Text" xml:space="preserve">
-    <value>Player names/IDs</value>
+  <data name="TravellerGroup.Text" xml:space="preserve">
+    <value>Traveller</value>
+  </data>
+  <data name="&gt;&gt;TravellerGroup.Name" xml:space="preserve">
+    <value>TravellerGroup</value>
+  </data>
+  <data name="&gt;&gt;TravellerGroup.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;TravellerGroup.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;TravellerGroup.ZOrder" xml:space="preserve">
+    <value>10</value>
   </data>
   <data name="NameSourceCombobox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
@@ -203,6 +224,18 @@
   <data name="NameSourceCombobox.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
+  <data name="&gt;&gt;NameSourceCombobox.Name" xml:space="preserve">
+    <value>NameSourceCombobox</value>
+  </data>
+  <data name="&gt;&gt;NameSourceCombobox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;NameSourceCombobox.Parent" xml:space="preserve">
+    <value>PlayersGroup</value>
+  </data>
+  <data name="&gt;&gt;NameSourceCombobox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="NumberEntryEachRoundCheckbox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
   </data>
@@ -218,20 +251,44 @@
   <data name="NumberEntryEachRoundCheckbox.Text" xml:space="preserve">
     <value>Player ID entry each round</value>
   </data>
-  <data name="RankingListGroup.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="&gt;&gt;NumberEntryEachRoundCheckbox.Name" xml:space="preserve">
+    <value>NumberEntryEachRoundCheckbox</value>
+  </data>
+  <data name="&gt;&gt;NumberEntryEachRoundCheckbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;NumberEntryEachRoundCheckbox.Parent" xml:space="preserve">
+    <value>PlayersGroup</value>
+  </data>
+  <data name="&gt;&gt;NumberEntryEachRoundCheckbox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="PlayersGroup.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9.75pt, style=Bold</value>
   </data>
-  <data name="RankingListGroup.Location" type="System.Drawing.Point, System.Drawing">
-    <value>396, 12</value>
+  <data name="PlayersGroup.Location" type="System.Drawing.Point, System.Drawing">
+    <value>396, 135</value>
   </data>
-  <data name="RankingListGroup.Size" type="System.Drawing.Size, System.Drawing">
-    <value>444, 112</value>
+  <data name="PlayersGroup.Size" type="System.Drawing.Size, System.Drawing">
+    <value>444, 81</value>
   </data>
-  <data name="RankingListGroup.TabIndex" type="System.Int32, mscorlib">
+  <data name="PlayersGroup.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="PlayersGroup.Text" xml:space="preserve">
+    <value>Player names/IDs</value>
+  </data>
+  <data name="&gt;&gt;PlayersGroup.Name" xml:space="preserve">
+    <value>PlayersGroup</value>
+  </data>
+  <data name="&gt;&gt;PlayersGroup.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;PlayersGroup.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;PlayersGroup.ZOrder" xml:space="preserve">
     <value>7</value>
-  </data>
-  <data name="RankingListGroup.Text" xml:space="preserve">
-    <value>Ranking list</value>
   </data>
   <data name="SuppressRankingListLastXLabel.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
@@ -252,6 +309,18 @@
   <data name="SuppressRankingListLastXLabel.Text" xml:space="preserve">
     <value>Don't show ranking list for last x rounds</value>
   </data>
+  <data name="&gt;&gt;SuppressRankingListLastXLabel.Name" xml:space="preserve">
+    <value>SuppressRankingListLastXLabel</value>
+  </data>
+  <data name="&gt;&gt;SuppressRankingListLastXLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;SuppressRankingListLastXLabel.Parent" xml:space="preserve">
+    <value>RankingListGroup</value>
+  </data>
+  <data name="&gt;&gt;SuppressRankingListLastXLabel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="SuppressRankingListLastXNud.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
   </data>
@@ -266,6 +335,18 @@
   </data>
   <data name="SuppressRankingListLastXNud.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
     <value>Center</value>
+  </data>
+  <data name="&gt;&gt;SuppressRankingListLastXNud.Name" xml:space="preserve">
+    <value>SuppressRankingListLastXNud</value>
+  </data>
+  <data name="&gt;&gt;SuppressRankingListLastXNud.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;SuppressRankingListLastXNud.Parent" xml:space="preserve">
+    <value>RankingListGroup</value>
+  </data>
+  <data name="&gt;&gt;SuppressRankingListLastXNud.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
   <data name="SuppressRankingListFirstXLabel.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
@@ -282,6 +363,18 @@
   <data name="SuppressRankingListFirstXLabel.Text" xml:space="preserve">
     <value>Don't show ranking list for first x rounds</value>
   </data>
+  <data name="&gt;&gt;SuppressRankingListFirstXLabel.Name" xml:space="preserve">
+    <value>SuppressRankingListFirstXLabel</value>
+  </data>
+  <data name="&gt;&gt;SuppressRankingListFirstXLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;SuppressRankingListFirstXLabel.Parent" xml:space="preserve">
+    <value>RankingListGroup</value>
+  </data>
+  <data name="&gt;&gt;SuppressRankingListFirstXLabel.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
   <data name="SuppressRankingListFirstXNud.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
   </data>
@@ -296,6 +389,18 @@
   </data>
   <data name="SuppressRankingListFirstXNud.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
     <value>Center</value>
+  </data>
+  <data name="&gt;&gt;SuppressRankingListFirstXNud.Name" xml:space="preserve">
+    <value>SuppressRankingListFirstXNud</value>
+  </data>
+  <data name="&gt;&gt;SuppressRankingListFirstXNud.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;SuppressRankingListFirstXNud.Parent" xml:space="preserve">
+    <value>RankingListGroup</value>
+  </data>
+  <data name="&gt;&gt;SuppressRankingListFirstXNud.ZOrder" xml:space="preserve">
+    <value>3</value>
   </data>
   <data name="ShowRankingCombobox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
@@ -318,20 +423,44 @@
   <data name="ShowRankingCombobox.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
-  <data name="LeadCardGroup.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="&gt;&gt;ShowRankingCombobox.Name" xml:space="preserve">
+    <value>ShowRankingCombobox</value>
+  </data>
+  <data name="&gt;&gt;ShowRankingCombobox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ShowRankingCombobox.Parent" xml:space="preserve">
+    <value>RankingListGroup</value>
+  </data>
+  <data name="&gt;&gt;ShowRankingCombobox.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="RankingListGroup.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9.75pt, style=Bold</value>
   </data>
-  <data name="LeadCardGroup.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 301</value>
+  <data name="RankingListGroup.Location" type="System.Drawing.Point, System.Drawing">
+    <value>396, 12</value>
   </data>
-  <data name="LeadCardGroup.Size" type="System.Drawing.Size, System.Drawing">
-    <value>367, 83</value>
+  <data name="RankingListGroup.Size" type="System.Drawing.Size, System.Drawing">
+    <value>444, 112</value>
   </data>
-  <data name="LeadCardGroup.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
+  <data name="RankingListGroup.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
   </data>
-  <data name="LeadCardGroup.Text" xml:space="preserve">
-    <value>Lead card</value>
+  <data name="RankingListGroup.Text" xml:space="preserve">
+    <value>Ranking list</value>
+  </data>
+  <data name="&gt;&gt;RankingListGroup.Name" xml:space="preserve">
+    <value>RankingListGroup</value>
+  </data>
+  <data name="&gt;&gt;RankingListGroup.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;RankingListGroup.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;RankingListGroup.ZOrder" xml:space="preserve">
+    <value>8</value>
   </data>
   <data name="ValidateLeadCardCheckbox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
@@ -348,6 +477,18 @@
   <data name="ValidateLeadCardCheckbox.Text" xml:space="preserve">
     <value>Validate lead card</value>
   </data>
+  <data name="&gt;&gt;ValidateLeadCardCheckbox.Name" xml:space="preserve">
+    <value>ValidateLeadCardCheckbox</value>
+  </data>
+  <data name="&gt;&gt;ValidateLeadCardCheckbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ValidateLeadCardCheckbox.Parent" xml:space="preserve">
+    <value>LeadCardGroup</value>
+  </data>
+  <data name="&gt;&gt;ValidateLeadCardCheckbox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="EnterLeadCardCheckbox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
   </data>
@@ -362,6 +503,45 @@
   </data>
   <data name="EnterLeadCardCheckbox.Text" xml:space="preserve">
     <value>Enter lead card</value>
+  </data>
+  <data name="&gt;&gt;EnterLeadCardCheckbox.Name" xml:space="preserve">
+    <value>EnterLeadCardCheckbox</value>
+  </data>
+  <data name="&gt;&gt;EnterLeadCardCheckbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;EnterLeadCardCheckbox.Parent" xml:space="preserve">
+    <value>LeadCardGroup</value>
+  </data>
+  <data name="&gt;&gt;EnterLeadCardCheckbox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="LeadCardGroup.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9.75pt, style=Bold</value>
+  </data>
+  <data name="LeadCardGroup.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 301</value>
+  </data>
+  <data name="LeadCardGroup.Size" type="System.Drawing.Size, System.Drawing">
+    <value>367, 83</value>
+  </data>
+  <data name="LeadCardGroup.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="LeadCardGroup.Text" xml:space="preserve">
+    <value>Lead card</value>
+  </data>
+  <data name="&gt;&gt;LeadCardGroup.Name" xml:space="preserve">
+    <value>LeadCardGroup</value>
+  </data>
+  <data name="&gt;&gt;LeadCardGroup.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;LeadCardGroup.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;LeadCardGroup.ZOrder" xml:space="preserve">
+    <value>9</value>
   </data>
   <data name="CanxButton.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9.75pt, style=Bold</value>
@@ -378,6 +558,18 @@
   <data name="CanxButton.Text" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="&gt;&gt;CanxButton.Name" xml:space="preserve">
+    <value>CanxButton</value>
+  </data>
+  <data name="&gt;&gt;CanxButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;CanxButton.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;CanxButton.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
   <data name="SaveButton.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9.75pt, style=Bold</value>
   </data>
@@ -393,20 +585,17 @@
   <data name="SaveButton.Text" xml:space="preserve">
     <value>Save and close</value>
   </data>
-  <data name="EnterResultsMethodGroup.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI, 9.75pt, style=Bold</value>
+  <data name="&gt;&gt;SaveButton.Name" xml:space="preserve">
+    <value>SaveButton</value>
   </data>
-  <data name="EnterResultsMethodGroup.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 12</value>
+  <data name="&gt;&gt;SaveButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="EnterResultsMethodGroup.Size" type="System.Drawing.Size, System.Drawing">
-    <value>367, 59</value>
+  <data name="&gt;&gt;SaveButton.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
-  <data name="EnterResultsMethodGroup.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="EnterResultsMethodGroup.Text" xml:space="preserve">
-    <value>Results entry method</value>
+  <data name="&gt;&gt;SaveButton.ZOrder" xml:space="preserve">
+    <value>5</value>
   </data>
   <data name="EnterResultsMethodCombobox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
@@ -426,20 +615,44 @@
   <data name="EnterResultsMethodCombobox.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
-  <data name="TabletMovesGroupBox.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="&gt;&gt;EnterResultsMethodCombobox.Name" xml:space="preserve">
+    <value>EnterResultsMethodCombobox</value>
+  </data>
+  <data name="&gt;&gt;EnterResultsMethodCombobox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;EnterResultsMethodCombobox.Parent" xml:space="preserve">
+    <value>EnterResultsMethodGroup</value>
+  </data>
+  <data name="&gt;&gt;EnterResultsMethodCombobox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="EnterResultsMethodGroup.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9.75pt, style=Bold</value>
   </data>
-  <data name="TabletMovesGroupBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>396, 224</value>
+  <data name="EnterResultsMethodGroup.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 12</value>
   </data>
-  <data name="TabletMovesGroupBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>444, 80</value>
+  <data name="EnterResultsMethodGroup.Size" type="System.Drawing.Size, System.Drawing">
+    <value>367, 59</value>
   </data>
-  <data name="TabletMovesGroupBox.TabIndex" type="System.Int32, mscorlib">
-    <value>9</value>
+  <data name="EnterResultsMethodGroup.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
   </data>
-  <data name="TabletMovesGroupBox.Text" xml:space="preserve">
-    <value>Table-top device mode</value>
+  <data name="EnterResultsMethodGroup.Text" xml:space="preserve">
+    <value>Results entry method</value>
+  </data>
+  <data name="&gt;&gt;EnterResultsMethodGroup.Name" xml:space="preserve">
+    <value>EnterResultsMethodGroup</value>
+  </data>
+  <data name="&gt;&gt;EnterResultsMethodGroup.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;EnterResultsMethodGroup.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;EnterResultsMethodGroup.ZOrder" xml:space="preserve">
+    <value>4</value>
   </data>
   <data name="TabletModePersonalRadioButton.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
@@ -456,6 +669,18 @@
   <data name="TabletModePersonalRadioButton.Text" xml:space="preserve">
     <value>Personal - tablets move with players</value>
   </data>
+  <data name="&gt;&gt;TabletModePersonalRadioButton.Name" xml:space="preserve">
+    <value>TabletModePersonalRadioButton</value>
+  </data>
+  <data name="&gt;&gt;TabletModePersonalRadioButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;TabletModePersonalRadioButton.Parent" xml:space="preserve">
+    <value>TabletMovesGroupBox</value>
+  </data>
+  <data name="&gt;&gt;TabletModePersonalRadioButton.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="TabletModeTraditionalRadioButton.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
   </data>
@@ -471,20 +696,74 @@
   <data name="TabletModeTraditionalRadioButton.Text" xml:space="preserve">
     <value>Traditional - 1 tablet per table</value>
   </data>
-  <data name="RoundTimerGroupBox.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="&gt;&gt;TabletModeTraditionalRadioButton.Name" xml:space="preserve">
+    <value>TabletModeTraditionalRadioButton</value>
+  </data>
+  <data name="&gt;&gt;TabletModeTraditionalRadioButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;TabletModeTraditionalRadioButton.Parent" xml:space="preserve">
+    <value>TabletMovesGroupBox</value>
+  </data>
+  <data name="&gt;&gt;TabletModeTraditionalRadioButton.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="TabletMovesGroupBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9.75pt, style=Bold</value>
   </data>
-  <data name="RoundTimerGroupBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 391</value>
+  <data name="TabletMovesGroupBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>396, 224</value>
   </data>
-  <data name="RoundTimerGroupBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>367, 104</value>
+  <data name="TabletMovesGroupBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>444, 80</value>
   </data>
-  <data name="RoundTimerGroupBox.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
+  <data name="TabletMovesGroupBox.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
   </data>
-  <data name="RoundTimerGroupBox.Text" xml:space="preserve">
-    <value>Round timer</value>
+  <data name="TabletMovesGroupBox.Text" xml:space="preserve">
+    <value>Table-top device mode</value>
+  </data>
+  <data name="&gt;&gt;TabletMovesGroupBox.Name" xml:space="preserve">
+    <value>TabletMovesGroupBox</value>
+  </data>
+  <data name="&gt;&gt;TabletMovesGroupBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;TabletMovesGroupBox.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;TabletMovesGroupBox.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="TimerMasterCheckbox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9pt</value>
+  </data>
+  <data name="TimerMasterCheckbox.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="TimerMasterCheckbox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 101</value>
+  </data>
+  <data name="TimerMasterCheckbox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>355, 24</value>
+  </data>
+  <data name="TimerMasterCheckbox.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="TimerMasterCheckbox.Text" xml:space="preserve">
+    <value>Use Table 1 as master to start round timer</value>
+  </data>
+  <data name="&gt;&gt;TimerMasterCheckbox.Name" xml:space="preserve">
+    <value>TimerMasterCheckbox</value>
+  </data>
+  <data name="&gt;&gt;TimerMasterCheckbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;TimerMasterCheckbox.Parent" xml:space="preserve">
+    <value>RoundTimerGroupBox</value>
+  </data>
+  <data name="&gt;&gt;TimerMasterCheckbox.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
   <data name="AdditionalMinutesPerRoundLabel.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
@@ -501,6 +780,18 @@
   <data name="AdditionalMinutesPerRoundLabel.Text" xml:space="preserve">
     <value>Additional minutes per round</value>
   </data>
+  <data name="&gt;&gt;AdditionalMinutesPerRoundLabel.Name" xml:space="preserve">
+    <value>AdditionalMinutesPerRoundLabel</value>
+  </data>
+  <data name="&gt;&gt;AdditionalMinutesPerRoundLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;AdditionalMinutesPerRoundLabel.Parent" xml:space="preserve">
+    <value>RoundTimerGroupBox</value>
+  </data>
+  <data name="&gt;&gt;AdditionalMinutesPerRoundLabel.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
   <data name="AdditionalMinutesPerRoundNud.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
   </data>
@@ -515,6 +806,18 @@
   </data>
   <data name="AdditionalMinutesPerRoundNud.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
     <value>Center</value>
+  </data>
+  <data name="&gt;&gt;AdditionalMinutesPerRoundNud.Name" xml:space="preserve">
+    <value>AdditionalMinutesPerRoundNud</value>
+  </data>
+  <data name="&gt;&gt;AdditionalMinutesPerRoundNud.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;AdditionalMinutesPerRoundNud.Parent" xml:space="preserve">
+    <value>RoundTimerGroupBox</value>
+  </data>
+  <data name="&gt;&gt;AdditionalMinutesPerRoundNud.ZOrder" xml:space="preserve">
+    <value>2</value>
   </data>
   <data name="MinutesPerBoardLabel.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
@@ -531,6 +834,18 @@
   <data name="MinutesPerBoardLabel.Text" xml:space="preserve">
     <value>Minutes per board</value>
   </data>
+  <data name="&gt;&gt;MinutesPerBoardLabel.Name" xml:space="preserve">
+    <value>MinutesPerBoardLabel</value>
+  </data>
+  <data name="&gt;&gt;MinutesPerBoardLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;MinutesPerBoardLabel.Parent" xml:space="preserve">
+    <value>RoundTimerGroupBox</value>
+  </data>
+  <data name="&gt;&gt;MinutesPerBoardLabel.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
   <data name="MinutesPerBoardNud.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
   </data>
@@ -545,6 +860,18 @@
   </data>
   <data name="MinutesPerBoardNud.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
     <value>Center</value>
+  </data>
+  <data name="&gt;&gt;MinutesPerBoardNud.Name" xml:space="preserve">
+    <value>MinutesPerBoardNud</value>
+  </data>
+  <data name="&gt;&gt;MinutesPerBoardNud.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;MinutesPerBoardNud.Parent" xml:space="preserve">
+    <value>RoundTimerGroupBox</value>
+  </data>
+  <data name="&gt;&gt;MinutesPerBoardNud.ZOrder" xml:space="preserve">
+    <value>4</value>
   </data>
   <data name="ShowTimerCheckbox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
@@ -561,20 +888,44 @@
   <data name="ShowTimerCheckbox.Text" xml:space="preserve">
     <value>Show round timer</value>
   </data>
-  <data name="HandRecordGroup.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="&gt;&gt;ShowTimerCheckbox.Name" xml:space="preserve">
+    <value>ShowTimerCheckbox</value>
+  </data>
+  <data name="&gt;&gt;ShowTimerCheckbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ShowTimerCheckbox.Parent" xml:space="preserve">
+    <value>RoundTimerGroupBox</value>
+  </data>
+  <data name="&gt;&gt;ShowTimerCheckbox.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="RoundTimerGroupBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9.75pt, style=Bold</value>
   </data>
-  <data name="HandRecordGroup.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 161</value>
+  <data name="RoundTimerGroupBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 391</value>
   </data>
-  <data name="HandRecordGroup.Size" type="System.Drawing.Size, System.Drawing">
-    <value>367, 133</value>
+  <data name="RoundTimerGroupBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>367, 147</value>
   </data>
-  <data name="HandRecordGroup.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
+  <data name="RoundTimerGroupBox.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
   </data>
-  <data name="HandRecordGroup.Text" xml:space="preserve">
-    <value>Hand record</value>
+  <data name="RoundTimerGroupBox.Text" xml:space="preserve">
+    <value>Round timer</value>
+  </data>
+  <data name="&gt;&gt;RoundTimerGroupBox.Name" xml:space="preserve">
+    <value>RoundTimerGroupBox</value>
+  </data>
+  <data name="&gt;&gt;RoundTimerGroupBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;RoundTimerGroupBox.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;RoundTimerGroupBox.ZOrder" xml:space="preserve">
+    <value>2</value>
   </data>
   <data name="FromPerspectiveOfCombobox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
@@ -600,6 +951,18 @@
   <data name="FromPerspectiveOfCombobox.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
+  <data name="&gt;&gt;FromPerspectiveOfCombobox.Name" xml:space="preserve">
+    <value>FromPerspectiveOfCombobox</value>
+  </data>
+  <data name="&gt;&gt;FromPerspectiveOfCombobox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;FromPerspectiveOfCombobox.Parent" xml:space="preserve">
+    <value>HandRecordGroup</value>
+  </data>
+  <data name="&gt;&gt;FromPerspectiveOfCombobox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="FromPerspectiveOfLabel.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
   </data>
@@ -618,6 +981,18 @@
   <data name="FromPerspectiveOfLabel.Text" xml:space="preserve">
     <value>From the perspective of</value>
   </data>
+  <data name="&gt;&gt;FromPerspectiveOfLabel.Name" xml:space="preserve">
+    <value>FromPerspectiveOfLabel</value>
+  </data>
+  <data name="&gt;&gt;FromPerspectiveOfLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;FromPerspectiveOfLabel.Parent" xml:space="preserve">
+    <value>HandRecordGroup</value>
+  </data>
+  <data name="&gt;&gt;FromPerspectiveOfLabel.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
   <data name="DoubleDummyCheckbox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
   </data>
@@ -632,6 +1007,18 @@
   </data>
   <data name="DoubleDummyCheckbox.Text" xml:space="preserve">
     <value>Double dummy analysis for entered hands</value>
+  </data>
+  <data name="&gt;&gt;DoubleDummyCheckbox.Name" xml:space="preserve">
+    <value>DoubleDummyCheckbox</value>
+  </data>
+  <data name="&gt;&gt;DoubleDummyCheckbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;DoubleDummyCheckbox.Parent" xml:space="preserve">
+    <value>HandRecordGroup</value>
+  </data>
+  <data name="&gt;&gt;DoubleDummyCheckbox.ZOrder" xml:space="preserve">
+    <value>2</value>
   </data>
   <data name="ShowHandRecordCheckbox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
@@ -648,6 +1035,18 @@
   <data name="ShowHandRecordCheckbox.Text" xml:space="preserve">
     <value>Show hand record</value>
   </data>
+  <data name="&gt;&gt;ShowHandRecordCheckbox.Name" xml:space="preserve">
+    <value>ShowHandRecordCheckbox</value>
+  </data>
+  <data name="&gt;&gt;ShowHandRecordCheckbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ShowHandRecordCheckbox.Parent" xml:space="preserve">
+    <value>HandRecordGroup</value>
+  </data>
+  <data name="&gt;&gt;ShowHandRecordCheckbox.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
   <data name="ManualHandEntryCheckbox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
   </data>
@@ -663,7 +1062,46 @@
   <data name="ManualHandEntryCheckbox.Text" xml:space="preserve">
     <value>Allow manual hand record entry</value>
   </data>
- <data name="SplashScreenCheckbox.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="&gt;&gt;ManualHandEntryCheckbox.Name" xml:space="preserve">
+    <value>ManualHandEntryCheckbox</value>
+  </data>
+  <data name="&gt;&gt;ManualHandEntryCheckbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ManualHandEntryCheckbox.Parent" xml:space="preserve">
+    <value>HandRecordGroup</value>
+  </data>
+  <data name="&gt;&gt;ManualHandEntryCheckbox.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="HandRecordGroup.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Segoe UI, 9.75pt, style=Bold</value>
+  </data>
+  <data name="HandRecordGroup.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 161</value>
+  </data>
+  <data name="HandRecordGroup.Size" type="System.Drawing.Size, System.Drawing">
+    <value>367, 133</value>
+  </data>
+  <data name="HandRecordGroup.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="HandRecordGroup.Text" xml:space="preserve">
+    <value>Hand record</value>
+  </data>
+  <data name="&gt;&gt;HandRecordGroup.Name" xml:space="preserve">
+    <value>HandRecordGroup</value>
+  </data>
+  <data name="&gt;&gt;HandRecordGroup.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;HandRecordGroup.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;HandRecordGroup.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="SplashScreenCheckbox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
   </data>
   <data name="SplashScreenCheckbox.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
@@ -681,6 +1119,18 @@
   <data name="SplashScreenCheckbox.Text" xml:space="preserve">
     <value>Show splash screen on startup</value>
   </data>
+  <data name="&gt;&gt;SplashScreenCheckbox.Name" xml:space="preserve">
+    <value>SplashScreenCheckbox</value>
+  </data>
+  <data name="&gt;&gt;SplashScreenCheckbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;SplashScreenCheckbox.Parent" xml:space="preserve">
+    <value>SplashScreenGroupBox</value>
+  </data>
+  <data name="&gt;&gt;SplashScreenCheckbox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="SplashScreenGroupBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9.75pt, style=Bold</value>
   </data>
@@ -696,6 +1146,18 @@
   <data name="SplashScreenGroupBox.Text" xml:space="preserve">
     <value>Splash screen</value>
   </data>
+  <data name="&gt;&gt;SplashScreenGroupBox.Name" xml:space="preserve">
+    <value>SplashScreenGroupBox</value>
+  </data>
+  <data name="&gt;&gt;SplashScreenGroupBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;SplashScreenGroupBox.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;SplashScreenGroupBox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -703,7 +1165,7 @@
     <value>7, 15</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>853, 507</value>
+    <value>853, 560</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

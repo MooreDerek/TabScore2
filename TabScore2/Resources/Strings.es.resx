@@ -505,4 +505,7 @@
   <data name="NoGrpcServer" xml:space="preserve">
     <value>El GrpcBwsDatabaseServer no se inició. Compruebe si están instaladas las bibliotecas de tiempo de ejecución correctas</value>
   </data>
+  <data name="BoardsStay" xml:space="preserve">
+    <value>Déjelo en esta mesa</value>
+  </data>
 </root>

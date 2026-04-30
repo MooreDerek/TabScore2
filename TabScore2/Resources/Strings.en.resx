@@ -525,4 +525,7 @@
   <data name="NoGrpcServer" xml:space="preserve">
     <value>The GrpcBwsDatabaseServer did not start.  Please check that the correct runtime libraries are installed</value>
   </data>
+  <data name="BoardsStay" xml:space="preserve">
+    <value>Leave at this table</value>
+  </data>
 </root>

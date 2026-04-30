@@ -1,4 +1,4 @@
-﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
+﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2026 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using GrpcSharedContracts.SharedClasses;
@@ -141,7 +141,8 @@ namespace TabScore2.DataServices
             RoundTimer? roundTimer = roundTimerList.Find(x => x.SectionId == deviceStatus.SectionId && x.RoundNumber == deviceStatus.RoundNumber);
             if (roundTimer == null)  // Round not yet started, so create initial timer data for this section and round 
             {
-                if (deviceStatus.TableNumber == 0) return -1;  // At a phantom table, so can't create timer data
+                // If phantom table or not at master table, then can't create initial timer data
+                if (deviceStatus.TableNumber == 0 || (settings.MasterTableForTimer && deviceStatus.TableNumber != 1)) return -1; 
                 DateTime startTime = DateTime.Now;
                 TableStatus tableStatus = GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber);
                 int secondsPerRound = (tableStatus.RoundData.HighBoard - tableStatus.RoundData.LowBoard + 1) * settings.SecondsPerBoard + settings.AdditionalSecondsPerRound;

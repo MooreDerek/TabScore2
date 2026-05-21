@@ -1,4 +1,4 @@
-﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2025 by Peter Flippant
+﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2026 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 namespace TabScore2.Forms
@@ -68,6 +68,7 @@ namespace TabScore2.Forms
             ManualHandEntryCheckbox = new CheckBox();
             SplashScreenGroupBox = new GroupBox();
             SplashScreenCheckbox = new CheckBox();
+            MasterTableForTimerCheckbox = new CheckBox();
             TravellerGroup.SuspendLayout();
             PlayersGroup.SuspendLayout();
             RankingListGroup.SuspendLayout();
@@ -241,6 +242,7 @@ namespace TabScore2.Forms
             // 
             // RoundTimerGroupBox
             // 
+            RoundTimerGroupBox.Controls.Add(MasterTableForTimerCheckbox);
             RoundTimerGroupBox.Controls.Add(AdditionalMinutesPerRoundLabel);
             RoundTimerGroupBox.Controls.Add(AdditionalMinutesPerRoundNud);
             RoundTimerGroupBox.Controls.Add(MinutesPerBoardLabel);
@@ -342,6 +344,12 @@ namespace TabScore2.Forms
             SplashScreenCheckbox.Name = "SplashScreenCheckbox";
             SplashScreenCheckbox.UseVisualStyleBackColor = true;
             // 
+            // TimerMasterCheckbox
+            // 
+            resources.ApplyResources(MasterTableForTimerCheckbox, "TimerMasterCheckbox");
+            MasterTableForTimerCheckbox.Name = "TimerMasterCheckbox";
+            MasterTableForTimerCheckbox.UseVisualStyleBackColor = true;
+            // 
             // SettingsForm
             // 
             resources.ApplyResources(this, "$this");
@@ -415,5 +423,6 @@ namespace TabScore2.Forms
         private ComboBox FromPerspectiveOfCombobox;
         private GroupBox SplashScreenGroupBox;
         private CheckBox SplashScreenCheckbox;
+        private CheckBox MasterTableForTimerCheckbox;
     }
 }

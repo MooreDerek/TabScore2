@@ -5,7 +5,8 @@
       "launchBrowser": true,
       "launchUrl": "http://localhost:5213",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": ""
       },
       "applicationUrl": "http://localhost:5213",
       "hotReloadEnabled": false

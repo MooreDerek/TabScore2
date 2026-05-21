@@ -31,6 +31,7 @@
         bool ShowTimer { get; set; }
         int SecondsPerBoard { get; set; }
         int AdditionalSecondsPerRound { get; set; }
+        public bool MasterTableForTimer { get; set; }
         bool DoubleDummy { get; set; }
         int SuppressRankingListForFirstXRounds { get; set; }
         int SuppressRankingListForLastXRounds { get; set; }

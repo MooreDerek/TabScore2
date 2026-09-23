@@ -1,0 +1,27 @@
+name: Tests
+
+on:
+  push:             # runs on every branch push — no branch filter
+  workflow_dispatch: # adds a "Run workflow" button in the GitHub Actions UI
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore
+      run: dotnet restore TabScore2.Tests.sln
+
+    - name: Build
+      run: dotnet build TabScore2.Tests.sln --no-restore --configuration Release
+
+    - name: Test
+      run: dotnet test TabScore2.Tests.sln --no-build --configuration Release --verbosity normal --logger "console;verbosity=detailed"

@@ -263,7 +263,7 @@ public class HowellDeadlockTest
         _out.WriteLine("═══ ROUND 2 → ROUND 3 TRANSITION (Table 3) ═══");
         _out.WriteLine($"  Table 3 R2: NS=10, EW=11 → R3: NS=11, EW=12");
         _out.WriteLine($"  Pair 11 stays (East→North), Pair 12 arrives from T6");
-        _out.WriteLine();
+        _out.WriteLine("");
 
         // ── R2→R3: both occupants view ShowMove ─────────────────────
         ctrl.ShowMoveIndex(dev10, newRoundNumber: 3);
@@ -283,14 +283,14 @@ public class HowellDeadlockTest
         ts5.ReadyForNextRoundEast  = true;
         bool ok10 = ctrl.OKButtonClick(dev10, move10_r3, newRoundNumber: 3);
         _out.WriteLine($"  Pair 10 OKButtonClick → {(ok10 ? "SUCCESS → Table 5" : "BLOCKED")}");
-        _out.WriteLine();
+        _out.WriteLine("");
 
         // ── KEY TIMING: pair 11 plays entire Round 3, then views ShowMove for R4 ──
         _out.WriteLine("  *** Pair 11 (staying, fast) plays entire Round 3 ***");
         _out.WriteLine("  *** Pair 11 views ShowMove.Index for Round 4 ***");
         ctrl.ShowMoveIndex(dev11, newRoundNumber: 4);
         _out.WriteLine($"  T3 flags after pair 11 sets R4 flag: N={ts3.ReadyForNextRoundNorth}, E={ts3.ReadyForNextRoundEast}");
-        _out.WriteLine();
+        _out.WriteLine("");
 
         // ── LATE ARRIVAL: pair 12 (elderly, slow walk) finally clicks OK ──
         _out.WriteLine("  *** Pair 12 (slow, elderly) finally arrives from Table 6 ***");
@@ -299,19 +299,19 @@ public class HowellDeadlockTest
         bool ok12_r3 = ctrl.OKButtonClick(dev12, move12_r3, newRoundNumber: 3);
         _out.WriteLine($"  Pair 12 OKButtonClick → {(ok12_r3 ? "SUCCESS → Table 3" : "BLOCKED")}");
         _out.WriteLine($"  T3 state AFTER pair 12 arrives: Round={ts3.RoundNumber}, flags N={ts3.ReadyForNextRoundNorth} E={ts3.ReadyForNextRoundEast}");
-        _out.WriteLine();
+        _out.WriteLine("");
 
         // ── Now pair 12 plays Round 3 and views ShowMove for R4 ────
         _out.WriteLine("  *** Pair 12 plays Round 3 at Table 3 ***");
         ctrl.ShowMoveIndex(dev12, newRoundNumber: 4);
         _out.WriteLine($"  T3 flags after pair 12 sets R4 flag: N={ts3.ReadyForNextRoundNorth}, E={ts3.ReadyForNextRoundEast}");
-        _out.WriteLine();
+        _out.WriteLine("");
 
         // ── R3→R4 transition: pair 11 tries to leave ───────────────
         _out.WriteLine("═══ ROUND 3 → ROUND 4 TRANSITION (Table 3) ═══");
         _out.WriteLine($"  Table 3 R3: NS=11, EW=12 → R4: NS=12, EW=13");
         _out.WriteLine($"  Pair 12 stays (East→North), Pair 11 leaves for T5");
-        _out.WriteLine();
+        _out.WriteLine("");
 
         var move11_r4 = new Move(5, Direction.North);  // pair 11 → Table 5
         // Table 5 is ready (other pairs have set flags)
@@ -325,11 +325,11 @@ public class HowellDeadlockTest
         var move12_r4 = new Move(3, Direction.North);  // stays at T3, switches to North
         bool ok12_r4 = ctrl.OKButtonClick(dev12, move12_r4, newRoundNumber: 4);
         _out.WriteLine($"  Pair 12 tries to stay at T3 (switch to North) → {(ok12_r4 ? "SUCCESS" : "BLOCKED")}");
-        _out.WriteLine();
+        _out.WriteLine("");
         _out.WriteLine($"  T3 final state: Round={ts3.RoundNumber}, flags N={ts3.ReadyForNextRoundNorth} E={ts3.ReadyForNextRoundEast}");
 
         // ── Retry loop: can pair 12 ever get unstuck? ───────────────
-        _out.WriteLine();
+        _out.WriteLine("");
         _out.WriteLine("  *** Retry loop (5 attempts) ***");
         for (int retry = 1; retry <= 5; retry++)
         {
@@ -343,13 +343,13 @@ public class HowellDeadlockTest
         // Also check: can pair 11 retry if it was blocked?
         if (!ok11_r4)
         {
-            _out.WriteLine();
+            _out.WriteLine("");
             ctrl.ShowMoveIndex(dev11, newRoundNumber: 4);
             ok11_r4 = ctrl.OKButtonClick(dev11, move11_r4, newRoundNumber: 4);
             _out.WriteLine($"  Pair 11 retry → {(ok11_r4 ? "SUCCESS" : "STILL BLOCKED")}");
         }
 
-        _out.WriteLine();
+        _out.WriteLine("");
         _out.WriteLine($"  RESULT: Pair 12 at R4 → {(ok12_r4 ? "CAN SCORE ✓" : "PERMANENT DEADLOCK ✗")}");
         return ok12_r4;
     }
@@ -360,7 +360,7 @@ public class HowellDeadlockTest
         _out.WriteLine("╔══════════════════════════════════════════════════╗");
         _out.WriteLine("║  ORIGINAL CODE (no guard in UpdateTableStatus)  ║");
         _out.WriteLine("╚══════════════════════════════════════════════════╝");
-        _out.WriteLine();
+        _out.WriteLine("");
 
         bool canScore = RunScenario(useFix: false);
 
@@ -374,7 +374,7 @@ public class HowellDeadlockTest
         _out.WriteLine("╔══════════════════════════════════════════════════╗");
         _out.WriteLine("║  FIXED CODE (guard: if RoundNumber >= round)    ║");
         _out.WriteLine("╚══════════════════════════════════════════════════╝");
-        _out.WriteLine();
+        _out.WriteLine("");
 
         bool canScore = RunScenario(useFix: true);
 

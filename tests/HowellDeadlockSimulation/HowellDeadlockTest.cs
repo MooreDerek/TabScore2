@@ -292,8 +292,8 @@ public class HowellDeadlockTest
         _out.WriteLine($"  T3 flags after pair 11 sets R4 flag: N={ts3.ReadyForNextRoundNorth}, E={ts3.ReadyForNextRoundEast}");
         _out.WriteLine("");
 
-        // ── LATE ARRIVAL: pair 12 (elderly, slow walk) finally clicks OK ──
-        _out.WriteLine("  *** Pair 12 (slow, elderly) finally arrives from Table 6 ***");
+        // ── LATE ARRIVAL: pair 12 (slow walkers) finally clicks OK ──
+        _out.WriteLine("  *** Pair 12 (slow) finally arrives from Table 6 ***");
         ctrl.ShowMoveIndex(dev12, newRoundNumber: 3); // sets flag on T6, not T3
         var move12_r3 = new Move(3, Direction.East);
         bool ok12_r3 = ctrl.OKButtonClick(dev12, move12_r3, newRoundNumber: 3);

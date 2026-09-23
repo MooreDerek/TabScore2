@@ -193,9 +193,23 @@ public class SimulatedController
 
         return ready;
     }
+    /// <summary>
+    /// Equivalent of ShowMoveController.OKButtonClick for DevicesPerTable == 1.
+    /// The device stays at the table — just advances the round directly.
+    /// Only one device per table, so only one UpdateTableStatus call.
+    /// </summary>
+    public void OKButtonClick_NonMoving(int deviceNumber, int newRoundNumber)
+    {
+        var ds = _app.GetDevice(deviceNumber);
+        ds.RoundNumber = newRoundNumber;
+        if (_useFix)
+            _app.UpdateTableStatus_Fixed(ds.TableNumber, newRoundNumber);
+        else
+            _app.UpdateTableStatus_Original(ds.TableNumber, newRoundNumber);
+    }
 }
 
-// ── The test ────────────────────────────────────────────────────────
+// ── The Howell deadlock test ────────────────────────────────────────
 
 public class HowellDeadlockTest
 {
@@ -292,8 +306,8 @@ public class HowellDeadlockTest
         _out.WriteLine($"  T3 flags after pair 11 sets R4 flag: N={ts3.ReadyForNextRoundNorth}, E={ts3.ReadyForNextRoundEast}");
         _out.WriteLine("");
 
-        // ── LATE ARRIVAL: pair 12 (slow walkers) finally clicks OK ──
-        _out.WriteLine("  *** Pair 12 (slow) finally arrives from Table 6 ***");
+        // ── LATE ARRIVAL: pair 12 (elderly, slow walk) finally clicks OK ──
+        _out.WriteLine("  *** Pair 12 (slow, elderly) finally arrives from Table 6 ***");
         ctrl.ShowMoveIndex(dev12, newRoundNumber: 3); // sets flag on T6, not T3
         var move12_r3 = new Move(3, Direction.East);
         bool ok12_r3 = ctrl.OKButtonClick(dev12, move12_r3, newRoundNumber: 3);
@@ -380,5 +394,226 @@ public class HowellDeadlockTest
 
         Assert.True(canScore,
             "Expected no deadlock: pair 12 should be able to score at Table 3");
+    }
+}
+
+// ── Mitchell movement: same double-call race, but self-resolving ────
+
+public class MitchellMovementTest
+{
+    private readonly ITestOutputHelper _out;
+    public MitchellMovementTest(ITestOutputHelper output) => _out = output;
+
+    /// <summary>
+    /// Mitchell 4-table movement:
+    ///   Round 1: T1(NS=1,EW=5) T2(NS=2,EW=6)
+    ///   Round 2: T1(NS=1,EW=6) T2(NS=2,EW=7)
+    ///   Round 3: T1(NS=1,EW=7) ...
+    ///
+    /// NS pair 1 stays at Table 1 every round — never leaves.
+    /// The same UpdateTableStatus double-call race can happen here:
+    /// NS pair 1 finishes R2, sets a flag for R3, then late EW device wipes it.
+    /// But NS pair 1 is STILL at the table, so the retry re-sets the flag.
+    /// </summary>
+    private SimulatedAppData BuildMitchellApp()
+    {
+        var app = new SimulatedAppData();
+        app.LoadMovement([new(1, 1, 5, 1, 2), new(2, 2, 6, 3, 4)], round: 1);
+        app.LoadMovement([new(1, 1, 6, 3, 4), new(2, 2, 7, 5, 6)], round: 2);
+        app.LoadMovement([new(1, 1, 7, 5, 6), new(2, 2, 5, 7, 8)], round: 3);
+        return app;
+    }
+
+    [Fact]
+    public void Original_Code_Causes_Transient_Block_But_Self_Resolves()
+    {
+        _out.WriteLine("Mitchell — original code (no guard)");
+        _out.WriteLine("");
+
+        var app = BuildMitchellApp();
+        var ctrl = new SimulatedController(app, useFix: false);
+
+        // Bootstrap Table 1 at Round 1: NS=1 (North), EW=5 (East)
+        var ts1 = app.GetTableStatus(1);
+        ts1.RoundNumber = 1;
+        ts1.RoundData = app.GetRound(1, 1);
+
+        int devNS1 = app.AddDevice(1, pairNumber: 1, roundNumber: 1, Direction.North);
+        int devEW5 = app.AddDevice(1, pairNumber: 5, roundNumber: 1, Direction.East);
+
+        // EW pair 6 starts at Table 2
+        var ts2 = app.GetTableStatus(2);
+        ts2.RoundNumber = 1;
+        ts2.RoundData = app.GetRound(2, 1);
+        int devEW6 = app.AddDevice(2, pairNumber: 6, roundNumber: 1, Direction.East);
+
+        // ── R1 → R2: normal transition ──────────────────────────────
+        ctrl.ShowMoveIndex(devNS1, 2);
+        ctrl.ShowMoveIndex(devEW5, 2);
+        ctrl.ShowMoveIndex(devEW6, 2);  // pair 6 sets flag on T2
+
+        // NS pair 1 advances Table 1 to Round 2
+        bool ok = ctrl.OKButtonClick(devNS1, new Move(1, Direction.North), 2);
+        Assert.True(ok, "NS pair 1 should advance T1 to R2");
+        _out.WriteLine($"  NS pair 1 advances T1 to R2 → OK");
+
+        // ── NS pair 1 finishes R2, sets flag for R3 ────────────────
+        _out.WriteLine("");
+        _out.WriteLine("  *** NS pair 1 finishes R2, views ShowMove for R3 ***");
+        ctrl.ShowMoveIndex(devNS1, 3);
+        _out.WriteLine($"  T1 flags: N={ts1.ReadyForNextRoundNorth} E={ts1.ReadyForNextRoundEast}");
+        Assert.True(ts1.ReadyForNextRoundNorth, "North flag should be set for R3 transition");
+
+        // ── Late EW pair 6 arrives — wipes the flag ─────────────────
+        _out.WriteLine("");
+        _out.WriteLine("  *** EW pair 6 (late) arrives at T1 — UpdateTableStatus wipes flags ***");
+        ok = ctrl.OKButtonClick(devEW6, new Move(1, Direction.East), 2);
+        Assert.True(ok, "EW pair 6 should arrive at T1");
+        _out.WriteLine($"  T1 flags after wipe: N={ts1.ReadyForNextRoundNorth} E={ts1.ReadyForNextRoundEast}");
+        Assert.False(ts1.ReadyForNextRoundNorth, "North flag should have been wiped");
+
+        // ── NS pair 1 clicks OK for R3 — BLOCKED on first attempt ───
+        _out.WriteLine("");
+        _out.WriteLine("  *** EW pair 6 finishes R2, both view ShowMove for R3 ***");
+        ctrl.ShowMoveIndex(devEW6, 3);
+        _out.WriteLine($"  T1 flags: N={ts1.ReadyForNextRoundNorth} E={ts1.ReadyForNextRoundEast}");
+
+        // NS pair 1 tries to advance — flag was wiped, only East is set
+        ok = ctrl.OKButtonClick(devNS1, new Move(1, Direction.North), 3);
+        _out.WriteLine($"  NS pair 1 first attempt → {(ok ? "OK" : "BLOCKED")}");
+        Assert.False(ok, "NS pair 1 should be blocked — North flag was wiped");
+
+        // ── Retry: ShowMove.Index re-sets the flag, because NS pair 1 is STILL HERE ──
+        _out.WriteLine("");
+        _out.WriteLine("  *** NS pair 1 retries — ShowMove.Index re-sets North flag ***");
+        ctrl.ShowMoveIndex(devNS1, 3);
+        _out.WriteLine($"  T1 flags after retry: N={ts1.ReadyForNextRoundNorth} E={ts1.ReadyForNextRoundEast}");
+
+        ok = ctrl.OKButtonClick(devNS1, new Move(1, Direction.North), 3);
+        _out.WriteLine($"  NS pair 1 retry → {(ok ? "OK ✓" : "BLOCKED ✗")}");
+        Assert.True(ok, "NS pair 1 should succeed on retry — they never left the table");
+
+        _out.WriteLine("");
+        _out.WriteLine("  RESULT: Transient block, self-resolves on retry ✓");
+    }
+
+    [Fact]
+    public void Fixed_Code_Avoids_Transient_Block_Entirely()
+    {
+        _out.WriteLine("Mitchell — fixed code (with guard)");
+        _out.WriteLine("");
+
+        var app = BuildMitchellApp();
+        var ctrl = new SimulatedController(app, useFix: true);
+
+        var ts1 = app.GetTableStatus(1);
+        ts1.RoundNumber = 1;
+        ts1.RoundData = app.GetRound(1, 1);
+
+        int devNS1 = app.AddDevice(1, pairNumber: 1, roundNumber: 1, Direction.North);
+        int devEW5 = app.AddDevice(1, pairNumber: 5, roundNumber: 1, Direction.East);
+
+        var ts2 = app.GetTableStatus(2);
+        ts2.RoundNumber = 1;
+        ts2.RoundData = app.GetRound(2, 1);
+        int devEW6 = app.AddDevice(2, pairNumber: 6, roundNumber: 1, Direction.East);
+
+        // ── R1 → R2: normal transition ──────────────────────────────
+        ctrl.ShowMoveIndex(devNS1, 2);
+        ctrl.ShowMoveIndex(devEW5, 2);
+        ctrl.ShowMoveIndex(devEW6, 2);
+
+        bool ok = ctrl.OKButtonClick(devNS1, new Move(1, Direction.North), 2);
+        Assert.True(ok);
+        _out.WriteLine($"  NS pair 1 advances T1 to R2 → OK");
+
+        // ── NS pair 1 finishes R2, sets flag for R3 ────────────────
+        ctrl.ShowMoveIndex(devNS1, 3);
+        _out.WriteLine($"  T1 flags after NS sets R3 flag: N={ts1.ReadyForNextRoundNorth} E={ts1.ReadyForNextRoundEast}");
+        Assert.True(ts1.ReadyForNextRoundNorth);
+
+        // ── Late EW pair 6 arrives — guard prevents flag wipe ───────
+        _out.WriteLine("");
+        _out.WriteLine("  *** EW pair 6 (late) arrives — guard skips redundant UpdateTableStatus ***");
+        ok = ctrl.OKButtonClick(devEW6, new Move(1, Direction.East), 2);
+        Assert.True(ok);
+        _out.WriteLine($"  T1 flags preserved: N={ts1.ReadyForNextRoundNorth} E={ts1.ReadyForNextRoundEast}");
+        Assert.True(ts1.ReadyForNextRoundNorth, "North flag should be PRESERVED by the guard");
+
+        // ── Both view ShowMove for R3, NS pair 1 succeeds first try ─
+        _out.WriteLine("");
+        ctrl.ShowMoveIndex(devEW6, 3);
+        _out.WriteLine($"  T1 flags: N={ts1.ReadyForNextRoundNorth} E={ts1.ReadyForNextRoundEast}");
+
+        ok = ctrl.OKButtonClick(devNS1, new Move(1, Direction.North), 3);
+        _out.WriteLine($"  NS pair 1 first attempt → {(ok ? "OK ✓" : "BLOCKED ✗")}");
+        Assert.True(ok, "NS pair 1 should succeed on FIRST attempt — no transient block");
+
+        _out.WriteLine("");
+        _out.WriteLine("  RESULT: No block at all ✓");
+    }
+}
+
+// ── Non-moving Howell: single device stays at table ─────────────────
+
+public class NonMovingHowellTest
+{
+    private readonly ITestOutputHelper _out;
+    public NonMovingHowellTest(ITestOutputHelper output) => _out = output;
+
+    /// <summary>
+    /// Howell with DevicesPerTable == 1: the device stays at the table
+    /// and pairs rotate around it. Only ONE UpdateTableStatus call per
+    /// round transition — no double-call, so the fix must be transparent.
+    ///
+    /// Uses Table 3 from the same 7-table Howell movement:
+    ///   Round 2: T3(NS=10,EW=11)
+    ///   Round 3: T3(NS=11,EW=12)
+    ///   Round 4: T3(NS=12,EW=13)
+    /// </summary>
+    [Theory]
+    [InlineData(false, "original")]
+    [InlineData(true, "fixed")]
+    public void NonMoving_Device_Advances_Normally(bool useFix, string label)
+    {
+        _out.WriteLine($"Non-moving Howell (DevicesPerTable=1) — {label} code");
+        _out.WriteLine("");
+
+        var app = new SimulatedAppData();
+
+        app.LoadMovement([new(3, 10, 11, 7, 8)], round: 2);
+        app.LoadMovement([new(3, 11, 12, 9, 10)], round: 3);
+        app.LoadMovement([new(3, 12, 13, 11, 12)], round: 4);
+
+        var ctrl = new SimulatedController(app, useFix);
+
+        // Single device at Table 3, registered as North, DevicesPerTable = 1
+        var ts3 = app.GetTableStatus(3);
+        ts3.RoundNumber = 2;
+        ts3.RoundData = app.GetRound(3, 2);
+        int dev = app.AddDevice(3, pairNumber: 0, roundNumber: 2, Direction.North);
+
+        // ── Advance R2 → R3 (single device, single call) ───────────
+        ctrl.OKButtonClick_NonMoving(dev, 3);
+        _out.WriteLine($"  After R2→R3: T3 round={ts3.RoundNumber} NS={ts3.RoundData.NumberNorth} EW={ts3.RoundData.NumberEast}");
+
+        Assert.Equal(3, ts3.RoundNumber);
+        Assert.Equal(11, ts3.RoundData.NumberNorth);
+        Assert.Equal(12, ts3.RoundData.NumberEast);
+
+        // ── Advance R3 → R4 (single device, single call) ───────────
+        ctrl.OKButtonClick_NonMoving(dev, 4);
+        _out.WriteLine($"  After R3→R4: T3 round={ts3.RoundNumber} NS={ts3.RoundData.NumberNorth} EW={ts3.RoundData.NumberEast}");
+
+        Assert.Equal(4, ts3.RoundNumber);
+        Assert.Equal(12, ts3.RoundData.NumberNorth);
+        Assert.Equal(13, ts3.RoundData.NumberEast);
+
+        // ── Verify flags are clean for next transition ──────────────
+        Assert.False(ts3.ReadyForNextRoundNorth);
+        Assert.False(ts3.ReadyForNextRoundEast);
+
+        _out.WriteLine("");
+        _out.WriteLine($"  RESULT: Non-moving device advances T3 through 3 rounds correctly ✓");
     }
 }

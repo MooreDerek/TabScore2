@@ -1,8 +1,8 @@
 name: Tests
 
 on:
-  push:             # runs on every branch push — no branch filter
-  workflow_dispatch: # adds a "Run workflow" button in the GitHub Actions UI
+  push:
+  workflow_dispatch:
 
 jobs:
   test:

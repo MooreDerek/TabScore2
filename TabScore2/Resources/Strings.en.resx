@@ -528,4 +528,79 @@
   <data name="BoardsStay" xml:space="preserve">
     <value>Leave at this table</value>
   </data>
+  <data name="MonitorButton" xml:space="preserve">
+    <value>Session status</value>
+  </data>
+  <data name="MonitorTitle" xml:space="preserve">
+    <value>Session status</value>
+  </data>
+  <data name="MonitorStartOfPlay" xml:space="preserve">
+    <value>Start of play</value>
+  </data>
+  <data name="MonitorNS" xml:space="preserve">
+    <value>N/S</value>
+  </data>
+  <data name="MonitorEW" xml:space="preserve">
+    <value>E/W</value>
+  </data>
+  <data name="MonitorDevice" xml:space="preserve">
+    <value>Device</value>
+  </data>
+  <data name="MonitorNamesNS" xml:space="preserve">
+    <value>N/S names</value>
+  </data>
+  <data name="MonitorNamesEW" xml:space="preserve">
+    <value>E/W names</value>
+  </data>
+  <data name="MonitorRefreshNames" xml:space="preserve">
+    <value>Refresh names now</value>
+  </data>
+  <data name="MonitorClose" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="MonitorRegistered" xml:space="preserve">
+    <value>Registered</value>
+  </data>
+  <data name="MonitorRegisteredSitout" xml:space="preserve">
+    <value>Registered (sit-out table)</value>
+  </data>
+  <data name="MonitorNotRegistered" xml:space="preserve">
+    <value>Not registered</value>
+  </data>
+  <data name="MonitorSitoutNotRegistered" xml:space="preserve">
+    <value>Sit-out table: {0} pair must register</value>
+  </data>
+  <data name="MonitorNotRegisteredDirections" xml:space="preserve">
+    <value>Not registered: {0}</value>
+  </data>
+  <data name="MonitorNoIds" xml:space="preserve">
+    <value>No IDs entered</value>
+  </data>
+  <data name="MonitorAllReady" xml:space="preserve">
+    <value>All tables registered and all names entered</value>
+  </data>
+  <data name="MonitorTablesNeedAttention" xml:space="preserve">
+    <value>Tables needing attention: {0}</value>
+  </data>
+  <data name="MonitorNoTables" xml:space="preserve">
+    <value>No tables found in round 1</value>
+  </data>
+  <data name="MonitorUnexpected" xml:space="preserve">
+    <value>Registered where not expected: {0}</value>
+  </data>
+  <data name="MonitorNamesChecked" xml:space="preserve">
+    <value>Names last read from the database at {0}</value>
+  </data>
+  <data name="MonitorScorerPage" xml:space="preserve">
+    <value>Scorer's page: {0}</value>
+  </data>
+  <data name="MonitorDatabaseNotReady" xml:space="preserve">
+    <value>The scoring database is not ready yet</value>
+  </data>
+  <data name="MonitorDatabaseError" xml:space="preserve">
+    <value>Could not read the scoring database. Check that TabScore2's database server is running.</value>
+  </data>
+  <data name="MonitorReadyTables" xml:space="preserve">
+    <value>Ready</value>
+  </data>
 </root>

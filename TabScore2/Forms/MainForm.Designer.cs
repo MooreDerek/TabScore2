@@ -1,4 +1,4 @@
-﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2026 by Peter Flippant
+// TabScore2, a wireless bridge scoring program.  Copyright(C) 2026 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 namespace TabScore2.Forms
@@ -42,6 +42,7 @@ namespace TabScore2.Forms
             labelAnalysing = new Label();
             buttonSettings = new Button();
             buttonResultsViewer = new Button();
+            buttonSessionStatus = new Button();
             labelSessionStatus = new Label();
             databaseFileDialog = new OpenFileDialog();
             handRecordFileDialog = new OpenFileDialog();
@@ -109,6 +110,17 @@ namespace TabScore2.Forms
             buttonResultsViewer.UseVisualStyleBackColor = true;
             buttonResultsViewer.Click += ButtonResultsViewer_Click;
             // 
+            // buttonSessionStatus
+            // Text is set from Strings in MainForm_Load, so no MainForm.*.resx entries are needed
+            // 
+            buttonSessionStatus.Location = new Point(122, 219);
+            buttonSessionStatus.Name = "buttonSessionStatus";
+            buttonSessionStatus.Size = new Size(150, 34);
+            buttonSessionStatus.TabIndex = 11;
+            buttonSessionStatus.UseVisualStyleBackColor = true;
+            buttonSessionStatus.Visible = false;
+            buttonSessionStatus.Click += ButtonSessionStatus_Click;
+            // 
             // labelSessionStatus
             // 
             resources.ApplyResources(labelSessionStatus, "labelSessionStatus");
@@ -128,6 +140,7 @@ namespace TabScore2.Forms
             resources.ApplyResources(this, "$this");
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(labelSessionStatus);
+            Controls.Add(buttonSessionStatus);
             Controls.Add(buttonResultsViewer);
             Controls.Add(buttonSettings);
             Controls.Add(labelAnalysing);
@@ -160,6 +173,7 @@ namespace TabScore2.Forms
         private Label labelAnalysing;
         private Button buttonSettings;
         private Button buttonResultsViewer;
+        private Button buttonSessionStatus;
         private Label labelSessionStatus;
         private OpenFileDialog databaseFileDialog;
         private OpenFileDialog handRecordFileDialog;

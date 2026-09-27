@@ -1,0 +1,116 @@
+@model SessionCheck
+@using TabScore2.DataServices
+@{
+    // Standalone page for the scorer's own phone or tablet: not the tablet _MainLayout, which has OK/Back buttons and a timer
+    Layout = null;
+    List<TableCheckRow> needAttention = Model.Rows.Where(x => !x.IsOk).ToList();
+    List<TableCheckRow> ready = Model.Rows.Where(x => x.IsOk).ToList();
+    bool allReady = Model.ErrorMessage == null && Model.Rows.Count > 0 && needAttention.Count == 0;
+    string unexpected = SessionCheckText.Unexpected(Model, localizer);
+}
+<!DOCTYPE html>
+<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2026 by Peter Flippant
+     Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
+<!-- The licence comment follows the DOCTYPE here because, with no layout, anything before it puts browsers into quirks mode -->
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Reload without ?refresh, so repeated reloads use the monitor's 30-second cache rather than hitting the database -->
+    <meta http-equiv="refresh" content="15; url=/SessionStatus">
+    <title>TabScore2 - @localizer["MonitorTitle"]</title>
+    <style>
+        :root {
+            --paper: ivory;
+            --band: bisque;
+            --ink: #222;
+            --muted: #6b6259;
+            --ok: #2e7d32;
+            --ok-bg: #dcf5dc;
+            --problem: #b3261e;
+            --problem-bg: #ffd7d2;
+        }
+        * { box-sizing: border-box; }
+        body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif; font-size: 16px; line-height: 1.4; }
+        header { background: var(--band); border-bottom: 2px solid var(--ink); padding: 12px 16px; }
+        header h1 { margin: 0; font-size: 1.1rem; font-weight: 600; }
+        .summary { margin: 4px 0 0; font-size: 1.35rem; font-weight: 700; }
+        .summary.ok { color: var(--ok); }
+        .summary.problem { color: var(--problem); }
+        main { padding: 8px 12px 24px; max-width: 720px; }
+        h2 { font-size: 0.95rem; font-weight: 600; color: var(--muted); margin: 18px 4px 6px; }
+        ul { list-style: none; margin: 0; padding: 0; }
+        li { display: grid; grid-template-columns: 3.5rem 1fr; gap: 0 10px; padding: 10px 4px; border-bottom: 1px solid #e3dccf; }
+        .table-no { font-size: 1.5rem; font-weight: 700; grid-row: span 3; align-self: start; }
+        .line { font-size: 0.95rem; }
+        .line b { font-weight: 600; }
+        .flag { display: inline-block; padding: 1px 6px; border-radius: 3px; }
+        .flag.ok { background: var(--ok-bg); }
+        .flag.problem { background: var(--problem-bg); color: var(--problem); font-weight: 600; }
+        .ready li { padding: 6px 4px; }
+        .ready .table-no { font-size: 1.1rem; grid-row: auto; }
+        .unexpected { margin: 14px 4px 0; color: var(--problem); }
+        footer { padding: 4px 16px 20px; color: var(--muted); font-size: 0.85rem; }
+        footer p { margin: 4px 0; }
+        footer a { color: inherit; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>TabScore2 - @localizer["MonitorStartOfPlay"]</h1>
+        <p class="summary @(allReady ? "ok" : "problem")">@SessionCheckText.Summary(Model, localizer)</p>
+    </header>
+
+    <main>
+        @if (needAttention.Count > 0)
+        {
+            <ul>
+                @foreach (TableCheckRow row in needAttention)
+                {
+                    <li>
+                        <span class="table-no">@($"{row.Table.SectionLetter}{row.Table.TableNumber}")</span>
+                        <span class="line">
+                            <span class="flag @(row.AllDevicesRegistered ? "ok" : "problem")">@SessionCheckText.Registration(row, localizer)</span>
+                        </span>
+                        <span class="line">
+                            <b>@localizer["MonitorNS"] @SessionCheckText.PairNumbers(row, true)</b>
+                            <span class="flag @(row.NorthSouthNames == NamesState.Missing ? "problem" : "")">@SessionCheckText.Names(row, true, localizer)</span>
+                        </span>
+                        <span class="line">
+                            <b>@localizer["MonitorEW"] @SessionCheckText.PairNumbers(row, false)</b>
+                            <span class="flag @(row.EastWestNames == NamesState.Missing ? "problem" : "")">@SessionCheckText.Names(row, false, localizer)</span>
+                        </span>
+                    </li>
+                }
+            </ul>
+        }
+
+        @if (unexpected != string.Empty)
+        {
+            <p class="unexpected">@unexpected</p>
+        }
+
+        @if (ready.Count > 0)
+        {
+            <h2>@localizer["MonitorReadyTables"]</h2>
+            <ul class="ready">
+                @foreach (TableCheckRow row in ready)
+                {
+                    <li>
+                        <span class="table-no">@($"{row.Table.SectionLetter}{row.Table.TableNumber}")</span>
+                        <span class="line">@SessionCheckText.Names(row, true, localizer) / @SessionCheckText.Names(row, false, localizer)</span>
+                    </li>
+                }
+            </ul>
+        }
+    </main>
+
+    <footer>
+        @if (Model.ErrorMessage == null)
+        {
+            <p>@localizer["MonitorNamesChecked", Model.LayoutLoadedAt.ToString("T")]</p>
+        }
+        <p><a href="/SessionStatus?refresh=true">@localizer["MonitorRefreshNames"]</a></p>
+    </footer>
+</body>
+</html>

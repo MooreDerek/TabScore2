@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
 		Microsoft ResX Schema
@@ -507,5 +507,80 @@
   </data>
   <data name="BoardsStay" xml:space="preserve">
     <value>Déjelo en esta mesa</value>
+  </data>
+  <data name="MonitorButton" xml:space="preserve">
+    <value>Estado de la sesión</value>
+  </data>
+  <data name="MonitorTitle" xml:space="preserve">
+    <value>Estado de la sesión</value>
+  </data>
+  <data name="MonitorStartOfPlay" xml:space="preserve">
+    <value>Inicio del juego</value>
+  </data>
+  <data name="MonitorNS" xml:space="preserve">
+    <value>N/S</value>
+  </data>
+  <data name="MonitorEW" xml:space="preserve">
+    <value>E/O</value>
+  </data>
+  <data name="MonitorDevice" xml:space="preserve">
+    <value>Dispositivo</value>
+  </data>
+  <data name="MonitorNamesNS" xml:space="preserve">
+    <value>Nombres N/S</value>
+  </data>
+  <data name="MonitorNamesEW" xml:space="preserve">
+    <value>Nombres E/O</value>
+  </data>
+  <data name="MonitorRefreshNames" xml:space="preserve">
+    <value>Actualizar nombres ahora</value>
+  </data>
+  <data name="MonitorClose" xml:space="preserve">
+    <value>Cerrar</value>
+  </data>
+  <data name="MonitorRegistered" xml:space="preserve">
+    <value>Registrado</value>
+  </data>
+  <data name="MonitorRegisteredSitout" xml:space="preserve">
+    <value>Registrado (mesa de descanso)</value>
+  </data>
+  <data name="MonitorNotRegistered" xml:space="preserve">
+    <value>No registrado</value>
+  </data>
+  <data name="MonitorSitoutNotRegistered" xml:space="preserve">
+    <value>Mesa de descanso: la pareja {0} debe registrarse</value>
+  </data>
+  <data name="MonitorNotRegisteredDirections" xml:space="preserve">
+    <value>No registrado: {0}</value>
+  </data>
+  <data name="MonitorNoIds" xml:space="preserve">
+    <value>No se han introducido IDs</value>
+  </data>
+  <data name="MonitorAllReady" xml:space="preserve">
+    <value>Todas las mesas registradas y todos los nombres introducidos</value>
+  </data>
+  <data name="MonitorTablesNeedAttention" xml:space="preserve">
+    <value>Mesas que requieren atención: {0}</value>
+  </data>
+  <data name="MonitorNoTables" xml:space="preserve">
+    <value>No se encontraron mesas en la ronda 1</value>
+  </data>
+  <data name="MonitorUnexpected" xml:space="preserve">
+    <value>Registrado donde no se esperaba: {0}</value>
+  </data>
+  <data name="MonitorNamesChecked" xml:space="preserve">
+    <value>Nombres leídos de la base de datos a las {0}</value>
+  </data>
+  <data name="MonitorScorerPage" xml:space="preserve">
+    <value>Página del anotador: {0}</value>
+  </data>
+  <data name="MonitorDatabaseNotReady" xml:space="preserve">
+    <value>La base de datos de puntuación aún no está lista</value>
+  </data>
+  <data name="MonitorDatabaseError" xml:space="preserve">
+    <value>No se pudo leer la base de datos de puntuación. Compruebe que el servidor de base de datos de TabScore2 está en ejecución.</value>
+  </data>
+  <data name="MonitorReadyTables" xml:space="preserve">
+    <value>Listas</value>
   </data>
 </root>

@@ -1,4 +1,4 @@
-﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2026 by Peter Flippant
+// TabScore2, a wireless bridge scoring program.  Copyright(C) 2026 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using GrpcSharedContracts.SharedClasses;
@@ -15,6 +15,7 @@ namespace TabScore2.DataServices
         bool TableStatusExists(int sectionId, int tableNumber);
         TableStatus GetTableStatus(int sectionId, int tableNumber);
         void UpdateTableStatus(int sectionId, int tableNumber, int roundNumber);
+        IReadOnlyList<TableSnapshot> GetTableStatusSnapshot();  // Read-only copy for monitoring; never creates entries
 
         bool DeviceStatusExists(int sectionId, int tableNumber, Direction direction = Direction.North);
         DeviceStatus GetDeviceStatus(int deviceNumber);
@@ -22,6 +23,7 @@ namespace TabScore2.DataServices
         void AddDeviceStatus(int sectionId, int tableNumber, int pairNumber, int roundNumber, Direction direction = Direction.North);
         void UpdateDeviceStatus(int deviceNumber, int tableNumber, int roundNumber, Direction direction);
         int GetDeviceNumber(DeviceStatus deviceStatus);
+        IReadOnlyList<DeviceSnapshot> GetDeviceStatusSnapshot();  // Read-only copy for monitoring
 
         int GetTimerSeconds(DeviceStatus deviceStatus);
 

@@ -1,4 +1,4 @@
-﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2026 by Peter Flippant
+// TabScore2, a wireless bridge scoring program.  Copyright(C) 2026 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using GrpcSharedContracts.SharedClasses;
@@ -12,17 +12,31 @@ using TabScore2.Resources;
 namespace TabScore2.DataServices
 {
     // AppData is a service that provides access to static data that does not reside in the scoring database
+    //
+    // IMPORTANT: the lists below MUST remain static.  Program.cs builds two separate DI containers (web app and desktop),
+    // each with its own AppData instance.  The desktop admin screens can only see the state created by the web app's
+    // request threads because these lists are shared statics.
+    //
+    // Thread safety: web request threads and the desktop UI thread all access these lists, so every list operation is
+    // done under 'sync'.  Database (gRPC) calls are always made OUTSIDE the lock, so a slow Access query cannot stall
+    // every tablet device.  The lock protects list membership and the fields assigned here; controllers still set
+    // TableStatus ready flags directly, which is acceptable because those are single bool writes.
     public class AppData(IStringLocalizer<Strings> iLocalizer, IDatabase iDatabase, ISettings iSettings) : IAppData
     {
         private readonly IStringLocalizer<Strings> localizer = iLocalizer;
         private readonly IDatabase database = iDatabase;
         private readonly ISettings settings = iSettings;
 
+        private static readonly object sync = new();
+
         public void ClearAppData()
         {
-            tableStatusList.Clear();
-            deviceStatusList.Clear();
-            roundTimerList.Clear();
+            lock (sync)
+            {
+                tableStatusList.Clear();
+                deviceStatusList.Clear();
+                roundTimerList.Clear();
+            }
         }
 
         // TABLESTATUS
@@ -30,29 +44,72 @@ namespace TabScore2.DataServices
 
         public bool TableStatusExists(int sectionId, int tableNumber)
         {
-            return tableStatusList.Any(x => x.SectionId == sectionId && x.TableNumber == tableNumber);
+            lock (sync)
+            {
+                return tableStatusList.Any(x => x.SectionId == sectionId && x.TableNumber == tableNumber);
+            }
         }
 
         public TableStatus GetTableStatus(int sectionId, int tableNumber)
         {
-            TableStatus? tableStatus = tableStatusList.Find(x => x.SectionId == sectionId && x.TableNumber == tableNumber);
-            if (tableStatus == null)
+            lock (sync)
             {
-                tableStatus = new TableStatus(sectionId, tableNumber, database.GetNumberOfLastRoundWithResults(sectionId, tableNumber));
-                tableStatusList.Add(tableStatus);
+                TableStatus? existing = tableStatusList.Find(x => x.SectionId == sectionId && x.TableNumber == tableNumber);
+                if (existing != null) return existing;
             }
-            return tableStatus;
+
+            // Not found, so read the starting round from the database outside the lock...
+            int lastRoundWithResults = database.GetNumberOfLastRoundWithResults(sectionId, tableNumber);
+
+            lock (sync)
+            {
+                // ...then check again, in case another device created it while we were waiting on the database
+                TableStatus? existing = tableStatusList.Find(x => x.SectionId == sectionId && x.TableNumber == tableNumber);
+                if (existing != null) return existing;
+                TableStatus tableStatus = new(sectionId, tableNumber, lastRoundWithResults);
+                tableStatusList.Add(tableStatus);
+                return tableStatus;
+            }
         }
 
         public void UpdateTableStatus(int sectionId, int tableNumber, int roundNumber)
         {
-            TableStatus tableStatus = GetTableStatus(sectionId, tableNumber)!;
-            tableStatus.RoundNumber = roundNumber;
-            tableStatus.RoundData = database.GetRound(sectionId, tableNumber, roundNumber);
-            tableStatus.ReadyForNextRoundNorth = false;
-            tableStatus.ReadyForNextRoundSouth = false;
-            tableStatus.ReadyForNextRoundEast = false;
-            tableStatus.ReadyForNextRoundWest = false;
+            TableStatus tableStatus = GetTableStatus(sectionId, tableNumber);
+
+            // Only the first device to advance a table to a new round resets it.  Without this guard, a later device
+            // arriving at the same table (eg at a Howell switch table) would clear ready flags that other devices have
+            // already set, and the table could never be released
+            lock (sync)
+            {
+                if (tableStatus.RoundNumber >= roundNumber) return;
+            }
+
+            Round roundData = database.GetRound(sectionId, tableNumber, roundNumber);
+
+            lock (sync)
+            {
+                if (tableStatus.RoundNumber >= roundNumber) return;  // Another device got there while we were reading the database
+                tableStatus.RoundNumber = roundNumber;
+                tableStatus.RoundData = roundData;
+                tableStatus.ReadyForNextRoundNorth = false;
+                tableStatus.ReadyForNextRoundSouth = false;
+                tableStatus.ReadyForNextRoundEast = false;
+                tableStatus.ReadyForNextRoundWest = false;
+            }
+        }
+
+        public IReadOnlyList<TableSnapshot> GetTableStatusSnapshot()
+        {
+            lock (sync)
+            {
+                return tableStatusList
+                    .Select(x => new TableSnapshot(
+                        x.SectionId, x.TableNumber, x.RoundNumber,
+                        x.RoundData.NumberNorth, x.RoundData.NumberEast, x.RoundData.NumberSouth, x.RoundData.NumberWest,
+                        x.RoundData.LowBoard, x.RoundData.HighBoard,
+                        x.ReadyForNextRoundNorth, x.ReadyForNextRoundSouth, x.ReadyForNextRoundEast, x.ReadyForNextRoundWest))
+                    .ToList();
+            }
         }
 
         // DEVICESTATUS
@@ -60,38 +117,71 @@ namespace TabScore2.DataServices
 
         public bool DeviceStatusExists(int sectionId, int tableNumber, Direction direction = Direction.North)
         {
-            return deviceStatusList.Any(x => x.SectionId == sectionId && x.TableNumber == tableNumber && x.Direction == direction);
+            lock (sync)
+            {
+                return deviceStatusList.Any(x => x.SectionId == sectionId && x.TableNumber == tableNumber && x.Direction == direction);
+            }
         }
 
         public DeviceStatus GetDeviceStatus(int deviceNumber)
         {
-            return deviceStatusList[deviceNumber];
+            lock (sync)
+            {
+                return deviceStatusList[deviceNumber];
+            }
         }
 
         public DeviceStatus GetDeviceStatus(int sectionId, int tableNumber, Direction direction = Direction.North)
         {
-            return deviceStatusList.First(x => x.SectionId == sectionId && x.TableNumber == tableNumber && x.Direction == direction);
+            lock (sync)
+            {
+                return deviceStatusList.First(x => x.SectionId == sectionId && x.TableNumber == tableNumber && x.Direction == direction);
+            }
         }
 
         public void AddDeviceStatus(int sectionId, int tableNumber, int pairNumber, int roundNumber, Direction direction = Direction.North)
         {
-            DeviceStatus deviceStatus = new(sectionId, database.GetSection(sectionId).SectionLetter, tableNumber, pairNumber, roundNumber, direction);
+            string sectionLetter = database.GetSection(sectionId).SectionLetter;  // Database call outside the lock
+            DeviceStatus deviceStatus = new(sectionId, sectionLetter, tableNumber, pairNumber, roundNumber, direction);
             SetDeviceStatusLocation(deviceStatus);
-            deviceStatusList.Add(deviceStatus);
+            lock (sync)
+            {
+                // Don't create a duplicate if another request registered this location while we were reading the database
+                if (deviceStatusList.Any(x => x.SectionId == sectionId && x.TableNumber == tableNumber && x.Direction == direction)) return;
+                deviceStatusList.Add(deviceStatus);
+            }
         }
 
         public int GetDeviceNumber(DeviceStatus deviceStatus)
         {
-            return deviceStatusList.LastIndexOf(deviceStatus);
+            lock (sync)
+            {
+                return deviceStatusList.LastIndexOf(deviceStatus);
+            }
         }
 
         public void UpdateDeviceStatus(int deviceNumber, int tableNumber, int roundNumber, Direction direction)
         {
-            DeviceStatus deviceStatus = GetDeviceStatus(deviceNumber);
-            deviceStatus.TableNumber = tableNumber;
-            deviceStatus.Direction = direction;
-            deviceStatus.RoundNumber = roundNumber;
-            SetDeviceStatusLocation(deviceStatus);
+            lock (sync)
+            {
+                DeviceStatus deviceStatus = deviceStatusList[deviceNumber];
+                deviceStatus.TableNumber = tableNumber;
+                deviceStatus.Direction = direction;
+                deviceStatus.RoundNumber = roundNumber;
+                SetDeviceStatusLocation(deviceStatus);
+            }
+        }
+
+        public IReadOnlyList<DeviceSnapshot> GetDeviceStatusSnapshot()
+        {
+            lock (sync)
+            {
+                return deviceStatusList
+                    .Select((x, index) => new DeviceSnapshot(
+                        index, x.SectionId, x.SectionLetter, x.TableNumber, x.Direction, x.PairNumber,
+                        x.RoundNumber, x.DevicesPerTable, x.AtSitoutTable, x.Location))
+                    .ToList();
+            }
         }
 
         private void SetDeviceStatusLocation(DeviceStatus deviceStatus)
@@ -138,7 +228,11 @@ namespace TabScore2.DataServices
         public int GetTimerSeconds(DeviceStatus deviceStatus)
         {
             if (!settings.ShowTimer) return -1;  // Don't show timer
-            RoundTimer? roundTimer = roundTimerList.Find(x => x.SectionId == deviceStatus.SectionId && x.RoundNumber == deviceStatus.RoundNumber);
+            RoundTimer? roundTimer;
+            lock (sync)
+            {
+                roundTimer = roundTimerList.Find(x => x.SectionId == deviceStatus.SectionId && x.RoundNumber == deviceStatus.RoundNumber);
+            }
             if (roundTimer == null)  // Round not yet started, so create initial timer data for this section and round 
             {
                 // If phantom table or not at master table, then can't create initial timer data
@@ -146,21 +240,26 @@ namespace TabScore2.DataServices
                 DateTime startTime = DateTime.Now;
                 TableStatus tableStatus = GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber);
                 int secondsPerRound = (tableStatus.RoundData.HighBoard - tableStatus.RoundData.LowBoard + 1) * settings.SecondsPerBoard + settings.AdditionalSecondsPerRound;
-                roundTimerList.Add(new RoundTimer
+                lock (sync)
                 {
-                    SectionId = deviceStatus.SectionId,
-                    RoundNumber = deviceStatus.RoundNumber,
-                    StartTime = startTime,
-                    SecondsPerRound = secondsPerRound
-                });
-                return secondsPerRound;  // Timer shows full time for the round
+                    // Another device may have started the timer for this round in the meantime
+                    roundTimer = roundTimerList.Find(x => x.SectionId == deviceStatus.SectionId && x.RoundNumber == deviceStatus.RoundNumber);
+                    if (roundTimer == null)
+                    {
+                        roundTimerList.Add(new RoundTimer
+                        {
+                            SectionId = deviceStatus.SectionId,
+                            RoundNumber = deviceStatus.RoundNumber,
+                            StartTime = startTime,
+                            SecondsPerRound = secondsPerRound
+                        });
+                        return secondsPerRound;  // Timer shows full time for the round
+                    }
+                }
             }
-            else
-            {
-                int timerSeconds = roundTimer.SecondsPerRound - Convert.ToInt32(DateTime.Now.Subtract(roundTimer.StartTime).TotalSeconds);
-                if (timerSeconds < 0) timerSeconds = 0;
-                return timerSeconds;  // Timer shows time remaining in this round 
-            }
+            int timerSeconds = roundTimer.SecondsPerRound - Convert.ToInt32(DateTime.Now.Subtract(roundTimer.StartTime).TotalSeconds);
+            if (timerSeconds < 0) timerSeconds = 0;
+            return timerSeconds;  // Timer shows time remaining in this round 
         }
 
         // HANDEVALUATION

@@ -1,4 +1,4 @@
-﻿// TabScore2, a wireless bridge scoring program.  Copyright(C) 2026 by Peter Flippant
+// TabScore2, a wireless bridge scoring program.  Copyright(C) 2026 by Peter Flippant
 // Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License
 
 using GrpcSharedContracts.SharedClasses;
@@ -19,6 +19,7 @@ namespace TabScore2.Forms
         private readonly IAppData appData;
         private readonly ISettings settings;
         private string pathToDatabase = string.Empty;
+        private SessionStatusForm? sessionStatusForm;  // Non-modal, so only one instance is kept open
         
         public MainForm(IServiceProvider iServiceProvider, IStringLocalizer<Strings> iLocalizer, IDatabase iDatabase, IAppData iAppData, ISettings iSettings)
         {
@@ -34,6 +35,7 @@ namespace TabScore2.Forms
         {
             // Set form title
             Text = $"TabScore2 - {localizer["Version"]} {Assembly.GetExecutingAssembly().GetName().Version}";
+            buttonSessionStatus.Text = localizer["MonitorButton"];
 
             // Scoring database is not yet ready for use
             settings.DatabaseReady = false;
@@ -114,6 +116,7 @@ namespace TabScore2.Forms
                 {
                     buttonSettings.Enabled = false;
                     buttonResultsViewer.Enabled = false;
+                    buttonSessionStatus.Enabled = false;
                     labelSessionStatus.Text = localizer["SessionPaused"];
                     labelSessionStatus.ForeColor = Color.OrangeRed;
                     settings.DatabaseReady = false;
@@ -121,6 +124,7 @@ namespace TabScore2.Forms
                     AnalyseHands();
                     buttonSettings.Enabled = true;
                     buttonResultsViewer.Enabled = true;
+                    buttonSessionStatus.Enabled = true;
                     labelSessionStatus.Text = localizer["SessionRunning"];
                     labelSessionStatus.ForeColor = Color.Green;
                     settings.DatabaseReady = true;
@@ -142,6 +146,22 @@ namespace TabScore2.Forms
             Func<Point, ViewResultsForm> viewResultsFormTemplate = serviceProvider.GetRequiredService<Func<Point, ViewResultsForm>>();
             ViewResultsForm viewResultsForm = viewResultsFormTemplate(new Point(Location.X + 30, Location.Y + 30));
             viewResultsForm.ShowDialog();
+        }
+
+        private void ButtonSessionStatus_Click(object sender, EventArgs e)
+        {
+            // Non-modal, so the director can keep it open while play starts.  Reuse the open instance if there is one
+            if (sessionStatusForm == null || sessionStatusForm.IsDisposed)
+            {
+                Func<Point, SessionStatusForm> sessionStatusFormTemplate = serviceProvider.GetRequiredService<Func<Point, SessionStatusForm>>();
+                sessionStatusForm = sessionStatusFormTemplate(new Point(Location.X + 30, Location.Y + 30));
+                sessionStatusForm.Show(this);
+            }
+            else
+            {
+                if (sessionStatusForm.WindowState == FormWindowState.Minimized) sessionStatusForm.WindowState = FormWindowState.Normal;
+                sessionStatusForm.Activate();
+            }
         }
 
         private void MainForm_Closing(object sender, FormClosingEventArgs e)
@@ -174,8 +194,10 @@ namespace TabScore2.Forms
                 labelPathToDatabase.Text = pathToDatabase;
                 buttonSettings.Enabled = false;
                 buttonResultsViewer.Enabled = false;
+                buttonSessionStatus.Enabled = false;
                 buttonSettings.Visible = true;
                 buttonResultsViewer.Visible = true;
+                buttonSessionStatus.Visible = true;
                 buttonAddDatabaseFile.Visible = false;
 
                 // Analyse any hand records in the database
@@ -188,6 +210,7 @@ namespace TabScore2.Forms
                 buttonAddHandRecordFile.Visible = true;
                 buttonSettings.Enabled = true;
                 buttonResultsViewer.Enabled = true;
+                buttonSessionStatus.Enabled = true;
                 labelSessionStatus.Text = localizer["SessionRunning"];
                 labelSessionStatus.ForeColor = Color.Green;
                 settings.DatabaseReady = true;

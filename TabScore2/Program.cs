@@ -14,6 +14,8 @@ namespace TabScore2
 {
     internal class Program
     {
+        internal const int WebAppPort = 5213;  // Also shown on the admin session status screen as the scorer's page address
+
         [STAThread]
         public static void Main(string[] args)
         {
@@ -91,13 +93,14 @@ namespace TabScore2
             webAppBuilder.Services.AddSingleton<IExternalNamesDatabase, ExternalNamesDatabase>();
             webAppBuilder.Services.AddSingleton<ISettings, Settings>();
             webAppBuilder.Services.AddSingleton<IAppData, AppData>();
+            webAppBuilder.Services.AddSingleton<ISessionMonitor, SessionMonitor>();
             webAppBuilder.Services.AddSession(options =>
             {
                 options.Cookie.Name = ".TabScore2.Session";
                 options.IdleTimeout = TimeSpan.FromHours(6);
                 options.Cookie.IsEssential = true;
             });
-            webAppBuilder.WebHost.ConfigureKestrel((context, serverOptions) => { serverOptions.Listen(IPAddress.Any, 5213); });
+            webAppBuilder.WebHost.ConfigureKestrel((context, serverOptions) => { serverOptions.Listen(IPAddress.Any, WebAppPort); });
 
             WebApplication webApp = webAppBuilder.Build();
             webApp.UseExceptionHandler("/ErrorScreen/Index");
@@ -120,6 +123,7 @@ namespace TabScore2
             desktopBuilder.Services.AddSingleton<IDatabase, BwsDatabase>();
             desktopBuilder.Services.AddSingleton<ISettings, Settings>();
             desktopBuilder.Services.AddSingleton<IAppData, AppData>();
+            desktopBuilder.Services.AddSingleton<ISessionMonitor, SessionMonitor>();
 
             // Create services for forms with free parameters
             desktopBuilder.Services.AddTransient<Func<Point, SettingsForm>>(
@@ -135,6 +139,12 @@ namespace TabScore2
                     location =>
                     {
                         return new ViewResultsForm(container, location);
+                    });
+            desktopBuilder.Services.AddTransient<Func<Point, SessionStatusForm>>(
+                container =>
+                    location =>
+                    {
+                        return new SessionStatusForm(container, location);
                     });
             desktopBuilder.Services.AddTransient<Func<Result, Point, EditResultForm>>(
                 container =>

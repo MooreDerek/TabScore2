@@ -205,10 +205,10 @@
     <value>Please select an ID or 'Unknown' for all players</value>
   </data>
   <data name="ErrorPermanentDB" xml:space="preserve">
-    <value>Permanent database connection error.  Please check format and access permissions for Scoring Database file, and re-start TabScoreStarter.exe</value>
+    <value>Permanent database connection error.  Please check format and access permissions for Scoring Database file, and re-start TabScore2</value>
   </data>
   <data name="ErrorReestablishConnection" xml:space="preserve">
-    <value>Please press OK to try to re-establish the connection.  If successful, please re-register this tablet to your [section/]table number[/direction]</value>
+    <value>Please click OK to try to re-establish the connection.  If successful, please re-register this tablet</value>
   </data>
   <data name="ErrorScreen" xml:space="preserve">
     <value>Error screen</value>

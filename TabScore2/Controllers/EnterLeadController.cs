@@ -6,65 +6,59 @@ using TabScore2.Models;
 using TabScore2.Classes;
 using TabScore2.DataServices;
 using TabScore2.Globals;
-using TabScore2.UtilityServices;
+using TabScore2.BusinessLogic;
 
 namespace TabScore2.Controllers
 {
-    public class EnterLeadController(IAppData iAppData, IUtilities iUtilities, ISettings iSettings) : Controller
+    public class EnterLeadController(IAppData iAppData, IBusLogic iBusLogic, ISettings iSettings) : Controller
     {
         private readonly IAppData appData = iAppData;
-        private readonly IUtilities utilities = iUtilities;
+        private readonly IBusLogic busLogic = iBusLogic;
         private readonly ISettings settings = iSettings;
 
-        public ActionResult Index(LeadValidationOptions leadValidation)
+        public ActionResult Index(bool leadValidated = false, bool showValidateLeadWarning = false)
         {
             int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
             if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
-            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
-
             if (!settings.EnterLeadCard)
             {
                 return RedirectToAction("Index", "EnterTricksTaken");
             }
 
-            TableStatus tableStatus = appData.GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber);
-            if (tableStatus.ResultData.BoardNumber == 0)  // Probably from browser 'Back' button.  Don't know boardNumber so go to ShowBoards
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
+            if (deviceStatus.ResultData.BoardNumber == 0)  // Probably from browser 'Back' button.  Don't know boardNumber so go to ShowBoards
             {
                 return RedirectToAction("Index", "ShowBoards");
             }
 
-            if (tableStatus.ResultData.LeadCard == string.Empty)  // Lead not set, so use leadValidation value as passed to controller
+            EnterContractModel model = busLogic.CreateEnterContractModel(deviceStatus.ResultData, false);
+            if (!leadValidated && settings.ValidateLeadCard)
             {
-                tableStatus.LeadValidation = leadValidation;
+                model.ValidateLead = !showValidateLeadWarning;  // If showing the warning, then the lead has already been validated
+                model.ShowValidateLeadWarning = showValidateLeadWarning;
             }
-            else  // Lead already set, so must be an edit (ie no validation and no warning)
-            {
-                tableStatus.LeadValidation = LeadValidationOptions.NoWarning;
-            }
-            EnterContractModel enterContractModel = utilities.CreateEnterContractModel(tableStatus.ResultData, false, tableStatus.LeadValidation);
 
             ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceStatus);
-            ViewData["Title"] = utilities.Title("EnterLead", deviceStatus);
-            ViewData["Header"] = utilities.Header(HeaderType.FullColoured, deviceStatus);
+            ViewData["Title"] = busLogic.Title("EnterLead", deviceStatus);
+            ViewData["Header"] = busLogic.Header(HeaderType.FullColoured, deviceStatus);
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabledAndBack;
-            return View(enterContractModel);
+            return View(model);
         }
 
-        public ActionResult OKButtonClick(string card)
+        public ActionResult OKButtonClick(bool validateLead, string card)
         {
             int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
             if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
-            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
 
-            TableStatus tableStatus = appData.GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber);
-            if (tableStatus.LeadValidation != LeadValidationOptions.Validate || !settings.ValidateLeadCard || utilities.ValidateLead(tableStatus, card))
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
+            if (validateLead && !busLogic.ValidateLead(deviceStatus.ResultData, card))
             {
-                tableStatus.ResultData.LeadCard = card;
-                return RedirectToAction("Index", "EnterTricksTaken");
+                return RedirectToAction("Index", "EnterLead", new { showValidateLeadWarning = true });
             }
             else
             {
-                return RedirectToAction("Index", "EnterLead", new { leadValidation = LeadValidationOptions.Warning });
+                deviceStatus.ResultData.LeadCard = card;
+                return RedirectToAction("Index", "EnterTricksTaken");
             }
         }
     }

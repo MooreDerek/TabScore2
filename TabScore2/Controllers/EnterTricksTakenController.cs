@@ -6,34 +6,33 @@ using TabScore2.Models;
 using TabScore2.Classes;
 using TabScore2.DataServices;
 using TabScore2.Globals;
-using TabScore2.UtilityServices;
 using GrpcSharedContracts.SharedClasses;
+using TabScore2.BusinessLogic;
 
 namespace TabScore2.Controllers
 {
-    public class EnterTricksTakenController(IAppData iAppData, IUtilities iUtilities, ISettings iSettings) : Controller
+    public class EnterTricksTakenController(IAppData iAppData, IBusLogic iBusLogic, ISettings iSettings) : Controller
     {
         private readonly IAppData appData = iAppData;
-        private readonly IUtilities utilities = iUtilities;
+        private readonly IBusLogic busLogic = iBusLogic;
         private readonly ISettings settings = iSettings;
 
         public ActionResult Index()
         {
             int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
             if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
+            
             DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
-
-            TableStatus tableStatus = appData.GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber);
-            if (tableStatus.ResultData.BoardNumber == 0)  // Probably from browser 'Back' button.  Don't know boardNumber so go to ShowBoards
+            if (deviceStatus.ResultData.BoardNumber == 0)  // Probably from browser 'Back' button.  Don't know boardNumber so go to ShowBoards
             {
                 return RedirectToAction("Index", "ShowBoards");
             }
 
-            EnterContractModel enterContractModel = utilities.CreateEnterContractModel(tableStatus.ResultData);
+            EnterContractModel enterContractModel = busLogic.CreateEnterContractModel(deviceStatus.ResultData);
 
             ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceStatus);
-            ViewData["Title"] = utilities.Title("EnterTricksTaken", deviceStatus);
-            ViewData["Header"] = utilities.Header(HeaderType.FullColoured, deviceStatus);
+            ViewData["Title"] = busLogic.Title("EnterTricksTaken", deviceStatus);
+            ViewData["Header"] = busLogic.Header(HeaderType.FullColoured, deviceStatus);
             ViewData["ButtonOptions"] = ButtonOptions.OKDisabledAndBack;
             if (settings.EnterResultsMethod == 1)
             {
@@ -49,9 +48,8 @@ namespace TabScore2.Controllers
         {
             int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
             if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
-            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
 
-            Result result = appData.GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber).ResultData;
+            Result result = appData.GetDeviceStatus(deviceNumber).ResultData;
             result.TricksTaken = tricksTaken;
             if (tricksTaken == -1)
             {
@@ -69,7 +67,7 @@ namespace TabScore2.Controllers
                     result.TricksTakenSymbol = tricksTakenLevel.ToString("+#;-#;0");
                 }
             }
-            utilities.CalculateScore(result);
+            busLogic.CalculateScore(result);
             return RedirectToAction("Index", "ConfirmResult");
         }
 
@@ -77,17 +75,14 @@ namespace TabScore2.Controllers
         {
             int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
             if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
-            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
 
             if (settings.EnterLeadCard)
             {
-                return RedirectToAction("Index", "EnterLead", new { deviceNumber, leadValidation = LeadValidationOptions.NoWarning });
+                return RedirectToAction("Index", "EnterLead", new { leadValidated = true }); // Going back, so the lead has already been validated (if it needed to be)
             }
             else
             {
-                TableStatus tableStatus = appData.GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber);
-                Result result = tableStatus.ResultData!;
-                return RedirectToAction("Index", "EnterContract", new { boardNumber = result.BoardNumber });
+                return RedirectToAction("Index", "EnterContract", new { boardNumber = appData.GetDeviceStatus(deviceNumber).ResultData.BoardNumber });
             }
         }
     }

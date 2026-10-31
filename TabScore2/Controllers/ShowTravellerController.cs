@@ -6,42 +6,41 @@ using TabScore2.Models;
 using TabScore2.Classes;
 using TabScore2.DataServices;
 using TabScore2.Globals;
-using TabScore2.UtilityServices;
+using TabScore2.BusinessLogic;
 
 namespace TabScore2.Controllers
 {
-    public class ShowTravellerController(IDatabase iDatabase, IAppData iAppData, IUtilities iUtilities, ISettings iSettings) : Controller
+    public class ShowTravellerController(IDatabase iDatabase, IAppData iAppData, IBusLogic iBusLogic, ISettings iSettings) : Controller
     {
         private readonly IDatabase database = iDatabase;
         private readonly IAppData appData = iAppData;
-        private readonly IUtilities utilities = iUtilities;
+        private readonly IBusLogic busLogic = iBusLogic;
         private readonly ISettings settings = iSettings;
 
         public ActionResult Index(int boardNumber, bool fromView = false)
         {
             int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
             if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
-            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
 
             if (!settings.ShowTraveller)
             {
                 return RedirectToAction("Index", "ShowBoards");
             }
 
-            TableStatus tableStatus = appData.GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber);
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
 
             // If ResultData doesn't exist, either from ShowBoards/View or browser 'Back' button, retrieve result
-            if (tableStatus.ResultData.BoardNumber == 0)
+            if (deviceStatus.ResultData.BoardNumber == 0)
             {
-                tableStatus.ResultData = database.GetResult(tableStatus.SectionId, tableStatus.TableNumber, tableStatus.RoundNumber, boardNumber);
+                deviceStatus.ResultData = database.GetResult(deviceStatus.SectionId, deviceStatus.TableNumber, deviceStatus.RoundNumber, boardNumber);
             }
            
-            ShowTravellerModel showTravellerModel = utilities.CreateShowTravellerModel(deviceStatus);
+            ShowTravellerModel showTravellerModel = busLogic.CreateShowTravellerModel(deviceStatus);
             showTravellerModel.FromView = fromView;
 
             ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceStatus);
-            ViewData["Title"] = utilities.Title("ShowTraveller", deviceStatus);
-            ViewData["Header"] = utilities.Header(HeaderType.FullColoured, deviceStatus);
+            ViewData["Title"] = busLogic.Title("ShowTraveller", deviceStatus);
+            ViewData["Header"] = busLogic.Header(HeaderType.FullColoured, deviceStatus);
             if (fromView)
             {
                 ViewData["ButtonOptions"] = ButtonOptions.OKEnabled;

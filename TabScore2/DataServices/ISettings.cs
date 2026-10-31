@@ -1,4 +1,6 @@
-﻿namespace TabScore2.DataServices
+﻿using TabScore2.Globals;
+
+namespace TabScore2.DataServices
 {
     public interface ISettings
     {
@@ -25,8 +27,7 @@
         int DefaultEnterResultsMethod { get; set; }
         bool DefaultManualHandRecordEntry { get; set; }
 
-
-        bool DevicesMove { get; set; }
+        Mode Mode { get; set; }
         string ShowHandRecordFromDirection { get; set; }
         bool ShowTimer { get; set; }
         int SecondsPerBoard { get; set; }
@@ -36,6 +37,7 @@
         int SuppressRankingListForFirstXRounds { get; set; }
         int SuppressRankingListForLastXRounds { get; set; }
         bool ShowSplashScreen { get; set; }
+        public bool RegisterByContestantNumber { get; set; }
 
         bool DatabaseReady { get; set; }
         bool IsIndividual { get; set; }

@@ -9,9 +9,9 @@ namespace TabScore2.DataServices
     {
         private readonly IExternalNamesDatabaseService client = iClient;
 
-        public string GetExternalPlayerName(string playerId)
+        public string GetExternalPlayerName(int playerId)
         {
-            return client!.GetExternalPlayerName(new PlayerMessage() { PlayerId = playerId }).PlayerName;
+            return client!.GetExternalPlayerName(new PlayerRequest() { PlayerId = playerId }).PlayerName;
         }
     }
 }

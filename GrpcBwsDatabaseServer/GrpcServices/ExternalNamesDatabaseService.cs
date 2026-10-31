@@ -8,7 +8,7 @@ namespace GrpcBwsDatabaseServer.GrpcServices
 {
     public class ExternalNamesDatabaseService : IExternalNamesDatabaseService
     {
-        public PlayerNameMessage GetExternalPlayerName(PlayerMessage request)
+        public PlayerNameResponse GetExternalPlayerName(PlayerRequest request)
         {
             string name = "Unknown";
             OdbcConnectionStringBuilder externalDB = new() { Driver = "Microsoft Access Driver (*.mdb)" };
@@ -16,31 +16,20 @@ namespace GrpcBwsDatabaseServer.GrpcServices
             externalDB.Add("Uid", "Admin");
             using (OdbcConnection connection = new(externalDB.ToString()))
             {
-                object? queryResult = null;
-                string SQLString = $"SELECT Name FROM PlayerNameDatabase WHERE ID={request.PlayerId}";
-                OdbcCommand cmd = new(SQLString, connection);
                 try
                 {
                     connection.Open();
-                    ODBCRetryHelper.ODBCRetry(() =>
+                    string SQLString = $"SELECT Name FROM PlayerNameDatabase WHERE ID={request.PlayerId}";
+                    object? queryResult = OdbcHelper.ExecuteScalar(connection, SQLString);
+                    if (queryResult != null)
                     {
-                        queryResult = cmd.ExecuteScalar();
-                        if (queryResult != null)
-                        {
-                            string? tempName = queryResult.ToString();
-                            if (tempName != null) name = tempName;
-                        }
-                    });
+                        string? tempName = queryResult.ToString();
+                        if (tempName != null) name = tempName;
+                    }
                 }
-                catch (OdbcException)  // If we can't read the external database for whatever reason, just return "Unknown"
-                {
-                }
-                finally
-                {
-                    cmd.Dispose();
-                }
+                catch (OdbcException) { } // If we can't read the external database for whatever reason, just return "Unknown"
             }
-            return new PlayerNameMessage() { PlayerName = name };
+            return new PlayerNameResponse() { PlayerName = name };
         }
     }
 }

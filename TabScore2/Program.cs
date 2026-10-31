@@ -6,9 +6,9 @@ using GrpcSharedContracts.SharedClasses;
 using ProtoBuf.Grpc.ClientFactory;
 using System.Diagnostics;
 using System.Net;
+using TabScore2.BusinessLogic;
 using TabScore2.DataServices;
 using TabScore2.Forms;
-using TabScore2.UtilityServices;
 
 namespace TabScore2
 {
@@ -78,15 +78,23 @@ namespace TabScore2
             if (!isDevelopment) {
                 // In the production environment, the scoring program may start TabScore2 using a different current working directory
                 webApplicationOptions = new() { ContentRootPath = Application.StartupPath };
+
+                // Disable console output in production environment, as it is not needed and may cause issues when running the application in a Windows service
+                Console.SetOut(StreamWriter.Null);
+                Console.SetError(StreamWriter.Null);
             }
 
             WebApplicationBuilder webAppBuilder = WebApplication.CreateBuilder(webApplicationOptions);
+
+            // Clear default logging providers as logging is not very useful given the way TabScore2 is deployed
+            webAppBuilder.Logging.ClearProviders();
+
             webAppBuilder.Services.AddLocalization();
             webAppBuilder.Services.AddControllersWithViews();
             webAppBuilder.Services.AddCodeFirstGrpcClient<IBwsDatabaseService>(option => { option.Address = grpcAddress; });
             webAppBuilder.Services.AddCodeFirstGrpcClient<IExternalNamesDatabaseService>(option => { option.Address = grpcAddress; });
             webAppBuilder.Services.AddWebOptimizer(option => { option.EnableDiskCache = false; });
-            webAppBuilder.Services.AddSingleton<IUtilities, Utilities>();
+            webAppBuilder.Services.AddSingleton<IBusLogic, BusLogic>();
             webAppBuilder.Services.AddSingleton<IDatabase, BwsDatabase>();
             webAppBuilder.Services.AddSingleton<IExternalNamesDatabase, ExternalNamesDatabase>();
             webAppBuilder.Services.AddSingleton<ISettings, Settings>();
@@ -100,7 +108,7 @@ namespace TabScore2
             webAppBuilder.WebHost.ConfigureKestrel((context, serverOptions) => { serverOptions.Listen(IPAddress.Any, 5213); });
 
             WebApplication webApp = webAppBuilder.Build();
-            webApp.UseExceptionHandler("/ErrorScreen/Index");
+            // webApp.UseExceptionHandler("/ErrorScreen/Index");
             webApp.UseWebOptimizer();
             webApp.UseStaticFiles();
             webApp.UseAuthorization();

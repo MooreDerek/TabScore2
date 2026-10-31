@@ -25,13 +25,13 @@ namespace TabScore2.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool DevicesMove {
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Mode {
             get {
-                return ((bool)(this["DevicesMove"]));
+                return ((int)(this["Mode"]));
             }
             set {
-                this["DevicesMove"] = value;
+                this["Mode"] = value;
             }
         }
         
@@ -296,6 +296,30 @@ namespace TabScore2.Properties {
             }
             set {
                 this["MasterTableForTimer"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool RegisterByContestantNumber {
+            get {
+                return ((bool)(this["RegisterByContestantNumber"]));
+            }
+            set {
+                this["RegisterByContestantNumber"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public string DefaultPlayerIDEntryMethod {
+            get {
+                return ((string)(this["DefaultPlayerIDEntryMethod"]));
+            }
+            set {
+                this["DefaultPlayerIDEntryMethod"] = value;
             }
         }
     }

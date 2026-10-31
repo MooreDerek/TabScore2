@@ -6,27 +6,32 @@ using TabScore2.Classes;
 using TabScore2.Globals;
 using TabScore2.Models;
 
-namespace TabScore2.UtilityServices
+namespace TabScore2.BusinessLogic
 {
-    public interface IUtilities
+    public interface IBusLogic
     {
-        ShowPlayerIdsModel CreateShowPlayerIdsModel(DeviceStatus deviceStatus, bool showWarning);
+        SelectSectionModel CreateSelectSectionModel();
+        SelectTableNumberModel CreateSelectTableNumberModel(int sectionId, int confirmTableNumber);
+        SelectContestantNumberModel CreateSelectContestantNumberModel(int sectionId, int confirmContestantNumber);
+        SelectDirectionModel CreateSelectDirectionModel(int sectionId, int tableNumber, Direction confirmDirection);
+        ShowPlayerIdsModel CreateShowPlayerIdsModel(DeviceStatus deviceStatus);
         EnterPlayerIdModel CreateEnterPlayerIdModel(Direction direction);
         ShowRoundInfoModel CreateShowRoundInfoModel(DeviceStatus deviceStatus);
         ShowBoardsModel CreateShowBoardsModel(DeviceStatus deviceStatus);
         ShowMoveModel CreateShowMoveModel(DeviceStatus deviceStatus, int newRoundNumber, int tableNotReadyNumber);
-        EnterContractModel CreateEnterContractModel(Result result, bool showTricks = false, LeadValidationOptions leadValidation = LeadValidationOptions.NoWarning);
+        EnterContractModel CreateEnterContractModel(Result result, bool showTricks = false);
         ShowTravellerModel CreateShowTravellerModel(DeviceStatus deviceStatus);
         ShowHandRecordModel? CreateShowHandRecordModel(DeviceStatus deviceStatus, int boardNumber);
         ShowRankingListModel CreateRankingListModel(DeviceStatus deviceStatus);
-        
+
+        void GetDatabaseNamesForRound(TableStatus tableStatus);
         Move GetMove(List<Round> roundsList, int tableNumber, int pairNumber, Direction direction);
         int GetBoardsFromTableNumber(TableStatus tableStatus);
         List<Ranking> GetRankings(int sectionId);
 
         string Header(HeaderType headerType, DeviceStatus deviceStatus);
         string Title(string titleString, DeviceStatus deviceStatus);
-        bool ValidateLead(TableStatus tableStatus, string card);
+        bool ValidateLead(Result result, string card);
         public void CalculateScore(Result result);
     }
 }

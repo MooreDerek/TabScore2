@@ -6,34 +6,33 @@ using TabScore2.Models;
 using TabScore2.Classes;
 using TabScore2.DataServices;
 using TabScore2.Globals;
-using TabScore2.UtilityServices;
 using GrpcSharedContracts.SharedClasses;
+using TabScore2.BusinessLogic;
 
 namespace TabScore2.Controllers
 {
-    public class ConfirmResultController(IDatabase iDatabase, IAppData iAppData, IUtilities iUtilities) : Controller
+    public class ConfirmResultController(IDatabase iDatabase, IAppData iAppData, IBusLogic iBusLogic) : Controller
     {
         private readonly IDatabase database = iDatabase;
         private readonly IAppData appData = iAppData;
-        private readonly IUtilities utilities = iUtilities;
+        private readonly IBusLogic busLogic = iBusLogic;
 
         public ActionResult Index()
         {
             int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
             if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
-            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
 
-            TableStatus tableStatus = appData.GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber);
-            if (tableStatus.ResultData.BoardNumber == 0)  // Probably from browser 'Back' button.  Don't know boardNumber so go to ShowBoards
+            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
+            if (deviceStatus.ResultData.BoardNumber == 0)  // Probably from browser 'Back' button.  Don't know boardNumber so go to ShowBoards
             {
                 return RedirectToAction("Index", "ShowBoards", new { deviceNumber });
             }
 
-            EnterContractModel enterContractModel = utilities.CreateEnterContractModel(tableStatus.ResultData, true);
+            EnterContractModel enterContractModel = busLogic.CreateEnterContractModel(deviceStatus.ResultData, true);
 
             ViewData["TimerSeconds"] = appData.GetTimerSeconds(deviceStatus);
-            ViewData["Title"] = utilities.Title("ConfirmResult", deviceStatus);
-            ViewData["Header"] = utilities.Header(HeaderType.FullColoured, deviceStatus);
+            ViewData["Title"] = busLogic.Title("ConfirmResult", deviceStatus);
+            ViewData["Header"] = busLogic.Header(HeaderType.FullColoured, deviceStatus);
             ViewData["ButtonOptions"] = ButtonOptions.OKEnabledAndBack;
             return View(enterContractModel);
         }
@@ -42,9 +41,8 @@ namespace TabScore2.Controllers
         {
             int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
             if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
-            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
 
-            Result result = appData.GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber).ResultData;
+            Result result = appData.GetDeviceStatus(deviceNumber).ResultData;
             database.SetResult(result);
             return RedirectToAction("Index", "EnterHandRecord", new { boardNumber = result.BoardNumber });
         }
@@ -53,9 +51,8 @@ namespace TabScore2.Controllers
         {
             int deviceNumber = HttpContext.Session.GetInt32("DeviceNumber") ?? -1;
             if (deviceNumber == -1) return RedirectToAction("Index", "ErrorScreen");
-            DeviceStatus deviceStatus = appData.GetDeviceStatus(deviceNumber);
 
-            Result result = appData.GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber).ResultData;
+            Result result = appData.GetDeviceStatus(deviceNumber).ResultData;
             if (result.ContractLevel == 0)  // This was passed out, so Back goes all the way to Enter Contract screen
             {
                 return RedirectToAction("Index", "EnterContract", new { boardNumber = result.BoardNumber });

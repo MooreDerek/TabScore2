@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="$this.Text" xml:space="preserve">
-    <value>TabScore Opties</value>
+    <value>TabScore2 - Instellingen</value>
   </data>
   <data name="AdditionalMinutesPerRoundLabel.Text" xml:space="preserve">
     <value>Extra minuten per ronde</value>
@@ -242,5 +242,8 @@
   </data>
   <data name="SplashScreenCheckbox.Text" xml:space="preserve">
     <value>Opstartscherm weergeven bij opstarten</value>
+  </data>
+  <data name="TimerMasterCheckbox.Text" xml:space="preserve">
+    <value>Gebruik Tafel 1 als master om de rondetimer te starten</value>
   </data>
 </root>

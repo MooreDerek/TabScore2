@@ -1,7 +1,35 @@
 ﻿<!-- TabScore2, a wireless bridge scoring program.  Copyright(C) 2026 by Peter Flippant
      Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License -->
 
-@model TabScore2.Models.ShowRoundInfoModel
+@model ShowRoundInfoModel
+
+@if (TempData.ContainsKey("Message") && TempData["Message"] is string message && !string.IsNullOrEmpty(message))
+{
+    <div id="invalidScorerModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header text-danger">
+                    <p class="modal-title text-center">
+                        <h3>@localizer["Warning"]</h3>
+                    </p>
+                </div>
+                <div class="modal-body">
+                    <p>@localizer[message]</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn  btn-lg btn-success" data-bs-dismiss="modal">
+                        @localizer["OK"] <span class="icon-check-circle"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var invalidScorerModal = new bootstrap.Modal(document.getElementById("invalidScorerModal"), { backdrop: 'static' });
+        invalidScorerModal.show();
+    </script>
+}
 
 <div class="row mt-4">
     <div class="col-12 text-center">
@@ -45,7 +73,7 @@
     <div class="row mt-4">
         <div class="col-12 text-center">
             <h3 style="color:blue">
-                @localizer["North"]: @Model.NumberNorth & @localizer["South"]: @Model.NumberSouth
+                @localizer["North"]: @Model.ContestantNumberNorth & @localizer["South"]: @Model.ContestantNumberSouth
             </h3>
         </div>
     </div>
@@ -64,7 +92,7 @@
     <div class="row mt-4">
         <div class="col-12 text-center">
             <h3 style="color:blue">
-                @localizer["East"]: @Model.NumberEast & @localizer["West"]: @Model.NumberWest
+                @localizer["East"]: @Model.ContestantNumberEast & @localizer["West"]: @Model.ContestantNumberWest
             </h3>
         </div>
     </div>
@@ -90,27 +118,7 @@
 }
 
 <script>
-    var isSubmitted = false;
-    var sitOut = @Model.NSMissing.ToString().ToLower() || @Model.EWMissing.ToString().ToLower();
-
-    function OKButtonClick() {
-        if (document.getElementById("OKButton").disabled) return;
-        if (!isSubmitted) {
-            isSubmitted = true;
-            if (sitOut) {
-                location.href = '@Url.Action("Index", "ShowRankingList")';
-            }
-            else {
-                location.href = '@Url.Action("Index", "ShowBoards")';
-            }
-        }
-    }
-
-    function BackButtonClick() {
-        if (document.getElementById("BackButton").disabled) return;
-        if (!isSubmitted) {
-            isSubmitted = true;
-            location.href = '@Url.Action("BackButtonClick", "ShowRoundInfo")';
-        }
-    }
+    var urlOKButtonClick = '@Url.Action("OKButtonClick", "ShowRoundInfo")';
+    var urlBackButtonClick = '@Url.Action("BackButtonClick", "ShowRoundInfo")';
 </script>
+<script src="~/js/ShowRoundInfo.js"></script>

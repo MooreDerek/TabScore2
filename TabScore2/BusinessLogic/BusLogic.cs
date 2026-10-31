@@ -10,9 +10,9 @@ using TabScore2.Globals;
 using TabScore2.Models;
 using TabScore2.Resources;
 
-namespace TabScore2.UtilityServices
+namespace TabScore2.BusinessLogic
 {
-    public class Utilities(IStringLocalizer<Strings> iLocalizer, IDatabase iDatabase, IAppData iAppData, ISettings iSettings) : IUtilities
+    public class BusLogic(IStringLocalizer<Strings> iLocalizer, IDatabase iDatabase, IAppData iAppData, ISettings iSettings) : IBusLogic
     {
         private readonly IStringLocalizer<Strings> localizer = iLocalizer;
         private readonly IDatabase database = iDatabase;
@@ -21,27 +21,88 @@ namespace TabScore2.UtilityServices
         private static readonly char[] arbitralScoreSeparators = ['%', '-'];
 
         // PUBLIC CLASSES TO CREATE VIEW MODELS
-        public ShowPlayerIdsModel CreateShowPlayerIdsModel(DeviceStatus deviceStatus, bool showWarning)
+        public SelectSectionModel CreateSelectSectionModel() { 
+            SelectSectionModel selectSectionModel = [];
+            selectSectionModel.AddRange(database.GetSectionsList());
+            return selectSectionModel;
+        }
+
+        public SelectTableNumberModel CreateSelectTableNumberModel(int sectionId, int confirmTableNumber)
         {
-            ShowPlayerIdsModel showPlayerIdsModel = new(showWarning);
+            Section section = database.GetSection(sectionId);
+            return new()
+            {
+                SectionId = section.SectionId,
+                SectionLetter = section.SectionLetter,
+                ConfirmTableNumber = confirmTableNumber,
+                NumTables = section.NumberOfTables,
+            };
+        }
+
+        public SelectContestantNumberModel CreateSelectContestantNumberModel(int sectionId, int confirmContestantNumber)
+        {
+            Section section = database.GetSection(sectionId);
+
+            // Need a list of all possible contestant numbers.  We can't rely on the PlayerNumbers table, so use the movement
+            List<Round> roundsList = database.GetRoundsListForSection(sectionId);
+            HashSet<int> contestantNumbers = [];
+            foreach (Round round in roundsList) 
+            {
+                contestantNumbers.Add(round.ContestantNumberNorth);
+                contestantNumbers.Add(round.ContestantNumberSouth);
+                contestantNumbers.Add(round.ContestantNumberEast);
+                contestantNumbers.Add(round.ContestantNumberWest);
+            }
+            contestantNumbers.Remove(0);
+
+            return new()
+            {
+                SectionId = section.SectionId,
+                SectionLetter = section.SectionLetter,
+                ContestantNumbers = [.. contestantNumbers.OrderBy(contestantNumber => contestantNumber)],
+                NumContestants = contestantNumbers.Count,
+                ConfirmContestantNumber = confirmContestantNumber,
+            };
+        }
+
+        public SelectDirectionModel CreateSelectDirectionModel(int sectionId, int tableNumber, Direction confirmDirection)
+        {
+            TableStatus tableStatus = appData.GetTableStatus(sectionId, tableNumber);
+            Section section = database.GetSection(sectionId);
+
+            return new()
+            {
+                SectionId = sectionId,
+                SectionLetter = section.SectionLetter,
+                TableNumber = tableNumber,
+                ConfirmDirection = confirmDirection,
+                RoundNumber = tableStatus.RoundNumber,
+                NorthSouthMissing = tableStatus.RoundData.ContestantNumberNorth == 0 || tableStatus.RoundData.ContestantNumberNorth == section.MissingPair,
+                EastWestMissing = tableStatus.RoundData.ContestantNumberEast == 0 || tableStatus.RoundData.ContestantNumberEast == section.MissingPair,
+            };
+        }
+
+        public ShowPlayerIdsModel CreateShowPlayerIdsModel(DeviceStatus deviceStatus)
+        {
+            ShowPlayerIdsModel showPlayerIdsModel = [];
             TableStatus tableStatus = appData.GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber);
             Round round = tableStatus.RoundData;
             int missingPair = database.GetSection(deviceStatus.SectionId).MissingPair;
 
-            if (deviceStatus.DevicesPerTable == 1)
+            if (settings.Mode == Mode.Scorer || deviceStatus.DevicesPerTable == 1) // Scorer enters all names
             {
-                if (round.NumberNorth != 0 && round.NumberNorth != missingPair)
+                if (round.ContestantNumberNorth != 0 && round.ContestantNumberNorth != missingPair)
                 {
                     showPlayerIdsModel.Add(CreatePlayerEntry(round, Direction.North));
                     showPlayerIdsModel.Add(CreatePlayerEntry(round, Direction.South));
                 }
-                if (round.NumberEast != 0 && round.NumberEast != missingPair)
+                if (round.ContestantNumberEast != 0 && round.ContestantNumberEast != missingPair)
                 {
                     showPlayerIdsModel.Add(CreatePlayerEntry(round, Direction.East));
                     showPlayerIdsModel.Add(CreatePlayerEntry(round, Direction.West));
                 }
             }
-            else if (deviceStatus.DevicesPerTable == 2)
+            else if (deviceStatus.DevicesPerTable == 2)  // Personal Mode and pairs, so both pairs enter their names
             {
                 if (deviceStatus.Direction == Direction.North)
                 {
@@ -54,13 +115,11 @@ namespace TabScore2.UtilityServices
                     showPlayerIdsModel.Add(CreatePlayerEntry(round, Direction.West));
                 }
             }
-            else  // tabletDevicesPerTable == 4
+            else  // Personal Mode and individual, so all 4 players enter their own name
             {
                 showPlayerIdsModel.Add(CreatePlayerEntry(round, deviceStatus.Direction));
             }
 
-            showPlayerIdsModel.NumberOfBlankEntries = showPlayerIdsModel.FindAll(x => x.DisplayName == string.Empty).Count;
-            showPlayerIdsModel.ShowMessage = deviceStatus.DevicesPerTable == 4 || (deviceStatus.DevicesPerTable == 2 && showPlayerIdsModel.Count == 4);
             return showPlayerIdsModel;
         }
 
@@ -82,10 +141,10 @@ namespace TabScore2.UtilityServices
             return new()
             {
                 RoundNumber = tableStatus.RoundNumber,
-                NumberNorth = round.NumberNorth,
-                NumberEast = round.NumberEast,
-                NumberSouth = round.NumberSouth,
-                NumberWest = round.NumberWest,
+                ContestantNumberNorth = round.ContestantNumberNorth,
+                ContestantNumberEast = round.ContestantNumberEast,
+                ContestantNumberSouth = round.ContestantNumberSouth,
+                ContestantNumberWest = round.ContestantNumberWest,
                 DisplayNameNorth = round.NameNorth.Replace("Unknown", unknown),
                 DisplayNameSouth = round.NameSouth.Replace("Unknown", unknown),
                 DisplayNameEast = round.NameEast.Replace("Unknown", unknown),
@@ -103,7 +162,8 @@ namespace TabScore2.UtilityServices
             ShowBoardsModel showBoardsModel = new(settings.ShowTraveller);
             foreach (Result result in resultsList) 
             {
-                showBoardsModel.Add(new ShowBoardsResult(result.BoardNumber, result.ContractLevel, GetContractDisplay(result, true), result.Remarks));
+                showBoardsModel.Add(new() { BoardNumber = result.BoardNumber, ContractLevel = result.ContractLevel, DisplayContract = GetContractDisplay(result, true), 
+                  Remarks = result.Remarks });
             }
 
             // Check to see if any boards don't have a result, and add dummies to the list
@@ -111,7 +171,7 @@ namespace TabScore2.UtilityServices
             {
                 if (showBoardsModel.Find(x => x.BoardNumber == iBoard) == null)
                 {
-                    ShowBoardsResult showBoardsResult = new(iBoard, -999, string.Empty, string.Empty);
+                    ShowBoardsResult showBoardsResult = new() { BoardNumber = iBoard, ContractLevel = -999, DisplayContract = string.Empty, Remarks = string.Empty };
                     showBoardsModel.Add(showBoardsResult);
                     showBoardsModel.GotAllResults = false;
                 }
@@ -123,69 +183,75 @@ namespace TabScore2.UtilityServices
         public ShowMoveModel CreateShowMoveModel(DeviceStatus deviceStatus, int newRoundNumber, int tableNotReadyNumber)
         {
             ShowMoveModel showMoveModel = [];
+            TableStatus tableStatus = appData.GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber);
             showMoveModel.Direction = deviceStatus.Direction;
             showMoveModel.NewRoundNumber = newRoundNumber;
             showMoveModel.TableNotReadyNumber = tableNotReadyNumber;
-            showMoveModel.TabletDevicesPerTable = deviceStatus.DevicesPerTable;
+            showMoveModel.DevicesPerTable = deviceStatus.DevicesPerTable;
             int missingPair = database.GetSection(deviceStatus.SectionId).MissingPair;
+            bool showBoards;
 
-            List<Round> roundsList = database.GetRoundsList(deviceStatus.SectionId, newRoundNumber);
-            if (deviceStatus.DevicesPerTable == 1)
+            List<Round> roundsList = database.GetRoundsListForSectionRound(deviceStatus.SectionId, newRoundNumber);
+            if (deviceStatus.DevicesPerTable == 1 || (settings.Mode == Mode.Scorer && deviceStatus.Scoring))
             {
-                TableStatus tableStatus = appData.GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber);
+                // Only one device per table, or a scoring device in Scorer Mode, so need to show all moves at the table
                 if (settings.IsIndividual)
                 {
-                    if (tableStatus.RoundData.NumberNorth != 0)
+                    if (tableStatus.RoundData.ContestantNumberNorth != 0)
                     {
-                        showMoveModel.Add(GetMove(roundsList, tableStatus.TableNumber, tableStatus.RoundData.NumberNorth, Direction.North));
+                        showMoveModel.Add(GetMove(roundsList, tableStatus.TableNumber, tableStatus.RoundData.ContestantNumberNorth, Direction.North));
                     }
-                    if (tableStatus.RoundData.NumberSouth != 0)
+                    if (tableStatus.RoundData.ContestantNumberSouth != 0)
                     {
-                        showMoveModel.Add(GetMove(roundsList, tableStatus.TableNumber, tableStatus.RoundData.NumberSouth, Direction.South));
+                        showMoveModel.Add(GetMove(roundsList, tableStatus.TableNumber, tableStatus.RoundData.ContestantNumberSouth, Direction.South));
                     }
-                    if (tableStatus.RoundData.NumberEast != 0)
+                    if (tableStatus.RoundData.ContestantNumberEast != 0)
                     {
-                        showMoveModel.Add(GetMove(roundsList, tableStatus.TableNumber, tableStatus.RoundData.NumberEast, Direction.East));
+                        showMoveModel.Add(GetMove(roundsList, tableStatus.TableNumber, tableStatus.RoundData.ContestantNumberEast, Direction.East));
                     }
-                    if (tableStatus.RoundData.NumberWest != 0)
+                    if (tableStatus.RoundData.ContestantNumberWest != 0)
                     {
-                        showMoveModel.Add(GetMove(roundsList, tableStatus.TableNumber, tableStatus.RoundData.NumberWest, Direction.West));
+                        showMoveModel.Add(GetMove(roundsList, tableStatus.TableNumber, tableStatus.RoundData.ContestantNumberWest, Direction.West));
                     }
                 }
                 else  // Not individual
                 {
-                    if (tableStatus.RoundData.NumberNorth != 0 && tableStatus.RoundData.NumberNorth != missingPair)
+                    if (tableStatus.RoundData.ContestantNumberNorth != 0 && tableStatus.RoundData.ContestantNumberNorth != missingPair)
                     {
-                        showMoveModel.Add(GetMove(roundsList, tableStatus.TableNumber, tableStatus.RoundData.NumberNorth, Direction.North));
+                        showMoveModel.Add(GetMove(roundsList, tableStatus.TableNumber, tableStatus.RoundData.ContestantNumberNorth, Direction.North));
                     }
-                    if (tableStatus.RoundData.NumberEast != 0 && tableStatus.RoundData.NumberEast != missingPair)
+                    if (tableStatus.RoundData.ContestantNumberEast != 0 && tableStatus.RoundData.ContestantNumberEast != missingPair)
                     {
-                        showMoveModel.Add(GetMove(roundsList, tableStatus.TableNumber, tableStatus.RoundData.NumberEast, Direction.East));
+                        showMoveModel.Add(GetMove(roundsList, tableStatus.TableNumber, tableStatus.RoundData.ContestantNumberEast, Direction.East));
                     }
                 }
+                showBoards = true;
             }
-            else  // TabletDevicesPerTable > 1, so only need move for single player/pair.  Could be at phantom table, so use deviceStatus info
+            else
             {
-                showMoveModel.Add(GetMove(roundsList, deviceStatus.TableNumber, deviceStatus.PairNumber, deviceStatus.Direction));
+                // Personal Mode or a non-scoring device in Scoring Mode, so only need to show need move for single player/pair.
+                // Could be at phantom table, so use deviceStatus info
+                showMoveModel.Add(GetMove(roundsList, deviceStatus.TableNumber, deviceStatus.ContestantNumber, deviceStatus.Direction));
+
+                // Show boards move only to North (or North/South) unless missing, in which case only show to East (or East/West)
+                showBoards = deviceStatus.Direction == Direction.North || ((tableStatus.RoundData.ContestantNumberNorth == 0 || tableStatus.RoundData.ContestantNumberNorth == missingPair) && deviceStatus.Direction == Direction.East);
             }
 
-            showMoveModel.BoardsNewTable = -999;  // Default is not to show boards move
-            if (deviceStatus.TableNumber != 0)    // If at a phantom table, there are no boards to worry about
+            if (showBoards && deviceStatus.TableNumber > 0)  // If at a phantom table, there are no boards to worry about
             {
-                // Show boards move only to North (or North/South) unless missing, in which case only show to East (or East/West)
-                TableStatus tableStatus = appData.GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber);
                 showMoveModel.LowBoard = tableStatus.RoundData.LowBoard;
                 showMoveModel.HighBoard = tableStatus.RoundData.HighBoard;
-                if (showMoveModel.Direction == Direction.North || ((tableStatus.RoundData.NumberNorth == 0 || tableStatus.RoundData.NumberNorth == missingPair) && showMoveModel.Direction == Direction.East))
-                {
-                    showMoveModel.BoardsNewTable = GetBoardsNewTableNumber(roundsList, tableStatus.TableNumber, tableStatus.RoundData.LowBoard);
-                    showMoveModel.BoardsStay = (showMoveModel.BoardsNewTable == tableStatus.TableNumber);
-                }
+                showMoveModel.BoardsNewTable = GetBoardsNewTableNumber(roundsList, tableStatus.TableNumber, tableStatus.RoundData.LowBoard);
+                showMoveModel.BoardsStay = showMoveModel.BoardsNewTable == tableStatus.TableNumber;
+            }
+            else
+            {
+                showMoveModel.BoardsNewTable = -999;  // Indicates not to show boards
             }
             return showMoveModel;
         }
 
-        public EnterContractModel CreateEnterContractModel(Result result, bool showTricks = false, LeadValidationOptions leadValidation = LeadValidationOptions.NoWarning)
+        public EnterContractModel CreateEnterContractModel(Result result, bool showTricks = false)
         {
             EnterContractModel enterContractModel = new()
             {
@@ -196,7 +262,6 @@ namespace TabScore2.UtilityServices
                 DeclarerNSEW = result.DeclarerNSEW,
                 LeadCard = result.LeadCard,
                 TricksTaken = result.TricksTaken,
-                LeadValidation = leadValidation,
                 Score = result.Score,
                 DeclarerNSEWDisplay = localizer[result.DeclarerNSEW],
                 ContractDisplay = GetContractDisplay(result, showTricks)
@@ -207,7 +272,7 @@ namespace TabScore2.UtilityServices
         public ShowTravellerModel CreateShowTravellerModel(DeviceStatus deviceStatus)
         {
             TableStatus tableStatus = appData.GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber);
-            int currentBoardNumber = tableStatus.ResultData!.BoardNumber; 
+            int currentBoardNumber = deviceStatus.ResultData.BoardNumber;
             ShowTravellerModel showTravellerModel = new(currentBoardNumber);
             List<Result> resultsList = database.GetResultsList(tableStatus.SectionId, currentBoardNumber);
             foreach (Result result in resultsList)
@@ -227,10 +292,10 @@ namespace TabScore2.UtilityServices
             {
                 TravellerResult travellerResult = new()
                 {
-                    NumberNorth = result.NumberNorth,
-                    NumberEast = result.NumberEast,
-                    NumberSouth = result.NumberSouth,
-                    NumberWest = result.NumberWest
+                    NumberNorth = result.ContestantNumberNorth,
+                    NumberEast = result.ContestantNumberEast,
+                    NumberSouth = result.ContestantNumberSouth,
+                    NumberWest = result.ContestantNumberWest
                 };
                 if (result.ContractLevel < 0)
                 {
@@ -307,7 +372,7 @@ namespace TabScore2.UtilityServices
                     {
                         // Apply Neuberg formula here
                         int matchpoints = 2 * resultsWithContractList.FindAll(x => x.Score < result.Score).Count + resultsWithContractList.FindAll(x => x.Score == result.Score).Count - 1;
-                        double neuberg = ((matchpoints + 1) * resultsForThisBoard / (double)scoresForThisBoard) - 1.0;
+                        double neuberg = (matchpoints + 1) * resultsForThisBoard / (double)scoresForThisBoard - 1.0;
                         travellerResult.SortPercentage = neuberg / matchPointsMax * 100.0;
                     }
 
@@ -316,7 +381,7 @@ namespace TabScore2.UtilityServices
                         (travellerResult.NumberEast, travellerResult.NumberNorth) = (travellerResult.NumberNorth, travellerResult.NumberEast);
                         (travellerResult.NumberWest, travellerResult.NumberSouth) = (travellerResult.NumberSouth, travellerResult.NumberWest);
                     }
-                    if (result.NumberNorth == tableStatus.RoundData.NumberNorth)
+                    if (result.ContestantNumberNorth == tableStatus.RoundData.ContestantNumberNorth)
                     {
                         int intPercentageNS = Convert.ToInt32(travellerResult.SortPercentage);
                         showTravellerModel.PercentageNS = Convert.ToString(intPercentageNS) + "%";
@@ -475,15 +540,15 @@ namespace TabScore2.UtilityServices
             if (deviceStatus.DevicesPerTable == 1)
             {
                 TableStatus tableStatus = appData.GetTableStatus(deviceStatus.SectionId,deviceStatus.TableNumber);
-                showRankingListModel.NumberNorth = tableStatus.RoundData.NumberNorth;
-                showRankingListModel.NumberEast = tableStatus.RoundData.NumberEast;
-                showRankingListModel.NumberSouth = tableStatus.RoundData.NumberSouth;
-                showRankingListModel.NumberWest = tableStatus.RoundData.NumberWest;
+                showRankingListModel.ContestantNumberNorth = tableStatus.RoundData.ContestantNumberNorth;
+                showRankingListModel.ContestantNumberEast = tableStatus.RoundData.ContestantNumberEast;
+                showRankingListModel.ContestantNumberSouth = tableStatus.RoundData.ContestantNumberSouth;
+                showRankingListModel.ContestantNumberWest = tableStatus.RoundData.ContestantNumberWest;
             }
             else  // More than one tablet device per table
             {
                 // Only need to highlight one row entry, so use NumberNorth as proxy
-                showRankingListModel.NumberNorth = deviceStatus.PairNumber;
+                showRankingListModel.ContestantNumberNorth = deviceStatus.ContestantNumber;
             }
 
             showRankingListModel.AddRange(GetRankings(deviceStatus.SectionId));
@@ -492,58 +557,70 @@ namespace TabScore2.UtilityServices
 
 
         // OTHER PUBLIC UTLITY CLASSES
-        public Move GetMove(List<Round> roundsList, int tableNumber, int pairNumber, Direction direction)
+
+        public void GetDatabaseNamesForRound(TableStatus tableStatus)
         {
-            Move move = new(pairNumber);
+            NamesForRound names = database.GetNamesForTableRound(tableStatus.SectionId, tableStatus.RoundNumber, tableStatus.RoundData.ContestantNumberNorth, tableStatus.RoundData.ContestantNumberEast, tableStatus.RoundData.ContestantNumberSouth, tableStatus.RoundData.ContestantNumberWest);
+            tableStatus.RoundData.NameNorth = names.NameNorth;
+            tableStatus.RoundData.NameEast = names.NameEast;
+            tableStatus.RoundData.NameSouth = names.NameSouth;
+            tableStatus.RoundData.NameWest = names.NameWest;
+            tableStatus.RoundData.GotAllNames = names.GotAllNames;
+        }
+
+
+        public Move GetMove(List<Round> roundsList, int tableNumber, int contestantNumber, Direction direction)
+        {
+            Move move = new() { ContestantNumber = contestantNumber };
             Round? round;
             if (settings.IsIndividual)
             {
                 move.DirectionString = direction.ToString();
                 // Try Direction = North
-                round = roundsList.Find(x => x.NumberNorth == pairNumber);
+                round = roundsList.Find(x => x.ContestantNumberNorth == contestantNumber);
                 if (round != null)
                 {
                     move.NewTableNumber = round.TableNumber;
                     move.NewDirection = Direction.North;
                     move.NewDirectionString = "North";
-                    move.Stay = (move.NewTableNumber == tableNumber && direction == Direction.North);
-                    if (round.NumberEast == 0) move.NewTableIsSitout = true;
+                    move.Stay = move.NewTableNumber == tableNumber && direction == Direction.North;
+                    if (round.ContestantNumberEast == 0) move.NewTableIsSitout = true;
                     return move;
                 }
 
                 // Try Direction = South
-                round = roundsList.Find(x => x.NumberSouth == pairNumber);
+                round = roundsList.Find(x => x.ContestantNumberSouth == contestantNumber);
                 if (round != null)
                 {
                     move.NewTableNumber = round.TableNumber;
                     move.NewDirection = Direction.South;
                     move.NewDirectionString = "South";
-                    move.Stay = (move.NewTableNumber == tableNumber && direction == Direction.South);
-                    if (round.NumberEast == 0) move.NewTableIsSitout = true;
+                    move.Stay = move.NewTableNumber == tableNumber && direction == Direction.South;
+                    if (round.ContestantNumberEast == 0) move.NewTableIsSitout = true;
                     return move;
                 }
 
                 // Try Direction = East
-                round = roundsList.Find(x => x.NumberEast == pairNumber);
+                round = roundsList.Find(x => x.ContestantNumberEast == contestantNumber);
                 if (round != null)
                 {
                     move.NewTableNumber = round.TableNumber;
                     move.NewDirection = Direction.East;
                     move.NewDirectionString = "East";
-                    move.Stay = (move.NewTableNumber == tableNumber && direction == Direction.East);
-                    if (round.NumberNorth == 0) move.NewTableIsSitout = true;
+                    move.Stay = move.NewTableNumber == tableNumber && direction == Direction.East;
+                    if (round.ContestantNumberNorth == 0) move.NewTableIsSitout = true;
                     return move;
                 }
 
                 // Try Direction = West
-                round = roundsList.Find(x => x.NumberWest == pairNumber);
+                round = roundsList.Find(x => x.ContestantNumberWest == contestantNumber);
                 if (round != null)
                 {
                     move.NewTableNumber = round.TableNumber;
                     move.NewDirection = Direction.West;
                     move.NewDirectionString = "West";
-                    move.Stay = (move.NewTableNumber == tableNumber && direction == Direction.West);
-                    if (round.NumberNorth == 0) move.NewTableIsSitout = true;
+                    move.Stay = move.NewTableNumber == tableNumber && direction == Direction.West;
+                    if (round.ContestantNumberNorth == 0) move.NewTableIsSitout = true;
                     return move;
                 }
 
@@ -561,31 +638,31 @@ namespace TabScore2.UtilityServices
                 if (direction == Direction.North)
                 {
                     move.DirectionString = move.NewDirectionString = "NorthSouth";
-                    round = roundsList.Find(x => x.NumberNorth == pairNumber);
+                    round = roundsList.Find(x => x.ContestantNumberNorth == contestantNumber);
                 }
                 else
                 {
                     move.DirectionString = move.NewDirectionString = "EastWest";
-                    round = roundsList.Find(x => x.NumberEast == pairNumber);
+                    round = roundsList.Find(x => x.ContestantNumberEast == contestantNumber);
                 }
 
                 if (round != null)
                 {
                     move.NewTableNumber = round.TableNumber;
                     move.NewDirection = direction;
-                    if (direction == Direction.North && round.NumberEast == 0) move.NewTableIsSitout = true;
-                    if (direction == Direction.East && round.NumberNorth == 0) move.NewTableIsSitout = true;
+                    if (direction == Direction.North && round.ContestantNumberEast == 0) move.NewTableIsSitout = true;
+                    if (direction == Direction.East && round.ContestantNumberNorth == 0) move.NewTableIsSitout = true;
                 }
                 else
                 {
                     // Pair changes Direction
                     if (direction == Direction.North)
                     {
-                        round = roundsList.Find(x => x.NumberEast == pairNumber);
+                        round = roundsList.Find(x => x.ContestantNumberEast == contestantNumber);
                     }
                     else
                     {
-                        round = roundsList.Find(x => x.NumberNorth == pairNumber);
+                        round = roundsList.Find(x => x.ContestantNumberNorth == contestantNumber);
                     }
 
                     if (round != null)
@@ -595,13 +672,13 @@ namespace TabScore2.UtilityServices
                         {
                             move.NewDirection = Direction.East;
                             move.NewDirectionString = "EastWest";
-                            if (round.NumberNorth == 0) move.NewTableIsSitout = true;
+                            if (round.ContestantNumberNorth == 0) move.NewTableIsSitout = true;
                         }
                         else
                         {
                             move.NewDirection = Direction.North;
                             move.NewDirectionString = "NorthSouth";
-                            if (round.NumberEast == 0) move.NewTableIsSitout = true;
+                            if (round.ContestantNumberEast == 0) move.NewTableIsSitout = true;
                         }
                     }
                     else   // No move info found - move to phantom table
@@ -611,7 +688,7 @@ namespace TabScore2.UtilityServices
                         move.NewDirectionString = "Sitout";
                     }
                 }
-                move.Stay = (move.NewTableNumber == tableNumber && move.NewDirection == direction);
+                move.Stay = move.NewTableNumber == tableNumber && move.NewDirection == direction;
                 return move;
             }
         }
@@ -619,7 +696,7 @@ namespace TabScore2.UtilityServices
         public int GetBoardsFromTableNumber(TableStatus tableStatus)
         {
             // Get a list of all possible tables from which boards could have moved (ie where the boards were in the previous round)
-            List<Round> tableList = database.GetRoundsList(tableStatus.SectionId, tableStatus.RoundNumber - 1).FindAll(x => x.LowBoard == tableStatus.RoundData.LowBoard);
+            List<Round> tableList = database.GetRoundsListForSectionRound(tableStatus.SectionId, tableStatus.RoundNumber - 1).FindAll(x => x.LowBoard == tableStatus.RoundData.LowBoard);
             if (tableList.Count == 0)
             {
                 // No table, so boards must have come from relay table
@@ -665,7 +742,7 @@ namespace TabScore2.UtilityServices
             {
                 int sortValue = y.Orientation.CompareTo(x.Orientation);    // N's first then E's
                 if (sortValue == 0) sortValue = y.ScoreDecimal.CompareTo(x.ScoreDecimal);
-                if (sortValue == 0) sortValue = x.PairNo.CompareTo(y.PairNo);
+                if (sortValue == 0) sortValue = x.ContestantNumber.CompareTo(y.ContestantNumber);
                 return sortValue;
             });
             return rankings;
@@ -685,25 +762,25 @@ namespace TabScore2.UtilityServices
                     TableStatus tableStatus = appData.GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber);
                     if (settings.IsIndividual)
                     {
-                        return $"{deviceStatus.Location}: {localizer["Rd"]} {tableStatus.RoundNumber}: {tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth} v {tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}";
+                        return $"{deviceStatus.Location}: {localizer["Rd"]} {tableStatus.RoundNumber}: {tableStatus.RoundData.ContestantNumberNorth}+{tableStatus.RoundData.ContestantNumberSouth} v {tableStatus.RoundData.ContestantNumberEast}+{tableStatus.RoundData.ContestantNumberWest}";
                     }
                     else
                     {
-                        return $"{deviceStatus.Location}: {localizer["Rd"]} {tableStatus.RoundNumber}: {localizer["N"]}{localizer["S"]} {tableStatus.RoundData.NumberNorth} v {localizer["E"]}{localizer["W"]} {tableStatus.RoundData.NumberEast}";
+                        return $"{deviceStatus.Location}: {localizer["Rd"]} {tableStatus.RoundNumber}: {localizer["N"]}{localizer["S"]} {tableStatus.RoundData.ContestantNumberNorth} v {localizer["E"]}{localizer["W"]} {tableStatus.RoundData.ContestantNumberEast}";
                     }
                 case HeaderType.FullColoured:
                     tableStatus = appData.GetTableStatus(deviceStatus.SectionId, deviceStatus.TableNumber);
                     if (settings.IsIndividual)
                     {
-                        return $"{deviceStatus.Location}: {localizer["Rd"]} {tableStatus.RoundNumber}: {ColourPairByVulnerability("NS", tableStatus.ResultData.BoardNumber, 
-                            $"{tableStatus.RoundData.NumberNorth}+{tableStatus.RoundData.NumberSouth}")} v {ColourPairByVulnerability("EW", tableStatus.ResultData.BoardNumber,
-                            $"{tableStatus.RoundData.NumberEast}+{tableStatus.RoundData.NumberWest}")}";
+                        return $"{deviceStatus.Location}: {localizer["Rd"]} {tableStatus.RoundNumber}: {ColourPairByVulnerability("NS", deviceStatus.ResultData.BoardNumber, 
+                            $"{tableStatus.RoundData.ContestantNumberNorth}+{tableStatus.RoundData.ContestantNumberSouth}")} v {ColourPairByVulnerability("EW", deviceStatus.ResultData.BoardNumber,
+                            $"{tableStatus.RoundData.ContestantNumberEast}+{tableStatus.RoundData.ContestantNumberWest}")}";
                     }
                     else
                     {
-                        return $"{deviceStatus.Location}: {localizer["Rd"]} {tableStatus.RoundNumber}: {ColourPairByVulnerability("NS", tableStatus.ResultData.BoardNumber, 
-                            $"{localizer["N"]}{localizer["S"]} {tableStatus.RoundData.NumberNorth}")} v {ColourPairByVulnerability("EW", tableStatus.ResultData.BoardNumber, 
-                            $"{localizer["E"]}{localizer["W"]} {tableStatus.RoundData.NumberEast}")}";
+                        return $"{deviceStatus.Location}: {localizer["Rd"]} {tableStatus.RoundNumber}: {ColourPairByVulnerability("NS", deviceStatus.ResultData.BoardNumber, 
+                            $"{localizer["N"]}{localizer["S"]} {tableStatus.RoundData.ContestantNumberNorth}")} v {ColourPairByVulnerability("EW", deviceStatus.ResultData.BoardNumber, 
+                            $"{localizer["E"]}{localizer["W"]} {tableStatus.RoundData.ContestantNumberEast}")}";
                     }
                 default:
                     return string.Empty;
@@ -715,23 +792,22 @@ namespace TabScore2.UtilityServices
             return $"{deviceStatus.Location}: {localizer["Rd"]} {deviceStatus.RoundNumber}: {localizer[titleString]}";
         }
 
-        public bool ValidateLead(TableStatus tableStatus, string card)
+        public bool ValidateLead(Result result, string card)
         {
             if (database.GetHandsCount() == 0) return true;    // No hand records to validate against
-            if (tableStatus.ResultData == null) return true;  // No result (shouldn't be possible at this stage)
             if (card == "SKIP") return true;    // Lead card entry has been skipped, so no validation
 
-            Hand hand = database.GetHand(tableStatus.SectionId, tableStatus.ResultData.BoardNumber);
+            Hand hand = database.GetHand(result.SectionId, result.BoardNumber);
             if (hand.NorthSpades == "###")     // Can't find matching hand record, so try default SectionId = 1
             {
-                hand = database.GetHand(1, tableStatus.ResultData.BoardNumber);
+                hand = database.GetHand(1, result.BoardNumber);
                 if (hand.NorthSpades == "###") return true;    // Still no match, so no validation possible
             }
 
             string cardSuit = card[..1];
             string cardValue = card.Substring(1,1);
 
-            switch (tableStatus.ResultData.DeclarerNSEW)
+            switch (result.DeclarerNSEW)
             {
                 case "N":
                     switch (cardSuit)
@@ -984,29 +1060,34 @@ namespace TabScore2.UtilityServices
         // PRIVATE CLASSES
         private PlayerEntry CreatePlayerEntry(Round round, Direction direction)
         {
-            int number;
+            int contestantNumber;
             string name;
             if (direction == Direction.North)
             {
                 name = round.NameNorth;
-                number = round.NumberNorth;
+                contestantNumber = round.ContestantNumberNorth;
             }
             else if (direction == Direction.East)
             {
                 name = round.NameEast;
-                number = round.NumberEast;
+                contestantNumber = round.ContestantNumberEast;
             }
             else if (direction == Direction.South)
             {
                 name = round.NameSouth;
-                number = round.NumberSouth;
+                contestantNumber = round.ContestantNumberSouth;
             }
             else
             {
                 name = round.NameWest;
-                number = round.NumberWest;
+                contestantNumber = round.ContestantNumberWest;
             }
-            return new PlayerEntry(name.Replace("Unknown", localizer["Unknown"]), number, direction);
+            return new()
+            {
+                DisplayName = name.Replace("Unknown", localizer["Unknown"]),
+                ContestantNumber = contestantNumber,
+                Direction = direction
+            };
         }
 
         private string GetContractDisplay(Result result, bool showTricks)
@@ -1149,7 +1230,7 @@ namespace TabScore2.UtilityServices
                     int matchpoints = 2 * currentBoardScoresList.FindAll(x => x.Score < result.Score).Count + currentBoardScoresList.FindAll(x => x.Score == result.Score).Count - 1;
 
                     // Apply Neuberg formula here
-                    double neuberg = ((matchpoints + 1) * maxResultsPerBoard / (double)scoresForThisBoard) - 1.0;
+                    double neuberg = (matchpoints + 1) * maxResultsPerBoard / (double)scoresForThisBoard - 1.0;
                     if (result.Remarks == "Wrong direction")
                     {
                         result.MatchpointsEW = neuberg;
@@ -1185,11 +1266,11 @@ namespace TabScore2.UtilityServices
                 // Add up MPs for each pair, creating Ranking List entries as we go
                 foreach (Result result in resultsList)
                 {
-                    Ranking? rankingListFind = rankingList.Find(x => x.PairNo == result.NumberNorth);
+                    Ranking? rankingListFind = rankingList.Find(x => x.ContestantNumber == result.ContestantNumberNorth);
                     if (rankingListFind == null)
                     {
                         Ranking ranking = new() {
-                            PairNo = result.NumberNorth,
+                            ContestantNumber = result.ContestantNumberNorth,
                             Orientation = "0",
                             MP = result.MatchpointsNS,
                             MPMax = matchPointsMax 
@@ -1201,12 +1282,12 @@ namespace TabScore2.UtilityServices
                         rankingListFind.MP += result.MatchpointsNS;
                         rankingListFind.MPMax += matchPointsMax;
                     }
-                    rankingListFind = rankingList.Find(x => x.PairNo == result.NumberEast);
+                    rankingListFind = rankingList.Find(x => x.ContestantNumber == result.ContestantNumberEast);
                     if (rankingListFind == null)
                     {
                         Ranking ranking = new()
                         {
-                            PairNo = result.NumberEast,
+                            ContestantNumber = result.ContestantNumberEast,
                             Orientation = "0",
                             MP = result.MatchpointsEW,
                             MPMax = matchPointsMax
@@ -1251,12 +1332,12 @@ namespace TabScore2.UtilityServices
                 // Add up MPs for each pair, creating Ranking List entries as we go
                 foreach (Result result in resultsList)
                 {
-                    Ranking? rankingListFind = rankingList.Find(x => x.PairNo == result.NumberNorth && x.Orientation == "N");
+                    Ranking? rankingListFind = rankingList.Find(x => x.ContestantNumber == result.ContestantNumberNorth && x.Orientation == "N");
                     if (rankingListFind == null)
                     {
                         Ranking ranking = new()
                         {
-                            PairNo = result.NumberNorth,
+                            ContestantNumber = result.ContestantNumberNorth,
                             Orientation = "N",
                             MP = result.MatchpointsNS,
                             MPMax = matchPointsMax
@@ -1268,12 +1349,12 @@ namespace TabScore2.UtilityServices
                         rankingListFind.MP += result.MatchpointsNS;
                         rankingListFind.MPMax += matchPointsMax;
                     }
-                    rankingListFind = rankingList.Find(x => x.PairNo == result.NumberEast && x.Orientation == "E");
+                    rankingListFind = rankingList.Find(x => x.ContestantNumber == result.ContestantNumberEast && x.Orientation == "E");
                     if (rankingListFind == null)
                     {
                         Ranking ranking = new()
                         {
-                            PairNo = result.NumberEast,
+                            ContestantNumber = result.ContestantNumberEast,
                             Orientation = "E",
                             MP = result.MatchpointsEW,
                             MPMax = matchPointsMax
@@ -1354,7 +1435,7 @@ namespace TabScore2.UtilityServices
                     int matchpoints = 2 * currentBoardScoresList.FindAll(x => x.Score < result.Score).Count + currentBoardScoresList.FindAll(x => x.Score == result.Score).Count - 1;
 
                     // Apply Neuberg formula here
-                    double neuberg = ((matchpoints + 1) * maxResultsPerBoard / (double)scoresForThisBoard) - 1.0;
+                    double neuberg = (matchpoints + 1) * maxResultsPerBoard / (double)scoresForThisBoard - 1.0;
                     if (result.Remarks == "Wrong direction")
                     {
                         result.MatchpointsEW = neuberg;
@@ -1389,12 +1470,12 @@ namespace TabScore2.UtilityServices
             List<Ranking> rankingList = [];
             foreach (Result result in resultsList)
             {
-                Ranking? rankingListFind = rankingList.Find(x => x.PairNo == result.NumberNorth);
+                Ranking? rankingListFind = rankingList.Find(x => x.ContestantNumber == result.ContestantNumberNorth);
                 if (rankingListFind == null)
                 {
                     Ranking ranking = new()
                     {
-                        PairNo = result.NumberNorth,
+                        ContestantNumber = result.ContestantNumberNorth,
                         Orientation = "0",
                         MP = result.MatchpointsNS,
                         MPMax = matchPointsMax
@@ -1406,12 +1487,12 @@ namespace TabScore2.UtilityServices
                     rankingListFind.MP += result.MatchpointsNS;
                     rankingListFind.MPMax += matchPointsMax;
                 }
-                rankingListFind = rankingList.Find(x => x.PairNo == result.NumberEast);
+                rankingListFind = rankingList.Find(x => x.ContestantNumber == result.ContestantNumberEast);
                 if (rankingListFind == null)
                 {
                     Ranking ranking = new()
                     {
-                        PairNo = result.NumberEast,
+                        ContestantNumber = result.ContestantNumberEast,
                         Orientation = "0",
                         MP = result.MatchpointsEW,
                         MPMax = matchPointsMax
@@ -1423,12 +1504,12 @@ namespace TabScore2.UtilityServices
                     rankingListFind.MP += result.MatchpointsEW;
                     rankingListFind.MPMax += matchPointsMax;
                 }
-                rankingListFind = rankingList.Find(x => x.PairNo == result.NumberSouth);
+                rankingListFind = rankingList.Find(x => x.ContestantNumber == result.ContestantNumberSouth);
                 if (rankingListFind == null)
                 {
                     Ranking ranking = new()
                     {
-                        PairNo = result.NumberSouth,
+                        ContestantNumber = result.ContestantNumberSouth,
                         Orientation = "0",
                         MP = result.MatchpointsNS,
                         MPMax = matchPointsMax
@@ -1440,12 +1521,12 @@ namespace TabScore2.UtilityServices
                     rankingListFind.MP += result.MatchpointsNS;
                     rankingListFind.MPMax += matchPointsMax;
                 }
-                rankingListFind = rankingList.Find(x => x.PairNo == result.NumberWest);
+                rankingListFind = rankingList.Find(x => x.ContestantNumber == result.ContestantNumberWest);
                 if (rankingListFind == null)
                 {
                     Ranking ranking = new()
                     {
-                        PairNo = result.NumberWest,
+                        ContestantNumber = result.ContestantNumberWest,
                         Orientation = "0",
                         MP = result.MatchpointsEW,
                         MPMax = matchPointsMax

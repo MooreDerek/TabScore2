@@ -4,6 +4,7 @@
 using GrpcSharedContracts.SharedClasses;
 using TabScore2.Classes;
 using TabScore2.Globals;
+using static System.Collections.Specialized.BitVector32;
 
 namespace TabScore2.DataServices
 {
@@ -12,16 +13,20 @@ namespace TabScore2.DataServices
     {
         void ClearAppData();
 
-        bool TableStatusExists(int sectionId, int tableNumber);
         TableStatus GetTableStatus(int sectionId, int tableNumber);
+        bool IsTableReadyForNextRound(int sectionId, int tableNumber, int roundNumber);
+        IEnumerable<TableStatusDisplay> GetAllTableStatuses();
         void UpdateTableStatus(int sectionId, int tableNumber, int roundNumber);
 
-        bool DeviceStatusExists(int sectionId, int tableNumber, Direction direction = Direction.North);
+        int GetDeviceNumberByTableDirection(int sectionId, int tableNumber, Direction direction = Direction.North);
+        int GetDeviceNumberByContestant(int sectionId, int contestantNumber);
         DeviceStatus GetDeviceStatus(int deviceNumber);
-        DeviceStatus GetDeviceStatus(int sectionId, int tableNumber, Direction direction = Direction.North);
-        void AddDeviceStatus(int sectionId, int tableNumber, int pairNumber, int roundNumber, Direction direction = Direction.North);
-        void UpdateDeviceStatus(int deviceNumber, int tableNumber, int roundNumber, Direction direction);
-        int GetDeviceNumber(DeviceStatus deviceStatus);
+        int AddDeviceStatusForTable(int sectionId, int tableNumber);
+        int AddDeviceStatusForTableDirection(int sectionId, int tableNumber, Direction direction = Direction.North);
+        int AddDeviceStatusForContestant(int sectionId, int contestant);
+        void UpdateDeviceStatus(DeviceStatus deviceStatus, int tableNumber, int roundNumber, Direction direction);
+        bool SetDeviceAsScorer(int deviceNumber);
+        bool SetDeviceAsViewer(int deviceNumber);
 
         int GetTimerSeconds(DeviceStatus deviceStatus);
 

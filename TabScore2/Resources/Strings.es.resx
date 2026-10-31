@@ -116,7 +116,7 @@
     <value>Por favor espere hasta que el Director del Torneo le indique que comience</value>
   </data>
   <data name="ErrorPermanentDB" xml:space="preserve">
-    <value>Error permanente de conexión de base de datos. Verifique el formato y los permisos de acceso para el archivo de la base de datos de puntajes y reinicie TabScoreStarter.exe</value>
+    <value>Error permanente de conexión de base de datos. Verifique el formato y los permisos de acceso para el archivo de la base de datos de puntajes y reinicie TabScore2</value>
   </data>
   <data name="Board" xml:space="preserve">
     <value>Tablilla</value>
@@ -221,7 +221,7 @@
     <value>Se ha producido un error al conectarse a la base de datos de puntajes</value>
   </data>
   <data name="ErrorReestablishConnection" xml:space="preserve">
-    <value>Clic en OK para intentar restablecer la conexión. Si tiene éxito, vuelva a registrar esta tableta en su [sección/]número de mesa[/dirección]</value>
+    <value>Haga clic en Aceptar para intentar restablecer la conexión.  Si tiene éxito, vuelva a registrar esta tableta</value>
   </data>
   <data name="Back" xml:space="preserve">
     <value>Atrás</value>

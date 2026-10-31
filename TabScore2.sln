@@ -30,6 +30,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TabScore2Setup", "TabScore2
 		TabScore2Setup\TabScore2Setup.iss = TabScore2Setup\TabScore2Setup.iss
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabScore2.Tests", "TabScore2.Tests\TabScore2.Tests.csproj", "{BABC36E8-D0A6-4039-9FC9-A8F9E3A50BC2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM64 = Debug|ARM64
@@ -82,6 +84,18 @@ Global
 		{6A6DBFAD-B7E0-48E7-ADD2-DF7F9A6B92F3}.Release|x64.ActiveCfg = Release|x64
 		{6A6DBFAD-B7E0-48E7-ADD2-DF7F9A6B92F3}.Release|x64.Build.0 = Release|x64
 		{6A6DBFAD-B7E0-48E7-ADD2-DF7F9A6B92F3}.Release|x86.ActiveCfg = Release|x64
+		{BABC36E8-D0A6-4039-9FC9-A8F9E3A50BC2}.Debug|ARM64.ActiveCfg = Debug|x64
+		{BABC36E8-D0A6-4039-9FC9-A8F9E3A50BC2}.Debug|ARM64.Build.0 = Debug|x64
+		{BABC36E8-D0A6-4039-9FC9-A8F9E3A50BC2}.Debug|x64.ActiveCfg = Debug|x64
+		{BABC36E8-D0A6-4039-9FC9-A8F9E3A50BC2}.Debug|x64.Build.0 = Debug|x64
+		{BABC36E8-D0A6-4039-9FC9-A8F9E3A50BC2}.Debug|x86.ActiveCfg = Debug|x64
+		{BABC36E8-D0A6-4039-9FC9-A8F9E3A50BC2}.Debug|x86.Build.0 = Debug|x64
+		{BABC36E8-D0A6-4039-9FC9-A8F9E3A50BC2}.Release|ARM64.ActiveCfg = Release|x64
+		{BABC36E8-D0A6-4039-9FC9-A8F9E3A50BC2}.Release|ARM64.Build.0 = Release|x64
+		{BABC36E8-D0A6-4039-9FC9-A8F9E3A50BC2}.Release|x64.ActiveCfg = Release|x64
+		{BABC36E8-D0A6-4039-9FC9-A8F9E3A50BC2}.Release|x64.Build.0 = Release|x64
+		{BABC36E8-D0A6-4039-9FC9-A8F9E3A50BC2}.Release|x86.ActiveCfg = Release|x64
+		{BABC36E8-D0A6-4039-9FC9-A8F9E3A50BC2}.Release|x86.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

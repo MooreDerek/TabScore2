@@ -37,7 +37,12 @@ internal sealed class InMemoryMovementDatabase(HowellMovement movement, int init
     public Section GetSection(int sectionId) => Section;
     public void RegisterTable(int sectionId, int tableNumber) { }
     public int GetNumberOfRoundsInSection(int sectionId, bool forceDatabaseRead = false) => Movement.NumberOfRounds;
-    public int GetLastRoundWithResultsForTable(int sectionId, int tableNumber) => InitialRound;
+    public int GetLastRoundWithResultsForTable(int sectionId, int tableNumber) =>
+        results
+            .Where(result => result.SectionId == sectionId && result.TableNumber == tableNumber)
+            .Select(result => result.RoundNumber)
+            .DefaultIfEmpty(InitialRound)
+            .Max();
 
     public Location GetLastLocationWithResultsForContestant(int sectionId, int contestantNumber) =>
         new() { TableNumber = 0, RoundNumber = 0 };
